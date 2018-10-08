@@ -11,7 +11,7 @@ module.exports = {
 	mode: 'development',
 
 	// Import polyfills, then our code
-	entry: ["babel-polyfill", "./src/init.js"],
+	entry: ["babel-polyfill", "./src/app.js"],
 
 	// Output everything as a big bundle
 	output: {
@@ -74,7 +74,7 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			favicon: 'src/favicon.ico',
 			template: 'src/index.html',
-			inject: 'head'
+			inject: 'body'
 		}),
 
         // new BundleAnalyzerPlugin({

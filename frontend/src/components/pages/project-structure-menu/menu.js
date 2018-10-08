@@ -41,7 +41,6 @@ module.component('projectEditMenu', {
 
 	bindings: {
 		project: '<',
-		ccIndicators: '<',
 		onProjectSaveSuccess: '&'
 	},
 
@@ -124,7 +123,6 @@ module.component('projectEditMenu', {
 			// When button is disabled, do not execute action.
 			if (this.projectChanged && this.projectIsValid && !this.projectSaveRunning) {
 				this.projectSaveRunning = true;
-				this.childProject.sanitize(this.ccIndicators);
 
 				try {
 					await this.childProject.save();

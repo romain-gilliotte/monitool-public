@@ -18,7 +18,6 @@
 import angular from 'angular';
 
 import uiRouter from '@uirouter/angularjs';
-import uiSelect from 'ui-select';
 
 import 'ui-select/dist/select.min.css';
 
@@ -30,7 +29,6 @@ const module = angular.module(
 	'monitool.components.pages.project.structure.basics',
 	[
 		uiRouter, // for $stateProvider
-		uiSelect, // Select themes
 
 		mtUtcDatepicker, // Datepicker start & end
 		mtFormGroup
@@ -40,6 +38,7 @@ const module = angular.module(
 
 module.config($stateProvider => {
 	$stateProvider.state('main.project.structure.basics', {
+		acceptedUsers: ['loggedIn'],
 		url: '/basics',
 		component: 'projectBasics'
 	});
@@ -48,9 +47,6 @@ module.config($stateProvider => {
 
 module.component('projectBasics', {
 	bindings: {
-		// injected from ui-router on 'main.project'.
-		themes: '<',
-
 		// injected from parent component.
 		project: '<',
 		onProjectUpdate: '&'

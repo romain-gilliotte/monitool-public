@@ -38,6 +38,7 @@ const module = angular.module(
 module.config($stateProvider => {
 
 	$stateProvider.state('main.project.structure.extra', {
+		acceptedUsers: ['loggedIn'],
 		url: '/extra',
 		component: 'extraIndicatorList',
 	});

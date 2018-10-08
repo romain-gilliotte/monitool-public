@@ -32,8 +32,8 @@ export default class Project {
 		return response.data.map(i => new Project(i));
 	}
 
-	static async fetchShort() {
-		const response = await axios.get('/api/resources/project?mode=short');
+	static async fetchAll() {
+		const response = await axios.get('/api/resources/project');
 		return response.data;
 	}
 
@@ -55,26 +55,21 @@ export default class Project {
 		oneYear.setFullYear(oneYear.getFullYear() + 1);
 		oneYear = oneYear.toISOString().substring(0, 10);
 
-		this._id = uuid()
 		this.type = "project";
 		this.name = "";
 		this.active = true;
 		this.start = now;
 		this.end = oneYear;
-		this.themes = [];
-		this.crossCutting = {};
 		this.extraIndicators = [];
 		this.logicalFrames = [];
 		this.entities = [];
 		this.groups = [];
 		this.forms = [];
 		this.users = [];
-		this.visibility = 'public';
 
 		if (data)
 			Object.assign(this, data);
 	}
-
 
 	canInputForm(projectUser, formId) {
 		if (!projectUser)
@@ -103,9 +98,6 @@ export default class Project {
 	 * inside the project to ensure that there are no broken links and repair them if needed.
 	 */
 	sanitize(indicators) {
-		if (!['private', 'public'].includes(this.visibility))
-			this.visibility = 'private';
-
 		//////////////////
 		// Sanitize links to input entities
 		//////////////////
@@ -264,10 +256,13 @@ export default class Project {
 	}
 
 	async save() {
-		const response = await axios.put(
-			'/api/resources/project/' + this._id,
-			JSON.parse(angular.toJson(this))
-		);
+		const payload = JSON.parse(angular.toJson(this));
+
+		let response;
+		if (this._id && this._rev)
+			response = await axios.put('/api/resources/project/' + this._id, payload);
+		else
+			response = await axios.post('/api/resources/project', payload);
 
 		Object.assign(this, response.data);
 	}

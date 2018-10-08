@@ -37,6 +37,7 @@ const module = angular.module(
 module.config($stateProvider => {
 
 	$stateProvider.state('main.project.structure.history', {
+		acceptedUsers: ['loggedIn'],
 		url: '/history',
 		component: 'history'
 	});

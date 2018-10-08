@@ -16,14 +16,10 @@
  */
 
 import validator from 'is-my-json-valid';
-import passwordHash from 'password-hash';
 import ProjectStore from '../store/project';
 import DbModel from './db-model';
 import LogicalFrame from './logical-frame';
 import DataSource from './data-source';
-import Indicator from './indicator';
-import Input from './input';
-import Theme from './theme';
 import schema from '../schema/project.json';
 
 var validate = validator(schema),
@@ -67,14 +63,6 @@ export default class Project extends DbModel {
 		// Create forms & logicalFrames
 		this.forms = this.forms.map(f => new DataSource(f, this));
 		this.logicalFrames = this.logicalFrames.map(lf => new LogicalFrame(lf, this));
-
-		// Replace passwords by a salted hash
-		this.users.forEach(function(user) {
-			if (user.type === 'partner') {
-				if (typeof user.password === 'string' && !user.password.match('^sha1'))
-					user.password = passwordHash.generate(user.password);
-			}
-		});
 	}
 
 	/**
@@ -116,56 +104,10 @@ export default class Project extends DbModel {
 	 * User session may be a real user, or a partner.
 	 * This method does not throw if the user is not found.
 	 */
-	getProjectUser(user) {
-		if (user.type === 'partner')
-			return user.projectId === this._id ? user : null;
-
-		else if (user.type === 'user')
-			return this.users.find(u => u.id === user._id);
-
-		else
-			throw new Error('invalid_user');
+	getUserById(id) {
+		return this.users.find(u => u.id === id);
 	}
 
-	/**
-	 * Get the role of an account from its session.
-	 * The role may be one of: "none", "readonly", "input" or "owner".
-	 */
-	getRole(user) {
-		if (user.type === 'partner')
-			return user.projectId !== this._id ? 'none' : user.role;
-
-		else if (user.type === 'user') {
-			if (user.role === 'admin')
-				return 'owner';
-			else {
-				var projectUser = this.getProjectUser(user);
-				return projectUser ? projectUser.role : 'readonly';
-			}
-		}
-		else
-			throw new Error('invalid_user');
-	}
-
-	/**
-	 * Validate that project does not make references to indicators and themes that don't exist.
-	 */
-	async validateForeignKeys() {
-		const [indicators, themes] = await Promise.all([
-			Indicator.storeInstance.list(),
-			Theme.storeInstance.list()
-		]);
-
-		Object.keys(this.crossCutting).forEach(indicatorId => {
-			if (!indicators.find(i => i._id === indicatorId))
-				throw new Error('invalid_reference');
-		});
-
-		this.themes.forEach(themeId => {
-			if (!themes.find(t => t._id === themeId))
-				throw new Error('invalid_reference');
-		});
-	}
 
 	/**
 	 * Save the project.
@@ -183,14 +125,6 @@ export default class Project extends DbModel {
 		let oldProject;
 		try {
 			oldProject = await Project.storeInstance.get(this._id);
-
-			this.users.forEach(newUser => {
-				if (newUser.type !== 'partner' || newUser.password !== null)
-					return;
-
-				var oldUser = oldProject.users.find(u => u.username === newUser.username);
-				newUser.password = oldUser.password;
-			});
 		}
 		catch (error) {
 			// if we can't get former project for some other reason than "missing" we are done.
@@ -217,21 +151,6 @@ export default class Project extends DbModel {
 
 		// the user want the result of the save operation, not the revision.
 		return result;
-	}
-
-	toAPI() {
-		var obj = super.toAPI();
-
-		// Replace the password by null before sending the project to the user.
-		obj.users = this.users.map(function(user) {
-			user = Object.assign({}, user);
-			if (user.type === 'partner')
-				user.password = null;
-
-			return user;
-		});
-
-		return obj;
 	}
 
 }

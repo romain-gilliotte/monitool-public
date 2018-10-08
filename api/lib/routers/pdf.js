@@ -21,8 +21,8 @@ import PdfPrinter from 'pdfmake';
 
 import Project from '../resource/model/project';
 
-const router = new Router();
 
+const router = new Router();
 
 /**
  * More boilerplate needed to start-up pdfmake
@@ -80,9 +80,6 @@ const printer = new PdfPrinter({
  * Render a PDF file containing a sample paper form (for a datasource).
  */
 router.get('/resources/project/:id/data-source/:dataSourceId.pdf', async ctx => {
-	if (!ctx.visibleProjectIds.has(ctx.params.id))
-		throw new Error('forbidden');
-
 	const project = await Project.storeInstance.get(ctx.params.id);
 	const dataSource = project.getDataSourceById(ctx.params.dataSourceId);
 
@@ -103,9 +100,6 @@ router.get('/resources/project/:id/data-source/:dataSourceId.pdf', async ctx => 
  * Render a PDF file describing the given logical frame.
  */
 router.get('/resources/project/:id/logical-frame/:logicalFrameId.pdf', async ctx => {
-	if (!ctx.visibleProjectIds.has(ctx.params.id))
-		throw new Error('forbidden');
-
 	const project = await Project.storeInstance.get(ctx.params.id);
 	const logicalFramework = project.getLogicalFrameById(ctx.params.logicalFrameId)
 

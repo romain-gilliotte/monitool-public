@@ -17,13 +17,10 @@
 
 import angular from 'angular';
 
-import Indicator from '../../../models/indicator';
-import Theme from '../../../models/theme';
 import Project from '../../../models/project';
 
 import uiRouter from '@uirouter/angularjs';
 
-import mtDirectiveAclProjectCreation from '../../../directives/acl/project-creation';
 import mtDirectiveAclProjectRole from '../../../directives/acl/project-role';
 import mtDirectiveAclProjectInput from '../../../directives/acl/project-input';
 import mtDirectiveDisableIf from '../../../directives/helpers/disableif';
@@ -34,7 +31,6 @@ const module = angular.module(
 	[
 		uiRouter, // for $stateProvider
 
-		mtDirectiveAclProjectCreation,
 		mtDirectiveAclProjectRole,
 		mtDirectiveAclProjectInput,
 		mtDirectiveDisableIf
@@ -46,27 +42,21 @@ module.config($stateProvider => {
 
 	$stateProvider.state('main.project', {
 		abstract: true,
-		url: window.user.type == 'user' ? '/projects/:projectId' : '/project',
+		url: '/projects/:projectId',
 		component: 'projectMenu',
 
 		resolve: {
 			loadedProject: function($rootScope, $stateParams, $q) {
-				// If partner account, we retrieve the projectId from profile, else from URL.
-				var projectId = $rootScope.userCtx.type === 'user' ? $stateParams.projectId : $rootScope.userCtx.projectId;
+				const projectId = $stateParams.projectId;
 
-				return Project.get(projectId).catch(function(e) {
-					// Project creation
-					if (e.response.status !== 404)
-						return $q.reject(e);
-
-					var project = new Project();
-					project._id = projectId;
-					project.users.push({ type: "internal", id: $rootScope.userCtx._id, role: "owner" });
+				if (projectId === 'new') {
+					const project = new Project();
+					project.users.push({email: $rootScope.userCtx.email, role: "owner"});
 					return $q.when(project);
-				});
-			},
-			ccIndicators: () => Indicator.fetchAll(),
-			themes: () => Theme.fetchAll()
+				}
+				else
+					return Project.get(projectId);
+			}
 		}
 	});
 });
@@ -74,9 +64,7 @@ module.config($stateProvider => {
 
 module.component('projectMenu', {
 	bindings: {
-		loadedProject: '<',
-		ccIndicators: '<',
-		themes: '<'
+		loadedProject: '<'
 	},
 
 	template: require('./menu.html'),

@@ -36,6 +36,7 @@ const module = angular.module(
 module.config($stateProvider => {
 
 	$stateProvider.state('main.project.input.list', {
+		acceptedUsers: ['loggedIn'],
 		url: '/input/:dataSourceId/list',
 		component: 'projectInputList',
 		resolve: {
@@ -88,16 +89,11 @@ module.component('projectInputList', {
 
 			// Define sites (depending on user permissions)
 			this.sites = this.project.entities.filter(e => this.dataSource.entities.includes(e.id));
-			if (this.userCtx.role !== 'admin') {
-				const projectUser = this.project.users.find(u => {
-					return (this.userCtx.type == 'user' && u.id == this.userCtx._id) ||
-						   (this.userCtx.type == 'partner' && u.username == this.userCtx.username);
-				});
+			const projectUser = this.project.users.find(u => u.id == this.userCtx._id);
 
-				if (projectUser.role === 'input')
-					// This will happen regardless of unexpected entries.
-					this.sites = this.sites.filter(e => projectUser.entities.includes(e.id));
-			}
+			// This will happen regardless of unexpected entries.
+			if (projectUser.role === 'input')
+				this.sites = this.sites.filter(e => projectUser.entities.includes(e.id));
 
 			// Handle special case for free periodicity.
 			if (this.dataSource.periodicity === 'free') {

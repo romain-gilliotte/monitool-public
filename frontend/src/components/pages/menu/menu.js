@@ -16,6 +16,7 @@
  */
 
 import angular from 'angular';
+import axios from 'axios';
 import uiRouter from '@uirouter/angularjs';
 
 import uiDropdown from 'angular-ui-bootstrap/src/dropdown/index';

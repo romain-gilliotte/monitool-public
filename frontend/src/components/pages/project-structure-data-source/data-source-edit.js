@@ -51,6 +51,7 @@ const module = angular.module(
 module.config($stateProvider => {
 
 	$stateProvider.state('main.project.structure.collection_form_edition', {
+		acceptedUsers: ['loggedIn'],
 		url: '/data-source/:dataSourceId',
 		component: 'dataSourceEdition',
 		resolve: {

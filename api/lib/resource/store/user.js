@@ -28,12 +28,4 @@ export default class UserStore extends Store {
 		return User;
 	}
 
-	async getPartner(username) {
-		const data = await this._db.callView('partners', {key: username});
-		if (data.rows.length == 0)
-			throw new Error('missing');
-
-		return data.rows[0].value;
-	}
-
 }

@@ -1,0 +1,69 @@
+{
+	"$schema": "http://json-schema.org/schema#",
+	"title": "Monitool link schema",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+
+	],
+	"properties": {
+		"_id": {
+			"type": "string",
+			"pattern": "^link:[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}:[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"
+		},
+		"_rev": {
+			"type": "string",
+			"pattern": "^[0-9]+\\-[0-9a-f]{32}$"
+		},
+
+		"thematics": {
+			"type": "object",
+			"additionalProperties": false,
+			"patternProperties": {
+				"[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}": {
+					"type": "object",
+					"additionalProperties": false,
+					"patternProperties": {
+						"[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}": {
+							"type": "object",
+							"additionalProperties": false,
+							"required": ["formula", "parameters"],
+							"properties": {
+								"formula": {
+									"type": "string",
+									"minLength": 1
+								},
+
+								"parameters": {
+									"type": "object",
+									"additionalProperties": false,
+									"patternProperties": {
+										".*": {
+											"type": "object",
+											"additionalProperties": false,
+											"required": ["elementId", "filter"],
+											"properties": {
+												"elementId": {"$ref": "#/definitions/uuid"},
+												"filter": {
+													"type": "object",
+													"additionalProperties": false,
+													"patternProperties": {
+														".*": {
+															"type": "array",
+															"items": {"$ref": "#/definitions/uuid"}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+

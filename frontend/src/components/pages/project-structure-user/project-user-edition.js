@@ -51,29 +51,13 @@ module.component('projectUserModal', {
 			this.entities = this.resolve.entities;
 			this.groups = this.resolve.groups;
 			this.dataSources = this.resolve.dataSources;
-
-			// Build the list of users that are available on the select box
-			// Available users are user that are not already taken (besides current one).
-			this.availableUsers = this.resolve.allUsers.filter(user => {
-				var isTakenInProject = this.resolve.allProjectUsers.find(u => u.id == user._id),
-					isTakenByMe      = this.resolve.projectUser && this.resolve.projectUser.id === user._id;
-
-				return isTakenByMe || !isTakenInProject;
-			});
-
-			// Build the list of forbidden usernames if creating a partner account.
-			this.partners = this.resolve.allProjectUsers.filter(u => {
-				if (this.resolve.projectUser)
-					return u.type == 'partner' && u.username !== this.resolve.projectUser.username;
-				else
-					return u.type == 'partner';
-			}).map(u => u.username);
+			this.takenIds = this.resolve.takenIds;
 
 			// isNew will be used by the view to disable inputs that can't be changed (username, etc), and show delete button.
 			this.isNew = !this.resolve.projectUser;
 
 			// The form updates a copy of the object, so that user can cancel the changes by just dismissing the modal.
-			this.user = angular.copy(this.resolve.projectUser) || {type: "internal", id: null, role: "owner", entities: [], dataSources: []};
+			this.user = angular.copy(this.resolve.projectUser) || {id: "", role: "owner", entities: [], dataSources: []};
 			this.user.entities = this.user.entities || [];
 			this.user.dataSources = this.user.dataSources || [];
 
@@ -85,13 +69,6 @@ module.component('projectUserModal', {
 		}
 
 		done() {
-			if (this.user.type == 'internal') {
-				delete this.user.login;
-				delete this.user.password;
-			}
-			else
-				delete this.user.id;
-
 			if (this.user.role != 'input') {
 				delete this.user.entities;
 				delete this.user.dataSources;

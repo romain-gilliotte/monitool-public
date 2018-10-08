@@ -17,6 +17,7 @@
 
 import Model from './model';
 import database from '../database';
+import uuidv4 from 'uuid/v4';
 
 export default class DbModel extends Model {
 
@@ -45,6 +46,9 @@ export default class DbModel extends Model {
 	async save(skipChecks) {
 		if (!skipChecks)
 			await this.validateForeignKeys();
+
+		if (!this._id)
+			this._id = this.storeInstance.type + ':' + uuidv4();
 
 		return this._db.insert(this);
 	}

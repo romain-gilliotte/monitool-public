@@ -1,0 +1,63 @@
+
+<div class="project-columns">
+	<div class="project-menu">
+		<div class="panel-group">
+
+			<div class="panel panel-default" acl-has-project-role="owner" acl-project="$ctrl.project">
+				<div class="panel-heading clickable" ui-sref="main.project.structure.home">
+					<i class="fa fa-caret-down pull-right"></i>
+					<h4 class="panel-title" translate="project.structure"></h4>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+
+				<div class="panel-heading">
+					<i class="fa fa-caret-up pull-right"></i>
+					<h4 class="panel-title" translate="project.organisation"></h4>
+				</div>
+
+				<div class="panel-collapse">
+					<div class="list-group">
+						<a ui-sref="main.project.organisation.home"
+						   ui-sref-active="active"
+						   class="list-group-item">
+
+							<i class="fa fa-home fa-fw"></i>
+							<span translate="shared.home"></span>
+						</a>
+
+						<a ui-sref="main.project.organisation.link({organisationId: organisation._id})"
+						   ui-sref-active="active"
+						   class="list-group-item"
+						   ng-repeat="organisation in $ctrl.organisations">
+
+							<i class="fa fa-home fa-fw"></i>
+							<span>{{organisation.name}}</span>
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default" acl-has-project-role="input" acl-project="$ctrl.project">
+				<div class="panel-heading clickable" ui-sref="main.project.input.home" disable-if="!$ctrl.project._rev">
+					<i class="fa fa-caret-down pull-right"></i>
+					<h4 class="panel-title" translate="project.input"></h4>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading clickable" ui-sref="main.project.reporting.home" disable-if="!$ctrl.project._rev">
+					<i class="fa fa-caret-down pull-right"></i>
+					<h4 class="panel-title" translate="shared.reporting"></h4>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="project-content">
+		<ui-view project="$ctrl.project" organisations="$ctrl.organisations"></ui-view>
+	</div>
+</div>
+

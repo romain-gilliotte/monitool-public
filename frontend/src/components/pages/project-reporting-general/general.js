@@ -41,6 +41,7 @@ const module = angular.module(
 module.config($stateProvider => {
 
 	$stateProvider.state('main.project.reporting.general', {
+		acceptedUsers: ['loggedIn'],
 		url: '/general',
 		component: 'generalReporting',
 	});

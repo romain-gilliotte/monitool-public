@@ -28,6 +28,7 @@ const module = angular.module(
 module.config($stateProvider => {
 
 	$stateProvider.state('main.home', {
+		acceptedUsers: ['loggedIn'],
 		url: '/home',
 		component: 'home',
 	});

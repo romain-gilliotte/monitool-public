@@ -29,6 +29,7 @@ const module = angular.module(
 module.config($stateProvider => {
 
 	$stateProvider.state('main.project.reporting.home', {
+		acceptedUsers: ['loggedIn'],
 		url: '/reporting-home',
 		component: 'projectReportingHome',
 	});

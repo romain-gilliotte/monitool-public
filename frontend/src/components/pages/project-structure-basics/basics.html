@@ -1,5 +1,5 @@
 <ol class="breadcrumb noprint">
-	<li ng-if="$root.userCtx.type == 'user'"><a ui-sref="main.projects" translate="shared.projects"></a></li>
+	<li><a ui-sref="main.projects" translate="shared.projects"></a></li>
 	<li class="active" title="{{$ctrl.project.country}}" ng-bind="$ctrl.project.country|maxLength:20"></li>
 	<li class="active" title="{{$ctrl.project.name}}" ng-bind="$ctrl.project.name|maxLength:50"></li>
 	<li class="active" translate="project.basics"></li>
@@ -47,29 +47,6 @@
 			</form-group>
 
 			<form-group
-				input-id="input-themes"
-				label="theme.themes"
-				help="project.basics_help_thematics">
-
-				<ui-select
-					id="input-themes"
-					multiple
-					ng-model="$ctrl.editableProject.themes"
-					ng-change="$ctrl.onFieldChange()"
-					name="themes"
-					theme="bootstrap">
-
-					<ui-select-match placeholder="{{'indicator.select_themes'|translate}}">
-						{{$item.name[$root.language]}}
-					</ui-select-match>
-					<ui-select-choices repeat="theme._id as theme in $ctrl.themes">
-						{{theme.name[$root.language]}}
-					</ui-select-choices>
-				</ui-select>
-
-			</form-group>
-
-			<form-group
 				input-id="input-start"
 				label="project.start_date"
 				help="project.basics_help_begin">
@@ -88,25 +65,6 @@
 				<utc-datepicker
 					ng-model="$ctrl.editableProject.end"
 					ng-change="$ctrl.onFieldChange()"></utc-datepicker>
-			</form-group>
-
-			<form-group
-				input-id="input-visibility"
-				label="project.visibility.visibility"
-				help="project.visibility.help">
-
-				<select
-					id="input-visibility"
-					type="text"
-					class="form-control"
-					name="visibility"
-					ng-model="$ctrl.editableProject.visibility"
-					ng-change="$ctrl.onFieldChange()"
-					required>
-					<option value="public" translate="project.visibility.public"></option>
-					<option value="private" translate="project.visibility.private"></option>
-				</select>
-
 			</form-group>
 
 		</fieldset>

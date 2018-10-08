@@ -33,31 +33,12 @@ const isAllowedProject = function(userCtx, scope, element, attributes) {
 	if (askedRole !== 'owner' && askedRole !== 'input')
 		throw new Error("acl-has-project-role must be called with either 'owner' or 'input'");
 
-	if (askedRole === 'owner') {
-		if (userCtx.type === 'user') {
-			var internalUser = project.users.find(u => u.id == userCtx._id);
-			return userCtx.role === 'admin' || (internalUser && internalUser.role === 'owner');
-		}
+	let internalUser = project.users.find(u => u.email == userCtx.email);
 
-		else if (userCtx.type === 'partner') {
-			return userCtx.projectId === project._id && userCtx.role === 'owner';
-		}
-
-		else
-			throw new Error('Invalid userCtx.type value');
-	}
-	else if (askedRole === 'input') {
-		if (userCtx.type === 'user') {
-			var internalUser = project.users.find(u => u.id == userCtx._id);
-			return userCtx.role === 'admin' || internalUser && ['owner', 'input'].includes(internalUser.role);
-		}
-
-		else if (userCtx.type === 'partner')
-			return userCtx.projectId === project._id && ['owner', 'input'].includes(userCtx.role);
-
-		else
-			throw new Error('Invalid userCtx.type value');
-	}
+	if (askedRole === 'owner')
+		return (internalUser && internalUser.role === 'owner');
+	else if (askedRole === 'input')
+		return internalUser && ['owner', 'input'].includes(internalUser.role);
 	else
 		throw new Error('Invalid asked role');
 };

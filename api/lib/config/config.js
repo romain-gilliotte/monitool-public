@@ -53,36 +53,8 @@ const config = {
 			process.env.MONITOOL_COUCHDB_PASS ||
 			readFile(process.env.MONITOOL_COUCHDB_PASS_FILE) ||
 			""
-	},
-	"api": {
-		"google":
-			process.env.MONITOOL_API_GOOGLE ||
-			readFile(process.env.MONITOOL_API_GOOGLE_FILE)
-	},
-	"auth": {
-		"administrator": process.env.MONITOOL_AUTH_ADMINISTRATOR,
-		"providers": {
-		}
 	}
 };
-
-if (toBool(process.env.MONITOOL_AUTH_PROVIDERS_AZUREAD))
-	config.auth.providers.azureAD = {
-		"label": process.env.MONITOOL_AUTH_PROVIDERS_AZUREAD_LABEL || "Use azure account",
-		"domain": process.env.MONITOOL_AUTH_PROVIDERS_AZUREAD_DOMAIN || "hotmail.com",
-		"tenantId": process.env.MONITOOL_AUTH_PROVIDERS_AZUREAD_TENANTID || "common",
-		"clientId": process.env.MONITOOL_AUTH_PROVIDERS_AZUREAD_CLIENTID,
-		"clientSecret":
-			process.env.MONITOOL_AUTH_PROVIDERS_AZUREAD_CLIENTSECRET ||
-			readFile(process.env.MONITOOL_AUTH_PROVIDERS_AZUREAD_CLIENTSECRET_FILE),
-	};
-
-if (toBool(process.env.MONITOOL_AUTH_PROVIDERS_TRAINING))
-	config.auth.providers.training = {
-		"label": process.env.MONITOOL_AUTH_PROVIDERS_TRAINING_LABEL || "Use training account (admin)",
-		"account": process.env.MONITOOL_AUTH_PROVIDERS_TRAINING_ACCOUNT || "training"
-	};
-
 
 // Validate that nothing is missing from the configuration file.
 let validate = validator(schema);

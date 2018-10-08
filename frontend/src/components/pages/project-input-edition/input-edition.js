@@ -36,6 +36,7 @@ const module = angular.module(
 module.config($stateProvider => {
 
 	$stateProvider.state('main.project.input.edit', {
+		acceptedUsers: ['loggedIn'],
 		url: '/input/:dataSourceId/edit/:period/:entityId',
 		component: 'projectInputEdition',
 		resolve: {

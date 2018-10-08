@@ -15,6 +15,8 @@
  * along with Monitool. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import JSONStream from 'JSONStream';
+import {Transform} from 'stream';
 import database from '../database';
 
 /**
@@ -52,14 +54,30 @@ export default class Store {
 	 *
 	 * @return {Array.<Model>}
 	 */
-	async list() {
-		const viewResult = await this._db.callList({
-			include_docs: true,
-			startkey: this.modelString + ":!",
-			endkey: this.modelString + ":~"
-		});
+	list() {
+		const ModelClass = this.modelClass;
 
-		return viewResult.rows.map(row => new this.modelClass(row.doc));
+		return [
+			this._db.bucket.listAsStream({
+				include_docs: true,
+				startkey: this.modelString + ":!",
+				endkey: this.modelString + ":~"
+			}),
+			JSONStream.parse(['rows', true, 'doc']),
+			new Transform({
+				objectMode: true,
+				transform(chunk, encoding, callback) {
+					try {
+
+					this.push(new ModelClass(chunk));
+					}
+					catch (e) {
+						console.log(e)
+					}
+					callback();
+				}
+			})
+		];
 	}
 
 	/**

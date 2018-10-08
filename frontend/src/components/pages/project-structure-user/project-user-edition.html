@@ -11,81 +11,20 @@
 	<form class="form-horizontal" role="form" name="userForm" novalidate autocomplete="off">
 
 		<div class="form-group">
-			<label for="type-input" class="col-sm-3 control-label" translate="project.user_type"></label>
-			<div class="col-sm-9">
-				<select id="type-input" class="form-control" ng-model="$ctrl.user.type" required ng-disabled="!$ctrl.isNew">
-					<option value="internal" translate="project.user_types.internal"></option>
-					<option value="partner" translate="project.user_types.partner"></option>
-				</select>
-
-				<p class="help-block">
-					<i class="fa fa-info-circle"></i>
-					{{'project.user_help_type'|translate}}
-				</p>
-			</div>
-		</div>
-
-		<div class="form-group" ng-if="$ctrl.user.type == 'internal'">
-			<label for="user-input" class="col-sm-3 control-label" translate="project.user"></label>
-			<div class="col-sm-9">
-				<select id="user-input"
-						class="form-control"
-						ng-disabled="!$ctrl.isNew"
-						ng-model="$ctrl.user.id"
-						ng-options="u._id as u.name for u in $ctrl.availableUsers|orderBy:'name'"
-						required></select>
-
-				<p class="help-block">
-					<i class="fa fa-info-circle"></i>
-					{{'project.user_help_user'|translate}}
-				</p>
-			</div>
-		</div>
-
-		<div class="form-group" ng-if="$ctrl.user.type == 'partner'">
-			<label for="login-input" class="col-sm-3 control-label" translate="project.username"></label>
+			<label for="login-input" class="col-sm-3 control-label" translate="project.email"></label>
 			<div class="col-sm-9">
 				<input id="login-input"
 					   type="text"
-					   ng-model="$ctrl.user.username"
-					   ng-disabled="!$ctrl.isNew"
+					   ng-model="$ctrl.user.email"
 					   class="form-control"
 					   ng-minlength="4"
 					   ng-pattern="/^[a-z\.\-]+$/"
-					   forbidden-values="$ctrl.partners"
+					   forbidden-values="$ctrl.takenIds"
 					   required>
 
 				<p class="help-block">
 					<i class="fa fa-info-circle"></i>
 					{{'project.user_help_username'|translate}}
-				</p>
-			</div>
-		</div>
-
-		<div class="form-group" ng-if="$ctrl.user.type == 'partner'">
-			<label for="fullname-input" class="col-sm-3 control-label" translate="project.user_fullname"></label>
-			<div class="col-sm-9">
-				<input id="fullname-input" type="text" ng-model="$ctrl.user.name" class="form-control" required>
-				<p class="help-block">
-					<i class="fa fa-info-circle"></i>
-					{{'project.user_help_fullname'|translate}}
-				</p>
-			</div>
-		</div>
-
-		<div class="form-group" ng-if="$ctrl.user.type == 'partner'">
-			<label for="password-input" class="col-sm-3 control-label" translate="project.password"></label>
-			<div class="col-sm-9">
-				<input id="password-input"
-					   type="password"
-					   ng-model="$ctrl.user.password"
-					   class="form-control"
-					   ng-minlength="6"
-					   ng-required="$ctrl.isNew">
-
-				<p class="help-block">
-					<i class="fa fa-info-circle"></i>
-					{{'project.user_help_password'|translate}}
 				</p>
 			</div>
 		</div>

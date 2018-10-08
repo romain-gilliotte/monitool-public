@@ -37,20 +37,15 @@ const module = angular.module(
 module.config($stateProvider => {
 
 	$stateProvider.state('main.project.structure.user_list', {
+		acceptedUsers: ['loggedIn'],
 		url: '/users',
-		component: 'projectUserList',
-		resolve: {
-			users: () => User.fetchAll()
-		}
+		component: 'projectUserList'
 	});
 });
 
 
 module.component('projectUserList', {
 	bindings: {
-		// injected from ui-router on this route.
-		users: '<',
-
 		// injected from parent component.
 		project: '<',
 		onProjectUpdate: '&'
@@ -74,11 +69,6 @@ module.component('projectUserList', {
 		$onChanges(changes) {
 			if (changes.project)
 				this.editableProject = angular.copy(this.project);
-
-			if (changes.users) {
-				this.usersById = {};
-				this.users.forEach(user => this.usersById[user._id] = user);
-			}
 		}
 
 		onEditUserClicked(user=null) {
@@ -87,9 +77,8 @@ module.component('projectUserList', {
 					component: 'projectUserModal',
 					size: 'lg',
 					resolve: {
-						allUsers: () => this.users,
 						projectUser: () => user,
-						allProjectUsers: () => this.editableProject.users,
+						takenIds: () => this.editableProject.users.map(user => user.id).filter(u => !user || u != user.id),
 						entities: () => this.editableProject.entities,
 						groups: () => this.editableProject.groups,
 						dataSources: () => this.editableProject.forms,

@@ -1,0 +1,23 @@
+
+<ol class="breadcrumb noprint">
+	<li><a ui-sref="main.organisations" translate="shared.organisations"></a></li>
+	<li class="active" title="{{$ctrl.organisation.name}}" ng-bind="$ctrl.organisation.name|maxLength:50"></li>
+	<li class="active" translate="shared.reporting"></li>
+</ol>
+
+<div ng-switch="$root.language">
+	<organisation-reporting-home-en
+		ng-switch-when="en"
+		organisation="$ctrl.organisation">
+	</organisation-reporting-home-en>
+
+	<organisation-reporting-home-fr
+		ng-switch-when="fr"
+		organisation="$ctrl.organisation">
+	</organisation-reporting-home-fr>
+
+	<organisation-reporting-home-es
+		ng-switch-when="es"
+		organisation="$ctrl.organisation">
+	</organisation-reporting-home-es>
+</div>

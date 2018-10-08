@@ -58,16 +58,6 @@
 							<span translate="shared.logical_frames"></span>
 						</a>
 
-						<a ui-sref="main.project.structure.cross_cutting"
-						   ui-sref-active="active"
-						   class="list-group-item"
-						   disable-if="!$ctrl.project._rev">
-
-							<span class="label label-default pull-right">{{$ctrl.project.crossCutting|length}}</span>
-							<i class="fa fa-sign-out fa-fw"></i>
-							<span translate="indicator.cross_cutting"></span>
-						</a>
-
 						<a ui-sref="main.project.structure.extra"
 						   ui-sref-active="active"
 						   class="list-group-item"
@@ -98,6 +88,13 @@
 							<span translate="project.revisions"></span>
 						</a>
 					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading clickable" ui-sref="main.project.organisation.home" disable-if="!$ctrl.project._rev">
+					<i class="fa fa-caret-down pull-right"></i>
+					<h4 class="panel-title" translate="project.organisation"></h4>
 				</div>
 			</div>
 

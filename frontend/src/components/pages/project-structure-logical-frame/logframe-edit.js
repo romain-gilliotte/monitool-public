@@ -43,6 +43,7 @@ const module = angular.module(
 module.config($stateProvider => {
 
 	$stateProvider.state('main.project.structure.logical_frame_edition', {
+		acceptedUsers: ['loggedIn'],
 		url: '/logical-frame/:logicalFrameId?from',
 		component: 'logicalFrameEdit',
 		resolve: {

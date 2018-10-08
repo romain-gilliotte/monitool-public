@@ -28,15 +28,8 @@ const isAllowedForm = function(userCtx, scope, element, attributes) {
 	var project = scope.$eval(attributes.aclProject),
 		askedFormId = scope.$eval(attributes.aclHasInputForm) || scope.$eval(attributes.aclLacksInputForm);
 
-	if (userCtx.type === 'user') {
-		var internalUser = project.users.find(u => u.id == userCtx._id);
-		return userCtx.role === 'admin' || project.canInputForm(internalUser, askedFormId);
-	}
-	else if (userCtx.type === 'partner')
-		return project.canInputForm(userCtx, askedFormId)
-
-	else
-		throw new Error('Invalid userCtx.type value');
+	var internalUser = project.users.find(u => u.email == userCtx.email);
+	return userCtx.role === 'admin' || project.canInputForm(internalUser, askedFormId);
 };
 
 

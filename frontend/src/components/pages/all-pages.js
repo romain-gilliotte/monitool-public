@@ -17,79 +17,102 @@
 
 import angular from 'angular';
 
-import menu from './menu/menu';
-import ccIndicatorList from './admin-cc-indicator/cc-indicator-list';
-import userList from './admin-user/user-list';
-import adminMenu from './admin-menu/menu';
-import themeList from './admin-theme/theme-list';
+import sessionInit from "./session-init/init";
+import sessionCheckLogin from "./session-checklogin/checklogin";
+import sessionLogin from "./session-login/login";
+import sessionRegister from "./session-register/register";
 
-import home from './home/home';
+import home from "./home/home";
+import menu from "./menu/menu";
 
-import repIndicatorList from './cc-indicator-list/cc-indicator-list';
-import ccIndicatorReporting from './cc-indicator-reporting/cc-indicator-reporting';
+import projectList from "./project-list/list";
 
-import projectMenu from './project-menu/menu';
-import projectList from './project-list/list';
+import projectMenu from "./project-menu/menu";
+import projectStructMenu from "./project-structure-menu/menu";
+import projectStructHome from "./project-structure-home/home";
+import projectStructBasics from "./project-structure-basics/basics";
+import projectStructSites from "./project-structure-sites/sites";
+import projectStructDsList from "./project-structure-data-source/data-source-list";
+import projectStructDsEdit from "./project-structure-data-source/data-source-edit";
+import projectStructExtra from "./project-structure-extra-indicators/extra-indicators";
+import projectStructHistory from "./project-structure-history/history";
+import projectStructLfList from "./project-structure-logical-frame/logframe-list";
+import projectStructLfEdit from "./project-structure-logical-frame/logframe-edit";
+import projectStructUserList from "./project-structure-user/user-list";
 
-import structureMenu from './project-structure-menu/menu';
-import basics from './project-structure-basics/basics';
-import sites from './project-structure-sites/sites';
-import dsList from './project-structure-data-source/data-source-list';
-import dsEdit from './project-structure-data-source/data-source-edit';
-import prjCcIndicatorList from './project-structure-cc-indicators/cc-indicator-list';
-import logframeList from './project-structure-logical-frame/logframe-list';
-import logframeEdit from './project-structure-logical-frame/logframe-edit';
-import prjUserList from './project-structure-user/user-list';
-import extraIndicators from './project-structure-extra-indicators/extra-indicators';
-import history from './project-structure-history/history';
+import projectOrgMenu from "./project-organisation-menu/menu";
+import projectOrgHome from "./project-organisation-home/home";
+import projectOrgLink from "./project-organisation-link/link";
 
-import inputList from './project-input-list/input-list';
-import inputEdition from './project-input-edition/input-edition';
+import projectInputMenu from "./project-input-menu/menu";
+import projectInputHome from "./project-input-home/home";
+import projectInputList from "./project-input-list/input-list";
+import projectInputEdition from "./project-input-edition/input-edition";
 
-import general from './project-reporting-general/general';
-import olap from './project-reporting-olap/olap';
+import projectReportingMenu from "./project-reporting-menu/menu";
+import projectReportingHome from "./project-reporting-home/home";
+import projectReportingGeneral from "./project-reporting-general/general";
+import projectReportingOlap from "./project-reporting-olap/olap";
 
+import orgList from "./organisation-list/list";
 
-import projectInputmenu from './project-input-menu/menu';
-import projectReportingmenu from './project-reporting-menu/menu';
-import projectStructureHome from './project-structure-home/home';
-import projectInputHome from './project-input-home/home';
-import projectReportingHome from './project-reporting-home/home';
+import orgMenu from "./organisation-menu/menu";
+import orgStructMenu from './organisation-structure-menu/menu';
+import orgStructHome from "./organisation-structure-home/home";
+import orgStructBasics from "./organisation-structure-basics/basics";
+import orgStructThematics from "./organisation-structure-thematics/thematics";
+import orgStructUser from "./organisation-structure-user/user";
+
+import orgReportingMenu from './organisation-reporting-menu/menu';
+import orgReportingHome from './organisation-reporting-home/home';
+import orgReportingProject from "./organisation-reporting-project/project";
+import orgReportingThematics from './organisation-reporting-thematics/thematics';
+
 
 const module = angular.module(
 	'monitool.components.pages.all-pages',
 	[
-		menu,
-		ccIndicatorList,
-		userList,
-		adminMenu,
-		themeList,
+		sessionInit,
+		sessionCheckLogin,
+		sessionLogin,
+		sessionRegister,
 		home,
-		projectMenu,
+		menu,
 		projectList,
-		inputEdition,
-		inputList,
-		olap,
-		general,
-		prjCcIndicatorList,
-		sites,
-		history,
-		logframeList,
-		dsList,
-		prjUserList,
-		basics,
-		structureMenu,
-		dsEdit,
-		extraIndicators,
-		logframeEdit,
-		repIndicatorList,
-		ccIndicatorReporting,
-
-		projectInputmenu,
-		projectReportingmenu,
-		projectStructureHome,
+		projectMenu,
+		projectStructMenu,
+		projectStructHome,
+		projectStructBasics,
+		projectStructSites,
+		projectStructDsList,
+		projectStructDsEdit,
+		projectStructExtra,
+		projectStructHistory,
+		projectStructLfList,
+		projectStructLfEdit,
+		projectStructUserList,
+		projectOrgMenu,
+		projectOrgHome,
+		projectOrgLink,
+		projectInputMenu,
 		projectInputHome,
-		projectReportingHome
+		projectInputList,
+		projectInputEdition,
+		projectReportingMenu,
+		projectReportingHome,
+		projectReportingGeneral,
+		projectReportingOlap,
+		orgList,
+		orgMenu,
+		orgStructMenu,
+		orgStructHome,
+		orgStructBasics,
+		orgStructThematics,
+		orgStructUser,
+		orgReportingMenu,
+		orgReportingHome,
+		orgReportingProject,
+		orgReportingThematics
 	]
 );
 

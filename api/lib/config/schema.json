@@ -4,7 +4,7 @@
 
 	"type": "object",
 	"additionalProperties": false,
-	"required": ["debug", "baseUrl", "port", "cookieSecret", "couchdb", "auth", "api"],
+	"required": ["debug", "baseUrl", "port", "cookieSecret", "couchdb"],
 	"properties": {
 		"debug": {
 			"type": "boolean"
@@ -38,47 +38,6 @@
 				},
 				"username": {"type": "string"},
 				"password": {"type": "string"}
-			}
-		},
-		"api": {
-			"type": "object",
-			"properties": {
-				"google": {"type": "string"}
-			}
-		},
-		"auth": {
-			"type": "object",
-			"required": ["administrator", "providers"],
-			"properties": {
-				"administrator": {
-					"type": "string",
-					"minLength": 1
-				},
-
-				"providers": {
-					"type": "object",
-					"required": [],
-					"properties": {
-						"azureAD": {
-							"type": "object",
-							"required": ["label", "domain", "clientId", "clientSecret"],
-							"properties": {
-								"label": {"type": "string", "minLength": 1},
-								"domain": {"type": "string", "minLength": 1},
-								"clientId": {"type": "string", "minLength": 1},
-								"clientSecret": {"type": "string", "minLength": 1}
-							}
-						},
-						"training": {
-							"type": "object",
-							"required": ["label", "account"],
-							"properties": {
-								"label": {"type": "string", "minLength": 1},
-								"account": {"type": "string", "minLength": 1}
-							}
-						}
-					}
-				}
 			}
 		}
 	}

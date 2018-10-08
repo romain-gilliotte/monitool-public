@@ -22,9 +22,7 @@ import uuid from 'uuid/v4';
 import diacritics from 'diacritics';
 
 import Project from '../../../models/project';
-import Theme from '../../../models/theme';
 
-import mtAclProjectCreation from '../../../directives/acl/project-creation';
 import mtAclProjectRole from '../../../directives/acl/project-role';
 
 const module = angular.module(
@@ -32,23 +30,21 @@ const module = angular.module(
 	[
 		uiRouter, // for $stateProvider
 
-		mtAclProjectCreation,
 		mtAclProjectRole
 	]
 );
 
 
 module.config($stateProvider => {
-	if (window.user.type == 'user') {
-		$stateProvider.state('main.projects', {
-			url: '/projects',
-			component: 'projectList',
-			resolve: {
-				projects: () => Project.fetchShort(),
-				themes: () => Theme.fetchAll()
-			}
-		});
-	}
+	$stateProvider.state('main.projects', {
+		acceptedUsers: ['loggedIn'],
+		url: '/projects',
+		component: 'projectList',
+		resolve: {
+			projects: () => Project.fetchAll()
+		}
+	});
+
 });
 
 
@@ -78,11 +74,11 @@ module.component('projectList', {
 			this.displayedProjects = this.projects.slice();
 
 			this.displayedProjects.forEach(p => {
-				const user = p.users.find(u => u.id == this.userCtx._id);
+				const user = p.users.find(u => u.email == this.userCtx.email);
 
 				p.running = p.end > new Date().toISOString().slice(0, 10);
 				p.isUser = !!user;
-				p.isOwner = this.userCtx.role === 'admin' || (user && user.role === 'owner');
+				p.isOwner = user && user.role === 'owner';
 				p.favorite = !!localStorage['favorites::projects::' + p._id];
 			});
 
@@ -146,7 +142,7 @@ module.component('projectList', {
 		}
 
 		createProject() {
-			this.$state.go('main.project.structure.home', {projectId: 'project:' + uuid()});
+			this.$state.go('main.project.structure.home', {projectId: 'new'});
 		}
 
 		onOpenClicked(project) {
@@ -160,10 +156,8 @@ module.component('projectList', {
 			var question = this.translate('project.are_you_sure_to_clone');
 
 			if (window.confirm(question)) {
-				const newProjectId = 'project:' + uuid();
-
-				await axios.put(
-					'/api/resources/project/' + newProjectId,
+				await axios.post(
+					'/api/resources/project',
 					null,
 					{
 						params: {
@@ -173,7 +167,7 @@ module.component('projectList', {
 					}
 				)
 
-				this.projects = await Project.fetchShort();
+				this.projects = await Project.fetchAll();
 				this.$onChanges();
 				this.$scope.$apply();
 				this.$window.scrollTo(0, 0);
@@ -192,7 +186,7 @@ module.component('projectList', {
 				try {
 					await project.save();
 
-					this.projects = await Project.fetchShort();
+					this.projects = await Project.fetchAll();
 					this.$onChanges();
 					this.$scope.$apply();
 				}
@@ -211,7 +205,7 @@ module.component('projectList', {
 			try {
 				await project.save();
 
-				this.projects = await Project.fetchShort();
+				this.projects = await Project.fetchAll();
 				this.$onChanges();
 				this.$scope.$apply();
 			}

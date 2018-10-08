@@ -31,6 +31,7 @@ const module = angular.module(
 module.config($stateProvider => {
 
 	$stateProvider.state('main.project.input.home', {
+		acceptedUsers: ['loggedIn'],
 		url: '/input-home',
 		component: 'projectInputHome',
 	});

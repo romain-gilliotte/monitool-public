@@ -44,6 +44,7 @@ const module = angular.module(
 
 module.config($stateProvider => {
 	$stateProvider.state('main.project.reporting.olap', {
+		acceptedUsers: ['loggedIn'],
 		url: '/olap',
 		component: 'olapReporting'
 	});

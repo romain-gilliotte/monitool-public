@@ -59,7 +59,7 @@ class Database {
 	constructor(config) {
 		this.config = config;
 		this.nano = nano(this.url);
-		this.database = this.nano.use(this.bucketName)
+		this.bucket = this.nano.use(this.bucketName)
 	}
 
 	async checkConnectivity() {
@@ -153,7 +153,7 @@ class Database {
 	 * @return {Array}
 	 */
 	async callView(viewName, options) {
-		return this.database.view('monitool', viewName, options);
+		return this.bucket.view('monitool', viewName, options);
 	}
 
 	/**
@@ -164,8 +164,10 @@ class Database {
 	 * @return {Array}
 	 */
 	async callList(options) {
-		return this.database.list(options);
+		return this.bucket.list(options);
 	}
+
+
 
 	/**
 	 * Wrap bulk queries to database into a promise
@@ -175,7 +177,7 @@ class Database {
 	 * @return {Array}
 	 */
 	async callBulk(options) {
-		return this.database.bulk(options);
+		return this.bucket.bulk(options);
 	}
 
 	/**
@@ -184,11 +186,11 @@ class Database {
 	 * @return {Model}
 	 */
 	async get(id, params=undefined) {
-		return this.database.get(id, params);
+		return this.bucket.get(id, params);
 	}
 
 	async insert(doc) {
-		const result = await this.database.insert(doc);
+		const result = await this.bucket.insert(doc);
 		doc._rev = result.rev;
 	}
 
@@ -196,7 +198,7 @@ class Database {
 		if (typeof id !== 'string' || typeof rev !== 'string')
 			throw new Error('invalid call to destroy.');
 
-		return this.database.destroy(id, rev);
+		return this.bucket.destroy(id, rev);
 	}
 }
 
