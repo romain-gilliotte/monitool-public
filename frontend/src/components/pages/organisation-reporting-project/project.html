@@ -1,1 +1,12 @@
-reporting project
+<ol class="breadcrumb noprint">
+	<li><a ui-sref="main.organisations" translate="shared.organisations"></a></li>
+	<li class="active" title="{{$ctrl.organisation.name}}" ng-bind="$ctrl.organisation.name|maxLength:50"></li>
+	<li class="active" translate="organisation.reporting_projects"></li>
+</ol>
+
+<project-list
+	projects="$ctrl.projects"
+	show-drop-down="false"
+	show-create="false"
+	prefer-reporting="true">
+</project-list>

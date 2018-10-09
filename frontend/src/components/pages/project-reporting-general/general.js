@@ -50,10 +50,7 @@ module.config($stateProvider => {
 
 module.component('generalReporting', {
 	bindings: {
-		themes: '<',
-
 		project: '<',
-		ccIndicators: '<'
 	},
 	template: require('./general.html'),
 	controller: class GeneralReportingController {

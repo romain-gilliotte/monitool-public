@@ -36,6 +36,23 @@ export default class LinkStore extends Store {
 		throw new Error('Implement me.');
 	}
 
+	listForUserOrganisation(user, organisationId) {
+		if (!user.organisations.includes(organisationId)) {
+			const emptyStream = new Readable({objectMode: true});
+			emptyStream.push(null);
+			return [emptyStream];
+		}
+		else
+			return [
+				this._db.bucket.listAsStream({
+					startkey: 'link:' + organisationId.slice(13) + ':!',
+					endkey: 'link:' + organisationId.slice(13) + ':~',
+					include_docs: true
+				}),
+				JSONStream.parse(['rows', true, 'doc'])
+			];
+	}
+
 	/**
 	 * Just scan all links and filter manually.
 	 * We can't do that on a view because of the auto invites and we don't expect the number

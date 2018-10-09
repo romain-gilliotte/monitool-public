@@ -16,60 +16,39 @@
  */
 
 import angular from 'angular';
-
 import uiRouter from '@uirouter/angularjs';
 
-import mtFormGroup from '../../shared/misc/form-group';
+import Project from '../../../models/project';
+import Link from '../../../models/link';
 
 
 const module = angular.module(
-	'monitool.components.pages.organisation.structure.user',
+	'monitool.components.pages.organisation.reporting.indicators',
 	[
 		uiRouter, // for $stateProvider
-
-		mtFormGroup
 	]
 );
 
 
 module.config($stateProvider => {
-	$stateProvider.state('main.organisation.structure.users', {
+
+	$stateProvider.state('main.organisation.reporting.indicators', {
 		acceptedUsers: ['loggedIn'],
-		url: '/user',
-		component: 'organisationUser'
+		url: '/indicators',
+		component: 'organisationReportingIndicators',
 	});
 });
 
 
-module.component('organisationUser', {
+module.component('organisationReportingIndicators', {
 	bindings: {
-		// injected from parent component.
 		organisation: '<',
-		onOrganisationUpdate: '&'
+		projects: '<',
+		links: '<'
 	},
-
-	template: require('./user.html'),
-
-	controller: class OrganisationUserController {
-
-		$onChanges(changes) {
-			if (changes.organisation) {
-				this.editableOrganisation = angular.copy(this.organisation);
-			}
-		}
-
-		/**
-		 * Called from ng-change on all inputs.
-		 */
-		onFieldChange() {
-			this.onOrganisationUpdate({
-				newOrganisation: this.editableOrganisation,
-				isValid: this.userForm.$valid
-			});
-		}
-
-	}
+	template: require('./indicators.html')
 });
 
 
 export default module.name;
+

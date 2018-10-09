@@ -23,17 +23,13 @@ import uuid from 'uuid/v4';
 
 export default class Project {
 
-	static async fetchCrossCutting(indicatorId) {
-		const response = await axios.get(
-			'/api/resources/project',
-			{params: {mode: 'crossCutting', indicatorId: indicatorId}}
-		);
-
-		return response.data.map(i => new Project(i));
-	}
-
 	static async fetchAll() {
 		const response = await axios.get('/api/resources/project');
+		return response.data;
+	}
+
+	static async fetchForOrganisation(organisationId) {
+		const response = await axios.get('/api/resources/project?organisationId=' + organisationId);
 		return response.data;
 	}
 

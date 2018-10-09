@@ -19,35 +19,57 @@ import angular from 'angular';
 
 import uiRouter from '@uirouter/angularjs';
 
+import mtFormGroup from '../../shared/misc/form-group';
+
+
 const module = angular.module(
-	'monitool.components.pages.organisation.reporting.thematics',
+	'monitool.components.pages.organisation.structure.invitations',
 	[
 		uiRouter, // for $stateProvider
 
+		mtFormGroup
 	]
 );
 
 
 module.config($stateProvider => {
-
-	$stateProvider.state('main.organisation.reporting.thematics', {
+	$stateProvider.state('main.organisation.structure.invitations', {
 		acceptedUsers: ['loggedIn'],
-		url: '/thematics',
-		component: 'organisationReportingThematics',
+		url: '/invitations',
+		component: 'organisationInvitation'
 	});
 });
 
 
-module.component('organisationReportingThematics', {
+module.component('organisationInvitation', {
 	bindings: {
+		// injected from parent component.
 		organisation: '<',
+		onOrganisationUpdate: '&'
 	},
-	template: require('./thematics.html'),
-	controller: class OrgReportingThematics {
+
+	template: require('./invitations.html'),
+
+	controller: class OrganisationInvitationController {
+
+		$onChanges(changes) {
+			if (changes.organisation) {
+				this.editableOrganisation = angular.copy(this.organisation);
+			}
+		}
+
+		/**
+		 * Called from ng-change on all inputs.
+		 */
+		onFieldChange() {
+			this.onOrganisationUpdate({
+				newOrganisation: this.editableOrganisation,
+				isValid: true
+			});
+		}
 
 	}
 });
 
 
 export default module.name;
-

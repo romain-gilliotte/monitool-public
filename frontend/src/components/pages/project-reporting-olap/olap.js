@@ -54,7 +54,6 @@ module.config($stateProvider => {
 module.component('olapReporting', {
 	bindings: {
 		project: '<',
-		ccIndicators: '<'
 	},
 
 	template: require('./olap.html'),

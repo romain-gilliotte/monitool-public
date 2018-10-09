@@ -15,6 +15,8 @@ router.get('/resources/link', async ctx => {
 	let streams;
 	if (ctx.request.query.projectId)
 		streams = Link.storeInstance.listForUserProject(ctx.state.user, ctx.request.query.projectId);
+	else if (ctx.request.query.organisationId)
+		streams = Link.storeInstance.listForUserOrganisation(ctx.state.user, ctx.request.query.organisationId);
 	else
 		streams = Link.storeInstance.listForUser(ctx.state.user);
 

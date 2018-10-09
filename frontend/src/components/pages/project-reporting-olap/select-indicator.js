@@ -28,7 +28,6 @@ const module = angular.module(
 module.component('selectIndicator', {
 	bindings: {
 		project: '<', // To get the indicators
-		ccIndicators: '<', // To get the names of cc indicators
 		onUpdate: '&'
 	},
 	template: require('./select-indicator.html'),

@@ -18,12 +18,16 @@
 import angular from 'angular';
 
 import uiRouter from '@uirouter/angularjs';
+import Project from '../../../models/project';
+import Link from '../../../models/link';
+
+import mtProjectList from '../../shared/project/list';
 
 const module = angular.module(
 	'monitool.components.pages.organisation.reporting.project',
 	[
 		uiRouter, // for $stateProvider
-
+		mtProjectList
 	]
 );
 
@@ -34,6 +38,10 @@ module.config($stateProvider => {
 		acceptedUsers: ['loggedIn'],
 		url: '/project',
 		component: 'organisationReportingProject',
+		resolve: {
+			projects: $stateParams => Project.fetchForOrganisation($stateParams.organisationId),
+			links: $stateParams => Link.fetchForOrganisation($stateParams.organisationId)
+		}
 	});
 });
 
@@ -41,11 +49,10 @@ module.config($stateProvider => {
 module.component('organisationReportingProject', {
 	bindings: {
 		organisation: '<',
+		projects: '<',
+		links: '<'
 	},
-	template: require('./project.html'),
-	controller: class OrgReportingProject {
-
-	}
+	template: require('./project.html')
 });
 
 

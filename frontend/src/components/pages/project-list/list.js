@@ -23,6 +23,7 @@ import diacritics from 'diacritics';
 
 import Project from '../../../models/project';
 
+import mtProjectList from '../../shared/project/list';
 import mtAclProjectRole from '../../../directives/acl/project-role';
 
 const module = angular.module(
@@ -30,6 +31,7 @@ const module = angular.module(
 	[
 		uiRouter, // for $stateProvider
 
+		mtProjectList,
 		mtAclProjectRole
 	]
 );
@@ -39,7 +41,7 @@ module.config($stateProvider => {
 	$stateProvider.state('main.projects', {
 		acceptedUsers: ['loggedIn'],
 		url: '/projects',
-		component: 'projectList',
+		component: 'projectListPage',
 		resolve: {
 			projects: () => Project.fetchAll()
 		}
@@ -48,174 +50,12 @@ module.config($stateProvider => {
 });
 
 
-module.component('projectList', {
+module.component('projectListPage', {
 	bindings: {
-		'projects': '<',
-		'themes': '<',
+		'projects': '<'
 	},
 
 	template: require('./list.html'),
-
-	controller: class ProjectListController {
-
-		constructor($rootScope, $filter, $scope, $state, $window) {
-			this.userCtx = $rootScope.userCtx;
-			this.$scope = $scope;
-			this.$state = $state;
-			this.$window = $window;
-			this.translate = $filter('translate');
-
-			this.displayOngoing = true;
-			this.displayFinished = false;
-			this.displayDeleted = false;
-		}
-
-		$onChanges(changes) {
-			this.displayedProjects = this.projects.slice();
-
-			this.displayedProjects.forEach(p => {
-				const user = p.users.find(u => u.email == this.userCtx.email);
-
-				p.running = p.end > new Date().toISOString().slice(0, 10);
-				p.isUser = !!user;
-				p.isOwner = user && user.role === 'owner';
-				p.favorite = !!localStorage['favorites::projects::' + p._id];
-			});
-
-			this.displayedProjects = this.displayedProjects.filter(p => {
-				const search = diacritics.remove(p.country + '//' + p.name || '').toLowerCase();
-				const needle = diacritics.remove(this.filterValue || '').toLowerCase();
-
-				const matchSearch = search.includes(needle);
-				const matchOngoing = this.displayOngoing && p.running && p.active;
-				const matchFinished = this.displayFinished && !p.running && p.active;
-				const matchDeleted = this.displayDeleted && !p.active;
-
-				return matchSearch && (matchOngoing || matchFinished || matchDeleted)
-			});
-
-			this.displayedProjects.sort((p1, p2) => {
-				const p1f = [p1.isUser, p1.favorite, p1.country || 'zzz', p1.name, p1.end];
-				const p2f = [p2.isUser, p2.favorite, p2.country || 'zzz', p2.name, p2.end];
-
-				for (let i = 0; i < p1f.length; ++i) {
-					if (typeof p1f[i] == 'boolean' && p1f[i] !== p2f[i])
-						return p1f[i] ? -1 : 1;
-
-					if (typeof p1f[i] == 'string' && p1f[i] !== p2f[i])
-						return p1f[i].localeCompare(p2f[i])
-				}
-
-				return 0;
-			});
-		}
-
-		filter() {
-			this.$onChanges();
-		}
-
-		toggleOngoing() {
-			this.displayOngoing = !this.displayOngoing;
-			this.$onChanges();
-		}
-
-		toggleFinished() {
-			this.displayFinished = !this.displayFinished;
-			this.$onChanges();
-		}
-
-		toggleDeleted() {
-			this.displayDeleted = !this.displayDeleted;
-			this.$onChanges();
-		}
-
-		toggleFavorite(p) {
-			const lsKey = 'favorites::projects::' + p._id
-
-			if (localStorage[lsKey])
-				delete localStorage[lsKey];
-			else
-				localStorage[lsKey] = 'yes';
-
-			this.$onChanges();
-			this.$window.scrollTo(0, 0);
-		}
-
-		createProject() {
-			this.$state.go('main.project.structure.home', {projectId: 'new'});
-		}
-
-		onOpenClicked(project) {
-			if (project.isOwner)
-				this.$state.go("main.project.structure.home", {projectId: project._id});
-			else
-				this.$state.go("main.project.reporting.home", {projectId: project._id});
-		}
-
-		async onCloneClicked(project) {
-			var question = this.translate('project.are_you_sure_to_clone');
-
-			if (window.confirm(question)) {
-				await axios.post(
-					'/api/resources/project',
-					null,
-					{
-						params: {
-							from: project._id,
-							with_data: 'true'
-						}
-					}
-				)
-
-				this.projects = await Project.fetchAll();
-				this.$onChanges();
-				this.$scope.$apply();
-				this.$window.scrollTo(0, 0);
-			}
-		}
-
-		async onDeleteClicked(shortProject) {
-			var question = this.translate('project.are_you_sure_to_delete');
-
-			if (window.confirm(question)) {
-
-				// FIXME this should be HTTP patch
-				const project = await Project.get(shortProject._id);
-				project.active = false;
-
-				try {
-					await project.save();
-
-					this.projects = await Project.fetchAll();
-					this.$onChanges();
-					this.$scope.$apply();
-				}
-				catch (error) {
-					// Display message to tell user that it's not possible to save.
-					alert(this.translate('project.saving_failed_other'));
-				}
-			}
-		}
-
-		async onRestoreClicked(shortProject) {
-			// FIXME this should be HTTP patch
-			const project = await Project.get(shortProject._id);
-			project.active = true;
-
-			try {
-				await project.save();
-
-				this.projects = await Project.fetchAll();
-				this.$onChanges();
-				this.$scope.$apply();
-			}
-			catch (error) {
-				// Display message to tell user that it's not possible to save.
-				alert(this.translate('project.saving_failed_other'));
-			}
-		}
-
-	}
 });
 
 export default module.name;

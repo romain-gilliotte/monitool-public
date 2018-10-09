@@ -15,8 +15,6 @@ const module = angular.module(
 module.component('generalTable', {
 	bindings: {
 		project: '<',
-		themes: '<',
-		ccIndicators: '<',
 
 		filter: '<',
 		groupBy: '<',

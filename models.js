@@ -2,7 +2,7 @@
 
 // Une organisation défini ses thematiques et ses indicateurs
 {
-	"id": "organisation:167df7f8-92d1-459e-9e6d-8c85ce0d4769",
+	"id": "organisation:9931a9b1-87be-43e0-a35e-ac5bf15bdcc8",
 	"name": "Médecins du Monde",
 	"description": "This organisation contains all projects from MDM international missions",
 	"thematics": [
@@ -39,10 +39,11 @@
 
 // Un lien organisation project definie le calcul des indicateurs.
 {
-	"id": "link:e23b840e-6233-4694-9fe0-44c2d3aac818:da19dd0a-4922-4721-b832-c1cd161348de",
+	"_id": "link:9931a9b1-87be-43e0-a35e-ac5bf15bdcc8:0de8301a-d299-4d65-8ddc-48ab99c841a2",
+
 	"thematics": {
-		"9a222b88-0181-490c-b99f-70669a5994f6": {
-			"ffdc33c7-6200-4fd7-aff1-103f40b98e2c": {
+		"e0f1bcb8-bc06-4743-845b-dfb325c4c9d5": {
+			"2111b9d6-419d-486d-86f3-5703b86f14c8": {
 				"formula": "copied_value",
 				"filter": {
 				},

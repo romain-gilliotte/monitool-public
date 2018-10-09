@@ -20,7 +20,13 @@ import axios from 'axios';
 export default class Link {
 
 	static async fetchAll() {
-		const response = await axios.get('api/resources/link');
+		const response = await axios.get('/api/resources/link');
+		return response.data.map(i => new Link(i));
+	}
+
+
+	static async fetchForOrganisation(organisationId) {
+		const response = await axios.get('/api/resources/link?organisationId=' + organisationId);
 		return response.data.map(i => new Link(i));
 	}
 
@@ -41,6 +47,29 @@ export default class Link {
 
 		if (data)
 			Object.assign(this, data);
+	}
+
+	sanitize(organisation) {
+		const thematics = this.thematics;
+		this.thematics = {};
+		organisation.thematics.forEach(thematic => {
+
+			if (thematics[thematic.id]) {
+				let numIndicators = 0;
+
+				this.thematics[thematic.id] = {};
+
+				thematic.indicators.forEach(indicator => {
+					if (thematics[thematic.id][indicator.id]) {
+						this.thematics[thematic.id][indicator.id] = thematics[thematic.id][indicator.id];
+						numIndicators++;
+					}
+				});
+
+				if (!numIndicators)
+					delete this.thematics[thematic.id];
+			}
+		})
 	}
 
 	async save() {
