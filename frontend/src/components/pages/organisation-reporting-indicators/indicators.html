@@ -24,7 +24,7 @@
 			<div ng-if="!indicator.description" translate="indicator.missing_description"></div>
 
 			<div class="panel-buttons">
-				<a ui-sref="main.indicator_reporting({indicatorId: indicator._id})"
+				<a ui-sref="main.organisation.reporting.indicator({thematicId: thematic.id, indicatorId: indicator.id})"
 				   class="btn btn-xxs btn-default"
 				   translate="indicator.see_report"></a>
 			</div>

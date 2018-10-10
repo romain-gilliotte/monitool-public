@@ -42,9 +42,7 @@ module.config($stateProvider => {
 
 module.component('organisationReportingIndicators', {
 	bindings: {
-		organisation: '<',
-		projects: '<',
-		links: '<'
+		organisation: '<'
 	},
 	template: require('./indicators.html')
 });

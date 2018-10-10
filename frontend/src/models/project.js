@@ -33,6 +33,11 @@ export default class Project {
 		return response.data;
 	}
 
+	static async fetchForThematic(organisationId, thematicId) {
+		const response = await axios.get('/api/resources/project?organisationId=' + organisationId + '&thematicId=' + thematicId);
+		return response.data;
+	}
+
 	static async get(id) {
 		const response = await axios.get('/api/resources/project/' + id);
 		return new Project(response.data);

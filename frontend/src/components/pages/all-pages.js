@@ -66,7 +66,8 @@ import orgStructInvitations from "./organisation-structure-invitations/invitatio
 import orgReportingMenu from './organisation-reporting-menu/menu';
 import orgReportingHome from './organisation-reporting-home/home';
 import orgReportingProject from "./organisation-reporting-project/project";
-import orgReportingThematics from './organisation-reporting-thematics/thematics';
+import orgReportingIndicators from './organisation-reporting-indicators/indicators';
+import orgReportingIndicator from './organisation-reporting-indicator/indicator';
 
 
 const module = angular.module(
@@ -112,7 +113,8 @@ const module = angular.module(
 		orgReportingMenu,
 		orgReportingHome,
 		orgReportingProject,
-		orgReportingThematics
+		orgReportingIndicators,
+		orgReportingIndicator
 	]
 );
 

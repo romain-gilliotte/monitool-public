@@ -43,12 +43,7 @@ module.component('organisationReportingMenu', {
 		organisation: '<'
 	},
 
-	template: require('./menu.html'),
-
-	controller: class OrganisationReportingController {
-
-
-	}
+	template: require('./menu.html')
 });
 
 

@@ -24,9 +24,13 @@ export default class Link {
 		return response.data.map(i => new Link(i));
 	}
 
-
 	static async fetchForOrganisation(organisationId) {
 		const response = await axios.get('/api/resources/link?organisationId=' + organisationId);
+		return response.data.map(i => new Link(i));
+	}
+
+	static async fetchForThematic(organisationId, thematicId) {
+		const response = await axios.get('/api/resources/link?organisationId=' + organisationId + '&thematicId=' + thematicId);
 		return response.data.map(i => new Link(i));
 	}
 
