@@ -1,7 +1,72 @@
 <p>
-Pour que des utilisateurs puissent rejoindre votre organisation, vous devez au préalable les inviter.
+	Pour que des utilisateurs puissent rejoindre cette organisation, vous devez au préalable les inviter.
 </p>
 
+<p>
+	Si tous les membres de votre organisation se connecteront à Monitool avec leur email professionel, il n'est pas nécessaire
+	de créer une invitation par membre.
+</p>
+
+
+<a class="btn btn-primary pull-right" ng-click="$ctrl.onCreateInvitationClicked()">Créer une invitation</a>
+
+
+
+<div class="clearfix">
+	<div class="panel panel-default columns-panel" ng-repeat="invitation in $ctrl.editableOrganisation.invitations">
+
+		<div class="panel-heading" title="{{invitation.name}}">
+			{{invitation.name|maxLength:90}}
+		</div>
+
+		<div class="panel-body">
+			<!-- Name -->
+			<div>
+				<strong>{{'invitation.name'|translate}}:</strong>
+				{{invitation.name}}
+			</div>
+
+			<!-- Pattern -->
+			<div>
+				<strong>{{'invitation.pattern'|translate}}:</strong>
+				{{invitation.pattern}}
+			</div>
+
+			<!-- State -->
+			<div>
+				<strong>{{'invitation.state'|translate}}:</strong>
+				Sur les {{invitation.acceptedUsers.length + invitation.waitingUsers.length + invitation.refusedUsers.length}} utilisateurs concernés
+				{{invitation.acceptedUsers.length}} ont accepté, {{invitation.waitingUsers.length}} sont en attente et {{invitation.refusedUsers.length}} ont refusé l'invitation.
+			</div>
+
+			<div class="panel-buttons btn-group">
+				<button class="btn btn-xxs btn-default" ng-click="$ctrl.onOpenClicked()">
+					<i class="fa fa-pencil"></i>
+					<span translate="invitation.open_details"></span>
+				</button>
+
+				<div class="btn-group" uib-dropdown>
+					<a class="btn btn-default btn-xxs" uib-dropdown-toggle>
+						<span class="caret"></span>
+					</a>
+
+					<ul class="dropdown-menu">
+						<li>
+							<a ng-click="$ctrl.onDeleteClicked()">
+								<i class="fa fa-trash text-danger"></i>
+								<span class="text-danger" translate="shared.delete"></span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<!-- 
 <div ng-repeat="invitation in $ctrl.editableOrganisation.invitations" style="margin-bottom: 10px">
 	Email: {{invitation.pattern}}<br/>
 	Role: {{invitation.role}}<br/>
@@ -10,8 +75,7 @@ Pour que des utilisateurs puissent rejoindre votre organisation, vous devez au p
 	<span ng-if="!invitation.users.length">No one yet</span>
 </div>
 
-<a ng-click="$ctrl.onCreateInvitationClicked()">Create invitation</a>
-
+ -->
 <!-- 
 
 	(function(doc) {

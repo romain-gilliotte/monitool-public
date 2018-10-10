@@ -6,7 +6,7 @@
 	"required": [
 		"_id",
 		"email", "passwordHash",
-		"tokens", "organisations",
+		"tokens", "invitations",
 		"createdAt"
 	],
 
@@ -59,7 +59,7 @@
 			}
 		},
 
-		"organisations": {
+		"invitations": {
 			"type": "object",
 			"additionalProperties": false,
 			"required": ["accepted", "discarded"],

@@ -1,1 +1,128 @@
-{{$ctrl.editableOrganisation.thematics}}
+<form class="form-horizontal noprint" role="form" name="$ctrl.thematicsForm" novalidate>
+
+	<div
+		ng-sortable="$ctrl.thematicSortOptions"
+		ng-mouseenter="$ctrl.onSortableMouseEvent('thematics', true)"
+		ng-mouseleave="$ctrl.onSortableMouseEvent('thematics', false)">
+
+
+		<div class="panel panel-primary" ng-repeat="(thematicId, thematic) in $ctrl.editableOrganisation.thematics">
+
+			<div class="panel-heading">
+				<div class="panel-title">
+					<a class="btn btn-danger btn-xs pull-right"
+					   ng-click="$ctrl.onRemoveClicked(thematic, $ctrl.editableOrganisation.thematics)">
+
+						<i class="fa fa-remove"></i>
+						<span translate="project.delete_thematic"></span>
+					</a>
+
+					<i class="fa fa-sort fa-fw thematic-handle"></i>
+
+					{{thematic.name}}
+				</div>
+			</div>
+
+			<div class="panel-body">
+				<ng-form name="themeForm">
+					<!-- [Theme name] -->
+					<form-group
+						input-id="{{thematicId}}-name-input"
+						label="thematic.name"
+						help="organisation.thematic_help_name">
+
+						<textarea
+							auto-resize class="form-control"
+							name="name"
+							id="{{thematicId}}-name-input"
+							placeholder="{{'thematic.name_ph'|translate}}"
+							ng-model="thematic.name"
+							ng-change="$ctrl.onFieldChange()"></textarea>
+					</form-group>
+					<!-- [/Theme name] -->
+
+					<!-- [Theme description] -->
+					<form-group
+						input-id="{{thematicId}}-description-input"
+						label="thematic.description"
+						help="organisation.thematic_help_description">
+
+						<textarea
+							auto-resize class="form-control"
+							description="description"
+							id="{{thematicId}}-description-input"
+							placeholder="{{'thematic.description_ph'|translate}}"
+							ng-model="thematic.description"
+							ng-change="$ctrl.onFieldChange()"></textarea>
+					</form-group>
+					<!-- [/Theme description] -->
+
+		<div class="clearfix"></div>
+
+					<!-- [indicators] -->
+					<div
+						ng-sortable="$ctrl.indicatorSortOptions"
+						ng-mouseenter="$ctrl.onSortableMouseEvent('indicators', true)"
+						ng-mouseleave="$ctrl.onSortableMouseEvent('indicators', false)">
+
+						<!-- [Indicator repeat] -->
+						<div class="panel panel-info" ng-repeat="(indicatorId, indicator) in thematic.indicators">
+							<div class="panel-heading">
+								<div class="panel-title">
+									<span class="pull-right">
+										<a class="btn btn-danger btn-xs" ng-click="$ctrl.onRemoveClicked(indicator, thematic.indicators)">
+											<i class="fa fa-remove"></i>
+											<span translate="project.delete_indicator"></span>
+										</a>
+									</span>
+									<i class="fa fa-sort fa-fw indicator-handle"></i>
+									{{indicator.name}}
+								</div>
+							</div>
+
+							<div class="panel-body">
+								<ng-form name="indicatorForm">
+									<!-- [Indicator name] -->
+									<form-group
+										input-id="indicator-name-{{thematicId}}-{{indicatorId}}-input"
+										label="indicator.name"
+										help="organisation.thematic_help_indicator_name">
+
+										<textarea
+											auto-resize
+											id="indicator-name-{{thematicId}}-{{indicatorId}}-input"
+											class="form-control"
+											name="name"
+											placeholder="{{'project.indicator_name_ph'|translate}}"
+											ng-model="indicator.name"
+											ng-change="$ctrl.onFieldChange()"></textarea>
+									</form-group>
+									<!-- [/Indicator name] -->
+
+
+									<!-- [Indicator description] -->
+									<form-group
+										input-id="indicator-desc-{{thematicId}}-{{indicatorId}}-input"
+										label="indicator.description"
+										help="organisation.thematic_help_indicator_desc">
+
+										<textarea
+											auto-resize
+											id="indicator-desc-{{thematicId}}-{{indicatorId}}-input"
+											class="form-control"
+											name="description"
+											placeholder="{{'project.indicator_desc_ph'|translate}}"
+											ng-model="indicator.description"
+											ng-change="$ctrl.onFieldChange()"></textarea>
+									</form-group>
+									<!-- [/Indicator description] -->
+
+								</ng-form>
+							</div>
+						</div>
+					</div>
+				</ng-form>
+			</div>
+		</div>
+	</div>
+</form>
