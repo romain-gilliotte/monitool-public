@@ -1,0 +1,52 @@
+<p>
+Pour que des utilisateurs puissent rejoindre votre organisation, vous devez au préalable les inviter.
+</p>
+
+<div ng-repeat="invitation in $ctrl.editableOrganisation.invitations" style="margin-bottom: 10px">
+	Email: {{invitation.pattern}}<br/>
+	Role: {{invitation.role}}<br/>
+	Accepted by:
+	<span ng-if="invitation.users.length">{{invitation.users|pluck:'email'|join:','}}</span>
+	<span ng-if="!invitation.users.length">No one yet</span>
+</div>
+
+<a ng-click="$ctrl.onCreateInvitationClicked()">Create invitation</a>
+
+<!-- 
+
+	(function(doc) {
+		if (doc._id.indexOf('organisation:') == 0) {
+			doc.invitations.forEach(function(invitation) {
+				emit(
+					invitation.suffix.split('').reverse().join(''),
+					invitation.type
+				);
+			})
+		}
+	}).toString().replace(/\s+/g, ' ');
+
+
+	const keys = user
+		.email
+		.split('')
+		.reverse()
+		.map((_, index, all) => all.slice(0, index + 1).join(''))
+
+	return [
+		...this._db.bucket.listAsStream({keys: keys}),
+		new Transform({
+			objectMode: true,
+			transform(organisation, _, callback) {
+				const isInvited = organisation.users.admins.includes(user.email)
+					|| organisation.users.explicitInvites.includes(user.email)
+					|| organisation.users.autoInvites.some(re => new RegExp(re).test(user.email));
+
+				if (isInvited)
+					this.push(organisation);
+
+				callback();
+			}
+		})
+	];
+
+ -->

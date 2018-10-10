@@ -42,7 +42,7 @@ const module = angular.module(
 module.config($stateProvider => {
 
 	$stateProvider.state('main.organisation.reporting.indicator', {
-		acceptedUsers: ['loggedIn', 'unknown'],
+		acceptedUsers: ['loggedIn'],
 		url: '/indicator/:thematicId/:indicatorId',
 		component: 'ccIndicatorReporting',
 		resolve: {

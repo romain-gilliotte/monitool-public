@@ -20,7 +20,7 @@ import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
 
 import mtFormGroup from '../../shared/misc/form-group';
-
+import User from '../../../models/user';
 
 const module = angular.module(
 	'monitool.components.pages.organisation.structure.invitations',
@@ -34,9 +34,12 @@ const module = angular.module(
 
 module.config($stateProvider => {
 	$stateProvider.state('main.organisation.structure.invitations', {
-		acceptedUsers: ['loggedIn'],
+		acceptedUsers: ['loggedIn', 'unknown'],
 		url: '/invitations',
-		component: 'organisationInvitation'
+		component: 'organisationInvitation',
+		resolve: {
+			users: $stateParams => User.fetchForOrganisation($stateParams.organisationId)
+		}
 	});
 });
 
@@ -45,7 +48,10 @@ module.component('organisationInvitation', {
 	bindings: {
 		// injected from parent component.
 		organisation: '<',
-		onOrganisationUpdate: '&'
+		onOrganisationUpdate: '&',
+
+		// resolved
+		users: '<'
 	},
 
 	template: require('./invitations.html'),
@@ -56,6 +62,34 @@ module.component('organisationInvitation', {
 			if (changes.organisation) {
 				this.editableOrganisation = angular.copy(this.organisation);
 			}
+
+
+			this.computeUsersByInvitation()
+		}
+
+		computeUsersByInvitation() {
+			this.users.forEach(user => {
+				// Get all invistations matching this user.
+				user.invitations = this.organisation
+					.invitations
+					.filter(invitation => new RegExp(invitation.pattern).test(user.email));
+
+				// Sort them depending on the role (owner goes first).
+				user.invitations.sort((a, b) => {
+					const perms = ['owner', 'readonly'];
+					console.log(a, b, perms.indexOf(b.role) - perms.indexOf(a.role))
+					return perms.indexOf(a.role) - perms.indexOf(b.role);
+				});
+			});
+
+			this.usersByInvitation = {};
+			this.organisation.invitations.forEach(invitation => {
+				this.usersByInvitation[invitation.id] = this.users.filter(u => u.invitations[0] === invitation);
+			});
+		}
+
+		onCreateInvitationClicked() {
+			
 		}
 
 		/**

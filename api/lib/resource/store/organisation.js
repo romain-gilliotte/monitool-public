@@ -42,10 +42,7 @@ export default class OrganisationStore extends Store {
 			new Transform({
 				objectMode: true,
 				transform(organisation, _, callback) {
-					const isInvited = organisation.users.admins.includes(user.email)
-						|| organisation.users.explicitInvites.includes(user.email)
-						|| organisation.users.autoInvites.some(re => new RegExp(re).test(user.email));
-
+					const isInvited = organisation.invitations.some(i => new RegExp(i.pattern).test(user.email))
 					if (isInvited)
 						this.push(organisation);
 

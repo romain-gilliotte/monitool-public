@@ -48,7 +48,10 @@ passport.use('local', new LocalStrategy.Strategy(
 	(email, password, done) => {
 		User.storeInstance.get('user:' + email).then(
 			user => {
+				console.log(user, password)
+
 				bcrypt.compare(password, user.passwordHash, function(err, res) {
+					console.log(err, res)
 					if (res)
 						done(null, user)
 					else
@@ -93,6 +96,7 @@ router.get('/authentication/methods/:email', async ctx => {
 		};
 	}
 	catch (e) {
+		console.log(e)
 		ctx.response.body = {
 			accountExists: false,
 			methods: []

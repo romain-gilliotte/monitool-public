@@ -21,18 +21,10 @@
 		}
 	],
 
-	"users": {
-		"admins": [
-			"romain.gilliotte@medecinsdumonde.net"
-		],
-
-		"explicitInvites": [
-			"maieule.nouvellet@medecinsdumonde.net"
-		],
-		"autoInvites": [
-			"[a-z][0-9]+@medecinsdumonde\\.net"
-		]
-	}
+	"invitations": [
+		{"role": "owner", "pattern": "eloims@gmail\\.com"},
+		{"role": "owner", "pattern": "@gmail\\.com"}
+	]
 }
 
 
@@ -41,7 +33,10 @@
 {
 	"_id": "link:9931a9b1-87be-43e0-a35e-ac5bf15bdcc8:0de8301a-d299-4d65-8ddc-48ab99c841a2",
 
-	"thematics": {
+	"thematics": [
+
+
+	]{
 		"e0f1bcb8-bc06-4743-845b-dfb325c4c9d5": {
 			"2111b9d6-419d-486d-86f3-5703b86f14c8": {
 				"formula": "copied_value",
@@ -65,20 +60,19 @@
 // a accepté les invitations.
 {
 	"_id": "user:eloims@gmail.com",
-	"_rev": "2-924c3ed68b03f129779c64a2f4adf68a",
 	"email": "eloims@gmail.com",
-	"passwordHash": "$2b$12$tL4J2MTqWi2ePjK/eqVCe.y0BzGIZWSusTIApHGlJ7QwnDeiJNfxG",
+	"passwordHash": "$2y$04$KE9PM3j4gXyGrm7OrqmEzuRFoFRW1KfczDacOIQcIJDRG0Bbs/I7e",
 	"createdAt": "2018-10-03T09:26:08.434Z",
 
-	tokens: {
+	"tokens": {
 		"validateEmailTokenHash": null,
 		"validateEmailSentAt": "2018-10-03T09:26:08.433Z",
 		"resetPasswordTokenHash": null,
-		"resetPasswordEmailSentAt": null,
+		"resetPasswordEmailSentAt": null
 	},
 	"organisations": {
 		"accepted": [
-			"organisation:167df7f8-92d1-459e-9e6d-8c85ce0d4769"
+			"organisation:1d695341-1f63-41b3-88b4-fc88161dce6e"
 		],
 		"discarded": [
 		]

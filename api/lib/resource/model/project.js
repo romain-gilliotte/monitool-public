@@ -39,22 +39,22 @@ export default class Project extends DbModel {
 		let entityIds = data.entities.map(e => e.id),
 			dataSourceIds = data.forms.map(ds => ds.id);
 
-		data.groups.forEach(function(group) {
-			group.members.forEach(function(entityId) {
+		data.groups.forEach(group => {
+			group.members.forEach(entityId => {
 				if (entityIds.indexOf(entityId) === -1)
 					throw new Error('invalid_data');
 			});
 		});
 
-		data.users.forEach(function(user) {
+		data.users.forEach(user => {
 			if (user.entities)
-				user.entities.forEach(function(entityId) {
+				user.entities.forEach(entityId => {
 					if (entityIds.indexOf(entityId) === -1)
 						throw new Error('invalid_data');
 				});
 
 			if (user.dataSources)
-				user.dataSources.forEach(function(dataSourceId) {
+				user.dataSources.forEach(dataSourceId => {
 					if (dataSourceIds.indexOf(dataSourceId) === -1)
 						throw new Error('invalid_data');
 				});
@@ -104,8 +104,8 @@ export default class Project extends DbModel {
 	 * User session may be a real user, or a partner.
 	 * This method does not throw if the user is not found.
 	 */
-	getUserById(id) {
-		return this.users.find(u => u.id === id);
+	getUserByEmail(email) {
+		return this.users.find(u => u.email === email);
 	}
 
 
@@ -121,7 +121,6 @@ export default class Project extends DbModel {
 		if (skipChecks)
 			return super.save(true);
 
-		// Copy passwords from old project.
 		let oldProject;
 		try {
 			oldProject = await Project.storeInstance.get(this._id);
@@ -144,7 +143,7 @@ export default class Project extends DbModel {
 			oldProject.type = 'rev:project';
 
 			if (user)
-				oldProject.modifiedBy = user._id || ('partner:' + user.username);
+				oldProject.modifiedBy = user._id;
 
 			await this._db.insert(oldProject);
 		}

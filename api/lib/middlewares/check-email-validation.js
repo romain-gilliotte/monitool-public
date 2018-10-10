@@ -19,7 +19,7 @@
  * Check that user has validated email address
  */
 export default async (ctx, next) => {
-	if (ctx.isAuthenticated() && ctx.state.user.validateEmailTokenHash === null)
+	if (ctx.isAuthenticated() && ctx.state.user.tokens.validateEmailTokenHash === null)
 		await next();
 
 	else {

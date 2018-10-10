@@ -155,68 +155,8 @@ export default class Input extends DbModel {
 		return newValues;
 	}
 
-	/**
-	 * Validate that input does not make references to project, datasource, variable, partitions that don't exist
-	 * We don't check for valid periodicity and entity because the client supports having inputs that are "out of calendar".
-	 * This allows not loosing data when we update the periodicity of a data source but will be removed.
-	 */
-	async validateForeignKeys(project=null) {
-		if (!project)
-			project = await Project.storeInstance.get(this.project);
-
-		var errors = [];
-
-		// entity must exist in the project
-		if (!project.entities.find(e => this.entity === e.id))
-			errors.push('unknown_entity');
-
-		var dataSource = project.getDataSourceById(this.form);
-		if (dataSource) {
-			// Check that all variables exist and have the proper length
-			for (var i = 0; i < dataSource.elements.length; ++i) {
-				var variable = dataSource.elements[i];
-
-				if (!this.values[variable.id])
-					errors.push('missing_variable_' + variable.id);
-				else if (this.values[variable.id].length !== variable.numValues)
-					errors.push('variable_length_mismatch_' + variable.id);
-			}
-
-			// Check that there are no extra variables.
-			for (var variableId in this.values) {
-				var variable = dataSource.getVariableById(variableId);
-				if (!variable)
-					errors.push('extra_variable_' + variable.id);
-			}
-		}
-		else
-			// Data source must exist
-			errors.push('unknown_datasource');
-
-		if (errors.length) {
-			var exc = new Error('invalid_reference');
-			exc.model = this;
-			exc.detail = errors;
-			throw exc;
-		}
-	}
-
-	toAPI() {
-		let result = super.toJSON();
-		delete result.structure;
-		return result;
-	}
-
 	async save(skipChecks) {
-		if (skipChecks)
-			return super.save(true);
-
-		const project = await Project.storeInstance.get(this.project);
-		await this.validateForeignKeys(project);
-		this.structure = project.getDataSourceById(this.form).structure;
 		this.updatedAt = new Date().toISOString();
-
-		return super.save(true);
+		return super.save(skipChecks);
 	}
 }
-

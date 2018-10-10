@@ -30,6 +30,7 @@ import organisationRouter from './routers/organisation';
 import linkRouter from './routers/link';
 import projectRouter from './routers/project';
 import reportingRouter from './routers/reporting';
+import userRouter from './routers/user';
 
 import errorHandler from './middlewares/error-handler';
 
@@ -64,5 +65,6 @@ app.use(pdfRouter.routes());
 app.use(projectRouter.routes());
 app.use(linkRouter.routes());
 app.use(reportingRouter.routes());
+app.use(userRouter.routes());
 
 export default app;

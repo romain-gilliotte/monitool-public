@@ -19,8 +19,8 @@
 import Router from 'koa-router';
 import uuidv4 from 'uuid/v4';
 
+import Project from '../resource/model/project';
 import Input from '../resource/model/input';
-
 
 const router = new Router();
 
@@ -34,26 +34,18 @@ const router = new Router();
 router.get('/resources/input', async ctx => {
 	const q = ctx.request.query;
 
-	if (q.mode && q.mode.startsWith('ids_by_')) {
-		let ids;
-		if (q.mode === 'ids_by_form')
-			ids = await Input.storeInstance.listIdsByDataSource(q.projectId, q.formId, true);
-		else
-			throw new Error('invalid_mode');
+	if (q.mode === 'ids_by_form') {
+		let ids = await Input.storeInstance.listIdsByDataSource(q.projectId, q.formId, true);
 
 		ctx.response.body = Object.keys(ids)
-			.filter(inputId => ctx.visibleProjectIds.has(inputId.substr(6, 44)))
+			// .filter(inputId => ctx.visibleProjectIds.has(inputId.substr(6, 44)))
 			.reduce((m, e) => { m[e] = ids[e]; return m; }, {});
 	}
-	else {
-		let inputs;
-		if (q.mode === 'current+last')
-			inputs = await Input.storeInstance.getLasts(q.projectId, q.formId, q.entityId, q.period, true);
-		else
-			throw new Error('invalid_mode');
+	else if (q.mode === 'current+last') {
+		let inputs = await Input.storeInstance.getLasts(q.projectId, q.formId, q.entityId, q.period, true);
 
 		ctx.response.body = inputs
-			.filter(input => ctx.visibleProjectIds.has(input.project))
+			// .filter(input => ctx.visibleProjectIds.has(input.project))
 			.map(input => input.toAPI());
 	}
 });
@@ -81,46 +73,35 @@ router.get('/resources/input/:id', async ctx => {
  * Save an input
  */
 router.put('/resources/input/:id', async ctx => {
+	const input = new Input(ctx.request.body);
+
 	// Validate that the _id in the payload is the same as the id in the URL.
-	if (ctx.request.body._id !== ctx.params.id)
+	if (input._id !== ctx.params.id)
 		throw new Error('id_mismatch');
 
-	const input = new Input(ctx.request.body);
+	// Validate that the user is allowed to change this input.
 	const project = await Project.storeInstance.get(input.project);
 
-	// Check ACLs
-	const projectUser = project.getProjectUser(ctx.state.user);
-	const projectRole = project.getRole(ctx.state.user);
+	const user = project.getUserByEmail(ctx.state.user.email);
+	if (!user)
+		throw new Error('forbidden');
 
 	const allowed =
-		(projectRole === 'owner') ||
-		(projectRole === 'input' && projectUser.entities.includes(input.entity) && projectUser.dataSources.includes(input.form));
+		(user.role === 'owner') ||
+		(user.role === 'input' && user.entities.includes(input.entity) && user.dataSources.includes(input.form));
 
 	if (!allowed)
 		throw new Error('forbidden');
 
 	await input.save();
 	ctx.response.body = input.toAPI();
-})
+});
 
 /**
  * Delete an input.
  */
 router.delete('/resources/input/:id', async ctx => {
 	const input = await Input.storeInstance.get(ctx.params.id);
-	const project = await Project.storeInstance.get(input.project);
-
-	// Check ACLs
-	const projectUser = project.getProjectUser(ctx.state.user);
-	const projectRole = project.getRole(ctx.state.user);
-
-	const allowed =
-		(projectRole === 'owner') ||
-		(projectRole === 'input' && projectUser.entities.includes(input.entity) && projectUser.dataSources.includes(input.form));
-
-	if (!allowed)
-		throw new Error('forbidden');
-
 	ctx.response.body = input.destroy();
 })
 

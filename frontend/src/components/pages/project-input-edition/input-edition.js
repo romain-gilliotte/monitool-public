@@ -112,13 +112,24 @@ module.component('projectInputEdition', {
 					form: this.dsId,
 					period: this.period,
 					entity: this.siteId,
-					values: {}
+					values: {},
+					structure: {}
 				});
 
 				this.form.elements.forEach(variable => {
+					// Create zero filled values.
 					const numFields = variable.partitions.reduce((m, p) => m * p.elements.length, 1);
 					this.input.values[variable.id] = new Array(numFields);
 					this.input.values[variable.id].fill(0);
+
+					// Create structure to tell server which version of the data source we're filling this against
+					this.input.structure[variable.id] = variable.partitions.map(partition => {
+						return {
+							id: partition.id,
+							items: partition.elements.map(pe => pe.id),
+							aggregation: partition.aggregation
+						};
+					});
 				});
 
 				this.isNew = true;

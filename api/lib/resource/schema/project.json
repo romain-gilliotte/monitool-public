@@ -63,13 +63,37 @@
 		"users": {
 			"type": "array",
 			"items": {
-				"type": "object",
-				"additionalProperties": false,
-				"required": ["email", "role"],
-				"properties": {
-					"email": {"type": "string", "pattern": "^[a-z0-9\\.\\-\\_@]+$"},
-					"role": {"type": "string", "enum": ["owner", "read"]}
-				}
+				"oneOf": [
+					{
+						"type": "object",
+						"additionalProperties": false,
+						"required": ["email", "role"],
+						"properties": {
+							"email": {"type": "string", "pattern": "^[a-z0-9\\.\\-\\_@]+$"},
+							"role": {"type": "string", "enum": ["owner", "read"]}
+						}
+					},
+					{
+						"type": "object",
+						"additionalProperties": false,
+						"required": ["email", "role", "entities", "dataSources"],
+						"properties": {
+							"email": {"type": "string", "pattern": "^[a-z0-9\\.\\-\\_@]+$"},
+							"role": {"type": "string", "enum": ["input"]},
+
+							"entities": {
+								"type": "array",
+								"uniqueItems": true,
+								"items": { "$ref": "#/definitions/uuid" }
+							},
+							"dataSources": {
+								"type": "array",
+								"uniqueItems": true,
+								"items": { "$ref": "#/definitions/uuid" }
+							}
+						}
+					}
+				]
 			}
 		},
 

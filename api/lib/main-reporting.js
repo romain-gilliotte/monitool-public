@@ -92,7 +92,7 @@ async function _createCube(project, dataSource, variable) {
 
 	// Query database, and stream the response in it.
 	await pipelineP(
-		database.database.viewAsStream(
+		database.bucket.viewAsStream(
 			'monitool',
 			'inputs_variable',
 			{key: project._id + ':' + dataSource.id + ':' + variable.id}

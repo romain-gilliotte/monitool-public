@@ -71,28 +71,8 @@
 			}
 		},
 
-		"users": {
-			"type": "object",
-			"properties": {
-				"admins": {
-					"type": "array",
-					"items": {
-						"type": "string"
-					}
-				},
-				"explicitInvites": {
-					"type": "array",
-					"items": {
-						"type": "string"
-					}
-				},
-				"autoInvites": {
-					"type": "array",
-					"items": {
-						"type": "string"
-					}
-				}
-			}
+		"invitations": {
+			"type": "array"
 		}
 	}
 }

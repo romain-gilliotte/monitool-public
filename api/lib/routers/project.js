@@ -39,15 +39,8 @@ const router = new Router();
 router.get('/resources/project', async ctx => {
 	let streams;
 
-	if (ctx.request.query.mode === 'crossCutting')
-		streams = await Project.storeInstance.listByUserIndicator(
-			ctx.state.user,
-			ctx.request.query.organisationId,
-			ctx.request.query.themeId,
-			ctx.request.query.indicatorId,
-			true // strip down the project to the bare minimum.
-		);
-
+	if (ctx.request.query.organisationId)
+		streams = await Project.storeInstance.listByOrganisation(ctx.request.query.organisationId);
 	else
 		streams = await Project.storeInstance.listByUser(ctx.state.user);
 

@@ -37,7 +37,7 @@ export default class LinkStore extends Store {
 	}
 
 	listForUserOrganisation(user, organisationId) {
-		if (!user.organisations.includes(organisationId)) {
+		if (!user.organisations.accepted.includes(organisationId)) {
 			const emptyStream = new Readable({objectMode: true});
 			emptyStream.push(null);
 			return [emptyStream];
@@ -63,7 +63,7 @@ export default class LinkStore extends Store {
 
 		return [
 			this._db.bucket.listAsStream({
-				keys: user.organisations.map(orgId => 'link:' + orgId.slice(13) + ':' + projectUuid),
+				keys: user.organisations.accepted.map(orgId => 'link:' + orgId.slice(13) + ':' + projectUuid),
 				include_docs: true
 			}),
 			JSONStream.parse('rows', true, 'doc')

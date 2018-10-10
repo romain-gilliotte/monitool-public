@@ -6,8 +6,7 @@
 	"required": [
 		"_id",
 		"email", "passwordHash",
-		"validateEmailTokenHash", "validateEmailSentAt",
-		"resetPasswordTokenHash", "resetPasswordEmailSentAt",
+		"tokens", "organisations",
 		"createdAt"
 	],
 
@@ -26,37 +25,53 @@
 		"passwordHash": {
 			"type": "string"
 		},
-		"validateEmailTokenHash": {
-			"oneOf": [
-				{"type": "string"},
-				{"type": "null"}
-			]
-		},
-		"validateEmailSentAt": {
-			"type": "string"
-		},
-
-		"resetPasswordTokenHash": {
-			"oneOf": [
-				{"type": "string"},
-				{"type": "null"}
-			]
-		},
-		"resetPasswordEmailSentAt": {
-			"oneOf": [
-				{"type": "string"},
-				{"type": "null"}
-			]
-		},
-
 		"createdAt": {
 			"type": "string"
 		},
 
+		"tokens": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["validateEmailTokenHash", "validateEmailSentAt", "resetPasswordTokenHash", "resetPasswordEmailSentAt"],
+			"properties": {
+				"validateEmailTokenHash": {
+					"oneOf": [
+						{"type": "string"},
+						{"type": "null"}
+					]
+				},
+				"validateEmailSentAt": {
+					"type": "string"
+				},
+
+				"resetPasswordTokenHash": {
+					"oneOf": [
+						{"type": "string"},
+						{"type": "null"}
+					]
+				},
+				"resetPasswordEmailSentAt": {
+					"oneOf": [
+						{"type": "string"},
+						{"type": "null"}
+					]
+				}
+			}
+		},
+
 		"organisations": {
-			"type": "array",
-			"items": {
-				"type": "string"
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["accepted", "discarded"],
+			"properties": {
+				"accepted": {
+					"type": "array",
+					"items": {"type": "string"}
+				},
+				"discarded": {
+					"type": "array",
+					"items": {"type": "string"}
+				}
 			}
 		}
 	}

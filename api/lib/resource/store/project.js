@@ -177,31 +177,40 @@ export default class ProjectStore extends Store {
 		return diffs;
 	}
 
+	// Retrieve the project in witch this user is directly involved.
 	async listByUser(user) {
-		// Retrieve the ids of all projects that this user has access to.
-		const results = await Promise.all([
-			// projectIds directly linked with the user (user is inside project.users).
-			this._db.bucket.view('monitool', 'project_by_email', {key: user.email}),
+		return [
+			this._db.bucket.viewAsStream(
+				'monitool',
+				'project_by_email',
+				{key: user.email, include_docs: true}
+			),
+			JSONStream.parse(['rows', true, 'doc']),
+			new Transform({
+				objectMode: true,
+				transform(doc, _, callback) {
+					this.push(new Project(doc));
+					callback();
+				}
+			})
+		];
+	}
 
-			// projectIds linked through an organisation.
-			...user.organisations.map(orgId =>
-				this._db.bucket.list({
-					startkey: 'organisation_project:' + orgId + ':!',
-					endkey: 'organisation_project:' + orgId + ':~'
-				})
-			)
-		]);
+	async listByOrganisation(organisationId) {
+		const result = await this._db.bucket.list({
+			startkey: 'link:' + organisationId.substring(13) + ':!',
+			endkey: 'link:' + organisationId.substring(13) + ':~'
+		});
 
-		// Remove duplicates from projectIds
-		const projectIds = new Set(results.reduce((m, r) => [...m, ...r.rows.map(r => r.id)], []));
+		const projectIds = result.rows.map(row => 'project:' + row.id.substring(42));
 
 		return [
 			this._db.bucket.listAsStream({keys: projectIds, include_docs: true}),
 			JSONStream.parse(['rows', true, 'doc']),
 			new Transform({
 				objectMode: true,
-				transform(chunk, encoding, callback) {
-					this.push(new Project(chunk));
+				transform(doc, _, callback) {
+					this.push(new Project(doc));
 					callback();
 				}
 			})
