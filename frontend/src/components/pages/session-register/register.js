@@ -86,7 +86,7 @@ module.component('register', {
 
 				// Put user in $rootScope
 				const payload = atob(window.localStorage.token.split('.')[1]);
-				$rootScope.userCtx = JSON.parse(payload);
+				this.$rootScope.userCtx = JSON.parse(payload);
 
 				this.$state.go('main.home')
 			}

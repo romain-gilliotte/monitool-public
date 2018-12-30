@@ -23,8 +23,8 @@ async function migrateDesignDoc() {
 	ddoc.views.project_by_user = {
 		map: function(doc) {
 			if (doc._id.indexOf('project:') == 0)
-				doc.users.forEach(function(user) { emit(user.id); });
-		}.toString().replace(/\s+/, ' ')
+				doc.users.forEach(function(user) { emit('user:' + user.email); });
+		}.toString().replace(/[\n\t\s]+/g, ' ')
 	};
 
 	await database.insert(ddoc);

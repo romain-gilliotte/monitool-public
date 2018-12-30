@@ -69,7 +69,7 @@
 						"additionalProperties": false,
 						"required": ["email", "role"],
 						"properties": {
-							"email": {"type": "string", "pattern": "^[a-z0-9\\.\\-\\_@]+$"},
+							"email": {"type": "string"},
 							"role": {"type": "string", "enum": ["owner", "read"]}
 						}
 					},
@@ -78,7 +78,7 @@
 						"additionalProperties": false,
 						"required": ["email", "role", "entities", "dataSources"],
 						"properties": {
-							"email": {"type": "string", "pattern": "^[a-z0-9\\.\\-\\_@]+$"},
+							"email": {"type": "string"},
 							"role": {"type": "string", "enum": ["input"]},
 
 							"entities": {

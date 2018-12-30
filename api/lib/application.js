@@ -40,10 +40,11 @@ app.use(responseTime()); // Add x-reponse-time header
 app.use(bodyParser({jsonLimit: '1mb'}));
 
 app.use(errorHandler); // Catch errors and set status codes.
+app.use(authenticationRouter.routes()); // login/logout/email validation...
+
 app.use(authenticationMiddleware);
 
 // Serve authentication related endpoints.
-app.use(authenticationRouter.routes()); // login/logout/email validation...
 app.use(inputRouter.routes());
 app.use(pdfRouter.routes());
 app.use(projectRouter.routes());

@@ -29,7 +29,6 @@ const nullErrorHandler = error => {};
 const router = new Router();
 
 router.get('/resources/project', async ctx => {
-	console.log(ctx.state.user)
 	let streams = await Project.storeInstance.listByUser(ctx.state.user.sub);
 	streams.push(JSONStream.stringify());
 
