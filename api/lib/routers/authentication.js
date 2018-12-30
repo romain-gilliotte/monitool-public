@@ -20,6 +20,7 @@ import Router from 'koa-router';
 
 import bcrypt from 'bcrypt';
 import owasp from 'owasp-password-strength-test';
+import jwt from 'jsonwebtoken'
 
 import {sendValidateEmail, sendResetPassword} from '../mailer/mailer';
 import pkg from '../../package.json';
@@ -39,16 +40,18 @@ router.post(
 	'/authentication/login',
 	async ctx => {
 		const userId = 'user:' + ctx.request.body.email;
-		const user = await User.storeInstance.get(userId);
-		const isValid = await bcrypt.compare(ctx.request.body.password, user.passwordHash);
+		try {
+			const user = await User.storeInstance.get(userId);
+			const isValid = await bcrypt.compare(ctx.request.body.password, user.passwordHash);
+			if (!isValid)
+				throw new Error();
 
-		if (isValid)
 			ctx.response.body = {
 				error: null,
-				token: jwt.sign({sub: userId}, 'secret')
+				token: jwt.sign({sub: userId, email: user.email}, config.tokenSecret)
 			};
-
-		else {
+		}
+		catch (e) {
 			ctx.response.status = 403;
 			ctx.response.body = {
 				error: 'wrong_email_or_password'
@@ -70,8 +73,11 @@ router.post('/authentication/register', async ctx => {
 
 		// Check that the password is secure enough
 		const passwordAssessment = owasp.test(ctx.request.body.password);
-		if (passwordAssessment.errors.length)
-			throw new Error('password_too_weak');
+		if (passwordAssessment.errors.length) {
+			const error = new Error('password_too_weak');
+			error.details = passwordAssessment.errors;
+			throw error;
+		}
 
 		// Pre-validate email to avoid typing errors.
 		const emailValidator = new EmailValidator();
@@ -92,11 +98,13 @@ router.post('/authentication/register', async ctx => {
 			_id: 'user:' + ctx.request.body.email,
 			email: ctx.request.body.email,
 			passwordHash: await bcrypt.hash(ctx.request.body.password, 12),
-			validateEmailTokenHash: await bcrypt.hash(validateEmailToken, 12),
-			validateEmailSentAt: new Date().toISOString(),
-			resetPasswordTokenHash: null,
-			resetPasswordEmailSentAt: null,
-			createdAt: new Date().toISOString()
+			createdAt: new Date().toISOString(),
+			tokens: {
+				validateEmailTokenHash: await bcrypt.hash(validateEmailToken, 12),
+				validateEmailSentAt: new Date().toISOString(),
+				resetPasswordTokenHash: null,
+				resetPasswordEmailSentAt: null
+			}
 		});
 
 		await newUser.save();
@@ -106,14 +114,15 @@ router.post('/authentication/register', async ctx => {
 		ctx.response.body = {error: false};
 	}
 	catch (e) {
+		console.log(e)
 		// This email is already taken.
 		if (e.message === 'Document update conflict.') {
 			ctx.response.status = 400;
 			ctx.response.body = {error: 'account_already_exists'};
 		}
-		else if (['password_too_weak', 'invalid_email_format', 'invalid_email_domain', 'invalid_email_mailbox'].includes(e.message)) {
+		else if (['missing_parameter', 'password_too_weak', 'invalid_email_format', 'invalid_email_domain', 'invalid_email_mailbox'].includes(e.message)) {
 			ctx.response.status = 400;
-			ctx.response.body = {error: e.message};
+			ctx.response.body = {error: e.message, details: e.details};
 		}
 		else {
 			ctx.response.status = 500;
@@ -131,13 +140,13 @@ router.post('/authentication/request-reset-password', async ctx => {
 		const user = await User.storeInstance.get('user:' + ctx.request.body.email);
 
 		// Maximum is one email every 15 minutes
-		if (new Date() - new Date(user.resetPasswordEmailSentAt) < 15 * 60 * 1000)
+		if (new Date() - new Date(user.tokens.resetPasswordEmailSentAt) < 15 * 60 * 1000)
 			throw new Error('already_sent');
 
 		// FIXME: Cheap random string, not secure at all. Should use crypto.randomBytes().
 		const resetToken = Math.random().toString(36).substring(2);
-		user.resetPasswordTokenHash = await bcrypt.hash(resetToken, 12);
-		user.resetPasswordEmailSentAt = new Date().toISOString();
+		user.tokens.resetPasswordTokenHash = await bcrypt.hash(resetToken, 12);
+		user.tokens.resetPasswordEmailSentAt = new Date().toISOString();
 		await user.save();
 
 		sendResetPassword(user, resetToken);
@@ -165,7 +174,7 @@ router.post('/authentication/reset-password', async ctx => {
 		const user = await User.storeInstance.get('user:' + ctx.request.body.email);
 
 		// Check that the user has requested a reset code.
-		if (!user.resetPasswordTokenHash)
+		if (!user.tokens.resetPasswordTokenHash)
 			throw new Error('not_expecting_reset');
 
 		// Check that the password is secure enough.
@@ -174,11 +183,11 @@ router.post('/authentication/reset-password', async ctx => {
 			throw new Error('password_too_weak');
 
 		// Check that the reset code is OK.
-		if (!await bcrypt.compare(ctx.request.body.token, user.resetPasswordTokenHash))
+		if (!await bcrypt.compare(ctx.request.body.token, user.tokens.resetPasswordTokenHash))
 			throw new Error('wrong_code');
 
 		// Reset the user password!
-		user.resetPasswordTokenHash = null;
+		user.tokens.resetPasswordTokenHash = null;
 		user.passwordHash = await bcrypt.hash(ctx.request.body.password, 12);
 		user.save();
 
@@ -202,17 +211,17 @@ router.post('/authentication/request-validate-email', async ctx => {
 		const user = await User.storeInstance.get('user:' + ctx.request.body.email);
 
 		// Don't allow double validation.
-		if (!user.validateEmailTokenHash)
+		if (!user.tokens.validateEmailTokenHash)
 			throw new Error('already_validated');
 
 		// Maximum is one email every 15 minutes.
-		if (new Date() - new Date(user.validateEmailSentAt) < 15 * 60 * 1000)
+		if (new Date() - new Date(user.tokens.validateEmailSentAt) < 15 * 60 * 1000)
 			throw new Error('already_sent');
 
 		// FIXME: Cheap random string, not secure at all. Should use crypto.randomBytes().
 		const validateEmailToken = Math.random().toString(36).substring(2);
-		user.validateEmailTokenHash = await bcrypt.hash(validateEmailToken, 12);
-		user.validateEmailSentAt = new Date().toISOString();
+		user.tokens.validateEmailTokenHash = await bcrypt.hash(validateEmailToken, 12);
+		user.tokens.validateEmailSentAt = new Date().toISOString();
 		await user.save();
 
 		sendValidateEmail(user, validateEmailToken);
@@ -237,19 +246,18 @@ router.post('/authentication/validate-email', async ctx => {
 		const user = await User.storeInstance.get('user:' + ctx.request.body.email);
 
 		// Don't allow double validation.
-		if (!user.validateEmailTokenHash)
+		if (!user.tokens.validateEmailTokenHash)
 			throw new Error('already_validated');
 
-		if (!await bcrypt.compare(ctx.request.body.token, user.validateEmailTokenHash))
+		if (!await bcrypt.compare(ctx.request.body.token, user.tokens.validateEmailTokenHash))
 			throw new Error('wrong_token');
 
-		user.validateEmailTokenHash = null;
+		user.tokens.validateEmailTokenHash = null;
 		await user.save();
 
 		ctx.response.body = {error: false};
 	}
 	catch (e) {
-		throw e
 		if (['not_found', 'already_validated', 'wrong_token'].includes(e.message)) {
 			ctx.response.status = 400;
 			ctx.response.body = {error: e.message};

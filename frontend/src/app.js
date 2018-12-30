@@ -50,15 +50,14 @@ module.run(function ($window, $transitions) {
 module.run(function($rootScope, $window, $transitions) {
 	// Load user from token.
 	if (window.localStorage.token) {
-		const payload = btoa(window.localStorage.token.split('.')[1]);
+		const payload = atob(window.localStorage.token.split('.')[1]);
 		$rootScope.userCtx = JSON.parse(payload);
 	}
 	else
 		$rootScope.userCtx = null;
 
 	$transitions.onBefore({}, function(transition) {
-		const loggedIn = $rootScope.userCtx && $rootScope.userCtx.email;
-		const userStatus = loggedIn ? 'loggedIn' : 'loggedOut';
+		const userStatus = !!$rootScope.userCtx ? 'loggedIn' : 'loggedOut';
 
 		// Check if the state is allowed for logged out users.
 		if (!transition.to().acceptedUsers.includes(userStatus)) {

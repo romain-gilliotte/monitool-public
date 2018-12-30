@@ -6,7 +6,7 @@
 	"required": [
 		"_id",
 		"email", "passwordHash",
-		"tokens", "invitations",
+		"tokens",
 		"createdAt"
 	],
 
@@ -55,22 +55,6 @@
 						{"type": "string"},
 						{"type": "null"}
 					]
-				}
-			}
-		},
-
-		"invitations": {
-			"type": "object",
-			"additionalProperties": false,
-			"required": ["accepted", "discarded"],
-			"properties": {
-				"accepted": {
-					"type": "array",
-					"items": {"type": "string"}
-				},
-				"discarded": {
-					"type": "array",
-					"items": {"type": "string"}
 				}
 			}
 		}

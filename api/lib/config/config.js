@@ -37,9 +37,9 @@ const config = {
 	"debug": toBool(process.env.MONITOOL_DEBUG) || false,
 	"baseUrl": process.env.MONITOOL_BASE_URL || "http://localhost:8000",
 	"port": parseInt(process.env.MONITOOL_PORT) || 8000,
-	"cookieSecret":
-		process.env.MONITOOL_COOKIE_SECRET ||
-		readFile(process.env.MONITOOL_COOKIE_SECRET_FILE),
+	"tokenSecret":
+		process.env.MONITOOL_TOKEN_SECRET ||
+		readFile(process.env.MONITOOL_TOKEN_SECRET_FILE),
 
 	"couchdb": {
 		"host": process.env.MONITOOL_COUCHDB_HOST || "localhost",

@@ -49,20 +49,20 @@ module.component('login', {
 		}
 
 		async onLoginClicked() {
-			const response = await axios.post('/api/authentication/login', {
-				email: this.email,
-				password: this.password
-			});
+			try {
+				const response = await axios.post('/api/authentication/login', {
+					email: this.email,
+					password: this.password
+				});
 
-			if (response.data.error === null) {
 				const token = response.data.token;
-
 				window.localStorage.token = token;
-				this.$rootScope.userCtx = JSON.parse(btoa(token.split('.')[1]));
+				this.$rootScope.userCtx = JSON.parse(atob(token.split('.')[1]));
 				this.$state.go('main.home')
 			}
-			else {
-				this.errorMessage = response.data.error;
+			catch (e) {
+				console.log(e)
+				this.errorMessage = e.response.data.error;
 				this.$scope.$apply();
 			}
 		}

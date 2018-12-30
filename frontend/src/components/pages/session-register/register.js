@@ -16,6 +16,7 @@
  */
 
 import angular from 'angular';
+import axios from 'axios';
 import uiRouter from '@uirouter/angularjs';
 
 const module = angular.module(
@@ -41,6 +42,55 @@ module.component('register', {
 	template: require('./register.html'),
 	controller: class RegisterController {
 
+		constructor($scope, $rootScope, $state) {
+			this.$scope = $scope;
+			this.$rootScope = $rootScope;
+			this.$state = $state;
+		}
+
+		async onRegisterClicked() {
+			try {
+				await axios.post('/api/authentication/register', {
+					email: this.email,
+					password: this.password
+				});
+
+				this.isWaitingToken = true;
+				this.$scope.$apply();
+			}
+			catch (e) {
+				console.log(e)
+				this.errorMessage = e.response.data.error;
+				this.$scope.$apply();
+			}
+		}
+
+		async onValidateEmailClicked() {
+			try {
+				// Validate the user email
+				await axios.post('/api/authentication/validate-email', {
+					email: this.email,
+					token: this.token
+				});
+
+				// Log the user in.
+				const response = await axios.post('/api/authentication/login', {
+					email: this.email,
+					password: this.password
+				});
+
+				const token = response.data.token;
+
+				window.localStorage.token = token;
+				this.$rootScope.userCtx = JSON.parse(atob(token.split('.')[1]));
+				this.$state.go('main.home')
+			}
+			catch (e) {
+				console.log(e)
+				this.errorMessage = e.response.data.error;
+				this.$scope.$apply();
+			}
+		}
 	}
 })
 

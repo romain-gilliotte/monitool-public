@@ -18,7 +18,6 @@
 import angular from 'angular';
 
 import sessionInit from "./session-init/init";
-import sessionCheckLogin from "./session-checklogin/checklogin";
 import sessionLogin from "./session-login/login";
 import sessionRegister from "./session-register/register";
 
@@ -74,7 +73,6 @@ const module = angular.module(
 	'monitool.components.pages.all-pages',
 	[
 		sessionInit,
-		sessionCheckLogin,
 		sessionLogin,
 		sessionRegister,
 		home,
