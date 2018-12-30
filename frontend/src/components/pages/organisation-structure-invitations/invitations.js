@@ -34,7 +34,7 @@ const module = angular.module(
 
 module.config($stateProvider => {
 	$stateProvider.state('main.organisation.structure.invitations', {
-		acceptedUsers: ['loggedIn', 'unknown'],
+		acceptedUsers: ['loggedIn'],
 		url: '/invitations',
 		component: 'organisationInvitation',
 		resolve: {
@@ -89,7 +89,7 @@ module.component('organisationInvitation', {
 		}
 
 		onCreateInvitationClicked() {
-			
+
 		}
 
 		/**

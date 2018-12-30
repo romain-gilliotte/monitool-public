@@ -18,10 +18,8 @@
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import responseTime from 'koa-response-time';
-import session from 'koa-session'
 
 import config from './config/config';
-import passport from 'passport';
 
 import authenticationRouter from './routers/authentication';
 import inputRouter from './routers/input';
@@ -34,31 +32,18 @@ import userRouter from './routers/user';
 
 import errorHandler from './middlewares/error-handler';
 
-import checkAuthentication from './middlewares/check-authentication';
-import checkEmailValidation from './middlewares/check-email-validation';
-
 const app = new Koa();
 
 app.keys = [config.cookieSecret];
 
 // Generic middlewares
 app.use(responseTime()); // Add x-reponse-time header
-app.use(errorHandler); // Catch errors and set status codes.
-
-// Enable sessions, body parser, and authentication.
-app.use(session({maxAge: 7 * 24 * 3600 * 1000}, app));
 app.use(bodyParser({jsonLimit: '1mb'}));
-app.use(passport.initialize())
-app.use(passport.session())
+
+app.use(errorHandler); // Catch errors and set status codes.
 
 // Serve authentication related endpoints.
 app.use(authenticationRouter.routes()); // login/logout/email validation...
-
-// From now on, all endpoints require authentication and email validation.
-app.use(checkAuthentication);
-app.use(checkEmailValidation);
-
-// Serve other endpoints.
 app.use(organisationRouter.routes());
 app.use(inputRouter.routes());
 app.use(pdfRouter.routes());

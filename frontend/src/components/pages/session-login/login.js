@@ -42,24 +42,32 @@ module.component('login', {
 	template: require('./login.html'),
 	controller: class LoginController {
 
-		constructor($scope) {
+		constructor($scope, $rootScope, $state) {
 			this.$scope = $scope;
+			this.$rootScope = $rootScope;
+			this.$state = $state;
 		}
 
-		$onInit() {
-			this.authenticationMethod = [];
+		async onLoginClicked() {
+			const response = await axios.post('/api/authentication/login', {
+				email: this.email,
+				password: this.password
+			});
+
+			if (response.data.error === null) {
+				const token = response.data.token;
+
+				window.localStorage.token = token;
+				this.$rootScope.userCtx = JSON.parse(btoa(token.split('.')[1]));
+				this.$state.go('main.home')
+			}
+			else {
+				this.errorMessage = response.data.error;
+				this.$scope.$apply();
+			}
 		}
-
-		async onEmailChange() {
-			const response = await axios.get('/api/authentication/methods/' + this.email);
-
-			this.accountExists = response.data.accountExists;
-			this.methods = response.data.methods;
-			this.$scope.$apply();
-		}
-
 	}
-})
+});
 
 
 export default module.name;

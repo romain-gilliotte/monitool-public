@@ -34,39 +34,36 @@ const module = angular.module(
 	]
 );
 
-
-module.run(function($rootScope) {
-	$rootScope.userCtx = window.user;
-});
-
-
 module.config(function($urlRouterProvider) {
 	$urlRouterProvider.otherwise('/home');
 });
 
-
-module.run(function($rootScope, $window, $transitions) {
-	// Scroll to top when changing page.
+// Scroll to top when changing page.
+module.run(function ($window, $transitions) {
 	$transitions.onSuccess({}, function(transition) {
 		$window.scrollTo(0, 0);
 	});
+})
+
+
+
+module.run(function($rootScope, $window, $transitions) {
+	// Load user from token.
+	if (window.localStorage.token) {
+		const payload = btoa(window.localStorage.token.split('.')[1]);
+		$rootScope.userCtx = JSON.parse(payload);
+	}
+	else
+		$rootScope.userCtx = null;
 
 	$transitions.onBefore({}, function(transition) {
-		let userStatus;
-		if (!$rootScope.userCtx)
-			userStatus = 'unknown';
-		else if ($rootScope.userCtx && $rootScope.userCtx.email)
-			userStatus = 'loggedIn';
-		else
-			userStatus = 'loggedOut';
+		const loggedIn = $rootScope.userCtx && $rootScope.userCtx.email;
+		const userStatus = loggedIn ? 'loggedIn' : 'loggedOut';
 
 		// Check if the state is allowed for logged out users.
 		if (!transition.to().acceptedUsers.includes(userStatus)) {
-			return transition.router.stateService.target({
-				unknown: 'init.checklogin',
-				loggedOut: 'init.login',
-				loggedIn: 'main.home'
-			}[userStatus]);
+			const destination = { loggedOut: 'init.login', loggedIn: 'main.home' }[userStatus];
+			return transition.router.stateService.target(destination);
 		}
 	});
 

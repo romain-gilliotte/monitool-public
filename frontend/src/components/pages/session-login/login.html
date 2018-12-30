@@ -7,43 +7,13 @@
 	<div class="col-sm-10">
 		<input type="text" ng-model="$ctrl.email" class="form-control" placeholder="Email" ng-change="$ctrl.onEmailChange()">
 	</div>
-</div>
 
-<div class="clearfix"></div>
-
-<div ng-if="!$ctrl.accountExists">
-	There is no account registered with this email address.<br/>
-	Do you want to register instead?
-</div>
-
-<div ng-if="$ctrl.methods.includes('local')">
-
-	<form class="form-horizontal well well-sm" action="/api/authentication/login-local" method="POST">
-		<input type="hidden" name="email" ng-value="$ctrl.email">
-
-		<div class="form-group">
-			<label for="password" class="col-sm-2 control-label">Password</label>
-			<div class="col-sm-10">
-				<input type="password" ng-model="$ctrl.password" class="form-control" name="password" placeholder="Password">
-			</div>
+	<div class="form-group">
+		<label for="password" class="col-sm-2 control-label">Password</label>
+		<div class="col-sm-10">
+			<input type="password" ng-model="$ctrl.password" class="form-control" name="password" placeholder="Password">
 		</div>
+	</div>
 
-		<button type="submit" class="btn btn-primary btn-block">
-			Connect
-		</button>
-	</form>
-</div>
-
-<div ng-if="$ctrl.methods.includes('google')">
-	<a href="/api/authentication/login-google" class="btn btn-primary btn-lg btn-block">
-		<i class="fa fa-google"></i>
-		Login with Google
-	</a>
-</div>
-
-<div ng-if="$ctrl.methods.includes('microsoft')">
-	<a href="/api/authentication/login-microsoft" class="btn btn-primary btn-lg btn-block">
-		<i class="fa fa-microsoft"></i>
-		Login with Microsoft
-	</a>
+	<button ng-click="$ctrl.onLoginClicked()" class="btn btn-primary btn-block">Connect</button>
 </div>

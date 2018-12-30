@@ -34,7 +34,7 @@ const module = angular.module(
 
 module.config($stateProvider => {
 	$stateProvider.state('main.organisation.structure.thematics', {
-		acceptedUsers: ['loggedIn', 'unknown'],
+		loggedUsers: ['loggedIn'],
 		url: '/thematics',
 		component: 'organisationThematics'
 	});

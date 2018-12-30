@@ -17,53 +17,14 @@
 
 import EmailValidator from 'email-deep-validator';
 import Router from 'koa-router';
-import LocalStrategy from 'passport-local';
 
 import bcrypt from 'bcrypt';
 import owasp from 'owasp-password-strength-test';
-import passport from 'koa-passport';
 
-import {sendValidateEmail, sendResetPassword} from '../mailer';
+import {sendValidateEmail, sendResetPassword} from '../mailer/mailer';
 import pkg from '../../package.json';
 import config from '../config/config';
 import User from '../resource/model/user';
-
-///////////////////////////////////////////////////////////////
-// Passport configuration
-///////////////////////////////////////////////////////////////
-
-passport.serializeUser(function(user, done) {
-	done(null, user._id);
-});
-
-passport.deserializeUser(function(id, done) {
-	User.storeInstance.get(id).then(
-		user => done(null, user),
-		error => done(error)
-	);
-});
-
-passport.use('local', new LocalStrategy.Strategy(
-	{usernameField: 'email'},
-	(email, password, done) => {
-		User.storeInstance.get('user:' + email).then(
-			user => {
-				console.log(user, password)
-
-				bcrypt.compare(password, user.passwordHash, function(err, res) {
-					console.log(err, res)
-					if (res)
-						done(null, user)
-					else
-						done(null, false);
-				});
-			},
-			error => {
-				return done(error);
-			}
-		);
-	}
-));
 
 ///////////////////////////////////////////////////////////////
 // Routes
@@ -72,64 +33,36 @@ passport.use('local', new LocalStrategy.Strategy(
 const router = new Router();
 
 /**
- * Index page.
- * Content will depend on the auth providers and debug mode.
- */
-router.get('/authentication/status', async ctx => {
-	if (ctx.isAuthenticated())
-		ctx.response.body = {
-			_id: ctx.state.user._id,
-			email: ctx.state.user.email,
-			validated: ctx.state.user.validateEmailTokenHash === null
-		};
-
-	else
-		ctx.response.body = {};
-});
-
-router.get('/authentication/methods/:email', async ctx => {
-	try {
-		const user = await User.storeInstance.get('user:' + ctx.params.email);
-		ctx.response.body = {
-			accountExists: true,
-			methods: ['microsoft', 'local']
-		};
-	}
-	catch (e) {
-		console.log(e)
-		ctx.response.body = {
-			accountExists: false,
-			methods: []
-		};
-	}
-});
-
-
-/**
  * This handler is POSTed to validate the username and password of partners
  */
 router.post(
-	'/authentication/login-local',
-	passport.authenticate('local', {
-		successRedirect: '/',
-		failureRedirect: '/?failed'
-	})
-);
+	'/authentication/login',
+	async ctx => {
+		const userId = 'user:' + ctx.request.body.email;
+		const user = await User.storeInstance.get(userId);
+		const isValid = await bcrypt.compare(ctx.request.body.password, user.passwordHash);
 
-/**
- * Log current user out.
- */
-router.post('/authentication/logout', async ctx => {
-	ctx.logout();
-	ctx.response.redirect('/');
-});
+		if (isValid)
+			ctx.response.body = {
+				error: null,
+				token: jwt.sign({sub: userId}, 'secret')
+			};
+
+		else {
+			ctx.response.status = 403;
+			ctx.response.body = {
+				error: 'wrong_email_or_password'
+			};
+		}
+	}
+);
 
 
 /**
  * Register a new account.
  * Need a {email, password} object in the request body
  */
-router.post('/authentication/register-local', async ctx => {
+router.post('/authentication/register', async ctx => {
 	// Create user & send validation email.
 	try {
 		if (typeof ctx.request.body.email !== 'string' || typeof ctx.request.body.password !== 'string')
