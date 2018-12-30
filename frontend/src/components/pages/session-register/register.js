@@ -79,10 +79,15 @@ module.component('register', {
 					password: this.password
 				});
 
-				const token = response.data.token;
+				window.localStorage.token = response.data.token;
 
-				window.localStorage.token = token;
-				this.$rootScope.userCtx = JSON.parse(atob(token.split('.')[1]));
+				// Setup default axios header.
+				axios.defaults.headers.common['Authorization'] = window.localStorage.token;
+
+				// Put user in $rootScope
+				const payload = atob(window.localStorage.token.split('.')[1]);
+				$rootScope.userCtx = JSON.parse(payload);
+
 				this.$state.go('main.home')
 			}
 			catch (e) {

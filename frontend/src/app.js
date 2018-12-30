@@ -20,6 +20,7 @@ import '@bower_components/font-awesome/css/font-awesome.min.css';
 import "./app.css";
 
 import angular from 'angular';
+import axios from 'axios';
 
 import mtPages from './components/pages/all-pages';
 import mtTranslation from './translation/bootstrap';
@@ -46,15 +47,15 @@ module.run(function ($window, $transitions) {
 })
 
 
-
 module.run(function($rootScope, $window, $transitions) {
-	// Load user from token.
 	if (window.localStorage.token) {
+		// Setup default axios header.
+		axios.defaults.headers.common['Authorization'] = window.localStorage.token;
+
+		// Put user in $rootScope
 		const payload = atob(window.localStorage.token.split('.')[1]);
 		$rootScope.userCtx = JSON.parse(payload);
 	}
-	else
-		$rootScope.userCtx = null;
 
 	$transitions.onBefore({}, function(transition) {
 		const userStatus = !!$rootScope.userCtx ? 'loggedIn' : 'loggedOut';

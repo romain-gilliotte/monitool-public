@@ -16,10 +16,7 @@
  */
 
 import angular from 'angular';
-import axios from 'axios';
 import uiRouter from '@uirouter/angularjs';
-import uuid from 'uuid/v4';
-import diacritics from 'diacritics';
 
 import Project from '../../../models/project';
 
@@ -43,7 +40,7 @@ module.config($stateProvider => {
 		url: '/projects',
 		component: 'projectListPage',
 		resolve: {
-			projects: () => Project.fetchAll()
+			projects: ($rootScope) => Project.fetchForUser($rootScope.userCtx.sub)
 		}
 	});
 

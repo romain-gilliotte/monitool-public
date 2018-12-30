@@ -21,14 +21,13 @@ import responseTime from 'koa-response-time';
 
 import config from './config/config';
 
+import authenticationMiddleware from './middlewares/authentication';
+
 import authenticationRouter from './routers/authentication';
 import inputRouter from './routers/input';
 import pdfRouter from './routers/pdf';
-import organisationRouter from './routers/organisation';
-import linkRouter from './routers/link';
 import projectRouter from './routers/project';
 import reportingRouter from './routers/reporting';
-import userRouter from './routers/user';
 
 import errorHandler from './middlewares/error-handler';
 
@@ -41,15 +40,13 @@ app.use(responseTime()); // Add x-reponse-time header
 app.use(bodyParser({jsonLimit: '1mb'}));
 
 app.use(errorHandler); // Catch errors and set status codes.
+app.use(authenticationMiddleware);
 
 // Serve authentication related endpoints.
 app.use(authenticationRouter.routes()); // login/logout/email validation...
-app.use(organisationRouter.routes());
 app.use(inputRouter.routes());
 app.use(pdfRouter.routes());
 app.use(projectRouter.routes());
-app.use(linkRouter.routes());
 app.use(reportingRouter.routes());
-app.use(userRouter.routes());
 
 export default app;

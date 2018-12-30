@@ -24,17 +24,7 @@ import uuid from 'uuid/v4';
 export default class Project {
 
 	static async fetchAll() {
-		const response = await axios.get('/api/resources/project');
-		return response.data;
-	}
-
-	static async fetchForOrganisation(organisationId) {
-		const response = await axios.get('/api/resources/project?organisationId=' + organisationId);
-		return response.data;
-	}
-
-	static async fetchForThematic(organisationId, thematicId) {
-		const response = await axios.get('/api/resources/project?organisationId=' + organisationId + '&thematicId=' + thematicId);
+		const response = await axios.get(`/api/resources/project`);
 		return response.data;
 	}
 

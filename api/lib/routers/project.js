@@ -28,22 +28,8 @@ const nullErrorHandler = error => {};
 
 const router = new Router();
 
-/**
- * Retrieve multiple projects.
- *
- * Multiple modes are supported
- * 		- no parameter: Retrieve all projects.
- *		- ?mode=short: Retrieve all projects (only country, name, themes, and current user).
- *		- ?mode=crossCutting&indicatorId=123: Retrieve projects that collect indicator 123 (bare minimum to compute indicator from cubes).
- */
 router.get('/resources/project', async ctx => {
-	let streams;
-
-	if (ctx.request.query.organisationId)
-		streams = await Project.storeInstance.listByOrganisation(ctx.request.query.organisationId);
-	else
-		streams = await Project.storeInstance.listByUser(ctx.state.user);
-
+	let streams = await Project.storeInstance.listByUser(ctx.state.user.sub);
 	streams.push(JSONStream.stringify());
 
 	ctx.response.type = 'application/json';

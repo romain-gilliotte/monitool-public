@@ -23,7 +23,6 @@ import owasp from 'owasp-password-strength-test';
 import jwt from 'jsonwebtoken'
 
 import {sendValidateEmail, sendResetPassword} from '../mailer/mailer';
-import pkg from '../../package.json';
 import config from '../config/config';
 import User from '../resource/model/user';
 
