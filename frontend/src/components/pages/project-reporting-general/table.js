@@ -89,7 +89,6 @@ module.component('generalTable', {
 		_computeTBodies() {
 			return [
 				...this.project.logicalFrames.map(lf => this._logicalFrameworkToTbody(lf)),
-				this._ccIndicatorsToTbody(),
 				this._extraIndicatorsToTbody(),
 				...this.project.forms.map(ds => this._dataSourceToTbody(ds))
 			].filter(tbody => tbody.sections.some(s => !!s.indicators.length));
@@ -139,57 +138,6 @@ module.component('generalTable', {
 						});
 					});
 				});
-			});
-
-			return tbody;
-		}
-
-		_ccIndicatorsToTbody() {
-			const tbody = {
-				id: 'cross_cutting',
-				name: 'indicator.cross_cutting',
-				sections: []
-			};
-
-			// Create a category with indicators that match project on 2 thematics or more
-			const manyThematicsIndicators = this.ccIndicators.filter(indicator => {
-				const commonThemes = indicator.themes.filter(themeId => this.project.themes.includes(themeId));
-				return indicator.themes.length > 1 && commonThemes.length > 0;
-			});
-
-			if (manyThematicsIndicators.length)
-				tbody.sections.push({
-					id: uuid(),
-					name: 'project.multi_theme_indicator',
-					indent: 0,
-					indicators: manyThematicsIndicators
-				});
-
-			// Create a category with indicators that match project on exactly 1 thematic
-			this.themes.forEach(theme => {
-				if (this.project.themes.includes(theme._id)) {
-					var themeIndicators = this.ccIndicators.filter(i => i.themes.length === 1 && i.themes[0] === theme._id);
-					if (themeIndicators.length !== 0)
-						tbody.sections.push({
-							id: theme._id,
-							name: theme.name[this.language],
-							indent: 0,
-							indicators: themeIndicators
-						});
-				}
-			});
-
-			// sort and replace indicators by their 'planning' (from the project)
-			tbody.sections.forEach(section => {
-				section.indicators = section.indicators.map(ccIndicator => {
-					return Object.assign(
-						{},
-						{id: ccIndicator._id, display: ccIndicator.name[this.language], baseline: null, target: null},
-						this.project.crossCutting[ccIndicator._id]
-					);
-				});
-
-				section.indicators.sort((a, b) => a.display.localeCompare(b.display));
 			});
 
 			return tbody;

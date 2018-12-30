@@ -73,25 +73,6 @@ module.component('selectIndicator', {
 				});
 			});
 
-			// FIXME, we can't modify this bindings (coding style)
-			const ccIndicators = this.ccIndicators.slice().sort((a, b) => a.name[this.language].localeCompare(b.name[this.language]));
-			ccIndicators.forEach(ccIndicator => {
-				// If there no theme in common
-				if (ccIndicator.themes.filter(t => this.project.themes.includes(t)).length === 0)
-					return;
-
-				choices.push({
-					name: ccIndicator.name[this.language],
-					group: this.translate('indicator.cross_cutting'),
-					indicator: this.project.crossCutting[ccIndicator._id] || {
-						display: ccIndicator.name[this.language],
-						baseline: null,
-						target: null,
-						computation: null
-					}
-				});
-			});
-
 			this.project.extraIndicators.forEach(indicator => {
 				choices.push({
 					name: indicator.display,

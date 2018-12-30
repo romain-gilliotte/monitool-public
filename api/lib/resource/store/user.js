@@ -29,30 +29,4 @@ export default class UserStore extends Store {
 	get modelClass() {
 		return User;
 	}
-
-	async listForOrganisation(organisationId) {
-		// Need to return all users that are part of a given organisation.
-		// Exclude users that have accepted an invitation, but are no longer invited...
-
-		const that = this;
-
-		return [
-			...this.list(),
-			new Transform({
-				objectMode: true,
-				transform(user, _, callback) {
-					if (!this._organisation)
-						this._organisation = that._db.bucket.get(organisationId);;
-
-					this._organisation.then(organisation => {
-						const isInvited = organisation.invitations.some(i => new RegExp(i.pattern).test(user.email))
-						if (isInvited)
-							this.push(user);
-
-						callback();
-					})
-				}
-			})
-		]
-	}
 }

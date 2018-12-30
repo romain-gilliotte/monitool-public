@@ -24,11 +24,6 @@ export default class User {
 		return response.data.map(i => new User(i));
 	}
 
-	static async fetchForOrganisation(organisationId) {
-		const response = await axios.get('/api/resources/user?organisationId=' + organisationId);
-		return response.data.map(i => new User(i));
-	}
-
 	constructor(data) {
 		Object.assign(this, data);
 	}

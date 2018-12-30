@@ -40,7 +40,7 @@ module.config($stateProvider => {
 		url: '/projects',
 		component: 'projectListPage',
 		resolve: {
-			projects: ($rootScope) => Project.fetchForUser($rootScope.userCtx.sub)
+			projects: ($rootScope) => Project.fetchAll()
 		}
 	});
 

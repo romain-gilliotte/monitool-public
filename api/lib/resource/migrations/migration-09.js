@@ -20,18 +20,15 @@ async function migrateDesignDoc() {
 	delete ddoc.views.indicator_by_theme;
 	delete ddoc.views.project_by_theme;
 
-	ddoc.views.project_by_email = {
+	ddoc.views.project_by_user = {
 		map: function(doc) {
 			if (doc._id.indexOf('project:') == 0)
-				doc.users.forEach(function(user) {
-					emit(user.email);
-				});
+				doc.users.forEach(function(user) { emit(user.id); });
 		}.toString().replace(/\s+/, ' ')
 	};
 
 	await database.insert(ddoc);
 }
-
 
 async function migrateOrganisation() {
 	// Query
@@ -44,39 +41,12 @@ async function migrateOrganisation() {
 	indicators = indicators.rows.map(r => r.doc);
 	themes = themes.rows.map(r => r.doc);
 
-	// Create organisation
-	const organisation = {
-		_id: 'organisation:1d695341-1f63-41b3-88b4-fc88161dce6e',
-		name: 'Default org',
-		description: 'This organisation was created while migrating from a previous monitool version',
-		thematics: themes.map(theme => {
-			return {
-				id: theme._id.substring(6),
-				name: theme.name.en,
-				description: 'This thematic was imported from a previous version of monitool',
-				indicators: indicators
-					.filter(indicator => indicator.themes.includes(theme._id))
-					.map(indicator => {
-						return {
-							id: indicator._id.substring(10),
-							name: indicator.name.en,
-							description: indicator.description.en
-						}
-					})
-			}
-		}),
-
-		"invitations": [
-			{"role": "readonly", "pattern": ".*"}
-		]
-	}
-
 	// Delete indicators and themes.
 	indicators = indicators.map(doc => { return {_id: doc._id, _rev: doc._rev, _deleted: true}})
 	themes = themes.map(doc => { return {_id: doc._id, _rev: doc._rev, _deleted: true}})
 
 	// Commit to database.
-	await database.bucket.bulk({docs: [...indicators, ...themes, organisation]})
+	await database.bucket.bulk({docs: [...indicators, ...themes]})
 }
 
 
@@ -91,28 +61,11 @@ async function migrateProjects() {
 		new Transform({
 			objectMode: true,
 			transform(doc, _, callback) {
-				// Create project link
-				this.push({
-					_id: 'link:1d695341-1f63-41b3-88b4-fc88161dce6e:' + doc._id.substring(8),
-					thematics: doc.themes.map(t => t.substring(6)),
-					indicators: Object
-						.keys(doc.crossCutting)
-						.map(id => {
-							return {
-								id: id.substring(10),
-								computation: doc.crossCutting[id].computation
-							};
-						})
-						.filter(ind => !!ind.computation)
-				});
-
 				// Transform project.
 				doc.users = doc.users.filter(user => user.type === 'internal');
 				doc.users.forEach(user => {
-					user.email = user.id.substring(5) + '@medecinsdumonde.net';
-
+					user.id = user.id + '@medecinsdumonde.net';
 					delete user.type;
-					delete user.id;
 				});
 
 				delete doc.visibility;
