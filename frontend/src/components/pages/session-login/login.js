@@ -50,6 +50,15 @@ module.component('login', {
 
 		async onLoginClicked() {
 			try {
+				this.errorMessage = null;
+
+				if (this.isWaitingToken && this.token) {
+					await axios.post('/api/authentication/validate-email', {
+						email: this.email,
+						token: this.token
+					});
+				}
+
 				const response = await axios.post('/api/authentication/login', {
 					email: this.email,
 					password: this.password
@@ -67,8 +76,13 @@ module.component('login', {
 				this.$state.go('main.home')
 			}
 			catch (e) {
-				console.log(e)
-				this.errorMessage = e.response.data.error;
+				if (e.response.data.error == 'need_email_validation') {
+					this.isWaitingToken = true;
+					this.validationSentAt = e.response.data.detail.sentAt;
+				}
+				else
+					this.errorMessage = e.response.data.error;
+
 				this.$scope.$apply();
 			}
 		}

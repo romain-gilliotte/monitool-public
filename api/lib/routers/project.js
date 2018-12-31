@@ -29,7 +29,7 @@ const nullErrorHandler = error => {};
 const router = new Router();
 
 router.get('/resources/project', async ctx => {
-	let streams = await Project.storeInstance.listByUser(ctx.state.user.sub);
+	let streams = await Project.storeInstance.listByUser(ctx.state.user.email);
 	streams.push(JSONStream.stringify());
 
 	ctx.response.type = 'application/json';

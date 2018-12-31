@@ -43,7 +43,13 @@ router.post(
 			const user = await User.storeInstance.get(userId);
 			const isValid = await bcrypt.compare(ctx.request.body.password, user.passwordHash);
 			if (!isValid)
-				throw new Error();
+				throw new Error('wrong_password');
+
+			if (user.tokens.validateEmailTokenHash) {
+				const e = new Error('need_email_validation');
+				e.detail = {sentAt: user.tokens.validateEmailSentAt};
+				throw e;
+			}
 
 			ctx.response.body = {
 				error: null,
@@ -52,9 +58,7 @@ router.post(
 		}
 		catch (e) {
 			ctx.response.status = 403;
-			ctx.response.body = {
-				error: 'wrong_email_or_password'
-			};
+			ctx.response.body = {error: e.message, detail: e.detail};
 		}
 	}
 );
@@ -71,12 +75,12 @@ router.post('/authentication/register', async ctx => {
 			throw new Error('missing_parameter');
 
 		// Check that the password is secure enough
-		const passwordAssessment = owasp.test(ctx.request.body.password);
-		if (passwordAssessment.errors.length) {
-			const error = new Error('password_too_weak');
-			error.details = passwordAssessment.errors;
-			throw error;
-		}
+		// const passwordAssessment = owasp.test(ctx.request.body.password);
+		// if (passwordAssessment.errors.length) {
+		// 	const error = new Error('password_too_weak');
+		// 	error.details = passwordAssessment.errors;
+		// 	throw error;
+		// }
 
 		// Pre-validate email to avoid typing errors.
 		const emailValidator = new EmailValidator();

@@ -1,19 +1,40 @@
-<legend>Please log in</legend>
+<div class="row">
+	<div class="col-sm-6">
+		<form>
+			<h4>Log in</h4>
 
-<p class="text-danger">{{$ctrl.errorMessage}}</p>
+			<p class="text-danger">{{$ctrl.errorMessage}}</p>
 
-<div class="form-group">
-	<label for="username" class="col-sm-2 control-label">Email</label>
-	<div class="col-sm-10">
-		<input type="text" ng-model="$ctrl.email" class="form-control" placeholder="Email" ng-change="$ctrl.onEmailChange()">
+			<div class="form-group">
+				<label for="username" class="control-label">Email</label>
+				<input type="text" required ng-model="$ctrl.email" class="form-control" placeholder="Email" ng-change="$ctrl.onEmailChange()" ng-disabled="$ctrl.isWaitingToken">
+			</div>
+
+			<div class="form-group">
+				<label for="password" class="control-label">Password</label>
+				<input type="password" required ng-model="$ctrl.password" class="form-control" name="password" placeholder="Password" ng-disabled="$ctrl.isWaitingToken">
+			</div>
+
+			<div ng-if="$ctrl.isWaitingToken">
+				<div class="form-group">
+					<label for="token" class="control-label">Email verification</label>
+					<input type="text" required ng-model="$ctrl.token" class="form-control" name="token" placeholder="Enter the token you received by email">
+				</div>
+
+				<p>This is needed once to check that you are the real owner of <code>{{$ctrl.email}}</code>.</p>
+				<p>The email was sent on {{$ctrl.validationSentAt|date:'MMMM,d HH:mm'}}</p>
+			</div>
+
+			<button ng-click="$ctrl.onLoginClicked()" class="btn btn-primary">Connect</button>
+			<button ng-click="$ctrl.sendValidationAgain()" class="btn btn-default" ng-if="$ctrl.isWaitingToken">Send email again</button>
+		</form>
 	</div>
+	<div class="col-sm-6">
+		<h4>Register</h4>
+		<p>If you don't have an account yet, you can <a ui-sref="init.register">register</a> for free!</p>
 
-	<div class="form-group">
-		<label for="password" class="col-sm-2 control-label">Password</label>
-		<div class="col-sm-10">
-			<input type="password" ng-model="$ctrl.password" class="form-control" name="password" placeholder="Password">
-		</div>
+		<h4>Recover account</h4>
+		<p>If you lost your password, you can <a ui-sref="init.recover">reset it</a>.</p>
+
 	</div>
-
-	<button ng-click="$ctrl.onLoginClicked()" class="btn btn-primary btn-block">Connect</button>
 </div>

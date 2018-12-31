@@ -67,6 +67,8 @@ module.component('register', {
 
 		async onValidateEmailClicked() {
 			try {
+				this.errorMessage = null;
+
 				// Validate the user email
 				await axios.post('/api/authentication/validate-email', {
 					email: this.email,

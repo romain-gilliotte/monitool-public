@@ -44,8 +44,17 @@ module.config($stateProvider => {
 module.component('topMenu', {
 	template: require('./menu.html'),
 	controller: class MenuController {
-		constructor($state) {
+
+		constructor($state, $rootScope) {
 			this.$state = $state;
+			this.$rootScope = $rootScope
+		}
+
+		logout() {
+			delete window.localStorage.token;
+			delete axios.defaults.headers.common['Authorization'];
+			delete this.$rootScope.userCtx;
+			this.$state.go('init.login')
 		}
 	}
 })
