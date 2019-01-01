@@ -22,11 +22,12 @@
 				</div>
 
 				<p>This is needed once to check that you are the real owner of <code>{{$ctrl.email}}</code>.</p>
-				<p>The email was sent on {{$ctrl.validationSentAt|date:'MMMM,d HH:mm'}}</p>
+				<p>The email was sent on {{$ctrl.validationSentAt|date:'medium'}}</p>
 			</div>
 
 			<button ng-click="$ctrl.onLoginClicked()" class="btn btn-primary">Connect</button>
 			<button ng-click="$ctrl.sendValidationAgain()" class="btn btn-default" ng-if="$ctrl.isWaitingToken">Send email again</button>
+			<button ng-click="$ctrl.onResetClicked()" class="btn btn-default">Reset</button>
 		</form>
 	</div>
 	<div class="col-sm-6">
