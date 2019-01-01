@@ -48,6 +48,15 @@ module.component('login', {
 			this.$state = $state;
 		}
 
+		$onInit() {
+			this.isWaitingToken = false;
+		}
+
+		onResetClicked() {
+			this.email = this.password = this.token = '';
+			this.isWaitingToken = false;
+		}
+
 		async onLoginClicked() {
 			try {
 				this.errorMessage = null;

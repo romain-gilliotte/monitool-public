@@ -49,6 +49,11 @@ module.component('register', {
 		}
 
 		async onRegisterClicked() {
+			if (this.password != this.password2) {
+				this.errorMessage = 'password_dont_match';
+				return;
+			}
+
 			try {
 				await axios.post('/api/authentication/register', {
 					email: this.email,
@@ -75,28 +80,36 @@ module.component('register', {
 					token: this.token
 				});
 
-				// Log the user in.
-				const response = await axios.post('/api/authentication/login', {
-					email: this.email,
-					password: this.password
-				});
-
-				window.localStorage.token = response.data.token;
-
-				// Setup default axios header.
-				axios.defaults.headers.common['Authorization'] = window.localStorage.token;
-
-				// Put user in $rootScope
-				const payload = atob(window.localStorage.token.split('.')[1]);
-				this.$rootScope.userCtx = JSON.parse(payload);
-
-				this.$state.go('main.home')
+				this.logUserIn(this.email, this.password);
 			}
 			catch (e) {
-				console.log(e)
 				this.errorMessage = e.response.data.error;
 				this.$scope.$apply();
 			}
+		}
+
+		onResetClicked() {
+			this.email = this.password = this.token = '';
+			this.isWaitingToken = false;
+		}
+
+		async logUserIn(email, password) {
+			// Log the user in.
+			const response = await axios.post('/api/authentication/login', {
+				email: email,
+				password: password
+			});
+
+			window.localStorage.token = response.data.token;
+
+			// Setup default axios header.
+			axios.defaults.headers.common['Authorization'] = window.localStorage.token;
+
+			// Put user in $rootScope
+			const payload = atob(window.localStorage.token.split('.')[1]);
+
+			this.$rootScope.userCtx = JSON.parse(payload);
+			this.$state.go('main.home')
 		}
 	}
 })

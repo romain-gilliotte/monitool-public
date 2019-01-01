@@ -143,7 +143,8 @@ router.post('/authentication/request-reset-password', async ctx => {
 		const user = await User.storeInstance.get('user:' + ctx.request.body.email);
 
 		// Maximum is one email every 15 minutes
-		if (new Date() - new Date(user.tokens.resetPasswordEmailSentAt) < 15 * 60 * 1000)
+		const elapsed = new Date() - new Date(user.tokens.resetPasswordEmailSentAt);
+		if (user.tokens.resetPasswordTokenHash && elapsed < 15 * 60 * 1000)
 			throw new Error('already_sent');
 
 		// FIXME: Cheap random string, not secure at all. Should use crypto.randomBytes().
@@ -180,10 +181,13 @@ router.post('/authentication/reset-password', async ctx => {
 		if (!user.tokens.resetPasswordTokenHash)
 			throw new Error('not_expecting_reset');
 
-		// Check that the password is secure enough.
-		const passwordAssessment = owasp.test(ctx.request.body.password);
-		if (passwordAssessment.errors.length)
-			throw new Error('password_too_weak');
+		// Check that the password is secure enough
+		// const passwordAssessment = owasp.test(ctx.request.body.password);
+		// if (passwordAssessment.errors.length) {
+		// 	const error = new Error('password_too_weak');
+		// 	error.details = passwordAssessment.errors;
+		// 	throw error;
+		// }
 
 		// Check that the reset code is OK.
 		if (!await bcrypt.compare(ctx.request.body.token, user.tokens.resetPasswordTokenHash))
