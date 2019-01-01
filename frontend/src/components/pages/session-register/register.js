@@ -109,7 +109,7 @@ module.component('register', {
 			const payload = atob(window.localStorage.token.split('.')[1]);
 
 			this.$rootScope.userCtx = JSON.parse(payload);
-			this.$state.go('main.home')
+			this.$state.go('main.projects')
 		}
 	}
 })

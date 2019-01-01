@@ -22,7 +22,6 @@ import sessionLogin from "./session-login/login";
 import sessionRegister from "./session-register/register";
 import sessionRecover from "./session-recover/recover";
 
-import home from "./home/home";
 import menu from "./menu/menu";
 
 import projectList from "./project-list/list";
@@ -58,7 +57,6 @@ const module = angular.module(
 		sessionLogin,
 		sessionRegister,
 		sessionRecover,
-		home,
 		menu,
 		projectList,
 		projectMenu,

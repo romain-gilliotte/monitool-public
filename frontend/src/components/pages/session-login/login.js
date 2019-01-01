@@ -82,7 +82,7 @@ module.component('login', {
 				const payload = atob(window.localStorage.token.split('.')[1]);
 				this.$rootScope.userCtx = JSON.parse(payload);
 
-				this.$state.go('main.home')
+				this.$state.go('main.projects');
 			}
 			catch (e) {
 				if (e.response.data.error == 'need_email_validation') {

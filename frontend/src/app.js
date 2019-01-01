@@ -36,7 +36,7 @@ const module = angular.module(
 );
 
 module.config(function($urlRouterProvider) {
-	$urlRouterProvider.otherwise('/home');
+	$urlRouterProvider.otherwise('/projects');
 });
 
 // Scroll to top when changing page.
@@ -62,7 +62,7 @@ module.run(function($rootScope, $window, $transitions) {
 
 		// Check if the state is allowed for logged out users.
 		if (!transition.to().acceptedUsers.includes(userStatus)) {
-			const destination = { loggedOut: 'init.login', loggedIn: 'main.home' }[userStatus];
+			const destination = { loggedOut: 'init.login', loggedIn: 'main.projects' }[userStatus];
 			return transition.router.stateService.target(destination);
 		}
 	});
