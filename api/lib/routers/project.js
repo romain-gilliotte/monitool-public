@@ -68,7 +68,7 @@ router.post('/resources/project', async ctx => {
 		// Clone the project
 		project._id = 'project:' + uuidv4();
 		delete project._rev;
-		project.users = [{id: ctx.state.user._id, role: "owner"}];
+		project.users = [{email: ctx.state.user.email, role: "owner"}];
 		await project.save();
 
 		// Recreate all inputs asynchronously. No need to have the user waiting.
