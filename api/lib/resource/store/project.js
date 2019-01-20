@@ -178,12 +178,12 @@ export default class ProjectStore extends Store {
 	}
 
 	// Retrieve the project in witch this user is directly involved.
-	async listByUser(userId) {
+	async listByEmail(email) {
 		return [
 			this._db.bucket.viewAsStream(
 				'monitool',
-				'project_by_user',
-				{key: userId, include_docs: true}
+				'project_by_email',
+				{key: email, include_docs: true}
 			),
 			JSONStream.parse(['rows', true, 'doc']),
 			new Transform({

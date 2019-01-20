@@ -20,10 +20,10 @@ async function migrateDesignDoc() {
 	delete ddoc.views.indicator_by_theme;
 	delete ddoc.views.project_by_theme;
 
-	ddoc.views.project_by_user = {
+	ddoc.views.project_by_email = {
 		map: function(doc) {
 			if (doc._id.indexOf('project:') == 0)
-				doc.users.forEach(function(user) { emit('user:' + user.email); });
+				doc.users.forEach(function(user) { emit(user.email); });
 		}.toString().replace(/[\n\t\s]+/g, ' ')
 	};
 

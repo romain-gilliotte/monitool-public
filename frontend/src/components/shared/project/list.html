@@ -25,9 +25,8 @@
 
 		<div class="panel-heading">
 			<div class="panel-title">
-				<i class="fa pull-right fa-user" ng-if="p.isUser" style="margin-top: 3px" title="{{'project.is_user'|translate}}"></i>
-				<i class="fa pull-right fa-star" ng-if="!p.isUser && p.favorite" style="margin-top: 3px; cursor: pointer" ng-click="$ctrl.toggleFavorite(p)"></i>
-				<i class="fa pull-right fa-star-o" ng-if="!p.isUser && !p.favorite" style="margin-top: 3px; cursor: pointer" ng-click="$ctrl.toggleFavorite(p)"></i>
+				<i class="fa pull-right fa-star" ng-if="p.favorite" style="margin-top: 3px; cursor: pointer" ng-click="$ctrl.toggleFavorite(p)"></i>
+				<i class="fa pull-right fa-star-o" ng-if="!p.favorite" style="margin-top: 3px; cursor: pointer" ng-click="$ctrl.toggleFavorite(p)"></i>
 				{{p.country}}
 			</div>
 		</div>

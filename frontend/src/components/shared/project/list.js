@@ -61,7 +61,6 @@ module.component('projectList', {
 				const user = p.users.find(u => u.email == this.userCtx.email);
 
 				p.running = p.end > new Date().toISOString().slice(0, 10);
-				p.isUser = !!user;
 				p.isOwner = user && user.role === 'owner';
 				p.favorite = !!localStorage['favorites::projects::' + p._id];
 			});
@@ -79,8 +78,8 @@ module.component('projectList', {
 			});
 
 			this.displayedProjects.sort((p1, p2) => {
-				const p1f = [p1.isUser, p1.favorite, p1.country || 'zzz', p1.name, p1.end];
-				const p2f = [p2.isUser, p2.favorite, p2.country || 'zzz', p2.name, p2.end];
+				const p1f = [p1.favorite, p1.country || 'zzz', p1.name, p1.end];
+				const p2f = [p2.favorite, p2.country || 'zzz', p2.name, p2.end];
 
 				for (let i = 0; i < p1f.length; ++i) {
 					if (typeof p1f[i] == 'boolean' && p1f[i] !== p2f[i])
