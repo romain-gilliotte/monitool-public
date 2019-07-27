@@ -15,16 +15,16 @@
  * along with Monitool. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import winston from 'winston';
-import validator from 'is-my-json-valid';
-import schema from './schema.json';
 import fs from 'fs';
+import validator from 'is-my-json-valid';
+import winston from 'winston';
+import schema from './schema.json';
 
-const toBool = function(str) {
+const toBool = function (str) {
 	return str && str !== '0' && str.toLowerCase() != 'false';
 };
 
-const readFile = function(secret) {
+const readFile = function (secret) {
 	try {
 		return fs.readFileSync(secret, "utf8").trim();
 	}
@@ -64,7 +64,7 @@ validate(config);
 var errors = validate.errors || [];
 if (errors.length) {
 	// if there is errors, log them and exit the process.
-	errors.forEach(function(error) {
+	errors.forEach(function (error) {
 		winston.log('error', 'Invalid config', error);
 	});
 

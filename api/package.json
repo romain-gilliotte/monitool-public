@@ -45,9 +45,9 @@
     "winston": "^3.1.0"
   },
   "scripts": {
-    "start": "./node_modules/.bin/nodemon lib/main-webapp.js --exitcrash --exec ./node_modules/.bin/babel-node --inspect=0.0.0.0:9229",
-    "build": "./node_modules/.bin/babel lib -d dist --copy-files",
+    "start": "nodemon lib/main-webapp.js --exitcrash --exec ./node_modules/.bin/babel-node --inspect=0.0.0.0:9229",
+    "build": "babel lib -d dist --copy-files",
     "serve": "node dist/main-webapp.js",
-    "test": "./node_modules/mocha/bin/mocha --compilers js:babel-register --recursive test"
+    "test": "mocha --compilers js:babel-register --recursive test"
   }
 }

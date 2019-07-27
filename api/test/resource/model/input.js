@@ -15,44 +15,39 @@
  * along with Monitool. If not, see <http://www.gnu.org/licenses/>.
  */
 
-"use strict";
+import assert from 'assert';
+import Input from '../../../resource/model/input';
+import Project from '../../../resource/model/project';
+import Variable from '../../../resource/model/variable';
+import '../../mock-database';
 
-require('../../mock-database');
+describe("Input", function () {
 
-let assert     = require('assert'),
-	Project    = require('../../../resource/model/project'),
-	DataSource = require('../../../resource/model/data-source'),
-	Variable   = require('../../../resource/model/variable'),
-	Input      = require('../../../resource/model/input');
-
-
-describe("Input", function() {
-
-	describe('update', function() {
+	describe('update', function () {
 		let oldProject, newProject, oldInput, input;
 
-		before("create project and input", function() {
+		before("create project and input", function () {
 			oldProject = new Project(require('../../data/project.json'));
 			oldInput = new Input(require('../../data/input.json'));
 		});
 
-		beforeEach(function() {
+		beforeEach(function () {
 			newProject = new Project(JSON.parse(JSON.stringify(oldProject)));
 			input = new Input(JSON.parse(JSON.stringify(oldInput)));
 		});
 
-		it('no change', function() {
+		it('no change', function () {
 			assert.equal(false, input.update(oldProject, newProject));
 		});
 
-		it('remove form', function() {
+		it('remove form', function () {
 			newProject.forms.splice(0, 1);
 
 			assert.equal(true, input.update(oldProject, newProject));
 			assert.equal(input._deleted, true);
 		});
 
-		it('adding a simple variable shoud add one zero', function() {
+		it('adding a simple variable shoud add one zero', function () {
 			newProject.forms[0].elements.push(new Variable({
 				id: '03ca15e3-6dab-438a-bbb0-40a673df547e',
 				name: "newVariable",
@@ -67,7 +62,7 @@ describe("Input", function() {
 			});
 		});
 
-		it('adding a variable with a partition shoud add two zeros', function() {
+		it('adding a variable with a partition shoud add two zeros', function () {
 			newProject.forms[0].elements.push(new Variable({
 				id: '03ca15e3-6dab-438a-bbb0-40a673df547e',
 				name: "newVariable",
@@ -77,8 +72,8 @@ describe("Input", function() {
 						id: "b0c9849f-c1ae-437d-ba93-2d52879455a1",
 						name: "whatever",
 						elements: [
-							{id: '7fa4cf21-a350-4a85-a095-941392201a9e', name: "whatever"},
-							{id: '0391baaa-4e2e-4d3f-a85d-4bf03b6f26a4', name: "whatever2"}
+							{ id: '7fa4cf21-a350-4a85-a095-941392201a9e', name: "whatever" },
+							{ id: '0391baaa-4e2e-4d3f-a85d-4bf03b6f26a4', name: "whatever2" }
 						],
 						groups: [],
 						aggregation: 'sum'
@@ -95,7 +90,7 @@ describe("Input", function() {
 			});
 		});
 
-		it('removing a variable shoud remove the entry', function() {
+		it('removing a variable shoud remove the entry', function () {
 			newProject.forms[0].elements.splice(0, 1);
 
 			assert.equal(true, input.update(oldProject, newProject));
@@ -104,7 +99,7 @@ describe("Input", function() {
 			});
 		});
 
-		it('removing another variable shoud remove the entry', function() {
+		it('removing another variable shoud remove the entry', function () {
 			newProject.forms[0].elements.splice(1, 1);
 
 			assert.equal(true, input.update(oldProject, newProject));
@@ -113,13 +108,13 @@ describe("Input", function() {
 			});
 		});
 
-		it('adding a partition at the back should move all data to the first element of that partition', function() {
+		it('adding a partition at the back should move all data to the first element of that partition', function () {
 			newProject.forms[0].elements[0].partitions.push({
 				id: "b0c9849f-c1ae-437d-ba93-2d52879455a1",
 				name: "whatever",
 				elements: [
-					{id: '7fa4cf21-a350-4a85-a095-941392201a9e', name: "whatever"},
-					{id: '0391baaa-4e2e-4d3f-a85d-4bf03b6f26a4', name: "whatever2"}
+					{ id: '7fa4cf21-a350-4a85-a095-941392201a9e', name: "whatever" },
+					{ id: '0391baaa-4e2e-4d3f-a85d-4bf03b6f26a4', name: "whatever2" }
 				],
 				groups: [],
 				aggregation: 'sum'
@@ -134,13 +129,13 @@ describe("Input", function() {
 			});
 		});
 
-		it('adding a partition in front should move all data to the first element of that partition', function() {
+		it('adding a partition in front should move all data to the first element of that partition', function () {
 			newProject.forms[0].elements[0].partitions.unshift({
 				id: "b0c9849f-c1ae-437d-ba93-2d52879455a1",
 				name: "whatever",
 				elements: [
-					{id: '7fa4cf21-a350-4a85-a095-941392201a9e', name: "whatever"},
-					{id: '0391baaa-4e2e-4d3f-a85d-4bf03b6f26a4', name: "whatever2"}
+					{ id: '7fa4cf21-a350-4a85-a095-941392201a9e', name: "whatever" },
+					{ id: '0391baaa-4e2e-4d3f-a85d-4bf03b6f26a4', name: "whatever2" }
 				],
 				groups: [],
 				aggregation: 'sum'
@@ -155,7 +150,7 @@ describe("Input", function() {
 			});
 		});
 
-		it('adding a partition elements on the beginning of first partition should update the data', function() {
+		it('adding a partition elements on the beginning of first partition should update the data', function () {
 			newProject.forms[0].elements[0].partitions[0].elements.push({
 				'id': '717a2728-c82c-426a-9198-88bd54821f0d',
 				'name': 'newElement'
@@ -170,7 +165,7 @@ describe("Input", function() {
 			});
 		})
 
-		it('adding a partition elements on the middle first partition should update the data', function() {
+		it('adding a partition elements on the middle first partition should update the data', function () {
 			newProject.forms[0].elements[0].partitions[0].elements.splice(1, 0, {
 				'id': '717a2728-c82c-426a-9198-88bd54821f0d',
 				'name': 'newElement'
@@ -185,7 +180,7 @@ describe("Input", function() {
 			});
 		});
 
-		it('adding a partition elements on the middle of the second partition should update the data', function() {
+		it('adding a partition elements on the middle of the second partition should update the data', function () {
 			newProject.forms[0].elements[0].partitions[1].elements.splice(1, 0, {
 				'id': '717a2728-c82c-426a-9198-88bd54821f0d',
 				'name': 'newElement'
@@ -200,7 +195,7 @@ describe("Input", function() {
 			});
 		});
 
-		it('removing a partition element 1', function() {
+		it('removing a partition element 1', function () {
 			newProject.forms[0].elements[0].partitions[0].elements.splice(0, 1);
 
 			assert.equal(true, input.update(oldProject, newProject));
@@ -212,8 +207,8 @@ describe("Input", function() {
 			});
 		});
 
-		it('reordering partition elements', function() {
-			newProject.forms[0].elements[0].partitions.forEach(function(partition) {
+		it('reordering partition elements', function () {
+			newProject.forms[0].elements[0].partitions.forEach(function (partition) {
 				partition.elements.reverse();
 			});
 
@@ -227,7 +222,7 @@ describe("Input", function() {
 			});
 		});
 
-		it('removing a partition', function() {
+		it('removing a partition', function () {
 			newProject.forms[0].elements[0].partitions.splice(2, 1);
 
 			assert.equal(true, input.update(oldProject, newProject));

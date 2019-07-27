@@ -15,21 +15,18 @@
  * along with Monitool. If not, see <http://www.gnu.org/licenses/>.
  */
 
-"use strict";
-
-require('../../mock-database');
-
-let assert    = require('assert'),
-	database  = require('../../../resource/database'),
-	Project   = require('../../../resource/model/project');
+import assert from 'assert';
+import database from '../../../resource/database';
+import Project from '../../../resource/model/project';
+import '../../mock-database';
 
 const INPUT_ID = '624c94fa-9ebc-4f8b-8389-f5959149a0a7:0c243e08-8c21-4946-9f5f-ce255106901b:8a7980f8-0e47-49bb-bf54-fdbe2013e3ea:2010-02',
 	PROJECT_ID = '624c94fa-9ebc-4f8b-8389-f5959149a0a7';
 
-describe('Project', function() {
+describe('Project', function () {
 
-	beforeEach(function() {
-		return database.prepare().then(function() {
+	beforeEach(function () {
+		return database.prepare().then(function () {
 			return Promise.all([
 				database.insert(require('../../data/project.json')),
 				database.insert(require('../../data/input.json')),
@@ -38,65 +35,65 @@ describe('Project', function() {
 		});
 	});
 
-	afterEach(function() {
+	afterEach(function () {
 		return database.destroyBucket();
 	});
 
-	describe('load', function() {
+	describe('load', function () {
 
-		it('should load', function() {
+		it('should load', function () {
 			return Project.storeInstance.get(PROJECT_ID);
 		});
 
-		it('should fail to load a non existing id', function(done) {
+		it('should fail to load a non existing id', function (done) {
 			Project.storeInstance.get('8dccaa8a-425a-4a60-b7ca-ccf623b0b27d')
-				.then(function() { throw new Error(); })
-				.catch(function() { done(); })
+				.then(function () { throw new Error(); })
+				.catch(function () { done(); })
 		});
 
-		it('should fail to load an id from something else', function(done) {
+		it('should fail to load an id from something else', function (done) {
 			Project.storeInstance
 				.get(INPUT_ID)
 				.then(
-					function(result) {
+					function (result) {
 						done('should_not_work');
 					},
-					function(error) {
+					function (error) {
 						done(null, error)
 					}
 				);
 		});
 	});
 
-	describe('destroy', function() {
+	describe('destroy', function () {
 
-		it('should delete project', function(done) {
+		it('should delete project', function (done) {
 			Project.storeInstance
 				.get(PROJECT_ID)
 				.then(p => p.destroy())
 				.then(r => database.get(PROJECT_ID))
 				.then(
-					function(result) {
+					function (result) {
 						// raise error.
 						done('document_found');
 					},
-					function(error) {
+					function (error) {
 						done();
 					}
 				);
 		});
 
-		it('should delete input when project is deleted', function(done) {
+		it('should delete input when project is deleted', function (done) {
 			Project.storeInstance
 				.get(PROJECT_ID)
 				.then(p => p.destroy())
 				.then(r => database.get(INPUT_ID))
 				.then(
-					function(result) {
+					function (result) {
 						// raise error.
 						done('document_found');
 					},
-					function(error) {
+					function (error) {
 						done();
 					}
 				);
@@ -105,35 +102,35 @@ describe('Project', function() {
 
 	});
 
-	describe('validateForeignKeys', function() {
+	describe('validateForeignKeys', function () {
 
-		it('should work with existent theme', function(done) {
+		it('should work with existent theme', function (done) {
 			Project.storeInstance.get(PROJECT_ID)
-				.then(function(project) {
+				.then(function (project) {
 					project.themes.push("49dc29ed-a025-40bd-97a2-da5f519f8907");
 					return project.save();
 				})
 				.then(
-					function() {
+					function () {
 						done();
 					},
-					function() {
+					function () {
 						done('should_succeded')
 					}
 				);
 		});
 
-		it('should fail with non existent theme', function(done) {
+		it('should fail with non existent theme', function (done) {
 			Project.storeInstance.get(PROJECT_ID)
-				.then(function(project) {
+				.then(function (project) {
 					project.themes.push("995eb975-6916-41cd-ba0a-018b866cc68b");
 					return project.save();
 				})
 				.then(
-					function() {
+					function () {
 						done('should_have_failed')
 					},
-					function() {
+					function () {
 						done();
 					}
 				);
@@ -141,67 +138,67 @@ describe('Project', function() {
 
 	});
 
-	describe('save', function() {
+	describe('save', function () {
 
-		describe('_computeInputsUpdates', function() {
+		describe('_computeInputsUpdates', function () {
 
-			it('should not touch inputs when datasource is changed', function(done) {
+			it('should not touch inputs when datasource is changed', function (done) {
 				let input;
 
 				Promise.all([
 					database.get(INPUT_ID),
 					Project.storeInstance.get(PROJECT_ID)
-				]).then(function(results) {
+				]).then(function (results) {
 					input = results[0];
 
 					results[1].forms[0].name = 'toto';
 					return results[1].save();
 				})
-				.then(r => database.get(INPUT_ID))
-				.then(
-					function(result) {
-						assert.deepEqual(input, result);
-						done();
-					},
-					function(error) {
-						done('document_missing');
-					}
-				);
+					.then(r => database.get(INPUT_ID))
+					.then(
+						function (result) {
+							assert.deepEqual(input, result);
+							done();
+						},
+						function (error) {
+							done('document_missing');
+						}
+					);
 			});
 
-			it('should delete input when datasource is deleted', function(done) {
+			it('should delete input when datasource is deleted', function (done) {
 				Project.storeInstance
 					.get(PROJECT_ID)
-					.then(function(project) {
+					.then(function (project) {
 						project.forms.splice(0, 1);
 						return project.save();
 					})
 					.then(r => database.get(INPUT_ID))
 					.then(
-						function(result) {
+						function (result) {
 							// raise error.
 							done('document_found');
 						},
-						function(error) {
+						function (error) {
 							done();
 						}
 					);
 			});
 
-			it('should delete input when entity is deleted', function(done) {
+			it('should delete input when entity is deleted', function (done) {
 				Project.storeInstance
 					.get(PROJECT_ID)
-					.then(function(project) {
+					.then(function (project) {
 						project.entities.splice(0, 1);
 						return project.save();
 					})
 					.then(r => database.get(INPUT_ID))
 					.then(
-						function(result) {
+						function (result) {
 							// raise error.
 							done('document_found');
 						},
-						function(error) {
+						function (error) {
 							done();
 						}
 					);

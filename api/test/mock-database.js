@@ -15,8 +15,6 @@
  * along with Monitool. If not, see <http://www.gnu.org/licenses/>.
  */
 
-"use strict";
+import config from '../lib/config/config';
 
-// Tell app to use it.
-let config = require('../config');
 config.couchdb.bucket = 'monitool-test';
