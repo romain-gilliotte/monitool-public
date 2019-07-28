@@ -1,6 +1,6 @@
 import angular from 'angular';
 import axios from 'axios';
-import TimeSlot, {timeSlotRange} from 'timeslot-dag';
+import TimeSlot, { timeSlotRange } from 'timeslot-dag';
 
 export default class Input {
 
@@ -25,8 +25,8 @@ export default class Input {
 
 	static async fetchFormStatus(project, dataSourceId) {
 		const response = await axios.get(
-			'/api/resources/input',
-			{params: {mode: 'ids_by_form', projectId: project._id, formId: dataSourceId}}
+			'/resources/input',
+			{ params: { mode: 'ids_by_form', projectId: project._id, formId: dataSourceId } }
 		);
 
 		const result = {};
@@ -71,7 +71,7 @@ export default class Input {
 
 	static async fetchLasts(projectId, siteId, dataSourceId, period) {
 		const response = await axios.get(
-			'/api/resources/input',
+			'/resources/input',
 			{
 				params: {
 					mode: "current+last",
@@ -89,23 +89,23 @@ export default class Input {
 
 		// both where found
 		if (result.length === 2)
-			return {current: result[0], previous: result[1]};
+			return { current: result[0], previous: result[1] };
 
 		// only the current one was found
 		else if (result.length === 1 && result[0]._id === currentInputId)
-			return {current: result[0], previous: null};
+			return { current: result[0], previous: null };
 
 		else
-			return {current: null, previous: result.length ? result[0] : null};
+			return { current: null, previous: result.length ? result[0] : null };
 	}
 
-	constructor(data=null) {
+	constructor(data = null) {
 		Object.assign(this, data);
 	}
 
 	async save() {
 		const response = await axios.put(
-			'/api/resources/input/' + this._id,
+			'/resources/input/' + this._id,
 			JSON.parse(angular.toJson(this))
 		);
 
@@ -113,7 +113,7 @@ export default class Input {
 	}
 
 	async delete() {
-		return axios.delete('/api/resources/input/' + this._id);
+		return axios.delete('/resources/input/' + this._id);
 	}
 
 }

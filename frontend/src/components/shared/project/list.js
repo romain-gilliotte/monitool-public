@@ -113,9 +113,9 @@ module.component('projectList', {
 
 		onOpenClicked(project) {
 			if (project.isOwner && !this.preferReporting)
-				this.$state.go("main.project.structure.home", {projectId: project._id});
+				this.$state.go("main.project.structure.home", { projectId: project._id });
 			else
-				this.$state.go("main.project.reporting.home", {projectId: project._id});
+				this.$state.go("main.project.reporting.home", { projectId: project._id });
 		}
 
 		async onCloneClicked(project) {
@@ -123,7 +123,7 @@ module.component('projectList', {
 
 			if (window.confirm(question)) {
 				await axios.post(
-					'/api/resources/project',
+					'/resources/project',
 					null,
 					{
 						params: {

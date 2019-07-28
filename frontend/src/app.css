@@ -9,8 +9,8 @@ html, body {
 */
 
 #load-container{
-  background: url('https://www.colourbox.com/preview/20112228-mandala-ornament-seamless-pattern.jpg') repeat;
-  background-size: 30%;
+  background: url('/mandala-ornament-seamless-pattern.jpg') repeat;
+  background-size: 400px;
 
   height: 100%;
   padding: 0;
@@ -27,9 +27,6 @@ html, body {
   border-radius: 5px;
   padding: 20px;
 }
-
-
-
 
 /* make bootstrap smaller */
 

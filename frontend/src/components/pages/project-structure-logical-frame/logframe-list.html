@@ -7,10 +7,8 @@
 
 <div class="alert alert-info" translate="project.logical_frame_list_info"></div>
 
-
 <div ng-sortable="$ctrl.ngSortableOptions">
-	<div class="panel panel-default columns-panel"
-		 ng-repeat="logicalFrame in $ctrl.editableProject.logicalFrames">
+	<div class="panel panel-default columns-panel" ng-repeat="logicalFrame in $ctrl.editableProject.logicalFrames">
 
 		<div class="panel-heading">
 			<div class="panel-title">
@@ -26,14 +24,15 @@
 			</div>
 			<div>
 				<strong translate="project.collection_site_list"></strong>
-				<element-groups ids="logicalFrame.entities" items="$ctrl.project.entities" groups="$ctrl.project.groups"></element-groups>
+				<element-groups ids="logicalFrame.entities" items="$ctrl.project.entities"
+					groups="$ctrl.project.groups"></element-groups>
 			</div>
 
 			<div class="panel-buttons btn-group">
 				<a class="btn btn-default btn-xxs"
-				   ui-sref="main.project.structure.logical_frame_edition({logicalFrameId: logicalFrame.id})">
-				   	<i class="fa fa-pencil"></i>
-				   	<span translate="shared.edit"></span>
+					ui-sref="main.project.structure.logical_frame_edition({logicalFrameId: logicalFrame.id})">
+					<i class="fa fa-pencil"></i>
+					<span translate="shared.edit"></span>
 				</a>
 
 				<div class="btn-group" uib-dropdown>
@@ -42,20 +41,22 @@
 					</a>
 
 					<ul class="dropdown-menu">
-					  	<li>
+						<li>
 							<a ng-click="$ctrl.onCreateLogicalFrameClicked(logicalFrame)">
 								<i class="fa fa-clone"></i>
 								<span translate="shared.clone"></span>
 							</a>
-					  	</li>
+						</li>
 						<li>
-							<a href="/api/resources/project/{{$ctrl.editableProject._id}}/logical-frame/{{logicalFrame.id}}.pdf?orientation=portrait&language={{$root.language}}" target="_blank">
+							<a href="{{::$root.serviceUrl}}/resources/project/{{$ctrl.editableProject._id}}/logical-frame/{{logicalFrame.id}}.pdf?orientation=portrait&language={{$root.language}}"
+								target="_blank">
 								<i class="fa fa-file-pdf-o"></i>
 								<span translate="project.download_portrait"></span>
 							</a>
 						</li>
 						<li>
-							<a href="/api/resources/project/{{$ctrl.editableProject._id}}/logical-frame/{{logicalFrame.id}}.pdf?orientation=landscape&language={{$root.language}}" target="_blank">
+							<a href="{{::$root.serviceUrl}}/resources/project/{{$ctrl.editableProject._id}}/logical-frame/{{logicalFrame.id}}.pdf?orientation=landscape&language={{$root.language}}"
+								target="_blank">
 								<i class="fa fa-file-pdf-o fa-rotate-270"></i>
 								<span translate="project.download_landscape"></span>
 							</a>

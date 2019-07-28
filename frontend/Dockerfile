@@ -3,7 +3,7 @@
 ###################################
 
 # We use the nodejs base image to build
-FROM node:8 as builder
+FROM node:10 as builder
 
 WORKDIR /app
 

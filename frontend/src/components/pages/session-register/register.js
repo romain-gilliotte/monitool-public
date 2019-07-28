@@ -38,7 +38,7 @@ module.component('register', {
 			}
 
 			try {
-				await axios.post('/api/authentication/register', {
+				await axios.post('/authentication/register', {
 					email: this.email,
 					password: this.password
 				});
@@ -58,7 +58,7 @@ module.component('register', {
 				this.errorMessage = null;
 
 				// Validate the user email
-				await axios.post('/api/authentication/validate-email', {
+				await axios.post('/authentication/validate-email', {
 					email: this.email,
 					token: this.token
 				});
@@ -78,7 +78,7 @@ module.component('register', {
 
 		async logUserIn(email, password) {
 			// Log the user in.
-			const response = await axios.post('/api/authentication/login', {
+			const response = await axios.post('/authentication/login', {
 				email: email,
 				password: password
 			});

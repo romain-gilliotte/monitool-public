@@ -35,7 +35,7 @@ module.component('recover', {
             try {
                 this.errorMessage = null;
 
-                await axios.post('/api/authentication/request-reset-password', {email: this.email});
+                await axios.post('/authentication/request-reset-password', { email: this.email });
                 this.isWaitingToken = true
             }
             catch (e) {
@@ -58,7 +58,7 @@ module.component('recover', {
             }
 
             try {
-                await axios.post('/api/authentication/reset-password', {
+                await axios.post('/authentication/reset-password', {
                     email: this.email,
                     password: this.password,
                     token: this.token
@@ -76,7 +76,7 @@ module.component('recover', {
 
         async logUserIn(email, password) {
             // Log the user in.
-            const response = await axios.post('/api/authentication/login', {
+            const response = await axios.post('/authentication/login', {
                 email: email,
                 password: password
             });

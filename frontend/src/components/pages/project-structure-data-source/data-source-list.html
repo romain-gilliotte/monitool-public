@@ -9,8 +9,7 @@
 
 
 <div ng-sortable="$ctrl.ngSortableOptions">
-	<div class="panel panel-default columns-panel"
-		 ng-repeat="dataSource in $ctrl.editableProject.forms">
+	<div class="panel panel-default columns-panel" ng-repeat="dataSource in $ctrl.editableProject.forms">
 
 		<div class="panel-heading">
 			<div class="panel-title">
@@ -29,14 +28,15 @@
 			</div>
 			<div>
 				<strong translate="project.collection_site_list"></strong>
-				<element-groups ids="dataSource.entities" items="$ctrl.project.entities" groups="$ctrl.project.groups"></element-groups>
+				<element-groups ids="dataSource.entities" items="$ctrl.project.entities" groups="$ctrl.project.groups">
+				</element-groups>
 			</div>
 
 			<div class="panel-buttons btn-group">
 				<a class="btn btn-default btn-xxs"
-				   ui-sref="main.project.structure.collection_form_edition({dataSourceId: dataSource.id})">
-				   	<i class="fa fa-pencil"></i>
-				   	<span translate="shared.edit"></span>
+					ui-sref="main.project.structure.collection_form_edition({dataSourceId: dataSource.id})">
+					<i class="fa fa-pencil"></i>
+					<span translate="shared.edit"></span>
 				</a>
 
 				<div class="btn-group" uib-dropdown>
@@ -46,13 +46,15 @@
 
 					<ul class="dropdown-menu">
 						<li>
-							<a href="/api/resources/project/{{$ctrl.editableProject._id}}/data-source/{{dataSource.id}}.pdf?orientation=portrait&language={{$root.language}}" target="_blank">
+							<a href="{{::$root.serviceUrl}}/resources/project/{{$ctrl.editableProject._id}}/data-source/{{dataSource.id}}.pdf?orientation=portrait&language={{$root.language}}"
+								target="_blank">
 								<i class="fa fa-file-pdf-o"></i>
 								<span translate="project.download_portrait"></span>
 							</a>
 						</li>
 						<li>
-							<a href="/api/resources/project/{{$ctrl.editableProject._id}}/data-source/{{dataSource.id}}.pdf?orientation=landscape&language={{$root.language}}" target="_blank">
+							<a href="{{::$root.serviceUrl}}/resources/project/{{$ctrl.editableProject._id}}/data-source/{{dataSource.id}}.pdf?orientation=landscape&language={{$root.language}}"
+								target="_blank">
 								<i class="fa fa-file-pdf-o fa-rotate-270"></i>
 								<span translate="project.download_landscape"></span>
 							</a>

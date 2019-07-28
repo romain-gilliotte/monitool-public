@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-import TimeSlot, {timeSlotRange} from 'timeslot-dag';
+import TimeSlot, { timeSlotRange } from 'timeslot-dag';
 
 
 const TIME_PERIODICITIES = [
@@ -210,7 +210,7 @@ function* _generatePartitions(project, indicator, filter) {
 					name: element.name,
 					isGroup: false,
 					indicator: indicator,
-					filter: {[partition.id]: [element.id]}
+					filter: { [partition.id]: [element.id] }
 				};
 			})
 
@@ -222,7 +222,7 @@ function* _generatePartitions(project, indicator, filter) {
 					name: group.name,
 					isGroup: true,
 					indicator: indicator,
-					filter: {[partition.id]: group.members}
+					filter: { [partition.id]: group.members }
 				};
 			});
 
@@ -250,7 +250,7 @@ function* _generateParameters(project, indicator, filter) {
 			indicator: {
 				id: paramId,
 				display: variable.name,
-				computation: {formula: paramId, parameters: {[paramId]: param}},
+				computation: { formula: paramId, parameters: { [paramId]: param } },
 				colorization: false,
 				baseline: null,
 				target: null,
@@ -282,7 +282,7 @@ export function generateIndicatorDimensions(project, indicator, filter) {
 
 
 
-export function *generateProjectDimensions(project) {
+export function* generateProjectDimensions(project) {
 	// Time
 	const timeVariants = {};
 
@@ -303,7 +303,7 @@ export function *generateProjectDimensions(project) {
 				isValid = true;
 				break;
 			}
-			catch (e) {}
+			catch (e) { }
 		}
 
 		if (isValid)
@@ -319,18 +319,18 @@ export function *generateProjectDimensions(project) {
 	const siteVariants = {}
 
 	siteVariants['elements'] = project.entities.map(site => {
-		return {id: site.id, name: site.name, filter: [site.id]};
+		return { id: site.id, name: site.name, filter: [site.id] };
 	});
 
 	if (project.groups) {
 		siteVariants['groups'] = project.groups.map(group => {
-			return {id: group.id, name: group.name, filter: group.members};
+			return { id: group.id, name: group.name, filter: group.members };
 		});
 
 		siteVariants['both'] = [...siteVariants['groups'], ...siteVariants['elements']];
 	}
 
-	yield {id: 'site', variants: siteVariants};
+	yield { id: 'site', variants: siteVariants };
 }
 
 
@@ -450,7 +450,7 @@ export async function fetchData(project, computation, dimensionIds, filter, with
 	}
 
 	// Otherwise, call the server for the data.
-	const url = '/api/reporting/project/' + project._id;
+	const url = '/reporting/project/' + project._id;
 	const data = {
 		computation: computation,
 		dimensionIds: dimensionIds,

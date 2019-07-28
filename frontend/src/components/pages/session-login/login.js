@@ -45,13 +45,13 @@ module.component('login', {
 				this.errorMessage = null;
 
 				if (this.isWaitingToken && this.token) {
-					await axios.post('/api/authentication/validate-email', {
+					await axios.post('/authentication/validate-email', {
 						email: this.email,
 						token: this.token
 					});
 				}
 
-				const response = await axios.post('/api/authentication/login', {
+				const response = await axios.post('/authentication/login', {
 					email: this.email,
 					password: this.password
 				});

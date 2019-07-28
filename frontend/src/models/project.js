@@ -1,18 +1,15 @@
 import axios from 'axios';
 import exprEval from 'expr-eval';
-import factorial from 'factorial';
-import uuid from 'uuid/v4';
-
 
 export default class Project {
 
 	static async fetchAll() {
-		const response = await axios.get(`/api/resources/project`);
+		const response = await axios.get(`/resources/project`);
 		return response.data;
 	}
 
 	static async get(id) {
-		const response = await axios.get('/api/resources/project/' + id);
+		const response = await axios.get('/resources/project/' + id);
 		return new Project(response.data);
 	}
 
@@ -138,7 +135,7 @@ export default class Project {
 		try {
 			const parser = new exprEval.Parser();
 			parser.consts = {};
-   			symbols = parser.parse(indicator.computation.formula).variables();
+			symbols = parser.parse(indicator.computation.formula).variables();
 		}
 		catch (e) {
 			// if we fail to retrieve symbols => computation is invalid.
@@ -234,15 +231,15 @@ export default class Project {
 
 		let response;
 		if (this._id && this._rev)
-			response = await axios.put('/api/resources/project/' + this._id, payload);
+			response = await axios.put('/resources/project/' + this._id, payload);
 		else
-			response = await axios.post('/api/resources/project', payload);
+			response = await axios.post('/resources/project', payload);
 
 		Object.assign(this, response.data);
 	}
 
 	async delete() {
-		return axios.delete('/api/resources/project/' + this._id);
+		return axios.delete('/resources/project/' + this._id);
 	}
 
 }

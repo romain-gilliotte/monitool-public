@@ -3,7 +3,7 @@ import axios from 'axios';
 export default class User {
 
 	static async fetchAll() {
-		const response = await axios.get('/api/resources/user');
+		const response = await axios.get('/resources/user');
 		return response.data.map(i => new User(i));
 	}
 
@@ -13,7 +13,7 @@ export default class User {
 
 	async save() {
 		const response = await axios.put(
-			'/api/resources/user/' + this._id,
+			'/resources/user/' + this._id,
 			JSON.parse(angular.toJson(this))
 		);
 

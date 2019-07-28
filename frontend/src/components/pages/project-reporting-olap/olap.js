@@ -87,7 +87,7 @@ module.component('olapReporting', {
 			this.$scope.$apply();
 
 			// Query server
-			const response = await axios.post('/api/reporting/project/' + this.project._id, {
+			const response = await axios.post('/reporting/project/' + this.project._id, {
 				dimensionIds: [...this.dimensions.rows, ...this.dimensions.cols],
 				filter: this.filter,
 				withTotals: true,
