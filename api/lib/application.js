@@ -1,6 +1,7 @@
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import responseTime from 'koa-response-time';
+import cors from '@koa/cors';
 
 import config from './config/config';
 
@@ -16,11 +17,10 @@ import errorHandler from './middlewares/error-handler';
 
 const app = new Koa();
 
-app.keys = [config.cookieSecret];
-
 // Generic middlewares
+app.use(cors());
 app.use(responseTime()); // Add x-reponse-time header
-app.use(bodyParser({jsonLimit: '1mb'}));
+app.use(bodyParser({ jsonLimit: '1mb' }));
 
 app.use(errorHandler); // Catch errors and set status codes.
 app.use(authenticationRouter.routes()); // login/logout/email validation...

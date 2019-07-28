@@ -71,7 +71,7 @@ Monitool's API takes the following configuration keys:
 	debug:				Enable/Disable stacktrack on API errors [default=false]
 	baseUrl:			Used for redirecting user after 3rd party authentication [default=http://localhost:8000]
 	port:				Binded port for the API [default=8000]
-	cookieSecret:		Secret to encrypt the cookies [no_default]
+	tokenSecret:		Secret to encrypt the tokens [no_default]
 
 	couchdb.host		Self-explanatory [default=localhost]
 	couchdb.port		Self-explanatory [default=5984]
@@ -97,18 +97,14 @@ To develop on Monitool, no need to install NodeJS or CouchDB.
 
 To start a local instance:
 
-	# Assuming docker is installed.
+	# Assuming docker and docker-compose are installed.
 
 	# Clone the repo and go to the working directory
 	git clone git@github.com:medecins-du-monde/monitool.git
 	cd monitool
 
-	# Configure docker
-	docker swarm init
-	printf "your-google-translate-api-key" | docker secret create googletranslate_apikey -
-
 	# Start up all the containers.
-	docker stack deploy -c docker/compose-develop.yml monitool-dev
+	docker-compose up
 
 Both frontend and server source folders are binded from your filesystem: the frontend and backend code will autoreload when changes are made to the sources.
 
@@ -126,6 +122,6 @@ The compose files available on the repository are for small deployment, keeping 
 	printf "your-azuread-client-id" | docker secret create azuread_clientid -
 	printf "your-azuread-client-secret" | docker secret create azuread_clientsecret -
 	printf "your-google-translate-api-key" | docker secret create googletranslate_apikey -
-	printf "a-long-random-string" | docker secret create monitool_cookiesecret -
+	printf "a-long-random-string" | docker secret create monitool_tokensecret -
 
 	docker stack deploy -c compose-production.yml monitool-prod

@@ -17,17 +17,17 @@ const readFile = function (secret) {
 };
 
 const config = {
-	"debug": toBool(process.env.MONITOOL_DEBUG) || false,
-	"baseUrl": process.env.MONITOOL_BASE_URL || "http://localhost:8000",
-	"port": parseInt(process.env.MONITOOL_PORT) || 8000,
+	"debug": toBool(process.env.MONITOOL_DEBUG),
+	"baseUrl": process.env.MONITOOL_BASE_URL,
+	"port": parseInt(process.env.MONITOOL_PORT),
 	"tokenSecret":
 		process.env.MONITOOL_TOKEN_SECRET ||
 		readFile(process.env.MONITOOL_TOKEN_SECRET_FILE),
 
 	"couchdb": {
-		"host": process.env.MONITOOL_COUCHDB_HOST || "localhost",
-		"port": parseInt(process.env.MONITOOL_COUCHDB_PORT) || 5984,
-		"bucket": process.env.MONITOOL_COUCHDB_DATABUCKET || "monitool",
+		"host": process.env.MONITOOL_COUCHDB_HOST,
+		"port": parseInt(process.env.MONITOOL_COUCHDB_PORT),
+		"bucket": process.env.MONITOOL_COUCHDB_DATABUCKET,
 		"username":
 			process.env.MONITOOL_COUCHDB_USER ||
 			readFile(process.env.MONITOOL_COUCHDB_USER_FILE) ||

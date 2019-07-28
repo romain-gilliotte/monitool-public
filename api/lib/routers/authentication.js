@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import owasp from 'owasp-password-strength-test';
 import jwt from 'jsonwebtoken'
 
-import {sendValidateEmail, sendResetPassword} from '../mailer/mailer';
+import { sendValidateEmail, sendResetPassword } from '../mailer/mailer';
 import config from '../config/config';
 import User from '../resource/model/user';
 
@@ -30,18 +30,18 @@ router.post(
 
 			if (user.tokens.validateEmailTokenHash) {
 				const e = new Error('need_email_validation');
-				e.detail = {sentAt: user.tokens.validateEmailSentAt};
+				e.detail = { sentAt: user.tokens.validateEmailSentAt };
 				throw e;
 			}
 
 			ctx.response.body = {
 				error: null,
-				token: jwt.sign({sub: userId, email: user.email}, config.tokenSecret)
+				token: jwt.sign({ sub: userId, email: user.email }, config.tokenSecret)
 			};
 		}
 		catch (e) {
 			ctx.response.status = 403;
-			ctx.response.body = {error: e.message, detail: e.detail};
+			ctx.response.body = { error: e.message, detail: e.detail };
 		}
 	}
 );
@@ -67,7 +67,7 @@ router.post('/authentication/register', async ctx => {
 
 		// Pre-validate email to avoid typing errors.
 		const emailValidator = new EmailValidator();
-		const {wellFormed, validDomain, validMailbox} = await emailValidator.verify(ctx.request.body.email);
+		const { wellFormed, validDomain, validMailbox } = await emailValidator.verify(ctx.request.body.email);
 
 		if (!wellFormed)
 			throw new Error('invalid_email_format');
@@ -97,22 +97,22 @@ router.post('/authentication/register', async ctx => {
 
 		sendValidateEmail(newUser, validateEmailToken);
 
-		ctx.response.body = {error: false};
+		ctx.response.body = { error: false };
 	}
 	catch (e) {
 		console.log(e)
 		// This email is already taken.
 		if (e.message === 'Document update conflict.') {
 			ctx.response.status = 400;
-			ctx.response.body = {error: 'account_already_exists'};
+			ctx.response.body = { error: 'account_already_exists' };
 		}
 		else if (['missing_parameter', 'password_too_weak', 'invalid_email_format', 'invalid_email_domain', 'invalid_email_mailbox'].includes(e.message)) {
 			ctx.response.status = 400;
-			ctx.response.body = {error: e.message, details: e.details};
+			ctx.response.body = { error: e.message, details: e.details };
 		}
 		else {
 			ctx.response.status = 500;
-			ctx.response.body = {error: "server_error"};
+			ctx.response.body = { error: "server_error" };
 		}
 	}
 });
@@ -138,16 +138,16 @@ router.post('/authentication/request-reset-password', async ctx => {
 
 		sendResetPassword(user, resetToken);
 
-		ctx.response.body = {error: false};
+		ctx.response.body = { error: false };
 	}
 	catch (e) {
 		if (['not_found', 'already_sent'].includes(e.message)) {
 			ctx.response.status = 400;
-			ctx.response.body = {error: e.message};
+			ctx.response.body = { error: e.message };
 		}
 		else {
 			ctx.response.status = 500;
-			ctx.response.body = {error: "server_error"};
+			ctx.response.body = { error: "server_error" };
 		}
 	}
 });
@@ -181,16 +181,16 @@ router.post('/authentication/reset-password', async ctx => {
 		user.passwordHash = await bcrypt.hash(ctx.request.body.password, 12);
 		user.save();
 
-		ctx.response.body = {error: false};
+		ctx.response.body = { error: false };
 	}
 	catch (e) {
 		if (['not_found', 'not_expecting_reset', 'wrong_code'].includes(e.message)) {
 			ctx.response.status = 400;
-			ctx.response.body = {error: e.message};
+			ctx.response.body = { error: e.message };
 		}
 		else {
 			ctx.response.status = 500;
-			ctx.response.body = {error: "server_error"};
+			ctx.response.body = { error: "server_error" };
 		}
 	}
 });
@@ -216,16 +216,16 @@ router.post('/authentication/request-validate-email', async ctx => {
 
 		sendValidateEmail(user, validateEmailToken);
 
-		ctx.response.body = {error: false};
+		ctx.response.body = { error: false };
 	}
 	catch (e) {
 		if (['not_found', 'already_validated', 'already_sent'].includes(e.message)) {
 			ctx.response.status = 400;
-			ctx.response.body = {error: e.message};
+			ctx.response.body = { error: e.message };
 		}
 		else {
 			ctx.response.status = 500;
-			ctx.response.body = {error: "server_error"};
+			ctx.response.body = { error: "server_error" };
 		}
 	}
 });
@@ -245,16 +245,16 @@ router.post('/authentication/validate-email', async ctx => {
 		user.tokens.validateEmailTokenHash = null;
 		await user.save();
 
-		ctx.response.body = {error: false};
+		ctx.response.body = { error: false };
 	}
 	catch (e) {
 		if (['not_found', 'already_validated', 'wrong_token'].includes(e.message)) {
 			ctx.response.status = 400;
-			ctx.response.body = {error: e.message};
+			ctx.response.body = { error: e.message };
 		}
 		else {
 			ctx.response.status = 500;
-			ctx.response.body = {error: "server_error"};
+			ctx.response.body = { error: "server_error" };
 		}
 	}
 });
