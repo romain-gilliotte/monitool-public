@@ -83,9 +83,7 @@ export default class Project extends DbModel {
 	}
 
 	/**
-	 * Retrieve the user object from the project that correspond to a user session (request.user).
-	 * User session may be a real user, or a partner.
-	 * This method does not throw if the user is not found.
+	 * Retrieve the user permissions on this project.
 	 */
 	getUserByEmail(email) {
 		return this.users.find(u => u.email === email);
@@ -96,10 +94,9 @@ export default class Project extends DbModel {
 	 * Save the project.
 	 *
 	 * This method makes many checks do deal with the fact that there are no foreign keys nor update method.
-	 *	- copy the passwords that were not changed for partners.
 	 * 	- validate that all foreign keys exist.
 	 */
-	async save(skipChecks, userEmail=null) {
+	async save(skipChecks, userEmail = null) {
 		// If we skip checks, because we know what we are doing, just delegate to parent class.
 		if (skipChecks)
 			return super.save(true);

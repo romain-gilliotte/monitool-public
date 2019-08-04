@@ -35,6 +35,10 @@ router.get('/resources/project/:id', async ctx => {
  * Retrieve one project
  */
 router.get('/resources/project/:id/revisions', async ctx => {
+	const project = await Project.storeInstance.get(ctx.params.id);
+	if (!project.getUserByEmail(ctx.state.userEmail))
+		throw new Error('forbidden');
+
 	ctx.response.body = await Project.storeInstance.listRevisions(
 		ctx.params.id,
 		ctx.request.query.offset,

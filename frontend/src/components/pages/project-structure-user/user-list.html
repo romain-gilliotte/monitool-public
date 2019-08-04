@@ -8,20 +8,17 @@
 <div class="alert alert-info" translate="project.users_list_info"></div>
 
 <div ng-sortable="$ctrl.sortableOptions">
-	<div class="panel panel-default columns-panel"
-		 ng-repeat="user in $ctrl.editableProject.users">
+	<div class="panel panel-default columns-panel" ng-repeat="user in $ctrl.editableProject.users">
 
 		<div class="panel-heading">
 			<div class="panel-title">
 				<i class="fa fa-arrows fa-fw handle"></i>
-				{{user.name || $ctrl.usersById[user.id].name}}
 			</div>
 		</div>
 		<div class="panel-body">
 			<div>
-				<strong translate="project.username"></strong>
-				<img src="user-list-logo.svg" style="height: 17px" ng-if="user.type=='internal'" />
-				{{user.username}}
+				<strong translate="project.email"></strong>
+				{{user.email}}
 			</div>
 			<div>
 				<strong translate="project.user_role"></strong>
@@ -29,7 +26,8 @@
 			</div>
 			<div ng-if="user.role == 'input'">
 				<strong translate="project.collection_site_list"></strong>
-				<element-groups ids="user.entities" items="$ctrl.project.entities" groups="$ctrl.project.groups"></element-groups>
+				<element-groups ids="user.entities" items="$ctrl.project.entities" groups="$ctrl.project.groups">
+				</element-groups>
 			</div>
 			<div ng-if="user.role == 'input'">
 				<strong translate="project.collection_form_list"></strong>
@@ -47,7 +45,7 @@
 						<span class="caret"></span>
 					</a>
 
-					  <ul class="dropdown-menu">
+					<ul class="dropdown-menu">
 						<li>
 							<a ng-click="$ctrl.onDeleteClicked(user)">
 								<i class="fa fa-trash text-danger"></i>

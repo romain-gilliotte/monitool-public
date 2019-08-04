@@ -23,7 +23,7 @@ module.component('inputGrid', {
 		variable: '<'
 	},
 	require: {
-		'ngModelCtrl' :'ngModel'
+		'ngModelCtrl': 'ngModel'
 	},
 	template: require('./number-table.html'),
 
@@ -221,7 +221,7 @@ module.component('inputGrid', {
 			if (col < this.variable.distribution || row < numPartitions - this.variable.distribution)
 				return {
 					readOnly: true,
-					renderer: function(instance, td, row, col, prop, value, cellProperties) {
+					renderer: function (instance, td, row, col, prop, value, cellProperties) {
 						Handsontable.renderers.TextRenderer.apply(this, arguments);
 						td.style.color = 'black';
 						td.style.background = '#eee';
@@ -230,11 +230,11 @@ module.component('inputGrid', {
 
 			// total
 			else if ((this.withSumX && col == this._width - 1) || (this.withSumY && row === this._height - 1))
-				return {type: 'numeric', readOnly: true};
+				return { type: 'numeric', readOnly: true };
 
 			// editable field
 			else
-				return {type: 'numeric', validator: /^\d+$/};
+				return { type: 'numeric', validator: /^\d+$/ };
 		}
 
 		_updateSums(editedY, editedX) {

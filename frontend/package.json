@@ -52,7 +52,7 @@
     "yarn": ">= 1.0.0"
   },
   "scripts": {
-    "build": "webpack --config webpack.config.prod",
+    "build": "./node_modules/.bin/webpack --config webpack.config.prod",
     "start": "webpack-dev-server --config webpack.config.dev"
   }
 }

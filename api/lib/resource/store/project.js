@@ -8,7 +8,7 @@ var hashFunction = function (obj) {
 	if (typeof obj === 'string')
 		return obj;
 	else
-		return obj.id || obj.username || obj.display || obj.name;
+		return obj.id || obj.display || obj.name;
 };
 
 /**

@@ -142,18 +142,16 @@ export default {
 			groups_members_move: "Reorder the sites of the group <code>{{group.name}}</code>",
 			groups_members_remove: "Remove the site <code>{{item.name}}</code> from the group <code>{{group.name}}</code>",
 
-			users_add: "Add the user <code>{{item.id || item.username}}</code> to the project",
+			users_add: "Add the user <code>{{item.email}}</code> to the project",
 			users_move: "Reorder the project users",
-			users_remove: "Remove the user <code>{{item.id || item.username}}</code> from the project",
-			users_name_replace: "Rename the partner <code>{{before}}</code> to <code>{{after}}</code>",
-			users_password_replace: "Change the password of the partner <code>{{user.id || user.username}}</code>",
-			users_role_replace: "Change the role of  <code>{{user.id || user.username}}</code> from <code>{{before}}</code> to <code>{{after}}</code>",
-			users_entities_add: "Allow <code>{{user.id || user.username}}</code> to input data on site <code>{{item.name}}</code>",
-			users_entities_move: "Reorder the sites associated with user <code>{{user.id || user.username}}</code>",
-			users_entities_remove: "Remove authorization to input on site <code>{{item.name}}</code> of user <code>{{user.id || user.username}}</code>",
-			users_dataSources_add: "Allow <code>{{user.id || user.username}}</code> to input data on data source <code>{{item.name}}</code>",
-			users_dataSources_move: "Reordonne les sources de données associées à l'utilisateur <code>{{user.id || user.username}}</code>",
-			users_dataSources_remove: "Remove authorization to input on data source <code>{{item.name}}</code> of user <code>{{user.id || user.username}}</code>",
+			users_remove: "Remove the user <code>{{item.email}}</code> from the project",
+			users_role_replace: "Change the role of  <code>{{user.email}}</code> from <code>{{before}}</code> to <code>{{after}}</code>",
+			users_entities_add: "Allow <code>{{user.email}}</code> to input data on site <code>{{item.name}}</code>",
+			users_entities_move: "Reorder the sites associated with user <code>{{user.email}}</code>",
+			users_entities_remove: "Remove authorization to input on site <code>{{item.name}}</code> of user <code>{{user.email}}</code>",
+			users_dataSources_add: "Allow <code>{{user.email}}</code> to input data on data source <code>{{item.name}}</code>",
+			users_dataSources_move: "Reordonne les sources de données associées à l'utilisateur <code>{{user.email}}</code>",
+			users_dataSources_remove: "Remove authorization to input on data source <code>{{item.name}}</code> of user <code>{{user.email}}</code>",
 
 			forms_add: "Create the data source <code>{{item.name}}</code>",
 			forms_move: "Reorder the data sources of the project",
@@ -249,13 +247,6 @@ export default {
 			crossCutting_target_replace: "Change cross-cutting indicator target from <code>{{before}}</code> to <code>{{after}}</code>",
 			crossCutting_colorize_replace: "Change cross-cutting indicator colorization from <code>{{before}}</code> to <code>{{after}}</code>",
 			crossCutting_computation_replace: "Change cross-cutting indicator computation"
-		},
-
-		visibility: {
-			visibility: "Visibility",
-			public: "Visible for all users (besides partners)",
-			private: "Visible only to members of this project",
-			help: "Outside of specific cases, all projects should be visible for all users."
 		},
 
 		authorization: "Authorization",
@@ -371,11 +362,6 @@ export default {
 
 		edit_user: "User edition",
 		update_user: "Update the user",
-		user_type: "Type",
-		user_types: {
-			internal: "MDM account",
-			partner: "Partner account"
-		},
 
 		user_role: "Role",
 		user_roles: {
@@ -385,8 +371,6 @@ export default {
 		},
 		user_fullname: "Full name",
 		user: "User",
-		username: "Login",
-		password: "Password",
 
 		parameter: "Parameter",
 		all_selected: "No filter",
@@ -560,19 +544,14 @@ export default {
 			"<p>When a project have the same activities on different sites, those activities need to be followed-up by site, groups of sites, and at project level.</p>" +
 			"<p>Enter here:</p>" +
 			"<ul>" +
-				"<li>The list of sites where your project works (i.e. the list of health centers)</li>" +
-				"<li>Groups that will be used during monitoring (i.e. by region, or type of structure)</li>" +
+			"<li>The list of sites where your project works (i.e. the list of health centers)</li>" +
+			"<li>Groups that will be used during monitoring (i.e. by region, or type of structure)</li>" +
 			"</ul>",
 
 		users_list_info:
 			"<p>Many people take part in setting-up and monitoring a project: coordination, M&E staff, data entry operators, partners, ...</p>" +
 			"<p>Enter here all users that need to have access to the monitoring of the project.</p>",
 
-		user_help_type: "Choose \"MDM Account\" if the user has a xxx@medecinsdumonde.net email address. Choose \"Partner account\" otherwise.",
-		user_help_user: "Who is the MDM user that you want to add? If the user is not in the list, ask him/her to log-in Monitool a first time.",
-		user_help_username: "This username will allow the user to connect. Email addresses are not allowed as usernames (i.e. your can use \"lastname.firstname\", ou \"job.country\")",
-		user_help_fullname: "Enter here the full name of the person that will use the account.",
-		user_help_password: "The password must be at least 6 characters long. Do not use the same value than the username",
 		user_help_role: "This field determines what will this user be allowed to do: owners can change the project's structure, data entry officers can only do data input.",
 		user_help_sites: "For which sites will this user enter data?",
 		user_help_datasources: "For which data sources will this user enter data?",
@@ -727,8 +706,8 @@ export default {
 			"<p>Enter here the name of the thematic in all languages used by your organisation.</p>" +
 			"<p>If you cannot translate to all languages:</p>" +
 			"<ol>" +
-				"<li>Manually translate all the languages that you can</li>" +
-				"<li>Use the button on the left to use automatic translation for the others</li>" +
+			"<li>Manually translate all the languages that you can</li>" +
+			"<li>Use the button on the left to use automatic translation for the others</li>" +
 			"</ol>"
 	},
 
@@ -763,8 +742,8 @@ export default {
 			"<p>This page allows changing the definition of a cross-cutting indicator. If you make changes, take care to update all languages.</p>" +
 			"<p>If you cannot translate to all language:</p>" +
 			"<ol>" +
-				"<li>Translate all languages that you can</li>" +
-				"<li>Use the button on the left on missing fields to use automatic translation</li>" +
+			"<li>Translate all languages that you can</li>" +
+			"<li>Use the button on the left on missing fields to use automatic translation</li>" +
 			"</ol>",
 
 		save: "Save indicator"

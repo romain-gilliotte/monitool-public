@@ -143,18 +143,16 @@ export default {
 			groups_members_move: "Reordena los lugares del grupo <code>{{group.name}}</code>",
 			groups_members_remove: "Elimina el lugar <code>{{item.name}}</code> del grupo <code>{{group.name}}</code>",
 
-			users_add: "Añade el usuario <code>{{item.id || item.username}}</code> al proyecto",
+			users_add: "Añade el usuario <code>{{item.email}}</code> al proyecto",
 			users_move: "Reordena los usurios del proyecto",
-			users_remove: "Elimina el usuario <code>{{item.id || item.username}}</code> del proyecto",
-			users_name_replace: "Cambia el nombre del socio de <code>{{before}}</code> a <code>{{after}}</code>",
-			users_password_replace: "Cambia la contraseña de <code>{{user.id || user.username}}</code>",
-			users_role_replace: "Cambia el nivel de autorización de <code>{{user.id || user.username}}</code> de <code>{{before}}</code> a <code>{{after}}</code>",
-			users_entities_add: "Permite a <code>{{user.id || user.username}}</code> a entrar datos en el lugar <code>{{item.name}}</code>",
-			users_entities_move: "Reordena los lugares vinculados al usuario <code>{{user.id || user.username}}</code>",
-			users_entities_remove: "Elimina la autorización de entrar datos en <code>{{item.name}}</code> al usuario <code>{{user.id || user.username}}</code>",
-			users_dataSources_add: "Permite a <code>{{user.id || user.username}}</code> entrar datos en la fuente de datos <code>{{item.name}}</code>",
-			users_dataSources_move: "Reordena las fuentes de datos vinculadas al usuario <code>{{user.id || user.username}}</code>",
-			users_dataSources_remove: "Elimina la autorización de entrar datos en <code>{{item.name}}</code> al usuario <code>{{user.id || user.username}}</code>",
+			users_remove: "Elimina el usuario <code>{{item.email}}</code> del proyecto",
+			users_role_replace: "Cambia el nivel de autorización de <code>{{user.email}}</code> de <code>{{before}}</code> a <code>{{after}}</code>",
+			users_entities_add: "Permite a <code>{{user.email}}</code> a entrar datos en el lugar <code>{{item.name}}</code>",
+			users_entities_move: "Reordena los lugares vinculados al usuario <code>{{user.email}}</code>",
+			users_entities_remove: "Elimina la autorización de entrar datos en <code>{{item.name}}</code> al usuario <code>{{user.email}}</code>",
+			users_dataSources_add: "Permite a <code>{{user.email}}</code> entrar datos en la fuente de datos <code>{{item.name}}</code>",
+			users_dataSources_move: "Reordena las fuentes de datos vinculadas al usuario <code>{{user.email}}</code>",
+			users_dataSources_remove: "Elimina la autorización de entrar datos en <code>{{item.name}}</code> al usuario <code>{{user.email}}</code>",
 
 			forms_add: "Añade la fuente de datos <code>{{item.name}}</code>",
 			forms_move: "Reordena las fuentes de datos del proyecto",
@@ -250,13 +248,6 @@ export default {
 			crossCutting_target_replace: "Cambia el objetivo de un indicador transversal de <code>{{before}}</code> a <code>{{after}}</code>",
 			crossCutting_colorize_replace: "Cambia la colorización de un indicador transversal de <code>{{before}}</code> a <code>{{after}}</code>",
 			crossCutting_computation_replace: "Cambia el cálculo de un indicador transversal"
-		},
-
-		visibility: {
-			visibility: "Visibilidad",
-			public: "Visible para todos los usuarios",
-			private: "Visible solo para miembros de este proyecto",
-			help: "Fuera de casos particulares todos los proyectos deben dejarse visibles para todos los usuarios."
 		},
 
 		authorization: "Permisiones",
@@ -372,11 +363,6 @@ export default {
 
 		edit_user: "Editar usuario",
 		update_user: "Actualizar el usuario",
-		user_type: "Tipo",
-		user_types: {
-			internal: "Cuenta MDM",
-			partner: "Cuenta socio"
-		},
 
 		user_role: "Nivel de autorización",
 		user_roles: {
@@ -384,10 +370,7 @@ export default {
 			input: "Entrada de datos",
 			read: "Consulta unicamente"
 		},
-		user_fullname: "Nombre y apellido",
 		user: "Usuario",
-		username: "Nombre de usuario",
-		password: "Contraseña",
 
 		parameter: "Parametro",
 		all_selected: "Sin filtro",
@@ -561,19 +544,14 @@ export default {
 			"<p>Cuando un proyecto tiene las mismas actividades en varios lugares, se deben seguir por lugar, grupos de lugares y a nivel de proyecto.</p>" +
 			"<p>Entre aqui:</p>" +
 			"<ul>" +
-				"<li>La lista de lugares donde su proyecto trabaja (ej: la lista de centros de salud)</li>" +
-				"<li>los grupos que se usuran durante la vida del proyecto (ej: por región, o tipo de estructura)</li>" +
+			"<li>La lista de lugares donde su proyecto trabaja (ej: la lista de centros de salud)</li>" +
+			"<li>los grupos que se usuran durante la vida del proyecto (ej: por región, o tipo de estructura)</li>" +
 			"</ul>",
 
 		users_list_info:
 			"<p>Muchas personas diferentes participan en crear y seguir un proyecto: coordination, equipo M&E, operadores de entrada de datos, partnerarios, ...</p>" +
 			"<p>Entre aqui la lista de todos los usuarios que deben tener acceso a los datos del programa.</p>",
 
-		user_help_type: "Elija \"Cuenta MDM\" si el usuario tiene una dirección email xxx@medecinsdumonde.net. Elija \"Cuenta partnerio\" sino.",
-		user_help_user: "Quien es el usuario MDM que desea añadir? Si el usuario no esta en la lista, pidale que se conecte al menos una vez a Monitool.",
-		user_help_username: "El usuario usara este nombre para conectarse. No se autorizan direcciones de correo electronico (por ej. use \"apellido.nombre\", o \"puesto.país\")",
-		user_help_fullname: "Entre aqui el nombre completo de la persona que va a usar la cuenta.",
-		user_help_password: "La contraseña debe ser al menos 6 letras. No use el mismo valor que el nombre de usuario",
 		user_help_role: "Este campo determina que podra hacer este usuario: los proprietarios pueden cambiar la estructura de los proyectos, los operadores de entrada solo entrar datos.",
 		user_help_sites: "Para que lugares podra este usuario entrar datos?",
 		user_help_datasources: "Para que fuentes de datos podra este usuario entrar datos?",
@@ -728,8 +706,8 @@ export default {
 			"<p>Entre aqui el nombre de la temática en todos los idiomas usados por su organización.</p>" +
 			"<p>Si no puede traducir a todos los idiomas:</p>" +
 			"<ol>" +
-				"<li>Entre manualmente todos los idiomas que pueda</li>" +
-				"<li>Pulse el botón a la izquierda para traducir automáticamente los demás</li>" +
+			"<li>Entre manualmente todos los idiomas que pueda</li>" +
+			"<li>Pulse el botón a la izquierda para traducir automáticamente los demás</li>" +
 			"</ol>"
 	},
 
@@ -764,8 +742,8 @@ export default {
 			"<p>Esta página permite cambiar la definicion de un indicador transversal. Si have cambios, tenga cuidado en poner todos los idiomas a día.</p>" +
 			"<p>Si no puede traducir a todos los idiomas:</p>" +
 			"<ol>" +
-				"<li>Entre manualmente todos los idiomas que pueda</li>" +
-				"<li>Pulse el botón a la izquierda para traducir automáticamente los demás</li>" +
+			"<li>Entre manualmente todos los idiomas que pueda</li>" +
+			"<li>Pulse el botón a la izquierda para traducir automáticamente los demás</li>" +
 			"</ol>",
 
 		save: "Guardar indicador"

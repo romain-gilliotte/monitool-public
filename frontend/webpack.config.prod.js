@@ -2,6 +2,8 @@ const zopfli = require('@gfx/zopfli');
 const CompressionPlugin = require('compression-webpack-plugin');
 const brotli = require('iltorb');
 const config = require('./webpack.config.base');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const webpack = require('webpack');
 
 module.exports = {
     ...config,
@@ -26,6 +28,10 @@ module.exports = {
             filename: '[path].br[query]',
             minRatio: 0.8,
             algorithm: brotli.compress
+        }),
+
+        new BundleAnalyzerPlugin({
+            analyzerMode: 'static'
         })
     ]
 }

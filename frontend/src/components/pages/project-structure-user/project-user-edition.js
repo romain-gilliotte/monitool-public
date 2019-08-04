@@ -34,13 +34,13 @@ module.component('projectUserModal', {
 			this.entities = this.resolve.entities;
 			this.groups = this.resolve.groups;
 			this.dataSources = this.resolve.dataSources;
-			this.takenIds = this.resolve.takenIds;
+			this.takenEmails = this.resolve.takenEmails;
 
-			// isNew will be used by the view to disable inputs that can't be changed (username, etc), and show delete button.
+			// isNew will be used by the view to disable inputs that can't be changed (email, etc), and show delete button.
 			this.isNew = !this.resolve.projectUser;
 
 			// The form updates a copy of the object, so that user can cancel the changes by just dismissing the modal.
-			this.user = angular.copy(this.resolve.projectUser) || {id: "", role: "owner", entities: [], dataSources: []};
+			this.user = angular.copy(this.resolve.projectUser) || { email: "", role: "owner", entities: [], dataSources: [] };
 			this.user.entities = this.user.entities || [];
 			this.user.dataSources = this.user.dataSources || [];
 
@@ -57,7 +57,7 @@ module.component('projectUserModal', {
 				delete this.user.dataSources;
 			}
 
-			this.close({$value: this.user});
+			this.close({ $value: this.user });
 		}
 
 	}

@@ -45,7 +45,7 @@ module.component('projectUserList', {
 		$onInit() {
 			this.sortableOptions = {
 				handle: '.handle',
-				onUpdate: () => this.onProjectUpdate({newProject: this.editableProject, isValid: true})
+				onUpdate: () => this.onProjectUpdate({ newProject: this.editableProject, isValid: true })
 			}
 		}
 
@@ -54,14 +54,14 @@ module.component('projectUserList', {
 				this.editableProject = angular.copy(this.project);
 		}
 
-		onEditUserClicked(user=null) {
+		onEditUserClicked(user = null) {
 			this.$uibModal
 				.open({
 					component: 'projectUserModal',
 					size: 'lg',
 					resolve: {
 						projectUser: () => user,
-						takenIds: () => this.editableProject.users.map(user => user.id).filter(u => !user || u != user.id),
+						takenEmails: () => this.editableProject.users.map(user => user.email).filter(email => !user || email != user.email),
 						entities: () => this.editableProject.entities,
 						groups: () => this.editableProject.groups,
 						dataSources: () => this.editableProject.forms,
@@ -80,9 +80,9 @@ module.component('projectUserList', {
 					else
 						this.editableProject.users.push(newUser);
 
-					this.onProjectUpdate({newProject: this.editableProject, isValid: true})
+					this.onProjectUpdate({ newProject: this.editableProject, isValid: true })
 				})
-				.catch(error => {});
+				.catch(error => { });
 		}
 
 		onDeleteClicked(user) {
@@ -91,7 +91,7 @@ module.component('projectUserList', {
 				1
 			);
 
-			this.onProjectUpdate({newProject: this.editableProject, isValid: true});
+			this.onProjectUpdate({ newProject: this.editableProject, isValid: true });
 		}
 	}
 });

@@ -1,7 +1,6 @@
 const path = require('path');
 const config = require('./webpack.config.base');
 const webpack = require('webpack');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     ...config,
@@ -22,9 +21,5 @@ module.exports = {
         new webpack.DefinePlugin({
             SERVICE_URL: '"http://localhost:8000"'
         }),
-
-        // new BundleAnalyzerPlugin({
-        //     analyzerMode: 'static'
-        // })
     ]
 };
