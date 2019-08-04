@@ -39,9 +39,9 @@ module.component('projectInputList', {
 	controller: class ProjectInputListController {
 
 		constructor($element, $rootScope, $state, $scope) {
-			this.userCtx = $rootScope.userCtx;
 			this.$state = $state;
 			this.$scope = $scope;
+			this.userEmail = $rootScope.userEmail;
 			this._element = $element;
 		}
 
@@ -74,7 +74,7 @@ module.component('projectInputList', {
 			this.sites = this.project.entities.filter(e => this.dataSource.entities.includes(e.id));
 
 			// This will happen regardless of unexpected entries.
-			const projectUser = this.project.users.find(u => u.email == this.userCtx.email);
+			const projectUser = this.project.users.find(u => u.email == this.userEmail);
 			if (projectUser.role === 'input')
 				this.sites = this.sites.filter(e => projectUser.entities.includes(e.id));
 

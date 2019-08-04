@@ -2,9 +2,9 @@ import Store from './store';
 import Project from '../model/project';
 import jsonpatch from 'fast-json-patch';
 import JSONStream from 'JSONStream';
-import {Transform} from 'stream'
+import { Transform } from 'stream'
 
-var hashFunction = function(obj) {
+var hashFunction = function (obj) {
 	if (typeof obj === 'string')
 		return obj;
 	else
@@ -15,7 +15,7 @@ var hashFunction = function(obj) {
  * Compare two arrays of objects, and create remove, add and move operations
  * to patch from the first to the second.
  */
-var compareArray = function(before, after, changes, prefix) {
+var compareArray = function (before, after, changes, prefix) {
 	var beforeIds = before.map(hashFunction),
 		afterIds = after.map(hashFunction);
 
@@ -32,7 +32,7 @@ var compareArray = function(before, after, changes, prefix) {
 			// element was removed
 			beforeIds.splice(beforeIndex, 1);
 			before.splice(beforeIndex, 1);
-			changes.push({op: 'remove', path: prefix + beforeIndex});
+			changes.push({ op: 'remove', path: prefix + beforeIndex });
 			beforeIndex--; // we need to recheck the same place in the table.
 		}
 	}
@@ -45,7 +45,7 @@ var compareArray = function(before, after, changes, prefix) {
 			// element was added
 			beforeIds.push(id);
 			before.push(after[afterIndex]);
-			changes.push({op: 'add', path: prefix + beforeIds.length, value: after[afterIndex]});
+			changes.push({ op: 'add', path: prefix + beforeIds.length, value: after[afterIndex] });
 		}
 	}
 
@@ -61,13 +61,13 @@ var compareArray = function(before, after, changes, prefix) {
 			// le remet au bon endroit
 			before.splice(afterIndex, 0, item);
 			beforeIds.splice(afterIndex, 0, id);
-			changes.push({op: 'move', from: prefix + beforeIndex, path: prefix + afterIndex})
+			changes.push({ op: 'move', from: prefix + beforeIndex, path: prefix + afterIndex })
 		}
 	}
 };
 
 
-var compareRec = function(before, after, changes, prefix='/') {
+var compareRec = function (before, after, changes, prefix = '/') {
 	if (Array.isArray(before) && Array.isArray(after)) {
 		compareArray(before, after, changes, prefix);
 
@@ -81,7 +81,7 @@ var compareRec = function(before, after, changes, prefix='/') {
 	}
 };
 
-var compare = function(before, after) {
+var compare = function (before, after) {
 	before = JSON.parse(JSON.stringify(before)); // clone
 
 	let moves = [];
@@ -123,7 +123,7 @@ export default class ProjectStore extends Store {
 					limit: limit
 				})
 			]);
-			revisions.rows.unshift({id: project._id, doc: project});
+			revisions.rows.unshift({ id: project._id, doc: project });
 		}
 		else
 			revisions = await this._db.callList({
@@ -166,7 +166,7 @@ export default class ProjectStore extends Store {
 			this._db.bucket.viewAsStream(
 				'monitool',
 				'project_by_email',
-				{key: email, include_docs: true}
+				{ startkey: [email], endkey: [email, {}], include_docs: true }
 			),
 			JSONStream.parse(['rows', true, 'doc']),
 			new Transform({
@@ -179,4 +179,8 @@ export default class ProjectStore extends Store {
 		];
 	}
 
+	async canView(email, projectId) {
+		const result = await this._db.callView('project_by_email', { key: [email, projectId] });
+		return result.rows.length === 1;
+	}
 }

@@ -4,7 +4,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-	entry: ["./src/app.js"],
+	entry: {
+		index: ["./src/app.js"],
+		callback: ['./src/callback.js']
+	},
 
 	// Output everything as a big bundle
 	output: {
@@ -72,9 +75,19 @@ module.exports = {
 
 		new HtmlWebpackPlugin({
 			favicon: null,
-			template: 'src/index.html',
-			inject: 'body'
-		})
+			filename: 'index.html',
+			template: 'src/template.html',
+			inject: 'body',
+			chunks: ['index']
+		}),
+
+		new HtmlWebpackPlugin({
+			favicon: null,
+			filename: 'callback.html',
+			template: 'src/template.html',
+			inject: 'body',
+			chunks: ['callback']
+		}),
 	]
 };
 

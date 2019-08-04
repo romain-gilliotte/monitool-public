@@ -29,12 +29,12 @@ module.config($stateProvider => {
 		component: 'projectMenu',
 
 		resolve: {
-			loadedProject: function($rootScope, $stateParams, $q) {
+			loadedProject: function ($rootScope, $stateParams, $q) {
 				const projectId = $stateParams.projectId;
 
 				if (projectId === 'new') {
 					const project = new Project();
-					project.users.push({email: $rootScope.userCtx.email, role: "owner"});
+					project.users.push({ email: $rootScope.userEmail, role: "owner" });
 					return $q.when(project);
 				}
 				else

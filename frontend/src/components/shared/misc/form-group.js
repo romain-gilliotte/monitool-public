@@ -1,13 +1,10 @@
-
-import uuid from 'uuid/v4';
-
+import angular from 'angular';
 
 const module = angular.module(
 	'monitool.components.misc.form-group',
 	[
 	]
 );
-
 
 module.component('formGroup', {
 	bindings: {

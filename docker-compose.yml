@@ -21,9 +21,8 @@ services:
       - ./api:/app
     environment:
       MONITOOL_DEBUG: "TRUE"
-      MONITOOL_BASE_URL: "http://localhost:8000"
       MONITOOL_PORT: "8000"
-      MONITOOL_TOKEN_SECRET: "123456789"
+      MONITOOL_JWT_JWKS: "https://cognito-idp.eu-west-1.amazonaws.com/eu-west-1_NSicpjtuG/.well-known/jwks.json"
       MONITOOL_COUCHDB_HOST: "couchdb"
       MONITOOL_COUCHDB_PORT: "5984"
       MONITOOL_COUCHDB_DATABUCKET: "monitool"

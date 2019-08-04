@@ -1,14 +1,7 @@
 import angular from 'angular';
 
-import sessionInit from "./session-init/init";
-import sessionLogin from "./session-login/login";
-import sessionRegister from "./session-register/register";
-import sessionRecover from "./session-recover/recover";
-
 import menu from "./menu/menu";
-
 import projectList from "./project-list/list";
-
 import projectMenu from "./project-menu/menu";
 import projectStructMenu from "./project-structure-menu/menu";
 import projectStructHome from "./project-structure-home/home";
@@ -36,10 +29,6 @@ import projectReportingOlap from "./project-reporting-olap/olap";
 const module = angular.module(
 	'monitool.components.pages.all-pages',
 	[
-		sessionInit,
-		sessionLogin,
-		sessionRegister,
-		sessionRecover,
 		menu,
 		projectList,
 		projectMenu,

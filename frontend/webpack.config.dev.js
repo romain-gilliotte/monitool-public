@@ -13,7 +13,7 @@ module.exports = {
         contentBase: path.resolve('public'),
         port: 8080,
         disableHostCheck: true,
-        host: '0.0.0.0'
+        host: '0.0.0.0',
     },
 
     plugins: [

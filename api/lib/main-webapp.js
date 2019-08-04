@@ -12,29 +12,32 @@ process.on('uncaughtException', function (err) {
 	console.log(err.stack)
 });
 
-async function tryStartApplication() {
-	// Wait for database.
+
+async function startApplication() {
+	// Check connection with couchdb
+	let connected = false;
+	while (!connected) {
+		try {
+			connected = !!await database.checkConnectivity();
+		}
+		catch (error) {
+			winston.log('warn', 'Could not connect database: ' + error.message + '. Retry in 15 seconds.');
+			await new Promise(resolve => setTimeout(resolve, 15 * 1000));
+		}
+	}
+
+	// Launch application
 	try {
-		await database.checkConnectivity();
+		// Create bucket / Migrate if needed
+		await database.prepare();
+
+		// Crash if we fail to listen.
+		application.listen(config.port);
 	}
-	catch (error) {
-		winston.log('warning', 'Could not connect database: ' + error.message + '. Retry in 15 seconds.');
-		setTimeout(startApplication, 15 * 1000);
-		return;
-	}
-
-	// Create bucket / Migrate if needed
-	await database.prepare();
-
-	// Crash if we fail to listen.
-	application.listen(config.port);
-}
-
-function startApplication() {
-	tryStartApplication().catch(error => {
-		winston.log('error', error.message);
+	catch (e) {
+		winston.log('error', e.message);
 		process.exit(1)
-	});
+	}
 }
 
 startApplication();

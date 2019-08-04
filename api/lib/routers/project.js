@@ -1,18 +1,18 @@
 
 import Router from 'koa-router';
-import {pipeline} from 'stream';
+import { pipeline } from 'stream';
 import JSONStream from 'JSONStream';
 import uuidv4 from 'uuid/v4';
 
 import Input from '../resource/model/input';
 import Project from '../resource/model/project';
 
-const nullErrorHandler = error => {};
+const nullErrorHandler = error => { };
 
 const router = new Router();
 
 router.get('/resources/project', async ctx => {
-	let streams = await Project.storeInstance.listByEmail(ctx.state.user.email);
+	let streams = await Project.storeInstance.listByEmail(ctx.state.userEmail);
 	streams.push(JSONStream.stringify());
 
 	ctx.response.type = 'application/json';
@@ -24,6 +24,8 @@ router.get('/resources/project', async ctx => {
  */
 router.get('/resources/project/:id', async ctx => {
 	const project = await Project.storeInstance.get(ctx.params.id);
+	if (!project.getUserByEmail(ctx.state.userEmail))
+		throw new Error('forbidden');
 
 	ctx.response.body = project.toAPI();
 });
@@ -40,8 +42,6 @@ router.get('/resources/project/:id/revisions', async ctx => {
 	);
 });
 
-
-
 router.post('/resources/project', async ctx => {
 	// User is cloning a project
 	if (ctx.request.query.from) {
@@ -51,7 +51,7 @@ router.post('/resources/project', async ctx => {
 		// Clone the project
 		project._id = 'project:' + uuidv4();
 		delete project._rev;
-		project.users = [{email: ctx.state.user.email, role: "owner"}];
+		project.users = [{ email: ctx.state.userEmail, role: "owner" }];
 		await project.save();
 
 		// Recreate all inputs asynchronously. No need to have the user waiting.
@@ -73,7 +73,7 @@ router.post('/resources/project', async ctx => {
 	else {
 		const newProject = new Project(ctx.request.body);
 		newProject._id = 'project:' + uuidv4();
-		await newProject.save(false, ctx.state.user);
+		await newProject.save(false, ctx.state.userEmail);
 
 		ctx.response.body = newProject.toAPI();
 	}
@@ -88,7 +88,7 @@ router.put('/resources/project/:id', async ctx => {
 		throw new Error('id_mismatch');
 
 	const newProject = new Project(ctx.request.body);
-	await newProject.save(false, ctx.state.user);
+	await newProject.save(false, ctx.state.userEmail);
 
 	ctx.response.body = newProject.toAPI();
 })

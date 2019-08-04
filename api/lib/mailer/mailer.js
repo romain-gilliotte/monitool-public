@@ -1,22 +1,10 @@
 
 import nodemailer from 'nodemailer';
+import { SES } from 'aws-sdk';
 
 const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    auth: {
-        user: 'luepbphdowqhr4l7@ethereal.email',
-        pass: 'ghhdrYdRg7Kqs6hhF5'
-    }
+    SES: new SES({
+        apiVersion: '2010-12-01'
+    })
 });
-
-
-export function sendValidateEmail(user, token) {
-	console.log('validate email', user.email, token)
-};
-
-
-export function sendResetPassword(user, token) {
-	console.log('reset password', user.email, token)
-};
 

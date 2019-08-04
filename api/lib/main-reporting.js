@@ -1,7 +1,7 @@
-import {Transform, Writable, pipeline} from 'stream';
-import {promisify} from 'util';
+import { Transform, Writable, pipeline } from 'stream';
+import { promisify } from 'util';
 
-import TimeSlot, {timeSlotRange} from 'timeslot-dag';
+import TimeSlot, { timeSlotRange } from 'timeslot-dag';
 import exprEval from 'expr-eval';
 import JSONStream from 'JSONStream';
 
@@ -28,8 +28,8 @@ setInterval(() => {
 
 process.on('message', m => {
 	computeReport(m.query).then(
-		result => process.send({messageId: m.messageId, result: result}),
-		error => process.send({messageId: m.messageId, error: error})
+		result => process.send({ messageId: m.messageId, result: result }),
+		error => process.send({ messageId: m.messageId, error: error })
 	);
 });
 
@@ -95,7 +95,7 @@ async function _createCube(project, dataSource, variable) {
 		database.bucket.viewAsStream(
 			'monitool',
 			'inputs_variable',
-			{key: project._id + ':' + dataSource.id + ':' + variable.id}
+			{ key: project._id + ':' + dataSource.id + ':' + variable.id }
 		),
 		JSONStream.parse(['rows', true]),
 		new InputBuilder(project, dataSource, variable),
@@ -111,8 +111,8 @@ function _createFilter(dataSource, queryFilter, paramFilter) {
 	for (let key in paramFilter)
 		filter[key] =
 			filter[key] ?
-			filter[key].filter(e => paramFilter[key].includes(e)) :
-			paramFilter[key];
+				filter[key].filter(e => paramFilter[key].includes(e)) :
+				paramFilter[key];
 
 	// Replace _start/_end by a proper filter depending on our time dimension.
 	if (filter._start && filter._end) {
@@ -185,11 +185,11 @@ function _mergeRec(depth, expr, parameters, trees) {
 class InputBuilder extends Transform {
 
 	constructor(project, dataSource, variable) {
-		super({objectMode: true});
+		super({ objectMode: true });
 
 		this.project = project;
 		this.dataSource = dataSource;
-		this.structure = {[variable.id]: variable.structure};
+		this.structure = { [variable.id]: variable.structure };
 	}
 
 	_transform(row, encoding, callback) {
@@ -203,8 +203,8 @@ class InputBuilder extends Transform {
 		input.form = dataSourceId;
 		input.entity = siteId;
 		input.period = period;
-		input.structure = {[variableId]: row.value.s};
-		input.values = {[variableId]: row.value.v};
+		input.structure = { [variableId]: row.value.s };
+		input.values = { [variableId]: row.value.v };
 
 		if (this._inputIsValid(input)) {
 			input.update(this.structure);
@@ -230,7 +230,7 @@ class InputBuilder extends Transform {
 class CubeFiller extends Writable {
 
 	constructor(cube, variable) {
-		super({objectMode: true});
+		super({ objectMode: true });
 
 		this.variable = variable;
 		this.cube = cube;

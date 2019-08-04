@@ -7,19 +7,19 @@ const module = angular.module(
 );
 
 
-const isAllowedForm = function(userCtx, scope, element, attributes) {
+const isAllowedForm = function (userEmail, scope, attributes) {
 	var project = scope.$eval(attributes.aclProject),
 		askedFormId = scope.$eval(attributes.aclHasInputForm) || scope.$eval(attributes.aclLacksInputForm);
 
-	var internalUser = project.users.find(u => u.email == userCtx.email);
-	return userCtx.role === 'admin' || project.canInputForm(internalUser, askedFormId);
+	var internalUser = project.users.find(u => u.email == userEmail);
+	return project.canInputForm(internalUser, askedFormId);
 };
 
 
-module.directive('aclHasInputForm', function($rootScope) {
+module.directive('aclHasInputForm', function ($rootScope) {
 	return {
-		link: function(scope, element, attributes) {
-			var isAllowed = isAllowedForm($rootScope.userCtx, scope, element, attributes);
+		link: function (scope, element, attributes) {
+			var isAllowed = isAllowedForm($rootScope.userEmail, scope, attributes);
 			if (!isAllowed)
 				element.remove();
 		}
@@ -27,10 +27,10 @@ module.directive('aclHasInputForm', function($rootScope) {
 });
 
 
-module.directive('aclLacksInputForm', function($rootScope) {
+module.directive('aclLacksInputForm', function ($rootScope) {
 	return {
-		link: function(scope, element, attributes) {
-			var isAllowed = isAllowedForm($rootScope.userCtx, scope, element, attributes);
+		link: function (scope, element, attributes) {
+			var isAllowed = isAllowedForm($rootScope.userEmail, scope, attributes);
 			if (isAllowed)
 				element.remove();
 		}

@@ -4,12 +4,12 @@ import config from '../config/config';
 import migrations from './migrations/index';
 
 
-// Helper function: delay something by 5 seconds
-const delay = async () => {
-	return new Promise((resolve, reject) => {
-		setTimeout(() => resolve(), 5000);
-	});
-};
+// // Helper function: delay something by 5 seconds
+// const delay = async () => {
+// 	return new Promise((resolve, reject) => {
+// 		setTimeout(() => resolve(), 5000);
+// 	});
+// };
 
 
 
@@ -88,7 +88,7 @@ class Database {
 			versionDoc = await this.get('version');
 		}
 		catch (error) {
-			versionDoc = {_id: "version", version: 0};
+			versionDoc = { _id: "version", version: 0 };
 		}
 
 		for (let i = versionDoc.version; i < migrations.length; ++i) {
@@ -107,24 +107,22 @@ class Database {
 	}
 
 	async _acquireMigrationLock() {
-		const getLockRec = async () => {
+		while (true) {
 			try {
 				winston.log('info', '[Database] Acquire migration lock');
 
-				const lock = {_id: 'version_lock'};
+				const lock = { _id: 'version_lock' };
 				await this.insert(lock);
+
 				winston.log('info', '[Database] Migration lock acquired');
 				return lock;
 			}
 			catch (e) {
 				winston.log('info', '[Database] Failed to acquire migration lock');
 
-				await delay();
-				return getLockRec();
+				await new Promise(resolve => setTimeout(resolve, 5000))
 			}
 		}
-
-		return getLockRec();
 	}
 
 	/**
@@ -168,7 +166,7 @@ class Database {
 	 *
 	 * @return {Model}
 	 */
-	async get(id, params=undefined) {
+	async get(id, params = undefined) {
 		return this.bucket.get(id, params);
 	}
 

@@ -1,14 +1,11 @@
 
 import validator from 'is-my-json-valid';
 import TimeSlot from 'timeslot-dag';
-
 import Cube from '../../olap/cube';
 import Dimension from '../../olap/dimension';
+import schema from '../schema/input.json';
 import InputStore from '../store/input';
 import DbModel from './db-model';
-import schema from '../schema/input.json';
-
-import Project from './project';
 
 var validate = validator(schema),
 	storeInstance = new InputStore();

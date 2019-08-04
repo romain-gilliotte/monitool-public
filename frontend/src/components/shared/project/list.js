@@ -26,7 +26,7 @@ module.component('projectList', {
 	controller: class ProjectListController {
 
 		constructor($rootScope, $filter, $scope, $state, $window) {
-			this.userCtx = $rootScope.userCtx;
+			this.userEmail = $rootScope.userEmail;
 			this.$scope = $scope;
 			this.$state = $state;
 			this.$window = $window;
@@ -41,7 +41,7 @@ module.component('projectList', {
 			this.displayedProjects = this.projects.slice();
 
 			this.displayedProjects.forEach(p => {
-				const user = p.users.find(u => u.email == this.userCtx.email);
+				const user = p.users.find(u => u.email == this.userEmail);
 
 				p.running = p.end > new Date().toISOString().slice(0, 10);
 				p.isOwner = user && user.role === 'owner';

@@ -1,5 +1,5 @@
 import angular from 'angular';
-import axios from 'axios';
+import auth from '../../../auth';
 import uiRouter from '@uirouter/angularjs';
 
 import uiDropdown from 'angular-ui-bootstrap/src/dropdown/index';
@@ -34,10 +34,7 @@ module.component('topMenu', {
 		}
 
 		logout() {
-			delete window.localStorage.token;
-			delete axios.defaults.headers.common['Authorization'];
-			delete this.$rootScope.userCtx;
-			this.$state.go('init.login')
+			auth.signOut();
 		}
 	}
 })

@@ -8,7 +8,7 @@ const module = angular.module(
 );
 
 
-const isAllowedProject = function(userCtx, scope, element, attributes) {
+const isAllowedProject = function (userEmail, scope, attributes) {
 	// FIXME: shouldn't this be the other way around? $eval(attr) || defaultValue
 	var project = scope.$eval(attributes.aclProject),
 		askedRole = attributes.aclHasProjectRole || attributes.aclLacksProjectRole;
@@ -16,7 +16,7 @@ const isAllowedProject = function(userCtx, scope, element, attributes) {
 	if (askedRole !== 'owner' && askedRole !== 'input')
 		throw new Error("acl-has-project-role must be called with either 'owner' or 'input'");
 
-	let internalUser = project.users.find(u => u.email == userCtx.email);
+	let internalUser = project.users.find(u => u.email == userEmail);
 
 	if (askedRole === 'owner')
 		return (internalUser && internalUser.role === 'owner');
@@ -27,10 +27,10 @@ const isAllowedProject = function(userCtx, scope, element, attributes) {
 };
 
 
-module.directive('aclHasProjectRole', function($rootScope) {
+module.directive('aclHasProjectRole', function ($rootScope) {
 	return {
-		link: function(scope, element, attributes) {
-			var isAllowed = isAllowedProject($rootScope.userCtx, scope, element, attributes);
+		link: function (scope, element, attributes) {
+			var isAllowed = isAllowedProject($rootScope.userEmail, scope, attributes);
 			if (!isAllowed)
 				element.remove();
 		}
@@ -38,10 +38,10 @@ module.directive('aclHasProjectRole', function($rootScope) {
 });
 
 
-module.directive('aclLacksProjectRole', function($rootScope) {
+module.directive('aclLacksProjectRole', function ($rootScope) {
 	return {
-		link: function(scope, element, attributes) {
-			var isAllowed = isAllowedProject($rootScope.userCtx, scope, element, attributes);
+		link: function (scope, element, attributes) {
+			var isAllowed = isAllowedProject($rootScope.userEmail, scope, attributes);
 			if (isAllowed)
 				element.remove();
 		}

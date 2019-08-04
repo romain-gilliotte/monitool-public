@@ -7,6 +7,7 @@ import "regenerator-runtime/runtime";
 import angular from 'angular';
 import axios from 'axios';
 
+import auth from './auth';
 import mtPages from './components/pages/all-pages';
 import mtTranslation from './translation/bootstrap';
 import mtFilterMisc from './filters/misc';
@@ -24,59 +25,49 @@ module.config(function ($urlRouterProvider) {
 	$urlRouterProvider.otherwise('/projects');
 });
 
-// Scroll to top when changing page.
-module.run(function ($window, $transitions) {
-	$transitions.onSuccess({}, function (transition) {
-		$window.scrollTo(0, 0);
-	});
-})
-
-module.run(function ($rootScope, $window, $transitions) {
-	$rootScope.serviceUrl = SERVICE_URL;
-	axios.defaults.baseURL = SERVICE_URL;
-
-	if (window.localStorage.token) {
-		// Setup default axios header.
-		axios.defaults.headers.common['Authorization'] = window.localStorage.token;
-
-		// Put user in $rootScope
-		const payload = atob(window.localStorage.token.split('.')[1]);
-		$rootScope.userCtx = JSON.parse(payload);
-	}
+// Hook angular-ui-router transitions.
+module.run(function ($window, $rootScope, $transitions) {
 
 	$transitions.onBefore({}, function (transition) {
-		const userStatus = !!$rootScope.userCtx ? 'loggedIn' : 'loggedOut';
+	});
 
-		// Check if the state is allowed for logged out users.
-		if (!transition.to().acceptedUsers.includes(userStatus)) {
-			const destination = { loggedOut: 'init.login', loggedIn: 'main.projects' }[userStatus];
-			return transition.router.stateService.target(destination);
-		}
+	// Scroll to top when changing page.
+	$transitions.onSuccess({}, function (transition) {
+		$window.scrollTo(0, 0);
 	});
 
 	$transitions.onError({}, function (transition) {
 		const error = transition.error();
-
-		// // If we got an error because we're not logged in, let's do that and come back.
-		// const needLogin =
-		// 	// Tried to transition without being logged in.
-		// 	error.detail.message == 'not_logged_in'
-		// 	// Called the API with an invalid token
-		// 	|| (error.detail.response && error.detail.response.status === 401);
-
-		// if (needLogin) {
-		// 	console.log('hello')
-		// 	delete $rootScope.userCtx;
-		// 	$state.go('init.login');
-		// 	return;
-		// }
-
-		// // Tried to access /login or /register while being logged in.
-		// if (error.message == 'logged_in') {
-		// 	$state.go('main.home');
-		// 	return;
-		// }
+		console.log(error);
 	});
-});
 
-angular.bootstrap(document, [module.name]);
+})
+
+// Start angular if authentication worked.
+auth.userhandler = {
+	onSuccess: function (result) {
+		const accessToken = result.accessToken.jwtToken;
+		const email = result.idToken.payload.email;
+
+		module.run(function ($rootScope) {
+			// Configure axios
+			axios.defaults.baseURL = SERVICE_URL;
+			axios.defaults.headers.common['Authorization'] = accessToken;
+
+			// Set api url in $rootScope (needed to download pdfs)
+			$rootScope.serviceUrl = SERVICE_URL
+
+			// Put user email in $rootScope
+			$rootScope.userEmail = email;
+		});
+
+		angular.bootstrap(document, [module.name]);
+	},
+	onFailure: function (err) {
+		console.log("Error!", err);
+	}
+};
+
+auth.setState(window.location.href); // Save route requested by the user, because checking auth
+auth.getSession(); // authenticate if needed
+

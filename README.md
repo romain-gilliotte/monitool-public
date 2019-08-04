@@ -66,30 +66,20 @@ Docker was introduced to make the transition easier and not having to install an
 
 ## Configuration
 
-Monitool's API takes the following configuration keys:
+Monitool's API uses the following environnement variables:
 
-	debug:				Enable/Disable stacktrack on API errors [default=false]
-	baseUrl:			Used for redirecting user after 3rd party authentication [default=http://localhost:8000]
-	port:				Binded port for the API [default=8000]
-	tokenSecret:		Secret to encrypt the tokens [no_default]
+```
+MONITOOL_DEBUG				Enable/Disable stacktrack on API errors [default=false]
+MONITOOL_PORT:				Binded port for the API [default=8000]
 
-	couchdb.host		Self-explanatory [default=localhost]
-	couchdb.port		Self-explanatory [default=5984]
-	couchdb.dataBucket	Self-explanatory [default=monitool]
-	couchdb.user		Self-explanatory [default=]
-	couchdb.pass		Self-explanatory [default=]
+MONITOOL_JWT_JWKS			URL to fetch the public key the jwt tokens will be validated against.
 
-	api.google			API key that allows using Google Translate API. Used to create cross-cutting indicators [no_default]
-
-	auth.administrator	Login of account that will always be an admin, disregarding entry in database.
-
-	auth.providers.azuread.label
-	auth.providers.azuread.domain
-	auth.providers.azuread.clientid
-	auth.providers.azuread.clientsecret
-
-	auth.providers.training.label
-	auth.providers.training.account
+MONITOOL_COUCHDB_HOST		Self-explanatory
+MONITOOL_COUCHDB_PORT		Self-explanatory
+MONITOOL_COUCHDB_DATABUCKET	Self-explanatory
+MONITOOL_COUCHDB_USER		Self-explanatory
+MONITOOL_COUCHDB_PASS		Self-explanatory
+```
 
 ### Development
 

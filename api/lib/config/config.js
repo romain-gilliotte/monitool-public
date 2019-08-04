@@ -1,4 +1,5 @@
 import fs from 'fs';
+import aws from 'aws-sdk';
 import validator from 'is-my-json-valid';
 import winston from 'winston';
 import schema from './schema.json';
@@ -17,27 +18,33 @@ const readFile = function (secret) {
 };
 
 const config = {
-	"debug": toBool(process.env.MONITOOL_DEBUG),
-	"baseUrl": process.env.MONITOOL_BASE_URL,
-	"port": parseInt(process.env.MONITOOL_PORT),
-	"tokenSecret":
-		process.env.MONITOOL_TOKEN_SECRET ||
-		readFile(process.env.MONITOOL_TOKEN_SECRET_FILE),
+	debug: toBool(process.env.MONITOOL_DEBUG),
+	port: parseInt(process.env.MONITOOL_PORT),
 
-	"couchdb": {
-		"host": process.env.MONITOOL_COUCHDB_HOST,
-		"port": parseInt(process.env.MONITOOL_COUCHDB_PORT),
-		"bucket": process.env.MONITOOL_COUCHDB_DATABUCKET,
-		"username":
+	jwt: {
+		jwks: process.env.MONITOOL_JWT_JWKS
+	},
+
+	couchdb: {
+		host: process.env.MONITOOL_COUCHDB_HOST,
+		port: parseInt(process.env.MONITOOL_COUCHDB_PORT),
+		bucket: process.env.MONITOOL_COUCHDB_DATABUCKET,
+		username:
 			process.env.MONITOOL_COUCHDB_USER ||
 			readFile(process.env.MONITOOL_COUCHDB_USER_FILE) ||
 			"",
-		"password":
+		password:
 			process.env.MONITOOL_COUCHDB_PASS ||
 			readFile(process.env.MONITOOL_COUCHDB_PASS_FILE) ||
 			""
 	}
 };
+
+aws.config.region = 'eu-west-1';
+
+
+
+
 
 // Validate that nothing is missing from the configuration file.
 let validate = validator(schema);
@@ -48,7 +55,7 @@ var errors = validate.errors || [];
 if (errors.length) {
 	// if there is errors, log them and exit the process.
 	errors.forEach(function (error) {
-		winston.log('error', 'Invalid config', error);
+		winston.log('error', 'Invalid config ', error);
 	});
 
 	process.exit(1);

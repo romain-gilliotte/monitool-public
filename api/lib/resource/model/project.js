@@ -99,7 +99,7 @@ export default class Project extends DbModel {
 	 *	- copy the passwords that were not changed for partners.
 	 * 	- validate that all foreign keys exist.
 	 */
-	async save(skipChecks, user=null) {
+	async save(skipChecks, userEmail=null) {
 		// If we skip checks, because we know what we are doing, just delegate to parent class.
 		if (skipChecks)
 			return super.save(true);
@@ -125,8 +125,8 @@ export default class Project extends DbModel {
 			oldProject._id = 'rev:' + oldProject._id + ':' + time;
 			oldProject.type = 'rev:project';
 
-			if (user)
-				oldProject.modifiedBy = user._id;
+			if (userEmail)
+				oldProject.modifiedBy = userEmail;
 
 			await this._db.insert(oldProject);
 		}

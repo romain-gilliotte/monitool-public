@@ -1,32 +1,45 @@
 {
 	"$schema": "http://json-schema.org/schema#",
 	"title": "Monitool configuration file schema",
-
 	"type": "object",
 	"additionalProperties": false,
-	"required": ["debug", "baseUrl", "port", "tokenSecret", "couchdb"],
+	"required": [
+		"debug",
+		"port",
+		"jwt",
+		"couchdb"
+	],
 	"properties": {
 		"debug": {
 			"type": "boolean"
-		},
-		"baseUrl": {
-			"type": "string",
-			"pattern": "^https?://[a-z\\d\\.\\-]+(:\\d+)?$"
 		},
 		"port": {
 			"type": "integer",
 			"minimum": 1,
 			"maximum": 65536
 		},
-		"tokenSecret": {
-			"type": "string",
-			"minimum": 6
+		"jwt": {
+			"type": "object",
+			"required": [
+				"jwks"
+			],
+			"properties": {
+				"jwks": {
+					"type": "string"
+				}
+			}
 		},
 		"couchdb": {
 			"type": "object",
-			"required": ["host", "port", "bucket"],
+			"required": [
+				"host",
+				"port",
+				"bucket"
+			],
 			"properties": {
-				"host": {"type": "string"},
+				"host": {
+					"type": "string"
+				},
 				"port": {
 					"type": "integer",
 					"minimum": 1,
@@ -36,8 +49,12 @@
 					"type": "string",
 					"minLength": 1
 				},
-				"username": {"type": "string"},
-				"password": {"type": "string"}
+				"username": {
+					"type": "string"
+				},
+				"password": {
+					"type": "string"
+				}
 			}
 		}
 	}

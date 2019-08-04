@@ -17,19 +17,18 @@ const router = new Router();
 router.get('/resources/input', async ctx => {
 	const q = ctx.request.query;
 
+	if (!await Project.storeInstance.canView(ctx.state.userEmail, q.projectId))
+		throw new Error('forbidden');
+
 	if (q.mode === 'ids_by_form') {
 		let ids = await Input.storeInstance.listIdsByDataSource(q.projectId, q.formId, true);
 
-		ctx.response.body = Object.keys(ids)
-			// .filter(inputId => ctx.visibleProjectIds.has(inputId.substr(6, 44)))
-			.reduce((m, e) => { m[e] = ids[e]; return m; }, {});
+		ctx.response.body = Object.keys(ids).reduce((m, e) => { m[e] = ids[e]; return m; }, {});
 	}
 	else if (q.mode === 'current+last') {
 		let inputs = await Input.storeInstance.getLasts(q.projectId, q.formId, q.entityId, q.period, true);
 
-		ctx.response.body = inputs
-			// .filter(input => ctx.visibleProjectIds.has(input.project))
-			.map(input => input.toAPI());
+		ctx.response.body = inputs.map(input => input.toAPI());
 	}
 });
 
@@ -38,16 +37,15 @@ router.get('/resources/input', async ctx => {
  * Retrieve one input by id
  */
 router.get('/resources/input/:id', async ctx => {
-	const input = await Input.storeInstance.get(ctx.params.id);
-
-	// Update the input before sending
-	const project = await Project.storeInstance.get(input.project);
-	input.update(project.getDataSourceById(input.form).structure);
-
-	// Check if user is allowed (lazy way).
-	if (!ctx.visibleProjectIds.has(input.project))
+	if (!await Project.storeInstance.canView(ctx.state.userEmail, ctx.params.id.substring(6, 46)))
 		throw new Error('forbidden');
 
+	const [project, input] = await Promise.all([
+		Project.storeInstance.get(`project:${ctx.params.id.substring(6, 46)}`),
+		Input.storeInstance.get(ctx.params.id)
+	]);
+
+	input.update(project.getDataSourceById(input.form).structure);
 	ctx.response.body = input.toAPI();
 });
 
@@ -64,15 +62,11 @@ router.put('/resources/input/:id', async ctx => {
 
 	// Validate that the user is allowed to change this input.
 	const project = await Project.storeInstance.get(input.project);
-
-	const user = project.getUserByEmail(ctx.state.user.email);
-	if (!user)
-		throw new Error('forbidden');
-
-	const allowed =
+	const user = project.getUserByEmail(ctx.state.userEmail);
+	const allowed = user && (
 		(user.role === 'owner') ||
-		(user.role === 'input' && user.entities.includes(input.entity) && user.dataSources.includes(input.form));
-
+		(user.role === 'input' && user.entities.includes(input.entity) && user.dataSources.includes(input.form))
+	);
 	if (!allowed)
 		throw new Error('forbidden');
 
@@ -85,6 +79,17 @@ router.put('/resources/input/:id', async ctx => {
  */
 router.delete('/resources/input/:id', async ctx => {
 	const input = await Input.storeInstance.get(ctx.params.id);
+
+	// Validate that the user is allowed to change this input.
+	const project = await Project.storeInstance.get(input.project);
+	const user = project.getUserByEmail(ctx.state.userEmail);
+	const allowed = user && (
+		(user.role === 'owner') ||
+		(user.role === 'input' && user.entities.includes(input.entity) && user.dataSources.includes(input.form))
+	);
+	if (!allowed)
+		throw new Error('forbidden');
+
 	ctx.response.body = input.destroy();
 })
 

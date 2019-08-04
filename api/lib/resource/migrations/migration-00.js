@@ -1,115 +1,65 @@
 
 import database from '../database';
 
-const getDesignDoc = function() {
+const getDesignDoc = function () {
 	let ddoc = {
-		_id: '_design/monitool',
-
+		_id: "_design/monitool",
 		views: {
-			inputs_by_project_date: {
-				map: function(doc) {
-					if (doc.type === 'input')
-						emit([doc.project, doc.period]);
+			inputs_variable: {
+				map: function (doc) {
+					if (doc.type === 'input') {
+						for (var variableId in doc.values) {
+							emit(
+								doc.project + ':' + doc.form + ':' + variableId,
+								{ v: doc.values[variableId], s: doc.structure[variableId] }
+							);
+						}
+					}
 				}
 			},
-
-			inputs_by_project_entity_date: {
-				map: function(doc) {
-					if (doc.type === 'input')
-						emit([doc.project, doc.entity, doc.period]);
+			inputs_with_progress: {
+				map: function (doc) {
+					if (doc.type === 'input') {
+						var progress = 0;
+						var count = 0;
+						for (var key in doc.values) {
+							count++;
+							for (var i = 0; i < doc.values[key].length; ++i)
+								if (doc.values[key][i] !== 0) {
+									progress++; break;
+								}
+						}
+						emit(doc._id, progress / count);
+					}
 				}
 			},
-
-			inputs_by_project_form_date: {
-				map: function(doc) {
-					if (doc.type === 'input')
-						emit([doc.project, doc.form, doc.period]);
-				}
-			},
-
-			project_by_theme: {
-				map: function(doc) {
-					if (doc.type === 'project')
-						doc.themes.forEach(function(themeId) {
-							emit(themeId);
-						});
-				}
-			},
-
-			indicator_by_theme: {
-				map: function(doc) {
-					if (doc.type === 'indicator')
-						doc.themes.forEach(function(themeId) {
-							emit(themeId);
-						});
-				}
-			},
-
-			cross_cutting: {
-				map: function(doc) {
-					if (doc.type === 'project')
-						for (var indicatorId in doc.crossCutting)
-							emit(indicatorId);
-				}
-			},
-
-			themes_usage: {
-				map: function(doc) {
-					if (doc.type === 'indicator' || doc.type === 'project')
-						doc.themes.forEach(function(themeId) { emit([themeId, doc.type]); });
-
+			inputs_updated_at: {
+				map: function (doc) {
+					if (doc.type === 'input' && doc.updatedAt)
+						emit(doc.project, doc.updatedAt);
 				},
-				reduce: '_count'
-			},
-
-			by_type: {
-				map: function(doc) {
-					emit(doc.type);
+				reduce: function (key, values, rereduce) {
+					return values.reduce(function (memo, updatedAt) {
+						return memo < updatedAt ? updatedAt : memo;
+					});
 				}
 			},
-
-			partners: {
-				map: function(doc) {
-					if (doc.type === 'project') {
-						doc.users.forEach(function(user) {
-							if (user.type == 'partner') {
-								emit(user.username, {
-									type: 'partner',
-									username: user.username,
-									password: user.password,
-									name: user.name,
-									role: user.role,
-									entities: user.entities,
-									projectId: doc._id
-								});
-							}
+			project_by_email: {
+				map: function (doc) {
+					if (doc._id.indexOf('project:') == 0)
+						doc.users.forEach(function (user) {
+							emit([user.email, doc._id]);
 						});
-					}
-				}
-			},
-
-			// listings
-			projects_short: {
-				map: function(doc) {
-					if (doc.type === 'project') {
-						emit(doc._id, {
-							_id: doc._id,
-							country: doc.country,
-							name: doc.name,
-							start: doc.start, end: doc.end,
-							users: doc.users.map(function(user) {
-								return {type: user.type, id: user.id, username: user.username, role: user.role};
-							}),
-							themes: doc.themes
-						});
-					}
 				}
 			}
 		}
 	};
 
-	for (var key in ddoc.views)
-		ddoc.views[key].map = ddoc.views[key].map.toString();
+	for (var key in ddoc.views) {
+		ddoc.views[key].map = ddoc.views[key].map.toString().replace(/[\n\t\s]+/g, ' ');
+		if (ddoc.views[key].reduce)
+			ddoc.views[key].reduce = ddoc.views[key].reduce.toString().replace(/[\n\t\s]+/g, ' ');
+	}
 
 	return ddoc;
 }
@@ -118,6 +68,8 @@ const getDesignDoc = function() {
 /**
  * This migration creates the initial design doc.
  */
-export default function() {
+export default function () {
 	return database.insert(getDesignDoc());
 };
+
+
