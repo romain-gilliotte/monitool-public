@@ -179,7 +179,7 @@ function* _generateSites(project, indicator, filter) {
 
 function* _generatePartitions(project, indicator, filter) {
 	// Get all variables and computations parameters in arrays.
-	const variables = project.forms.reduce((m, e) => m.concat(e.elements), []);
+	const variables = project.forms.reduce((m, e) => [...m, ...e.elements], []);
 	const parameters = Object.values(indicator.computation.parameters);
 
 	// Get partitions which are available in all variables used for the computation (<=> intersect parameters)
@@ -377,7 +377,7 @@ export function computeSplitPartitions(project, computation) {
 		.values(computation.parameters)
 		.reduce((memo, param) => {
 			let partitions = project.forms
-				.reduce((m, e) => m.concat(e.elements), [])
+				.reduce((m, e) => [...m, ...e.elements], [])
 				.find(v => v.id === param.elementId)
 				.partitions
 				.filter(p => !param.filter[p.id])

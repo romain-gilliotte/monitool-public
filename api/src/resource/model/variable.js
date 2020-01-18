@@ -58,8 +58,6 @@ class Variable extends Model {
 				});
 		});
 
-		body = topRows.concat(bodyRows);
-
 		widths = [];
 		for (var i = 0; i < rowPartitions.length; ++i)
 			widths.push('auto');
@@ -75,7 +73,7 @@ class Variable extends Model {
 						headerRows: colPartitions.length,
 						dontBreakRows: true,
 						widths: widths,
-						body: body
+						body: [...topRows, ...bodyRows]
 					}
 				}
 			]

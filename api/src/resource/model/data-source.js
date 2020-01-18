@@ -95,8 +95,10 @@ class DataSource extends Model {
 						}
 					]
 				]
-			}
-		].concat(this.elements.map(el => el.getPdfDocDefinition()));
+			},
+
+			...this.elements.map(el => el.getPdfDocDefinition())
+		]
 
 		return doc;
 	}
