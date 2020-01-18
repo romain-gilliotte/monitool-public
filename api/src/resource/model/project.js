@@ -1,0 +1,137 @@
+const validator = require('is-my-json-valid');
+const ProjectStore = require('../store/project');
+const DbModel = require('./db-model');
+const LogicalFrame = require('./logical-frame');
+const DataSource = require('./data-source');
+const schema = require('../schema/project.json');
+
+var validate = validator(schema),
+	storeInstance = new ProjectStore();
+
+class Project extends DbModel {
+
+	static get storeInstance() { return storeInstance; }
+
+	/**
+	 * Deserialize and validate a project that comes from the API/DB.
+	 */
+	constructor(data) {
+		super(data, validate);
+
+		// Check that entity ids exist in groups, ...
+		let entityIds = data.entities.map(e => e.id),
+			dataSourceIds = data.forms.map(ds => ds.id);
+
+		data.groups.forEach(group => {
+			group.members.forEach(entityId => {
+				if (entityIds.indexOf(entityId) === -1)
+					throw new Error('invalid_data');
+			});
+		});
+
+		data.users.forEach(user => {
+			if (user.entities)
+				user.entities.forEach(entityId => {
+					if (entityIds.indexOf(entityId) === -1)
+						throw new Error('invalid_data');
+				});
+
+			if (user.dataSources)
+				user.dataSources.forEach(dataSourceId => {
+					if (dataSourceIds.indexOf(dataSourceId) === -1)
+						throw new Error('invalid_data');
+				});
+		});
+
+		// Create forms & logicalFrames
+		this.forms = this.forms.map(f => new DataSource(f, this));
+		this.logicalFrames = this.logicalFrames.map(lf => new LogicalFrame(lf, this));
+	}
+
+	/**
+	 * Destroy a project, and all related inputs.
+	 *
+	 * @return {Promise}
+	 */
+	async destroy() {
+		throw new Error('Projects can\'t be deleted');
+	}
+
+	/**
+	 * Retrieve a datasource by id.
+	 */
+	getDataSourceById(id) {
+		return this.forms.find(ds => ds.id === id);
+	}
+
+	getDataSourceByVariableId(id) {
+		return this.forms.find(ds => ds.getVariableById(id));
+	}
+
+	/**
+	 * Retrieve an entity by id.
+	 */
+	getEntityById(id) {
+		return this.entities.find(e => e.id === id);
+	}
+
+	/**
+	 * Retrieve a logical framework by id.
+	 */
+	getLogicalFrameById(id) {
+		return this.logicalFrames.find(lf => lf.id === id);
+	}
+
+	/**
+	 * Retrieve the user permissions on this project.
+	 */
+	getUserByEmail(email) {
+		return this.users.find(u => u.email === email);
+	}
+
+
+	/**
+	 * Save the project.
+	 *
+	 * This method makes many checks do deal with the fact that there are no foreign keys nor update method.
+	 * 	- validate that all foreign keys exist.
+	 */
+	async save(skipChecks, userEmail = null) {
+		// If we skip checks, because we know what we are doing, just delegate to parent class.
+		if (skipChecks)
+			return super.save(true);
+
+		let oldProject;
+		try {
+			oldProject = await Project.storeInstance.get(this._id);
+		}
+		catch (error) {
+			// if we can't get former project for some other reason than "missing" we are done.
+			if (error.message !== 'missing')
+				throw error;
+		}
+
+		// Save with the relevant checks
+		let result = await super.save(false);
+
+		// Save history if all the rest succeded (errors will raise exceptions).
+		if (oldProject) {
+			let time = (+new Date()).toString().padStart(16, '0')
+
+			delete oldProject._rev;
+			oldProject._id = 'rev:' + oldProject._id + ':' + time;
+			oldProject.type = 'rev:project';
+
+			if (userEmail)
+				oldProject.modifiedBy = userEmail;
+
+			await this._db.insert(oldProject);
+		}
+
+		// the user want the result of the save operation, not the revision.
+		return result;
+	}
+
+}
+
+module.exports = Project;
