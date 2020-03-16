@@ -194,7 +194,10 @@ describe('test', () => {
                     items: ['0c243e08-8c21-4946-9f5f-ce255106901b'],
                 },
             ],
-            dimensionIds: ['time']
+            drill: [
+                { dimensionId: 'time', attribute: 'month' },
+            ],
+            allowInterpolate: false
         });
 
         console.log(response.status);

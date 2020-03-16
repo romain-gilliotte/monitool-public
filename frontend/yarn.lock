@@ -5416,9 +5416,9 @@ timers-browserify@^2.0.4:
     setimmediate "^1.0.4"
 
 timeslot-dag@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/timeslot-dag/-/timeslot-dag-0.3.1.tgz#2ce8fbbe371a8ea6d77cd8e24081e52300be6ef2"
-  integrity sha512-WRHzGd4dMhUGFB5PAcL6Uop2KO9dfV/fSdOIwleeN3/jPyAzu123zE+wiO503N2Orf0byh6MZVpWfF+bAKcPUQ==
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/timeslot-dag/-/timeslot-dag-0.3.3.tgz#2f4992c16e76066bec339221e88fef126852d247"
+  integrity sha512-TrRr6GpabrI1fWxz4z819vpHvE7hHYNMqKIZEmlzgikb7Z4F4TlAi2sC9Ro+dooABoQfGwEKRmc67H0+yLEMIQ==
 
 to-arraybuffer@^1.0.0:
   version "1.0.1"
