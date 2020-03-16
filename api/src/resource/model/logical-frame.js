@@ -41,7 +41,21 @@ const strings = Object.freeze({
 
 class LogicalFrame extends Model {
 
-	constructor(data, project) {
+	static validate(data) {
+		if (!data)
+			throw new Error('missing_data');
+
+		validate(data);
+		var errors = validate.errors || [];
+		if (errors.length) {
+			var error = new Error('invalid_data');
+			error.detail = errors;
+			error.model = data;
+			throw error;
+		}
+	}
+
+	constructor(data) {
 		super(data, validate);
 	}
 

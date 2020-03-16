@@ -1,10 +1,16 @@
 {
 	"$schema": "http://json-schema.org/schema#",
 	"title": "Monitool data source schema",
-
 	"type": "object",
 	"additionalProperties": false,
-	"required": ["id", "name", "periodicity", "start", "end", "elements"],
+	"required": [
+		"id",
+		"name",
+		"periodicity",
+		"start",
+		"end",
+		"elements"
+	],
 	"properties": {
 		"id": {
 			"$ref": "#/definitions/uuid"
@@ -15,36 +21,52 @@
 		},
 		"entities": {
 			"type": "array",
-			"items": { "$ref": "#/definitions/uuid" }
+			"items": {
+				"$ref": "#/definitions/uuid"
+			}
 		},
 		"periodicity": {
 			"type": "string",
 			"enum": [
 				"day",
-				"week_sat", "week_sun", "week_mon",
-				"month_week_sat", "month_week_sun", "month_week_mon",
+				"week_sat",
+				"week_sun",
+				"week_mon",
+				"month_week_sat",
+				"month_week_sun",
+				"month_week_mon",
 				"month",
 				"quarter",
 				"semester",
-				"year",
-				"free"
+				"year"
 			]
 		},
 		"start": {
 			"oneOf": [
-				{"type": "null"},
-				{ "type": "string", "format": "date" }
+				{
+					"type": "null"
+				},
+				{
+					"type": "string",
+					"format": "date"
+				}
 			]
 		},
 		"end": {
 			"oneOf": [
-				{"type": "null"},
-				{ "type": "string", "format": "date" }
+				{
+					"type": "null"
+				},
+				{
+					"type": "string",
+					"format": "date"
+				}
 			]
 		},
-		"elements": { "type": "array" }
+		"elements": {
+			"type": "array"
+		}
 	},
-
 	"definitions": {
 		"uuid": {
 			"type": "string",

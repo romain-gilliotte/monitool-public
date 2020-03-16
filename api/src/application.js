@@ -4,9 +4,9 @@ const responseTime = require('koa-response-time');
 const cors = require('@koa/cors');
 const authenticationMiddleware = require('./middlewares/authentication');
 const inputRouter = require('./routers/input');
-const pdfRouter = require('./routers/pdf');
+const pdf1Router = require('./routers/pdf-datasource');
+const pdf2Router = require('./routers/pdf-logframe');
 const projectRouter = require('./routers/project');
-const reportingRouter = require('./routers/reporting');
 const errorHandler = require('./middlewares/error-handler');
 
 const app = new Koa();
@@ -18,11 +18,12 @@ app.use(bodyParser({ jsonLimit: '1mb' }));
 
 app.use(errorHandler); // Catch errors and set status codes.
 app.use(authenticationMiddleware);
+app.use(require('./middlewares/load-profile'));
 
 // Serve authentication related endpoints.
 app.use(inputRouter.routes());
-app.use(pdfRouter.routes());
+app.use(pdf1Router.routes());
+app.use(pdf2Router.routes());
 app.use(projectRouter.routes());
-app.use(reportingRouter.routes());
 
 module.exports = app;

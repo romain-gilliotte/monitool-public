@@ -37,14 +37,14 @@
 				</td>
 				<td ng-repeat="site in ::$ctrl.sites">
 					<div class="bodyField" ng-if="$ctrl.inputsStatus[date][site.id] !== undefined">
-						<a class="btn btn-xs btn-default" ng-if="$ctrl.inputsStatus[date][site.id] !== null"
+						<a class="btn btn-xs btn-default" ng-if="$ctrl.inputsStatus[date][site.id] !== 0"
 							ui-sref="main.project.input.edit({dataSourceId: $ctrl.dataSource.id, period: date, entityId: site.id})"
 							translate="project.input_status.done"
 							translate-values="::{value: $ctrl.inputsStatus[date][site.id]}">
 
 							<a class="btn btn-xs btn-primary"
 								ui-sref="main.project.input.edit({dataSourceId: $ctrl.dataSource.id, period: date, entityId: site.id})"
-								ng-if="$ctrl.inputsStatus[date][site.id] === null"
+								ng-if="$ctrl.inputsStatus[date][site.id] === 0"
 								translate="project.input_status.expected"></a>
 					</div>
 				</td>
@@ -89,20 +89,5 @@
 				</th>
 			</tr>
 		</thead>
-		<tfoot ng-if="$ctrl.displayFooter">
-			<tr>
-				<th ng-style="$ctrl.firstColStyle">
-					<div class="bodyField2">
-						<utc-datepicker ng-model="$ctrl.newInputDate"></utc-datepicker>
-					</div>
-				</th>
-				<td ng-repeat="site in ::$ctrl.sites">
-					<div class="bodyField2">
-						<a class="btn btn-xs btn-success" ng-click="$ctrl.addInput(site.id)"
-							translate="project.input_status.expected-new"></a>
-					</div>
-				</td>
-			</tr>
-		</tfoot>
 	</table>
 </div>

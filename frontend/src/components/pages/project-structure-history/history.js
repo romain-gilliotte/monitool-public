@@ -49,16 +49,14 @@ module.component('history', {
 
 				// If the project was saved, or this is the first call, we reload everything.
 				// Otherwise, the user just clicked on reset.
-				if (changes.project.isFirstChange()
-					|| changes.project.currentValue._rev !== changes.project.previousValue._rev) {
-
-					this.loading = false;
-					this.finished = false;
-					this.revisions = [];
-					this._pageSize = 10;
-					this._currentOffset = 0;
-					this.onShowMoreClicked();
-				}
+				// if (changes.project.isFirstChange()) {
+				this.loading = false;
+				this.finished = false;
+				this.revisions = [];
+				this._pageSize = 10;
+				this._currentOffset = 0;
+				this.onShowMoreClicked();
+				// }
 			}
 		}
 

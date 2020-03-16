@@ -7,7 +7,7 @@ export default class Revision {
 	static async fetch(projectId, offset, limit) {
 		const response = await axios.get(
 			'/resources/project/' + projectId + '/revisions',
-			{ params: { projectId: projectId, offset: offset, limit: limit } }
+			{ params: { offset: offset, limit: limit } }
 		);
 
 		return response.data.map(r => new Revision(r));

@@ -32,13 +32,9 @@ module.config($stateProvider => {
 			loadedProject: function ($rootScope, $stateParams, $q) {
 				const projectId = $stateParams.projectId;
 
-				if (projectId === 'new') {
-					const project = new Project();
-					project.users.push({ email: $rootScope.userEmail, role: "owner" });
-					return $q.when(project);
-				}
-				else
-					return Project.get(projectId);
+				return projectId === 'new' ?
+					$q.when(new Project({ owner: $rootScope.profile.email })) :
+					Project.get(projectId);
 			}
 		}
 	});

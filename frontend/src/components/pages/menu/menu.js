@@ -1,5 +1,4 @@
 import angular from 'angular';
-import auth from '../../../auth';
 import uiRouter from '@uirouter/angularjs';
 
 import uiDropdown from 'angular-ui-bootstrap/src/dropdown/index';
@@ -34,7 +33,9 @@ module.component('topMenu', {
 		}
 
 		logout() {
-			auth.signOut();
+			window.auth0.logout({
+				returnTo: window.location.origin
+			});
 		}
 	}
 })

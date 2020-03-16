@@ -26,15 +26,27 @@ const strings = Object.freeze({
 
 class DataSource extends Model {
 
-	constructor(data, project) {
-		super(data, validate);
-
+	static validate(data, project) {
 		let entityIds = project.entities.map(e => e.id);
 
 		data.entities.forEach(function (entityId) {
 			if (entityIds.indexOf(entityId) === -1)
 				throw new Error('invalid_data');
 		});
+
+		data.elements.forEach(el => Variable.validate(el));
+
+		var errors = validate.errors || [];
+		if (errors.length) {
+			var error = new Error('invalid_data');
+			error.detail = errors;
+			error.model = data;
+			throw error;
+		}
+	}
+
+	constructor(data) {
+		super(data);
 
 		this.elements = this.elements.map(el => new Variable(el));
 	}
@@ -47,14 +59,7 @@ class DataSource extends Model {
 
 	isValidSlot(slot) {
 		const timeSlot = new TimeSlot(slot);
-
-		if (this.periodicity === 'free' && timeSlot.periodicity !== 'day')
-			return false;
-
-		if (this.periodicity !== 'free' && timeSlot.periodicity !== this.periodicity)
-			return false;
-
-		return true;
+		return timeSlot.periodicity === this.periodicity;
 	}
 
 	/**

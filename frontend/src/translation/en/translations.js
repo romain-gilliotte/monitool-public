@@ -479,7 +479,6 @@ export default {
 			quarter: 'Every quarter',
 			semester: 'Every semester',
 			year: "Every year",
-			free: 'Free'
 		},
 
 		no_input_entities: 'No collection site was created yet!',

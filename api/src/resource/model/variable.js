@@ -6,8 +6,18 @@ const validate = validator(schema);
 
 class Variable extends Model {
 
-	constructor(data) {
-		super(data, validate);
+	static validate(data) {
+		if (!data)
+			throw new Error('missing_data');
+
+		validate(data);
+		var errors = validate.errors || [];
+		if (errors.length) {
+			var error = new Error('invalid_data');
+			error.detail = errors;
+			error.model = data;
+			throw error;
+		}
 	}
 
 	/**

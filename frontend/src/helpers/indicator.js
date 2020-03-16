@@ -2,7 +2,6 @@
 import axios from 'axios';
 import TimeSlot, { timeSlotRange } from 'timeslot-dag';
 
-
 const TIME_PERIODICITIES = [
 	'day', 'month_week_sat', 'month_week_sun', 'month_week_mon', 'week_sat', 'week_sun',
 	'week_mon', 'month', 'quarter', 'semester', 'year'
@@ -18,7 +17,7 @@ function* _generatePeriods(project, indicator, filter) {
 	// Get list of periodicities which are compatible with the computation
 	const periodicities = TIME_PERIODICITIES.filter(periodicity => {
 		const validForIndicator = dataSources.every(dataSource => {
-			if (dataSource.periodicity === 'free' || periodicity === dataSource.periodicity)
+			if (periodicity === dataSource.periodicity)
 				return true;
 
 			try {
@@ -64,27 +63,29 @@ function* _generatePeriods(project, indicator, filter) {
 			ends.push(new TimeSlot(filter[key][filter[key].length - 1]).lastDate.toISOString().slice(0, 10));
 		}
 
-	const start = starts.reduce((memo, date) => date && date > memo ? date : memo, project.start);
-	const end = ends.reduce((memo, date) => date && date < memo ? date : memo, project.end);
+	const startDate = starts.reduce((memo, date) => date && date > memo ? date : memo, project.start);
+	const endDate = ends.reduce((memo, date) => date && date < memo ? date : memo, project.end);
 
 	// Create dimensions
 	for (let periodicity of periodicities) {
-		const rows = Array
-			.from(timeSlotRange(
-				TimeSlot.fromDate(new Date(start + 'T00:00:00Z'), periodicity),
-				TimeSlot.fromDate(new Date(end + 'T00:00:00Z'), periodicity)
-			))
-			.map(slot => {
-				return {
-					id: slot.value,
-					name: slot.value,
-					isGroup: periodicity !== periodicities[0],
-					indicator: indicator,
-					filter: {
-						[periodicity]: [slot.value] // FIXME would be better to use the native periodicity of the data source.
-					}
-				};
+		const start = TimeSlot.fromDate(new Date(startDate + 'T00:00:00Z'), periodicity);
+		const end = TimeSlot.fromDate(new Date(endDate + 'T00:00:00Z'), periodicity);
+		const rows = [];
+
+		let slot = start;
+		do {
+			rows.push({
+				id: slot.value,
+				name: slot.value,
+				isGroup: periodicity !== periodicities[0],
+				indicator: indicator,
+				filter: {
+					[periodicity]: [slot.value] // FIXME would be better to use the native periodicity of the data source.
+				}
 			});
+			slot = slot.next();
+		}
+		while (slot.value !== end.value)
 
 		yield {
 			id: periodicity,
@@ -290,7 +291,7 @@ export function* generateProjectDimensions(project) {
 
 		let isValid = false;
 		for (let dataSource of project.forms) {
-			if (dataSource.periodicity === 'free' || dataSource.periodicity === periodicity) {
+			if (dataSource.periodicity === periodicity) {
 				isValid = true;
 				break
 			}
@@ -353,7 +354,7 @@ export function computeCompatiblePeriodicities(project, computation) { //fixme r
 
 	return TIME_PERIODICITIES.filter(periodicity => {
 		return dsPeriodicities.every(dsPeriodicity => {
-			if (dsPeriodicity === 'free' || periodicity === dsPeriodicity)
+			if (periodicity === dsPeriodicity)
 				return true;
 
 			try {
@@ -471,5 +472,3 @@ export async function fetchData(project, computation, dimensionIds, filter, with
 			throw e;
 	}
 }
-
-

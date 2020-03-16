@@ -26,8 +26,10 @@
 
 		<div class="alert alert-info">
 			<i class="fa fa-info-circle"></i>
-			Use nombres cortos para nombrar ubicaciones de colecciones, fuentes de datos, variables e indicadores. <br/>
-			Al evitar los acrónimos, mejora la legibilidad de sus cuadros y tablas y permite una mejor comprensión de su proyecto por parte de todos los actores de Médicos del Mundo.
+			Use nombres cortos para nombrar ubicaciones de colecciones, fuentes de datos, variables e indicadores.
+			<br />
+			Al evitar los acrónimos, mejora la legibilidad de sus cuadros y tablas y permite una mejor comprensión de su
+			proyecto por parte de todos los actores de Médicos del Mundo.
 		</div>
 
 		<div class="alert alert-info">
@@ -44,7 +46,7 @@
 		<div class="alert alert-info">
 			<i class="fa fa-info-circle"></i>
 			Si ha guardado un error: vaya a la página
-			<a class="btn btn-default btn-xs" ui-sref="main.project.structure.history" disable-if="!$ctrl.project._rev">
+			<a class="btn btn-default btn-xs" ui-sref="main.project.structure.history" disable-if="!$ctrl.project._id">
 				<i class="fa fa-history"></i>
 				<span translate="project.revisions"></span>
 			</a>
@@ -77,7 +79,8 @@
 				<tr>
 					<td>
 						Rellene la lista de
-						<a class="btn btn-default btn-xs" ui-sref="main.project.structure.collection_site_list" disable-if="!$ctrl.project._rev">
+						<a class="btn btn-default btn-xs" ui-sref="main.project.structure.collection_site_list"
+							disable-if="!$ctrl.project._id">
 							<i class="fa fa-map-marker"></i>
 							<span translate="project.collection_site_list"></span>
 						</a>
@@ -90,7 +93,8 @@
 				<tr>
 					<td>
 						Rellene el marco lógico de su proyecto de referencia en
-						<a class="btn btn-default btn-xs" ui-sref="main.project.structure.logical_frame_list" disable-if="!$ctrl.project._rev">
+						<a class="btn btn-default btn-xs" ui-sref="main.project.structure.logical_frame_list"
+							disable-if="!$ctrl.project._id">
 							<i class="fa fa-sign-out"></i>
 							<span translate="shared.logical_frames"></span>
 						</a>
@@ -102,7 +106,8 @@
 				<tr>
 					<td>
 						Si su proyecto esta financiado por fondos institucionales y que otros
-						<a class="btn btn-default btn-xs" ui-sref="main.project.structure.logical_frame_list" disable-if="!$ctrl.project._rev">
+						<a class="btn btn-default btn-xs" ui-sref="main.project.structure.logical_frame_list"
+							disable-if="!$ctrl.project._id">
 							<i class="fa fa-sign-out"></i>
 							<span translate="shared.logical_frames"></span>
 						</a>
@@ -115,7 +120,8 @@
 				<tr>
 					<td>
 						Si tiene otros indicadores que desea rastrear fuera de su(s) marco(s) lógico(s), agréguelos en
-						<a class="btn btn-default btn-xs" ui-sref="main.project.structure.extra" disable-if="!$ctrl.project._rev">
+						<a class="btn btn-default btn-xs" ui-sref="main.project.structure.extra"
+							disable-if="!$ctrl.project._id">
 							<i class="fa fa-sign-out"></i>
 							<span translate="indicator.extra"></span>
 						</a>
@@ -127,14 +133,17 @@
 				<tr>
 					<td>
 						Complete los
-						<a class="btn btn-default btn-xs" ui-sref="main.project.structure.collection_form_list" disable-if="!$ctrl.project._rev">
+						<a class="btn btn-default btn-xs" ui-sref="main.project.structure.collection_form_list"
+							disable-if="!$ctrl.project._id">
 							<i class="fa fa-sign-in"></i>
 							<span translate="project.collection_form_list"></span>
 						</a>
 
-						de donde extraerá los datos necesarios para calcular los indicadores de todos sus marcos lógicos.<br/>
+						de donde extraerá los datos necesarios para calcular los indicadores de todos sus marcos
+						lógicos.<br />
 						A medida que avance, actualice las fórmulas para calcular sus indicadores en
-						<a class="btn btn-default btn-xs" ui-sref="main.project.structure.logical_frame_list" disable-if="!$ctrl.project._rev">
+						<a class="btn btn-default btn-xs" ui-sref="main.project.structure.logical_frame_list"
+							disable-if="!$ctrl.project._id">
 							<i class="fa fa-sign-out"></i>
 							<span translate="shared.logical_frames"></span>
 						</a>
@@ -146,7 +155,8 @@
 				<tr>
 					<td>
 						Realice la misma tarea para
-						<a class="btn btn-default btn-xs" ui-sref="main.project.structure.extra" disable-if="!$ctrl.project._rev">
+						<a class="btn btn-default btn-xs" ui-sref="main.project.structure.extra"
+							disable-if="!$ctrl.project._id">
 							<i class="fa fa-sign-out"></i>
 							<span translate="indicator.extra"></span>
 						</a>

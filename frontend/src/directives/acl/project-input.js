@@ -8,8 +8,11 @@ const module = angular.module(
 
 
 const isAllowedForm = function (userEmail, scope, attributes) {
+
 	var project = scope.$eval(attributes.aclProject),
 		askedFormId = scope.$eval(attributes.aclHasInputForm) || scope.$eval(attributes.aclLacksInputForm);
+
+	if (project.owner == userEmail) return true;
 
 	var internalUser = project.users.find(u => u.email == userEmail);
 	return project.canInputForm(internalUser, askedFormId);
@@ -19,7 +22,7 @@ const isAllowedForm = function (userEmail, scope, attributes) {
 module.directive('aclHasInputForm', function ($rootScope) {
 	return {
 		link: function (scope, element, attributes) {
-			var isAllowed = isAllowedForm($rootScope.userEmail, scope, attributes);
+			var isAllowed = isAllowedForm($rootScope.profile.email, scope, attributes);
 			if (!isAllowed)
 				element.remove();
 		}
@@ -30,7 +33,7 @@ module.directive('aclHasInputForm', function ($rootScope) {
 module.directive('aclLacksInputForm', function ($rootScope) {
 	return {
 		link: function (scope, element, attributes) {
-			var isAllowed = isAllowedForm($rootScope.userEmail, scope, attributes);
+			var isAllowed = isAllowedForm($rootScope.profile.email, scope, attributes);
 			if (isAllowed)
 				element.remove();
 		}

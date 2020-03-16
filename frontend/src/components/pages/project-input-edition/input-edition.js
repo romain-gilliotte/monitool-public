@@ -4,6 +4,7 @@ import Input from '../../../models/input';
 import uiRouter from '@uirouter/angularjs';
 import mtFilterTimeSlot from '../../../filters/time-slot';
 import mtNumberTable from './number-table';
+import { P } from 'handsontable/dist/handsontable';
 
 
 const module = angular.module(
@@ -23,7 +24,7 @@ module.config($stateProvider => {
 		url: '/input/:dataSourceId/edit/:period/:entityId',
 		component: 'projectInputEdition',
 		resolve: {
-			inputs: (loadedProject, $stateParams) => Input.fetchLasts(loadedProject._id, $stateParams.entityId, $stateParams.dataSourceId, $stateParams.period),
+			inputs: (loadedProject, $stateParams) => Input.fetchLasts(loadedProject, $stateParams.entityId, $stateParams.dataSourceId, $stateParams.period),
 			input: inputs => inputs.current,
 			previousInput: inputs => inputs.previous,
 			dsId: $stateParams => $stateParams.dataSourceId,
@@ -50,7 +51,7 @@ module.component('projectInputEdition', {
 	controller: class ProjectInputEditionController {
 
 		get isUnchanged() {
-			return angular.equals(this.master, this.input);
+			return angular.equals(this.master, this.input)
 		}
 
 		constructor($scope, $state, $transitions, $filter) {
@@ -81,73 +82,40 @@ module.component('projectInputEdition', {
 		}
 
 		$onChanges(changes) {
-			this.isNew = false;
 			this.form = this.project.forms.find(f => f.id === this.dsId);
 			this.entity = this.project.entities.find(f => f.id === this.siteId);
 
-			if (!this.input) {
-				const currentInputId = ['input', this.project._id, this.dsId, this.siteId, this.period].join(':');
-
-				this.input = new Input({
-					_id: currentInputId,
-					type: "input",
-					project: this.project._id,
-					form: this.dsId,
-					period: this.period,
-					entity: this.siteId,
-					values: {},
-					structure: {}
-				});
-
-				this.form.elements.forEach(variable => {
-					// Create zero filled values.
-					const numFields = variable.partitions.reduce((m, p) => m * p.elements.length, 1);
-					this.input.values[variable.id] = new Array(numFields);
-					this.input.values[variable.id].fill(0);
-
-					// Create structure to tell server which version of the data source we're filling this against
-					this.input.structure[variable.id] = variable.partitions.map(partition => {
-						return {
-							id: partition.id,
-							items: partition.elements.map(pe => pe.id),
-							aggregation: partition.aggregation
-						};
-					});
-				});
-
-				this.isNew = true;
-			}
+			// replace values which were never entered by zeroes
+			// this.input.content.forEach(content => {
+			// 	content.data = content.data.map(v => v === null ? 0 : v);
+			// });
 
 			this.master = angular.copy(this.input);
+
+			this.variablesById = {};
+			this.project.forms.forEach(form => {
+				form.elements.forEach(variable => this.variablesById[variable.id] = variable);
+			});
 		}
 
 		copy() {
-			angular.copy(this.previousInput.values, this.input.values);
+			// bad naming.
+			this.previousInput.content.forEach((content, index) => {
+				this.input.content[index].data = content.data;
+			})
 		}
 
 		async save() {
-			if ((!this.isNew && this.isUnchanged) || this.inputForm.$invalid || this.inputSaving)
+			if (this.isUnchanged || this.inputForm.$invalid || this.inputSaving)
 				return;
 
 			try {
 				this.inputSaving = true;
 				await this.input.save();
-
-				// Stop listening transitions before leaving the page to avoid the safety message.
-				this._pageChangeWatch();
-				this.$state.go('main.project.input.list', {dataSourceId: this.input.form});
+				angular.copy(this.input, this.master);
 			}
 			catch (error) {
 				let errorMessage = 'project.saving_failed_other';
-
-				// Customize error message if server is telling us there was an editing conflict.
-				try {
-					if (error.response.data.message == 'Document update conflict.')
-						errorMessage = 'project.saving_failed_conflict_input';
-				}
-				catch (e) {}
-
-				// Display message to tell user that it's not possible to save.
 				alert(this.translate(errorMessage));
 			}
 			finally {
@@ -160,15 +128,6 @@ module.component('projectInputEdition', {
 			angular.copy(this.master, this.input);
 		}
 
-		async delete() {
-			const question = this.translate('project.delete_input');
-
-			if (window.confirm(question)) {
-				this._pageChangeWatch(); // remove the change page watch, because it will trigger otherwise.
-				await this.input.delete();
-				this.$state.go('main.project.input.list', {dataSourceId: this.input.form});
-			}
-		}
 	}
 });
 

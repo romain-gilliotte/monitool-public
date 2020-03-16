@@ -4,7 +4,7 @@
 	<li class="active" title="{{$ctrl.project.name}}" ng-bind="$ctrl.project.name|maxLength:50"></li>
 	<li><a ui-sref="main.project.input.list({dataSourceId: $ctrl.form.id})">{{$ctrl.form.name|maxLength:50}}</a></li>
 	<li class="active">{{$ctrl.entity.name|maxLength:50}}</li>
-	<li class="active">{{$ctrl.input.period|formatSlot}}</li>
+	<li class="active">{{$ctrl.period|formatSlot}}</li>
 </ol>
 
 <div id="formblock">
@@ -12,7 +12,7 @@
 		<legend translate="project.general_informations"></legend>
 
 		<div class="form-group">
-			<label class="col-sm-2 control-label" translate="shared.name"></label>
+			<label class="col-sm-2 control-label" translate="project.collection_form"></label>
 
 			<div class="col-sm-10">
 				<input class="form-control disabled" disabled ng-value="$ctrl.form.name" />
@@ -31,7 +31,7 @@
 			<label class="col-sm-2 control-label" translate="project.covered_period"></label>
 
 			<div class="col-sm-10">
-				<input class="form-control disabled" disabled ng-value="$ctrl.input.period|formatSlotLong" />
+				<input class="form-control disabled" disabled ng-value="$ctrl.period|formatSlotLong" />
 			</div>
 		</div>
 
@@ -44,11 +44,11 @@
 			{{'project.data'|translate}}
 		</legend>
 
-		<div class="form-group" ng-repeat="variable in $ctrl.form.elements">
-			<label class="col-sm-2 control-label">{{variable.name}}</label>
+		<div class="form-group" ng-repeat="content in $ctrl.input.content">
+			<label class="col-sm-2 control-label">{{$ctrl.variablesById[content.variableId].name}}</label>
 
 			<div class="col-sm-10">
-				<input-grid ng-model="$ctrl.input.values[variable.id]" variable="variable"></input-grid>
+				<input-grid ng-model="content.data" variable="$ctrl.variablesById[content.variableId]"></input-grid>
 			</div>
 		</div>
 	</form>
@@ -62,20 +62,19 @@
 			<span translate="project.form_error"></span>
 		</p>
 
-		<p ng-if="!$ctrl.isNew && $ctrl.isUnchanged" class="text-info">
+		<p ng-if="$ctrl.inputForm.$valid && $ctrl.isUnchanged" class="text-info">
 			<i class="fa fa-info-circle"></i>
 			<span translate="project.form_persisted"></span>
 		</p>
 
-		<p ng-if="!$ctrl.isUnchanged && $ctrl.inputForm.$valid" class="text-warning">
+		<p ng-if="$ctrl.inputForm.$valid && !$ctrl.isUnchanged" class="text-warning">
 			<i class="fa fa-exclamation-triangle"></i>
 			<span translate="project.form_changed"></span>
 		</p>
 	</div>
 
-	<a ng-click="$ctrl.save()"
-	   ng-disabled="(!$ctrl.isNew && $ctrl.isUnchanged) || $ctrl.inputForm.$invalid || $ctrl.inputSaving" class="btn btn-primary">
-
+	<a ng-click="$ctrl.save()" ng-disabled="$ctrl.isUnchanged || $ctrl.inputForm.$invalid || $ctrl.inputSaving"
+		class="btn btn-primary">
 		<i class="fa fa-floppy-o" ng-if="!$ctrl.inputSaving"></i>
 		<i class="fa fa-circle-o-notch fa-spin" ng-if="$ctrl.inputSaving"></i>
 
@@ -87,8 +86,4 @@
 		<span translate="shared.remove_changes"></span>
 	</a>
 
-	<a ng-click="$ctrl.delete()" ng-if="!$ctrl.isNew" class="btn btn-danger">
-		<i class="fa fa-remove"></i>
-		<span translate="shared.delete"></span>
-	</a>
 </div>

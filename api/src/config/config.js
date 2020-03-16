@@ -1,7 +1,6 @@
 require('dotenv').config();
 
 const fs = require('fs');
-const aws = require('aws-sdk');
 const validator = require('is-my-json-valid');
 const winston = require('winston');
 const schema = require('./schema.json');
@@ -25,7 +24,9 @@ const config = {
 	port: parseInt(process.env.MONITOOL_PORT),
 
 	jwt: {
-		jwks: process.env.MONITOOL_JWT_JWKS
+		jwksHost: process.env.MONITOOL_JWKS_HOST,
+		audience: process.env.MONITOOL_AUDIENCE,
+		issuer: process.env.MONITOOL_ISSUER,
 	},
 
 	couchdb: {
@@ -42,12 +43,6 @@ const config = {
 			""
 	}
 };
-
-aws.config.region = 'eu-west-1';
-
-
-
-
 
 // Validate that nothing is missing from the configuration file.
 let validate = validator(schema);

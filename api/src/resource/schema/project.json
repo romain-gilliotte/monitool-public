@@ -4,7 +4,8 @@
 	"type": "object",
 	"additionalProperties": false,
 	"required": [
-		"type",
+		"owner",
+		"country",
 		"name",
 		"start",
 		"end",
@@ -16,50 +17,91 @@
 		"users",
 		"extraIndicators"
 	],
-
 	"properties": {
-		"_id": {
+		"owner": {
 			"type": "string",
-			"pattern": "^project:[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"
+			"minLength": 1
 		},
-		"_rev": {
+		"country": {
 			"type": "string",
-			"pattern": "^[0-9]+\\-[0-9a-f]{32}$"
+			"minLength": 1
 		},
-		"type": { "type": "string", "pattern": "^project$" },
-		"country": { "type": "string", "minLength": 1 },
-		"name": { "type": "string", "minLength": 1 },
-		"start": { "type": "string", "format": "date" },
-		"end": { "type": "string", "format": "date" },
-		"active": { "type": "boolean" },
-
+		"name": {
+			"type": "string",
+			"minLength": 1
+		},
+		"start": {
+			"type": "string",
+			"format": "date"
+		},
+		"end": {
+			"type": "string",
+			"format": "date"
+		},
+		"active": {
+			"type": "boolean"
+		},
 		"entities": {
 			"type": "array",
 			"items": {
-				"id": { "$ref": "#/definitions/uuid" },
-				"name": { "type": "string", "minLength": 1 },
-				"start": { "oneOf": [{"type": "null"}, { "type": "string", "format": "date" }]},
-				"end": { "oneOf": [{"type": "null"}, { "type": "string", "format": "date" }]}
+				"id": {
+					"$ref": "#/definitions/uuid"
+				},
+				"name": {
+					"type": "string",
+					"minLength": 1
+				},
+				"start": {
+					"oneOf": [
+						{
+							"type": "null"
+						},
+						{
+							"type": "string",
+							"format": "date"
+						}
+					]
+				},
+				"end": {
+					"oneOf": [
+						{
+							"type": "null"
+						},
+						{
+							"type": "string",
+							"format": "date"
+						}
+					]
+				}
 			}
 		},
-
 		"groups": {
 			"type": "array",
 			"items": {
 				"type": "object",
 				"properties": {
-					"id": { "$ref": "#/definitions/uuid" },
-					"name": { "type": "string", "minLength": 1 },
-					"members": { "type": "array", "items": { "$ref": "#/definitions/uuid" } }
+					"id": {
+						"$ref": "#/definitions/uuid"
+					},
+					"name": {
+						"type": "string",
+						"minLength": 1
+					},
+					"members": {
+						"type": "array",
+						"items": {
+							"$ref": "#/definitions/uuid"
+						}
+					}
 				}
 			}
 		},
-
 		"forms": {
 			"type": "array",
-			"items": {"type": "object"}
+			"items": {
+				"type": "object"
+			}
 		},
-
 		"users": {
 			"type": "array",
 			"items": {
@@ -67,67 +109,93 @@
 					{
 						"type": "object",
 						"additionalProperties": false,
-						"required": ["email", "role"],
+						"required": [
+							"email",
+							"role"
+						],
 						"properties": {
-							"email": {"type": "string"},
-							"role": {"type": "string", "enum": ["owner", "read"]}
+							"email": {
+								"type": "string"
+							},
+							"role": {
+								"type": "string",
+								"enum": [
+									"owner",
+									"read"
+								]
+							}
 						}
 					},
 					{
 						"type": "object",
 						"additionalProperties": false,
-						"required": ["email", "role", "entities", "dataSources"],
+						"required": [
+							"email",
+							"role",
+							"entities",
+							"dataSources"
+						],
 						"properties": {
-							"email": {"type": "string"},
-							"role": {"type": "string", "enum": ["input"]},
-
+							"email": {
+								"type": "string"
+							},
+							"role": {
+								"type": "string",
+								"enum": [
+									"input"
+								]
+							},
 							"entities": {
 								"type": "array",
 								"uniqueItems": true,
-								"items": { "$ref": "#/definitions/uuid" }
+								"items": {
+									"$ref": "#/definitions/uuid"
+								}
 							},
 							"dataSources": {
 								"type": "array",
 								"uniqueItems": true,
-								"items": { "$ref": "#/definitions/uuid" }
+								"items": {
+									"$ref": "#/definitions/uuid"
+								}
 							}
 						}
 					}
 				]
 			}
 		},
-
 		"logicalFrames": {
 			"type": "array",
-			"items": { "type": "object" }
+			"items": {
+				"type": "object"
+			}
 		},
-
 		"extraIndicators": {
 			"type": "array",
-			"items": {"$ref": "#/definitions/indicator"}
+			"items": {
+				"$ref": "#/definitions/indicator"
+			}
 		}
 	},
-
 	"definitions": {
 		"uuid": {
 			"type": "string",
 			"pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"
 		},
-
 		"computation": {
-
 			"oneOf": [
 				{
 					"type": "object",
 					"additionalProperties": false,
-					"required": ["formula", "parameters"],
+					"required": [
+						"formula",
+						"parameters"
+					],
 					"properties": {
-
 						"formula": {
 							"type": "string",
 							"minLength": 1
 						},
-
 						"parameters": {
 							"type": "object",
 							"additionalProperties": false,
@@ -135,16 +203,23 @@
 								".*": {
 									"type": "object",
 									"additionalProperties": false,
-									"required": ["elementId", "filter"],
+									"required": [
+										"elementId",
+										"filter"
+									],
 									"properties": {
-										"elementId": {"$ref": "#/definitions/uuid"},
+										"elementId": {
+											"$ref": "#/definitions/uuid"
+										},
 										"filter": {
 											"type": "object",
 											"additionalProperties": false,
 											"patternProperties": {
 												".*": {
 													"type": "array",
-													"items": {"$ref": "#/definitions/uuid"}
+													"items": {
+														"$ref": "#/definitions/uuid"
+													}
 												}
 											}
 										}
@@ -154,26 +229,59 @@
 						}
 					}
 				},
-				{"type": "null"}
+				{
+					"type": "null"
+				}
 			]
 		},
-
 		"indicator": {
 			"type": "object",
 			"additionalProperties": false,
-			"required": ["baseline", "target", "colorize", "display", "computation"],
+			"required": [
+				"baseline",
+				"target",
+				"colorize",
+				"display",
+				"computation"
+			],
 			"properties": {
-				"display": {"type": "string", "minLength": 1},
-				"baseline": {"oneOf": [{"type": "null"}, {"type": "number"}]},
-				"target": {"oneOf": [{"type": "null"}, {"type": "number"}]},
-				"colorize": {"type": "boolean"},
-				"computation": { "$ref": "#/definitions/computation" }
+				"display": {
+					"type": "string",
+					"minLength": 1
+				},
+				"baseline": {
+					"oneOf": [
+						{
+							"type": "null"
+						},
+						{
+							"type": "number"
+						}
+					]
+				},
+				"target": {
+					"oneOf": [
+						{
+							"type": "null"
+						},
+						{
+							"type": "number"
+						}
+					]
+				},
+				"colorize": {
+					"type": "boolean"
+				},
+				"computation": {
+					"$ref": "#/definitions/computation"
+				}
 			}
 		},
-
 		"indicators": {
 			"type": "array",
-			"items": { "$ref": "#/definitions/indicator" }
+			"items": {
+				"$ref": "#/definitions/indicator"
+			}
 		}
 	}
 }

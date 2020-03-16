@@ -1,46 +1,15 @@
-const aws = require('aws-sdk');
-const LruCache = require('lru-cache');
-const jwt = require('jsonwebtoken');
-const jwksClient = require('jwks-rsa');
-const util = require('util');
+const jwt = require('koa-jwt');
+const jwksRsa = require('jwks-rsa');
 const config = require('../config/config');
 
-const client = jwksClient({ jwksUri: config.jwt.jwks, cache: true });
-const cognito = new aws.CognitoIdentityServiceProvider({})
-const verify = util.promisify(jwt.verify.bind(jwt));
-
-const getKey = (header, callback) => {
-    client.getSigningKey(header.kid, (err, key) => {
-        if (err) callback(err);
-        else callback(null, key.publicKey || key.rsaPublicKey);
-    });
-}
-
-const cache = new LruCache({ max: 500, maxAge: 60 * 60 * 1000 })
-
-module.exports = async (ctx, next) => {
-    const authorization = ctx.request.header['authorization'];
-
-    try {
-        // Check token.
-        const token = await verify(authorization, getKey);
-
-        // Load profile from cognito
-        ctx.state.userEmail = cache.get(token.sub);
-
-        if (!ctx.state.userEmail) {
-            const result = await cognito.getUser({ AccessToken: authorization }).promise();
-            const email = result.UserAttributes.find(attr => attr.Name === 'email').Value;
-
-            cache.set(token.sub, email);
-            ctx.state.userEmail = email;
-        }
-    }
-    catch (e) {
-        ctx.response.status = 401;
-        ctx.response.body = { error: 'invalid_token' };
-        return;
-    }
-
-    await next();
-};
+module.exports = jwt({
+    secret: jwksRsa.koaJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 2,
+        jwksUri: `https://${config.jwt.jwksHost}/.well-known/jwks.json`
+    }),
+    audience: config.jwt.audience,
+    issuer: config.jwt.issuer,
+    algorithms: ['RS256']
+})

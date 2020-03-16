@@ -1,99 +1,132 @@
+const jsonpatch = require('fast-json-patch');
 const Router = require('koa-router');
-const { pipeline } = require('stream');
-const JSONStream = require('JSONStream');
-const uuidv4 = require('uuid/v4');
-const Input = require('../resource/model/input');
+const ObjectId = require('mongodb').ObjectID;
 const Project = require('../resource/model/project');
-
-const nullErrorHandler = error => { };
+const JSONStream = require('JSONStream');
 
 const router = new Router();
 
 router.get('/resources/project', async ctx => {
-	let streams = await Project.storeInstance.listByEmail(ctx.state.userEmail);
-	streams.push(JSONStream.stringify());
+	const projects = database.collection('project').find({
+		$or: [
+			{ owner: ctx.state.profile.email },
+			{ 'users.email': ctx.state.profile.email },
+		]
+	})
 
 	ctx.response.type = 'application/json';
-	ctx.response.body = pipeline(...streams, nullErrorHandler);
+	ctx.response.body = projects.pipe(JSONStream.stringify());
 });
 
 /**
  * Retrieve one project
  */
 router.get('/resources/project/:id', async ctx => {
-	const project = await Project.storeInstance.get(ctx.params.id);
-	if (!project.getUserByEmail(ctx.state.userEmail))
-		throw new Error('forbidden');
+	const project = await database.collection('project').findOne({
+		_id: new ObjectId(ctx.params.id),
+		$or: [
+			{ owner: ctx.state.profile.email },
+			{ 'users.email': ctx.state.profile.email },
+		]
+	});
 
-	ctx.response.body = project.toAPI();
+	if (project) {
+		ctx.response.body = project;
+	}
 });
 
 
 /**
- * Retrieve one project
+ * Retrieve project revisions
  */
 router.get('/resources/project/:id/revisions', async ctx => {
-	const project = await Project.storeInstance.get(ctx.params.id);
-	if (!project.getUserByEmail(ctx.state.userEmail))
-		throw new Error('forbidden');
-
-	ctx.response.body = await Project.storeInstance.listRevisions(
-		ctx.params.id,
-		ctx.request.query.offset,
-		ctx.request.query.limit
+	if (!await ctx.state.profile.canViewProject(ctx.params.id)) {
+		ctx.response.status = 404;
+		return;
+	}
+	const revisions = database.collection('revision').find(
+		{ projectId: new ObjectId(ctx.params.id) },
+		{
+			skip: (+ctx.request.query.offset) || 0,
+			limit: (+ctx.request.query.limit) || 10,
+			sort: [['time', -1]],
+			projection: { projectId: false, _id: false },
+		}
 	);
+
+	ctx.response.type = 'application/json';
+	ctx.response.body = revisions.pipe(JSONStream.stringify());
 });
 
 router.post('/resources/project', async ctx => {
-	// User is cloning a project
-	if (ctx.request.query.from) {
-		// Let fetch the origin project
-		const project = await Project.storeInstance.get(ctx.request.query.from);
+	let project;
 
-		// Clone the project
-		project._id = 'project:' + uuidv4();
-		delete project._rev;
-		project.users = [{ email: ctx.state.userEmail, role: "owner" }];
-		await project.save();
+	if (!ctx.request.query.from) {
+		project = ctx.request.body;
+		if (project.owner !== ctx.state.profile.email)
+			throw new Error('you must own the project');
 
-		// Recreate all inputs asynchronously. No need to have the user waiting.
-		if (ctx.request.query.with_data == 'true')
-			Input.storeInstance.listByProject(ctx.request.query.from).then(inputs => {
-				inputs.forEach(input => {
-					input._id = ['input', project._id, input.form, input.entity, input.period].join(':');
-					delete input._rev;
-					input.project = project._id;
-				});
+	} else {
+		project = await database.collection('project').findOne(
+			{
+				_id: new ObjectId(ctx.params.id),
+				$or: [
+					{ owner: ctx.state.profile.email },
+					{ 'users.email': ctx.state.profile.email },
+				]
+			},
+			{ _id: false, users: false }
+		);
 
-				Input.storeInstance.bulkSave(inputs);
-			});
-
-		// Give the project to the user.
-		ctx.response.body = project.toAPI();
+		project.owner = ctx.state.profile.email;
+		project.users = [];
 	}
-	// User is creating a project
-	else {
-		const newProject = new Project(ctx.request.body);
-		newProject._id = 'project:' + uuidv4();
-		await newProject.save(false, ctx.state.userEmail);
 
-		ctx.response.body = newProject.toAPI();
+	await database.collection('project').insertOne(project);
+
+	// Recreate all inputs asynchronously. No need to have the user waiting.
+	if (ctx.request.query.from && ctx.request.query.with_data == 'true') {
+		// clone inputs
+		;
 	}
+
+	// Give the project to the user.
+	ctx.response.body = project;
 });
 
 /**
  * Save an existing project
  */
 router.put('/resources/project/:id', async ctx => {
-	// Validate that the _id in the payload is the same as the id in the URL.
-	if (ctx.request.body._id !== ctx.params.id)
-		throw new Error('id_mismatch');
+	delete ctx.request.body._id;
+	Project.validate(ctx.request.body);
 
-	const newProject = new Project(ctx.request.body);
-	await newProject.save(false, ctx.state.userEmail);
+	const newProject = ctx.request.body;
+	const { value: oldProject } = await database.collection('project').findOneAndReplace(
+		{
+			_id: new ObjectId(ctx.params.id),
+			$or: [
+				{ owner: ctx.state.profile.email },
+				{
+					users: {
+						email: ctx.state.profile.email, role: 'owner'
+					}
+				}
+			]
+		},
+		newProject,
+		{ projection: { _id: false } }
+	);
 
-	ctx.response.body = newProject.toAPI();
-})
+	await database.collection('revision').insertOne({
+		projectId: new ObjectId(ctx.params.id),
+		user: ctx.state.profile.email,
+		time: new Date(),
+		backwards: jsonpatch.compare(newProject, oldProject),
+		forwards: jsonpatch.compare(oldProject, newProject)
+	});
 
+	ctx.response.body = { _id: ctx.params.id, ...newProject };
+});
 
 module.exports = router;

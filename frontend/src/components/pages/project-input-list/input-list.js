@@ -41,7 +41,7 @@ module.component('projectInputList', {
 		constructor($element, $rootScope, $state, $scope) {
 			this.$state = $state;
 			this.$scope = $scope;
-			this.userEmail = $rootScope.userEmail;
+			this.userEmail = $rootScope.profile.email;
 			this._element = $element;
 		}
 
@@ -74,14 +74,10 @@ module.component('projectInputList', {
 			this.sites = this.project.entities.filter(e => this.dataSource.entities.includes(e.id));
 
 			// This will happen regardless of unexpected entries.
-			const projectUser = this.project.users.find(u => u.email == this.userEmail);
-			if (projectUser.role === 'input')
-				this.sites = this.sites.filter(e => projectUser.entities.includes(e.id));
-
-			// Handle special case for free periodicity.
-			if (this.dataSource.periodicity === 'free') {
-				this.displayFooter = true;
-				this.newInputDate = new Date().toISOString().substring(0, 10);
+			if (this.project.owner !== this.userEmail) {
+				const projectUser = this.project.users.find(u => u.email == this.userEmail);
+				if (projectUser.role === 'input')
+					this.sites = this.sites.filter(e => projectUser.entities.includes(e.id));
 			}
 
 			this.loading = true;

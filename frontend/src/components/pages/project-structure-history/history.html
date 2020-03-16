@@ -24,23 +24,21 @@
 	<tbody ng-repeat="(revIndex, revision) in $ctrl.revisions" class="revtbody">
 		<tr>
 			<td>
-				{{::revision.time|date:'medium'}}<br/>
-				{{::revision.user.substring(5)}}
+				{{::revision.time|date:'medium'}}<br />
+				{{::revision.user}}
 			</td>
 			<td>
 				<revision-summary revision="revision"></revision-summary>
 			</td>
 		</tr>
-		<tr class="restore"
-			ng-class="{'selected': revIndex == $ctrl.selectedIndex}">
+		<tr class="restore" ng-class="{'selected': revIndex == $ctrl.selectedIndex}">
 
 			<td colspan="2" style="text-align: center">
-				<a ng-show="!revision.isEquivalent && revIndex != $ctrl.selectedIndex"
-					class="btn btn-xxs btn-default"
-					ng-click="$ctrl.onRestoreCliked(revIndex)"
-					translate="project.revision_restore"></a>
+				<a ng-show="!revision.isEquivalent && revIndex != $ctrl.selectedIndex" class="btn btn-xxs btn-default"
+					ng-click="$ctrl.onRestoreCliked(revIndex)" translate="project.revision_restore"></a>
 
-				<span ng-show="!revision.isEquivalent && revIndex == $ctrl.selectedIndex" translate="project.revision_save_to_confirm"></span>
+				<span ng-show="!revision.isEquivalent && revIndex == $ctrl.selectedIndex"
+					translate="project.revision_save_to_confirm"></span>
 				<span ng-show="revision.isEquivalent" translate="project.revision_is_equivalent"></span>
 			</td>
 		</tr>
@@ -53,9 +51,9 @@
 	<tfoot>
 		<tr ng-if="$ctrl.revisions.length && !$ctrl.finished && !$ctrl.loading">
 			<td style="text-align: center" colspan="2">
-				<a ng-click="$ctrl.onShowMoreClicked()" class="btn btn-default btn-xs" translate="project.revision_show_more"></a>
+				<a ng-click="$ctrl.onShowMoreClicked()" class="btn btn-default btn-xs"
+					translate="project.revision_show_more"></a>
 			</td>
 		</tr>
 	</tfoot>
 </table>
-

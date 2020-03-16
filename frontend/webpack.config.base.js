@@ -5,8 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
 	entry: {
-		index: ["./src/app.js"],
-		callback: ['./src/callback.js']
+		index: ["./src/app.js"]
 	},
 
 	// Output everything as a big bundle
@@ -79,15 +78,7 @@ module.exports = {
 			template: 'src/template.html',
 			inject: 'body',
 			chunks: ['index']
-		}),
-
-		new HtmlWebpackPlugin({
-			favicon: null,
-			filename: 'callback.html',
-			template: 'src/template.html',
-			inject: 'body',
-			chunks: ['callback']
-		}),
+		})
 	]
 };
 

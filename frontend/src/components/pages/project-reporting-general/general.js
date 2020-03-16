@@ -1,7 +1,7 @@
 import angular from 'angular';
 
 import uiRouter from '@uirouter/angularjs';
-import TimeSlot, {timeSlotRange} from 'timeslot-dag';
+import TimeSlot from 'timeslot-dag';
 
 import mtGraph from '../../shared/reporting/graph';
 import mtProjectGroupBy from './project-group-by';
@@ -65,7 +65,7 @@ module.component('generalReporting', {
 			const newGraphs = Object.assign({}, this.graphYs);
 
 			if (data)
-				newGraphs[id] = {name: name, data: data};
+				newGraphs[id] = { name: name, data: data };
 			else
 				delete newGraphs[id];
 
@@ -81,27 +81,24 @@ module.component('generalReporting', {
 			];
 
 			if (timeGroupBy.includes(this.groupBy)) {
-				const [start, end] = [this.filter._start, this.filter._end];
-
-				const slots = Array.from(
-					timeSlotRange(
-						TimeSlot.fromDate(new Date(start + 'T00:00:00Z'), this.groupBy),
-						TimeSlot.fromDate(new Date(end + 'T00:00:00Z'), this.groupBy)
-					)
-				);
-
-				this.columns = [
-					...slots.map(slot => {
-						return {
-							id: slot.value,
-							name: this._formatSlot(slot.value),
-							title: this._formatSlotRange(slot.value)
-						};
-					}),
-					{id:'_total', name: "Total"}
-				];
-
 				this.graphType = 'line';
+				this.columns = [];
+
+				const start = TimeSlot.fromDate(this.filter._start, this.groupBy);
+				const end = TimeSlot.fromDate(this.filter._end, this.groupBy);
+
+				let slot = start;
+				do {
+					this.columns.push({
+						id: slot.value,
+						name: this._formatSlot(slot.value),
+						title: this._formatSlotRange(slot.value)
+					});
+					slot = slot.next();
+				}
+				while (slot.value !== end.value);
+
+				this.columns.push({ id: '_total', name: "Total" });
 			}
 
 			else if (this.groupBy === 'entity') {
@@ -109,7 +106,7 @@ module.component('generalReporting', {
 				if (this.filter.entity)
 					entities = entities.filter(e => this.filter.entity.includes(e.id));
 
-				this.columns = [...entities, {id: '_total', name: 'Total'}];
+				this.columns = [...entities, { id: '_total', name: 'Total' }];
 				this.graphType = 'bar';
 			}
 

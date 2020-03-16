@@ -6,68 +6,91 @@ import "regenerator-runtime/runtime";
 
 import angular from 'angular';
 import axios from 'axios';
+import createAuth0Client from '@auth0/auth0-spa-js';
 
-import auth from './auth';
 import mtPages from './components/pages/all-pages';
 import mtTranslation from './translation/bootstrap';
 import mtFilterMisc from './filters/misc';
 
-const module = angular.module(
-	'monitool.app',
-	[
-		mtPages,
-		mtTranslation,
-		mtFilterMisc
-	]
-);
-
-module.config(function ($urlRouterProvider) {
-	$urlRouterProvider.otherwise('/projects');
-});
-
-// Hook angular-ui-router transitions.
-module.run(function ($window, $rootScope, $transitions) {
-
-	$transitions.onBefore({}, function (transition) {
+async function authenticate() {
+	const auth0 = window.auth0 = await createAuth0Client({
+		domain: "monitool.eu.auth0.com",
+		client_id: "z31Kt6FYp8YDG4BypH4qp1ibLd1Ns4ME",
+		audience: "https://api.monitool.org"
 	});
 
-	// Scroll to top when changing page.
-	$transitions.onSuccess({}, function (transition) {
-		$window.scrollTo(0, 0);
+
+	// Handle callback
+	const query = window.location.search;
+	if (query.includes("code=") && query.includes("state=")) {
+		// Process the login state
+		await auth0.handleRedirectCallback();
+
+		// Use replaceState to redirect the user away and remove the querystring parameters
+		window.history.replaceState({}, document.title, "/");
+	}
+
+	// If authenticated, start app
+	const isAuthenticated = await auth0.isAuthenticated();
+	if (isAuthenticated) {
+		const accessToken = await auth0.getTokenSilently();
+		const profile = await auth0.getUser();
+
+		startApp(accessToken, profile);
+	}
+	// otherwise, go login
+	else {
+		await auth0.loginWithRedirect({
+			redirect_uri: window.location.origin
+		});
+	}
+}
+
+function startApp(accessToken, profile) {
+	const module = angular.module(
+		'monitool.app',
+		[
+			mtPages,
+			mtTranslation,
+			mtFilterMisc
+		]
+	);
+
+	module.config(function ($urlRouterProvider) {
+		$urlRouterProvider.otherwise('/projects');
 	});
 
-	$transitions.onError({}, function (transition) {
-		const error = transition.error();
-		console.log(error);
-	});
+	// Hook angular-ui-router transitions.
+	module.run(function ($window, $rootScope, $transitions) {
 
-})
-
-// Start angular if authentication worked.
-auth.userhandler = {
-	onSuccess: function (result) {
-		const accessToken = result.accessToken.jwtToken;
-		const email = result.idToken.payload.email;
-
-		module.run(function ($rootScope) {
-			// Configure axios
-			axios.defaults.baseURL = SERVICE_URL;
-			axios.defaults.headers.common['Authorization'] = accessToken;
-
-			// Set api url in $rootScope (needed to download pdfs)
-			$rootScope.serviceUrl = SERVICE_URL
-
-			// Put user email in $rootScope
-			$rootScope.userEmail = email;
+		$transitions.onBefore({}, function (transition) {
 		});
 
-		angular.bootstrap(document, [module.name]);
-	},
-	onFailure: function (err) {
-		console.log("Error!", err);
-	}
-};
+		// Scroll to top when changing page.
+		$transitions.onSuccess({}, function (transition) {
+			$window.scrollTo(0, 0);
+		});
 
-auth.setState(window.location.href); // Save route requested by the user, because checking auth
-auth.getSession(); // authenticate if needed
+		$transitions.onError({}, function (transition) {
+			const error = transition.error();
+			console.log(error);
+		});
 
+	})
+
+	module.run(function ($rootScope) {
+		// Configure axios
+		axios.defaults.baseURL = SERVICE_URL;
+		axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
+		// Set api url in $rootScope (needed to download pdfs)
+		$rootScope.serviceUrl = SERVICE_URL
+
+		// Put user email in $rootScope
+		$rootScope.profile = profile;
+	});
+
+	angular.bootstrap(document, [module.name]);
+}
+
+authenticate()

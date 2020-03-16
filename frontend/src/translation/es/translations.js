@@ -478,8 +478,7 @@ export default {
 			month: 'Cada mes',
 			quarter: 'Cada trimestre',
 			semester: 'Cada semestre',
-			year: 'Cada año',
-			free: 'Libre'
+			year: 'Cada año'
 		},
 
 		no_input_entities: '¡Ningún lugar de colecta ha sido creado!',

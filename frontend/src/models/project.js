@@ -26,7 +26,6 @@ export default class Project {
 		oneYear.setFullYear(oneYear.getFullYear() + 1);
 		oneYear = oneYear.toISOString().substring(0, 10);
 
-		this.type = "project";
 		this.name = "";
 		this.active = true;
 		this.start = now;
@@ -221,16 +220,13 @@ export default class Project {
 			if (element.distribution < 0 || element.distribution > element.partitions.length)
 				element.distribution = Math.floor(element.partitions.length / 2);
 		});
-
-		if (form.periodicity === 'free')
-			form.start = form.end = null;
 	}
 
 	async save() {
 		const payload = JSON.parse(angular.toJson(this));
 
 		let response;
-		if (this._id && this._rev)
+		if (this._id)
 			response = await axios.put('/resources/project/' + this._id, payload);
 		else
 			response = await axios.post('/resources/project', payload);

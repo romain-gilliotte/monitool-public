@@ -21,10 +21,18 @@
 		"jwt": {
 			"type": "object",
 			"required": [
-				"jwks"
+				"jwksHost",
+				"audience",
+				"issuer"
 			],
 			"properties": {
-				"jwks": {
+				"jwksHost": {
+					"type": "string"
+				},
+				"audience": {
+					"type": "string"
+				},
+				"issuer": {
 					"type": "string"
 				}
 			}

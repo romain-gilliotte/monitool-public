@@ -1,6 +1,6 @@
 import angular from 'angular';
 import axios from 'axios';
-import TimeSlot, { timeSlotRange } from 'timeslot-dag';
+import TimeSlot from 'timeslot-dag';
 
 export default class Input {
 
@@ -11,8 +11,8 @@ export default class Input {
 				.reduce((m, e) => [...m, ...Object.values(e)], []);
 
 			return {
-				missing: dsResult.length ? dsResult.filter(v => v === null).length / dsResult.length : 0,
-				incomplete: dsResult.length ? dsResult.filter(v => v !== null && v < 1).length / dsResult.length : 0,
+				missing: dsResult.length ? dsResult.filter(v => v === 0).length / dsResult.length : 0,
+				incomplete: dsResult.length ? dsResult.filter(v => v !== 0 && v < 1).length / dsResult.length : 0,
 				complete: dsResult.length ? dsResult.filter(v => v === 1).length / dsResult.length : 1,
 				total: dsResult.length
 			};
@@ -24,79 +24,94 @@ export default class Input {
 	}
 
 	static async fetchFormStatus(project, dataSourceId) {
-		const response = await axios.get(
-			'/resources/input',
-			{ params: { mode: 'ids_by_form', projectId: project._id, formId: dataSourceId } }
-		);
+		const dataSource = project.forms.find(ds => ds.id === dataSourceId);
 
-		const result = {};
-
-		for (let inputId in response.data) {
-			const [siteId, period] = inputId.split(':').slice(-2);
-			result[period] = result[period] || {};
-			result[period][siteId] = response.data[inputId];
+		const query = {
+			formula: dataSource.elements.map((v, i, a) => '!isNaN(variable_' + i + ')/' + a.length).join('+'),
+			parameters: {},
+			dice: [],
+			dimensionIds: ['time', 'location']
 		}
 
-		const dataSource = project.forms.find(ds => ds.id === dataSourceId);
-		dataSource.entities.forEach(siteId => {
-			let periods;
-			if (dataSource.periodicity === 'free')
-				periods = Object.keys(result);
-			else {
-				const site = project.entities.find(site => site.id == siteId);
-				const [start, end] = [
-					[project.start, site.start, dataSource.start].filter(a => a).sort().pop(),
-					[project.end, site.end, dataSource.end, new Date().toISOString().substring(0, 10)].filter(a => a).sort().shift()
-				];
-
-				periods = Array.from(timeSlotRange(
-					TimeSlot.fromDate(new Date(start + 'T00:00:00Z'), dataSource.periodicity),
-					TimeSlot.fromDate(new Date(end + 'T00:00:00Z'), dataSource.periodicity)
-				)).map(ts => ts.value);
+		dataSource.elements.forEach((v, i) => {
+			query.parameters['variable_' + i] = {
+				variableId: v.id,
+				dice: []
 			}
+		})
 
-			periods.forEach(period => {
-				result[period] = result[period] || {};
+		const response = await axios.post(`/resources/project/${project._id}/reporting`, query);
+		const result = response.data;
 
-				if (result[period][siteId] === undefined)
-					result[period][siteId] = null;
-			});
-		});
-
-		// Sort periods alphabetically
 		const sortedResult = {};
 		Object.keys(result).sort().reverse().forEach(p => sortedResult[p] = result[p]);
+
 		return sortedResult;
 	}
 
-	static async fetchLasts(projectId, siteId, dataSourceId, period) {
-		const response = await axios.get(
-			'/resources/input',
-			{
-				params: {
-					mode: "current+last",
-					projectId: projectId,
-					entityId: siteId,
-					formId: dataSourceId,
-					period: period
-				}
-			}
-		);
+	static async fetchLasts(project, siteId, dataSourceId, period) {
+		const dataSource = project.forms.find(ds => ds.id === dataSourceId);
+		const previousPeriod = new TimeSlot(period).previous().value;
+		const data = await Promise.all(dataSource.elements.map(async (v) => {
+			const response = await axios.post(`/resources/project/${project._id}/reporting`, {
+				formula: 'cst',
+				parameters: {
+					cst: {
+						variableId: v.id,
+						dice: v.partitions.map(p => ({
+							id: p.id,
+							attribute: 'element',
+							items: p.elements.map(pe => pe.id),
+						}))
+					}
+				},
+				dice: [
+					{ id: 'time', attribute: dataSource.periodicity, items: [previousPeriod, period], },
+					{ id: 'location', attribute: 'entity', items: [siteId], },
+				],
+				dimensionIds: ['time', ...v.partitions.map(p => p.id)],
+				output: 'flatArray'
+			});
 
-		const result = response.data.map(i => new Input(i));
+			return response.data;
+		}));
 
-		var currentInputId = ['input', projectId, dataSourceId, siteId, period].join(':');
 
-		// both where found
-		if (result.length === 2)
-			return { current: result[0], previous: result[1] };
+		const previous = new Input({
+			projectId: project._id,
+			content: dataSource.elements.map((v, i) => ({
+				variableId: v.id,
+				data: data[i].slice(0, data[i].length / 2),
+				dimensions: [
+					{ id: 'time', attribute: dataSource.periodicity, items: [period] },
+					{ id: 'location', attribute: 'entity', items: [siteId] },
+					...v.partitions.map(p => ({
+						id: p.id,
+						attribute: 'element',
+						items: p.elements.map(pe => pe.id)
+					}))
+				]
+			}))
+		});
 
-		// only the current one was found
-		else if (result.length === 1 && result[0]._id === currentInputId)
-			return { current: result[0], previous: null };
+		const current = new Input({
+			projectId: project._id,
+			content: dataSource.elements.map((v, i) => ({
+				variableId: v.id,
+				data: data[i].slice(data[i].length / 2),
+				dimensions: [
+					{ id: 'time', attribute: dataSource.periodicity, items: [period] },
+					{ id: 'location', attribute: 'entity', items: [siteId] },
+					...v.partitions.map(p => ({
+						id: p.id,
+						attribute: 'element',
+						items: p.elements.map(pe => pe.id)
+					}))
+				]
+			}))
+		});
 
-		else
-			return { current: null, previous: result.length ? result[0] : null };
+		return { previous, current };
 	}
 
 	constructor(data = null) {
@@ -104,16 +119,16 @@ export default class Input {
 	}
 
 	async save() {
-		const response = await axios.put(
-			'/resources/input/' + this._id,
-			JSON.parse(angular.toJson(this))
-		);
+		const data = JSON.parse(angular.toJson(this));
+
+		let response;
+		if (this._id) {
+			response = await axios.put('/resources/input/' + this._id, data);
+		} else {
+			response = await axios.post('/resources/input', data);
+		}
 
 		Object.assign(this, response.data);
-	}
-
-	async delete() {
-		return axios.delete('/resources/input/' + this._id);
 	}
 
 }

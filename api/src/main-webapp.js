@@ -1,7 +1,8 @@
 const winston = require('winston');
 const application = require('./application');
 const config = require('./config/config');
-const database = require('./resource/database');
+const MongoClient = require('mongodb').MongoClient;
+const Redis = require("ioredis");
 
 winston.add(new winston.transports.Console())
 
@@ -11,29 +12,21 @@ process.on('uncaughtException', function (err) {
 	console.log(err.stack)
 });
 
-
 async function startApplication() {
-	// Check connection with couchdb
-	let connected = false;
-	while (!connected) {
-		try {
-			connected = !!await database.checkConnectivity();
-		}
-		catch (error) {
-			winston.log('warn', 'Could not connect database: ' + error.message + '. Retry in 15 seconds.');
-			await new Promise(resolve => setTimeout(resolve, 15 * 1000));
-		}
-	}
 
-	// Launch application
 	try {
-		// Create bucket / Migrate if needed
-		await database.prepare();
+		const client = await MongoClient.connect('mongodb://admin:admin@localhost:27017', {
+			useUnifiedTopology: true
+		});
 
-		// Crash if we fail to listen.
+		global.database = client.db('monitool');
+		global.redis = new Redis();
+
 		application.listen(config.port);
+		winston.log('info', `Listening on ${config.port}`);
 	}
 	catch (e) {
+		// Crash if we fail
 		winston.log('error', e.message);
 		process.exit(1)
 	}

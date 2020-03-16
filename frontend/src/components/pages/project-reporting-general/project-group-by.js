@@ -1,6 +1,6 @@
 
 import angular from 'angular';
-import TimeSlot, {timeSlotRange} from 'timeslot-dag';
+import TimeSlot from 'timeslot-dag';
 
 
 const module = angular.module(
@@ -26,7 +26,7 @@ module.component('projectGroupBy', {
 		}
 
 		onValueChange() {
-			this.onUpdate({groupBy: this.groupBy});
+			this.onUpdate({ groupBy: this.groupBy });
 		}
 
 		_computeCompatiblePeriodicities() {
@@ -39,7 +39,7 @@ module.component('projectGroupBy', {
 				for (var i = 0; i < this.project.forms.length; ++i) {
 					var dataSource = this.project.forms[i];
 
-					if (dataSource.periodicity == 'free' || dataSource.periodicity === periodicity)
+					if (dataSource.periodicity === periodicity)
 						return true;
 
 					try {
@@ -54,8 +54,8 @@ module.component('projectGroupBy', {
 		}
 
 		_chooseDefaultGroupBy() {
-			let start = new Date(this.project.start + 'T00:00:00Z');
-			let end = new Date(this.project.end + 'T00:00:00Z');
+			let startDate = new Date(this.project.start + 'T00:00:00Z');
+			let endDate = new Date(this.project.end + 'T00:00:00Z');
 			// let now = new Date();
 			// if (now < end)
 			// 	end = now;
@@ -63,13 +63,17 @@ module.component('projectGroupBy', {
 			let chosen = this.periodicities[this.periodicities.length - 1];
 
 			for (var i = 0; i < this.periodicities.length; ++i) {
-				let iterator = timeSlotRange(
-					TimeSlot.fromDate(start, this.periodicities[i]),
-					TimeSlot.fromDate(end, this.periodicities[i])
-				);
+				const startSlot = TimeSlot.fromDate(startDate, this.periodicities[i]);
+				const endSlot = TimeSlot.fromDate(endDate, this.periodicities[i]);
 
-				if ([...iterator].length < 15) {
-					chosen = this.periodicities[i];
+				let length = 0, slot = startSlot;
+				do {
+					length++;
+					slot = slot.next();
+				}
+				while (slot.value !== endSlot.value && length < 15);
+
+				if (length < 15) {
 					break;
 				}
 			}

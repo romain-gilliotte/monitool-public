@@ -26,7 +26,7 @@ module.component('projectList', {
 	controller: class ProjectListController {
 
 		constructor($rootScope, $filter, $scope, $state, $window) {
-			this.userEmail = $rootScope.userEmail;
+			this.userEmail = $rootScope.profile.email;
 			this.$scope = $scope;
 			this.$state = $state;
 			this.$window = $window;
@@ -111,12 +111,12 @@ module.component('projectList', {
 			this.$state.go('main.project.structure.home', { projectId: 'new' });
 		}
 
-		onOpenClicked(project) {
-			if (project.isOwner && !this.preferReporting)
-				this.$state.go("main.project.structure.home", { projectId: project._id });
-			else
-				this.$state.go("main.project.reporting.home", { projectId: project._id });
-		}
+		// onOpenClicked(project) {
+		// 	if (project.isOwner && !this.preferReporting)
+		// 		this.$state.go("main.project.structure.home", { projectId: project._id });
+		// 	else
+		// 		this.$state.go("main.project.reporting.home", { projectId: project._id });
+		// }
 
 		async onCloneClicked(project) {
 			var question = this.translate('project.are_you_sure_to_clone');

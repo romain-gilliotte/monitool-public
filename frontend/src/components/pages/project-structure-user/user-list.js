@@ -1,9 +1,6 @@
-import angular from 'angular';
-
 import uiRouter from '@uirouter/angularjs';
+import angular from 'angular';
 import 'angular-legacy-sortablejs-maintained';
-
-import User from '../../../models/user';
 import mtProjectUserEditModal from './project-user-edition';
 
 const module = angular.module(

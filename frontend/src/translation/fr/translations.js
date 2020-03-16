@@ -478,8 +478,7 @@ export default {
 			month: 'Tous les mois',
 			quarter: 'Tous les trimestres',
 			semester: 'Tous les semestres',
-			year: 'Tous les ans',
-			free: 'Libre'
+			year: 'Tous les ans'
 		},
 
 		no_input_entities: 'Aucun lieu d\'activité n\'a encore été créé!',

@@ -1,23 +1,14 @@
 const validator = require('is-my-json-valid');
-const ProjectStore = require('../store/project');
-const DbModel = require('./db-model');
+const Model = require('./model');
 const LogicalFrame = require('./logical-frame');
 const DataSource = require('./data-source');
 const schema = require('../schema/project.json');
 
-var validate = validator(schema),
-	storeInstance = new ProjectStore();
+var validate = validator(schema);
 
-class Project extends DbModel {
+class Project extends Model {
 
-	static get storeInstance() { return storeInstance; }
-
-	/**
-	 * Deserialize and validate a project that comes from the API/DB.
-	 */
-	constructor(data) {
-		super(data, validate);
-
+	static validate(data) {
 		// Check that entity ids exist in groups, ...
 		let entityIds = data.entities.map(e => e.id),
 			dataSourceIds = data.forms.map(ds => ds.id);
@@ -43,18 +34,20 @@ class Project extends DbModel {
 				});
 		});
 
-		// Create forms & logicalFrames
-		this.forms = this.forms.map(f => new DataSource(f, this));
-		this.logicalFrames = this.logicalFrames.map(lf => new LogicalFrame(lf, this));
+		data.forms.forEach(form => DataSource.validate(form, data));
+		data.logicalFrames.forEach(lf => LogicalFrame.validate(lf, data));
 	}
 
+
 	/**
-	 * Destroy a project, and all related inputs.
-	 *
-	 * @return {Promise}
+	 * Deserialize and validate a project that comes from the API/DB.
 	 */
-	async destroy() {
-		throw new Error('Projects can\'t be deleted');
+	constructor(data) {
+		super(data);
+
+		// Create forms & logicalFrames
+		this.forms = this.forms.map(f => new DataSource(f));
+		this.logicalFrames = this.logicalFrames.map(lf => new LogicalFrame(lf));
 	}
 
 	/**
@@ -88,50 +81,6 @@ class Project extends DbModel {
 	getUserByEmail(email) {
 		return this.users.find(u => u.email === email);
 	}
-
-
-	/**
-	 * Save the project.
-	 *
-	 * This method makes many checks do deal with the fact that there are no foreign keys nor update method.
-	 * 	- validate that all foreign keys exist.
-	 */
-	async save(skipChecks, userEmail = null) {
-		// If we skip checks, because we know what we are doing, just delegate to parent class.
-		if (skipChecks)
-			return super.save(true);
-
-		let oldProject;
-		try {
-			oldProject = await Project.storeInstance.get(this._id);
-		}
-		catch (error) {
-			// if we can't get former project for some other reason than "missing" we are done.
-			if (error.message !== 'missing')
-				throw error;
-		}
-
-		// Save with the relevant checks
-		let result = await super.save(false);
-
-		// Save history if all the rest succeded (errors will raise exceptions).
-		if (oldProject) {
-			let time = (+new Date()).toString().padStart(16, '0')
-
-			delete oldProject._rev;
-			oldProject._id = 'rev:' + oldProject._id + ':' + time;
-			oldProject.type = 'rev:project';
-
-			if (userEmail)
-				oldProject.modifiedBy = userEmail;
-
-			await this._db.insert(oldProject);
-		}
-
-		// the user want the result of the save operation, not the revision.
-		return result;
-	}
-
 }
 
 module.exports = Project;
