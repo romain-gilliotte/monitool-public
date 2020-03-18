@@ -5,27 +5,9 @@
 	<li class="active" translate="shared.reporting_general"></li>
 </ol>
 
-<project-group-by
-	project="$ctrl.project"
-	on-update="$ctrl.onGroupByUpdate(groupBy)"></project-group-by>
+<project-query project="$ctrl.project" on-update="$ctrl.onQueryUpdate(query)">
+</project-query>
 
-<project-filter
-	project="$ctrl.project"
-	on-update="$ctrl.onFilterUpdate(filter)"></project-filter>
-
-<reporting-graph
-	x="$ctrl.graphX"
-	ys="$ctrl.graphYs"
-	presentation="$ctrl.graphType"
-	ng-if="$ctrl.graphYs|length"></reporting-graph>
-
-<general-table
-	project="$ctrl.project"
-
-	filter="$ctrl.filter"
-	group-by="$ctrl.groupBy"
-	columns="$ctrl.columns"
-
-	on-plot-toggle="$ctrl.onPlotToggle(id, name, data)">
+{{$ctrl.query}}
+<general-table project="$ctrl.project" query="$ctrl.query">
 </general-table>
-

@@ -1,5 +1,7 @@
 import axios from 'axios';
 import exprEval from 'expr-eval';
+import TimeSlot from 'timeslot-dag';
+import { Cube, TimeDimension, GenericDimension } from 'olap-in-memory';
 
 export default class Project {
 
@@ -62,6 +64,107 @@ export default class Project {
 		return false;
 	}
 
+	/** Get the disagregation dimensions available for any given query */
+	getQueryDimensions(query) {
+		const dimensions = [];
+		for (let key in query.parameters) {
+			const variableId = query.parameters[key].variableId;
+			const dices = [...query.dice, ...query.parameters[key].dice]
+			const variableDimensions = this
+				.getDimensions(variableId, dices)
+				.filter(dim => !query.parameters[key].dice.find(dice => dice.id == dim.id));
+
+			dimensions.push(variableDimensions);
+		}
+
+		return dimensions.reduce((dimensions1, dimensions2) => {
+			dimensions1 = dimensions1.filter(dim1 => dimensions2.find(dim2 => dim1.id == dim2.id));
+			dimensions2 = dimensions1.map(dim1 => dimensions2.find(dim => dim1.id == dim.id));
+
+			for (let i = 0; i < dimensions1.length; ++i) {
+				let dimension1 = dimensions1[i],
+					dimension2 = dimensions2[i];
+
+				// Drill-up one of the cubes so that their dimensions have the same rootAttribute
+				if (dimension1.rootAttribute !== dimension2.rootAttribute) {
+					if (dimension2.attributes.includes(dimension1.rootAttribute))
+						dimension2 = dimension2.drillUp(dimension1.rootAttribute);
+					else if (dimension1.attributes.includes(dimension2.rootAttribute))
+						dimension1 = dimension1.drillUp(dimension2.rootAttribute);
+					else
+						throw new Error(`The dimension ${dimensionId} is not compatible between the cubes`);
+				}
+
+				// Intersect them
+				if (dimension1.id === 'time') {
+					throw new Error('implement me.')
+				}
+				else {
+					let commonItems = dimension1.getItems().filter(i => dimension2.getItems().indexOf(i) !== -1);
+					dimension1 = dimension1.dice(dimension1.rootAttribute, commonItems, false);
+					dimension2 = dimension2.dice(dimension2.rootAttribute, commonItems, true);
+				}
+
+				dimensions1[i] = dimension1;
+				dimensions2[i] = dimension2;
+			}
+
+			return dimensions1;
+		});
+	}
+
+	getDimensions(variableId, dices = []) {
+		const form = this.forms.find(f => f.elements.find(v => v.id === variableId));
+		const variable = form.elements.find(v => v.id === variableId);
+
+		// Time dimension
+		const start = [this.start, form.start].filter(a => a).sort().pop();
+		const end = [this.end, form.end, new Date().toISOString().substring(0, 10)].sort().shift();
+		const time = new TimeDimension(
+			form.periodicity,
+			TimeSlot.fromDate(start, form.periodicity).value,
+			TimeSlot.fromDate(end, form.periodicity).value
+		);
+
+		// location dimension
+		const entity = new GenericDimension('location', 'entity', form.entities);
+		this.groups.forEach(group => {
+			dim.addChildAttribute(
+				'entity',
+				group.id,
+				entityId => group.members.includes(entityId) ? 'in' : 'out'
+			);
+		});
+
+		// partitions
+		const partitions = variable.partitions.map(partition => {
+			const dim = new GenericDimension(partition.id, 'element', partition.elements.map(e => e.id));
+
+			partition.groups.forEach(group => {
+				dim.addChildAttribute(
+					'element',
+					group.id,
+					elementId => group.members.includes(elementId) ? 'in' : 'out'
+				);
+			})
+
+			return dim;
+		});
+
+		const dimensions = [time, entity, ...partitions];
+		dices.forEach(dice => {
+			let dimIndex = dimensions.findIndex(dim => dim.id === dice.id);
+			if (dice.range) {
+				dimensions[dimIndex] = dimensions[dimIndex].diceRange(dice.attribute, dice.range[0], dice.range[1]);
+			}
+			else if (dice.items) {
+				dimensions[dimIndex] = dimensions[dimIndex].dice(dice.attribute, dice.items);
+			}
+			else throw new Error('unexpected dice');
+		})
+
+		return dimensions;
+	}
 
 	/**
 	 * Scan all internal references to entities, variables, partitions, and partitions elements

@@ -16,11 +16,19 @@ class CubeLoader {
                     let cube = await this.loadCubeFromVariable(parameter.variableId, key);
 
                     [...computation.dice, ...parameter.dice].forEach(d => {
-                        cube = cube.dice(d.id, d.attribute, d.items);
+                        if (d.range) {
+                            cube = cube.diceRange(d.id, d.attribute, d.range[0], d.range[1]);
+                        }
+                        else {
+                            cube = cube.dice(d.id, d.attribute, d.items);
+                        }
                     });
 
-                    cube = cube.keepDimensions(computation.dimensionIds);
-                    console.log(cube)
+                    cube = cube.keepDimensions(computation.aggregate.map(d => d.id));
+                    computation.aggregate.forEach(agg => {
+                        cube = cube.drillUp(agg.id, agg.attribute);
+                    })
+
                     return cube;
                 })
         );
@@ -45,7 +53,7 @@ class CubeLoader {
         );
 
         // location dimension
-        const entity = new Dimension('location', 'entity', this._project.entities.map(e => e.id));
+        const entity = new GenericDimension('location', 'entity', form.entities);
         this._project.groups.forEach(group => {
             dim.addChildAttribute(
                 'entity',
@@ -56,7 +64,7 @@ class CubeLoader {
 
         // partitions
         const partitions = variable.partitions.map(partition => {
-            const dim = new Dimension(partition.id, 'element', partition.elements.map(e => e.id));
+            const dim = new GenericDimension(partition.id, 'element', partition.elements.map(e => e.id));
 
             partition.groups.forEach(group => {
                 dim.addChildAttribute(

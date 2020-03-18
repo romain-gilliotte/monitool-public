@@ -4,29 +4,36 @@ import TimeSlot from 'timeslot-dag';
 
 
 const module = angular.module(
-	'monitool.components.pages.project.reporting.general-group-by',
+	'monitool.components.pages.project.reporting.query-aggregate',
 	[
 	]
 );
 
-module.component('projectGroupBy', {
+module.component('queryAggregate', {
 
 	bindings: {
 		project: '<',
 		onUpdate: '&'
 	},
-	template: require('./project-group-by.html'),
+	template: require('./query-aggregate.html'),
 
 	controller: class GeneralGroupBy {
 
 		$onChanges(changes) {
 			this.periodicities = this._computeCompatiblePeriodicities();
 			this.groupBy = this._chooseDefaultGroupBy();
+
 			this.onValueChange();
 		}
 
 		onValueChange() {
-			this.onUpdate({ groupBy: this.groupBy });
+			let value;
+			if (this.groupBy === 'entity')
+				value = { id: 'location', attribute: 'entity' }
+			else
+				value = { id: 'time', attribute: this.groupBy }
+
+			this.onUpdate({ aggregate: value })
 		}
 
 		_computeCompatiblePeriodicities() {
@@ -56,9 +63,6 @@ module.component('projectGroupBy', {
 		_chooseDefaultGroupBy() {
 			let startDate = new Date(this.project.start + 'T00:00:00Z');
 			let endDate = new Date(this.project.end + 'T00:00:00Z');
-			// let now = new Date();
-			// if (now < end)
-			// 	end = now;
 
 			let chosen = this.periodicities[this.periodicities.length - 1];
 

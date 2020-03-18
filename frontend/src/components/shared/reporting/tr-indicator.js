@@ -4,7 +4,7 @@ import angular from 'angular';
 
 import mtReportingField from './td-reporting-field';
 import mtIndicatorUnit from '../../../filters/indicator';
-import {fetchData, computeSplitPartitions, generateIndicatorDimensions} from '../../../helpers/indicator';
+import { fetchData, computeSplitPartitions, generateIndicatorDimensions } from '../../../helpers/indicator';
 
 const module = angular.module(
 	'monitool.components.pages.project.reporting.indicator-row',
@@ -65,18 +65,18 @@ module.directive('trIndicator', () => {
 
 			$onDestroy() {
 				if (this.graphToggled)
-					this.onPlotToggle({data: null});
+					this.onPlotToggle({ data: null });
 			}
 
 			toggleSplit(partitionId) {
-				this.onSplitToggle({partitionId: partitionId})
+				this.onSplitToggle({ partitionId: partitionId })
 			}
 
 			toggleGraph() {
 				if (this.graphToggled)
-					this.onPlotToggle({data: null});
+					this.onPlotToggle({ data: null });
 				else
-					this.onPlotToggle({name: this.name, data: this._data});
+					this.onPlotToggle({ name: this.name, data: this._data });
 
 				this.graphToggled = !this.graphToggled;
 			}
@@ -99,11 +99,11 @@ module.directive('trIndicator', () => {
 					this.errorMessage = null;
 					this.values = this.columns.map(col => this._data[col.id]);
 					if (this.graphToggled)
-						this.onPlotToggle({name: this.name, data: this._data});
+						this.onPlotToggle({ name: this.name, data: this._data });
 				}
 				catch (e) {
 					this.errorMessage = e.message;
-					this.onPlotToggle({data: null});
+					this.onPlotToggle({ data: null });
 				}
 
 				this.$scope.$apply();

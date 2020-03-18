@@ -1,32 +1,31 @@
-
 <table id="reporting" class="table table-bordered table-condensed">
-	<tbody
-		ng-repeat="tbody in $ctrl.tbodies track by tbody.id"
-		tbody-indicators
-
-		project="$ctrl.project"
-		columns="$ctrl.columns"
-		group-by="$ctrl.groupBy"
-
-		first-col-style="$ctrl.firstColStyle"
-
-		prefix="tbody.prefix"
-		name="tbody.name"
-		sections="tbody.sections"
-		filter="tbody.filter"
-
-		on-plot-toggle="$ctrl.onPlotToggle({id: id, name: name, data: data})">
-	</tbody>
-	<thead ng-style="$ctrl.headerStyle">
+	<thead>
 		<tr>
-			<th class="row-graph" ng-style="$ctrl.firstColStyle"></th>
-			<th class="row-title" translate="shared.name" ng-style="$ctrl.firstColStyle"></th>
-			<th class="row-dimension" ng-style="$ctrl.firstColStyle"></th>
+			<th class="row-graph"></th>
+			<th class="row-title" translate="shared.name"></th>
+			<th class="row-dimension"></th>
 			<th translate="project.baseline"></th>
 			<th translate="project.target"></th>
 			<th ng-repeat="col in $ctrl.columns track by col.id" title="{{col.title}}">
 				{{col.name}}
 			</th>
+			<th translate="project.total"></th>
 		</tr>
 	</thead>
+	<tbody>
+		<tr ng-repeat-start="row in $ctrl.rows track by row.id" ng-if="row.type == 'title'"
+			ng-click="$ctrl.onSectionToggle(row.id)">
+			<td colspan="{{6 + $ctrl.columns.length}}">
+				<fa-open value="$ctrl.sectionOpen[row.id]" class="noprint"></fa-open>
+				<span ng-if="$ctrl.subtype">
+					{{$ctrl.subtype|translate}}:
+				</span>
+				{{row.title}}
+			</td>
+		</tr>
+
+		<tr ng-repeat-end ng-if="row.type == 'data'" project="$ctrl.project" tr-data="row" columns="$ctrl.columns"
+			on-disagregate-clicked="$ctrl.onRowDisagregate(row.id, dimensionId, attribute)">
+		</tr>
+	</tbody>
 </table>

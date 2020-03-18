@@ -1,18 +1,10 @@
 <div class="input-group">
 	<span class="input-group-addon"><i class="fa fa-columns"></i></span>
 
-	<select
-		id="group-by-input"
-		class="form-control"
-		ng-model="$ctrl.groupBy"
-		ng-change="$ctrl.onValueChange()">
+	<select id="group-by-input" class="form-control" ng-model="$ctrl.groupBy" ng-change="$ctrl.onValueChange()">
 		<option value="{{periodicity}}" ng-repeat="periodicity in $ctrl.periodicities">
 			{{('shared.' + periodicity)|translate}}
 		</option>
 		<option value="entity" translate="project.collection_site_list"></option>
-		<option value="group" translate="project.groups"></option>
 	</select>
-
-	<export-csv class="input-group-btn"></export-csv>
-
 </div>

@@ -1,0 +1,44 @@
+<td class="row-graph">
+	<i class="fa fa-line-chart" ng-click="$ctrl.toggleGraph()"
+		ng-style="{color: $ctrl.graphToggled ? 'black' : 'revert'}"></i>
+</td>
+
+<td class="row-title" title="{{$ctrl.row.title}}">
+	<div>{{$ctrl.row.title|formatSlot}}</div>
+</td>
+
+<td class="row-dimension">
+	<div ng-if="$ctrl.aggregations.length">
+		<button class="btn btn-default btn-xs" ng-if="$ctrl.row.disagregated" ng-click="$ctrl.onDisagregateClicked({})">
+			<i class="fa fa-minus"></i>
+		</button>
+
+		<div class="btn-group" uib-dropdown dropdown-append-to-body ng-if="!$ctrl.row.disagregated">
+			<button class="btn btn-default btn-xs" uib-dropdown-toggle>
+				<i class="fa fa-plus"></i>
+			</button>
+
+			<ul class="dropdown-menu" uib-dropdown-menu>
+				<li ng-repeat="agg in $ctrl.aggregations track by agg.attribute">
+					<a ng-click="$ctrl.onDisagregateClicked({dimensionId: agg.id, attribute: agg.attribute})">
+						{{agg.attribute|translate}}
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</td>
+
+<td class="row-baseline" ng-class="{empty: $ctrl.indicator.baseline === null}">
+	<span>{{$ctrl.indicator.baseline}}{{$ctrl.indicator|indicatorUnit}}</span>
+</td>
+<td class="row-target" ng-class="{empty: $ctrl.indicator.target === null}">
+	<span>{{$ctrl.indicator.target}}{{$ctrl.indicator|indicatorUnit}}</span>
+</td>
+
+<td colspan="{{$ctrl.columns.length + 1}}" ng-if="!$ctrl.values" style="background-color: rgb(238, 238, 238);">
+	{{$ctrl.errorMessage|translate}}
+</td>
+
+<td ng-repeat="value in $ctrl.values track by $index" td-reporting-field value="value" indicator="$ctrl.indicator">
+</td>

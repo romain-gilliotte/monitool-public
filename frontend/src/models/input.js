@@ -30,7 +30,10 @@ export default class Input {
 			formula: dataSource.elements.map((v, i, a) => '!isNaN(variable_' + i + ')/' + a.length).join('+'),
 			parameters: {},
 			dice: [],
-			dimensionIds: ['time', 'location']
+			aggregate: [
+				{ id: 'time', attribute: dataSource.periodicity },
+				{ id: 'location', attribute: 'entity' }
+			]
 		}
 
 		dataSource.elements.forEach((v, i) => {
@@ -66,10 +69,13 @@ export default class Input {
 					}
 				},
 				dice: [
-					{ id: 'time', attribute: dataSource.periodicity, items: [previousPeriod, period], },
+					{ id: 'time', attribute: dataSource.periodicity, range: [previousPeriod, period], },
 					{ id: 'location', attribute: 'entity', items: [siteId], },
 				],
-				dimensionIds: ['time', ...v.partitions.map(p => p.id)],
+				aggregate: [
+					{ id: 'time', attribute: dataSource.periodicity },
+					...v.partitions.map(p => ({ id: p.id, attribute: 'element' }))
+				],
 				output: 'flatArray'
 			});
 

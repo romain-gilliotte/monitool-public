@@ -30,6 +30,7 @@ async function computeReport(computation) {
                 'groups.members': true,
                 'forms.start': true,
                 'forms.end': true,
+                'forms.entities': true,
                 'forms.periodicity': true,
                 'forms.elements.id': true,
                 'forms.elements.timeAgg': true,
@@ -46,7 +47,13 @@ async function computeReport(computation) {
     const loader = new CubeLoader(project);
     const cube = await loader.loadCubeFromComputation(computation);
 
-    if (computation.output == 'flatArray') return cube.getFlatArray('main');
+    if (computation.output == 'report') {
+        const report = {};
+        report.detail = cube.getNestedObject('main');
+        report.total = cube.keepDimensions([]).getNestedObject('main')
+        return report;
+    }
+    else if (computation.output == 'flatArray') return cube.getFlatArray('main');
     else if (computation.output == 'nestedArray') return cube.getNestedArray('main');
     else return cube.getNestedObject('main');
 }
