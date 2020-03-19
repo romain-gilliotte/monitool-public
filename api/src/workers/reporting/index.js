@@ -1,59 +1,63 @@
 const Bull = require('bull');
 const CubeLoader = require('./cube-loader');
-const ObjectId = require('mongodb').ObjectId;
 const queue = new Bull('reporting');
 
-queue.process('compute-report', async (job) => {
+const loader = new CubeLoader();
+
+queue.process('compute-report', async job => {
+    // Load cube.
     try {
-        return await computeReport(job.data);
+        const { projectId, formula, parameters } = job.data;
+        let cube = await loader.getIndicatorCube(projectId, formula, parameters);
+
+        // Execute query (dice, keepDimensions, drillUp).
+        const { dice, aggregate } = job.data;
+        dice.forEach(dice => {
+            if (dice.range) cube = cube.diceRange(dice.id, dice.attribute, dice.range[0], dice.range[1]);
+            else cube = cube.dice(dice.id, dice.attribute, dice.items);
+        })
+        cube = cube.keepDimensions(aggregate.map(agg => agg.id));
+        aggregate.forEach(agg => {
+            cube = cube.drillUp(agg.id, agg.attribute);
+        });
+
+        // Format response.
+        const { output } = job.data;
+        if (output == 'report') {
+            const report = {};
+            report.detail = cube.getNestedObject('main');
+            report.total = cube.keepDimensions([]).getNestedObject('main')
+            return report;
+        }
+        else if (output == 'flatArray') return cube.getFlatArray('main');
+        else if (output == 'nestedArray') return cube.getNestedArray('main');
+        else return cube.getNestedObject('main');
     }
     catch (e) {
-        console.log(e)
+        console.log(e);
         throw e;
     }
 });
 
+// queue.process('update-report-cache', async job => {
+//     const input = job.data;
 
-async function computeReport(computation) {
-    console.log(computation)
+//     input.content.forEach(content => {
+//         // FIXME
+//         const dimensions = content.dimensions.map(dim => {
+//             if (dim.id === 'time') {
+//                 return new TimeDimension('time', dim.attribute, dim.items[0], dim.items[dim.items.length - 1]);
+//             }
+//             else {
+//                 return new GenericDimension(dim.id, dim.attribute, dim.items);
+//             }
+//         });
 
-    const project = await database.collection('project').findOne(
-        {
-            _id: new ObjectId(computation.projectId)
-        },
-        {
-            projection: {
-                'start': true,
-                'end': true,
-                'entities.id': true,
-                'groups.id': true,
-                'groups.members': true,
-                'forms.start': true,
-                'forms.end': true,
-                'forms.entities': true,
-                'forms.periodicity': true,
-                'forms.elements.id': true,
-                'forms.elements.timeAgg': true,
-                'forms.elements.geoAgg': true,
-                'forms.elements.partitions.id': true,
-                'forms.elements.partitions.aggregation': true,
-                'forms.elements.partitions.elements.id': true,
-                'forms.elements.partitions.groups.id': true,
-                'forms.elements.partitions.groups.members': true,
-            }
-        }
-    );
+//         const inputCube = new Cube(dimensions);
+//         inputCube.createStoredMeasure('main');
+//         inputCube.setFlatArray('main', content.data);
 
-    const loader = new CubeLoader(project);
-    const cube = await loader.loadCubeFromComputation(computation);
+//         cube.hydrateFromCube(inputCube);
+//     })
 
-    if (computation.output == 'report') {
-        const report = {};
-        report.detail = cube.getNestedObject('main');
-        report.total = cube.keepDimensions([]).getNestedObject('main')
-        return report;
-    }
-    else if (computation.output == 'flatArray') return cube.getFlatArray('main');
-    else if (computation.output == 'nestedArray') return cube.getNestedArray('main');
-    else return cube.getNestedObject('main');
-}
+// })

@@ -13,19 +13,35 @@
 		</tr>
 	</thead>
 	<tbody>
+		<!-- Main section titles (i.e. logframes, datasources) -->
 		<tr ng-repeat-start="row in $ctrl.rows track by row.id" ng-if="row.type == 'title'"
 			ng-click="$ctrl.onSectionToggle(row.id)">
-			<td colspan="{{6 + $ctrl.columns.length}}">
+			<th colspan="{{6 + $ctrl.columns.length}}">
 				<fa-open value="$ctrl.sectionOpen[row.id]" class="noprint"></fa-open>
-				<span ng-if="$ctrl.subtype">
-					{{$ctrl.subtype|translate}}:
+				<span ng-if="row.subtype">
+					{{row.subtype|translate}}:
 				</span>
 				{{row.title}}
-			</td>
+			</th>
 		</tr>
 
-		<tr ng-repeat-end ng-if="row.type == 'data'" project="$ctrl.project" tr-data="row" columns="$ctrl.columns"
-			on-disagregate-clicked="$ctrl.onRowDisagregate(row.id, dimensionId, attribute)">
+		<!-- Subsections (i.e. outputs, activities) -->
+		<tr ng-if="row.type == 'subtitle'" class="indent{{row.indent}}">
+			<td class="noprint"></td>
+
+			<th colspan="{{5 + $ctrl.columns.length}}" class="row-header-title">
+				<div>
+					<span ng-if="row.subtype">
+						{{row.subtype|translate}}:
+					</span>
+					{{row.title|translate}}
+				</div>
+			</th>
+		</tr>
+
+		<!-- Data -->
+		<tr ng-repeat-end ng-if="row.type == 'data'" project="$ctrl.project" class="indent{{row.indent}}" tr-data="row"
+			columns="$ctrl.columns" on-disagregate-clicked="$ctrl.onRowDisagregate(row.id, dimensionId, attribute)">
 		</tr>
 	</tbody>
 </table>

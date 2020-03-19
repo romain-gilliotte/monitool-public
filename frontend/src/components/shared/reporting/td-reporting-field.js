@@ -1,16 +1,13 @@
 import angular from 'angular';
 
-import mtIndicatorUnit from '../../../filters/indicator';
-
 const module = angular.module(
 	'monitool.components.shared.reporting.field',
 	[
-		mtIndicatorUnit
 	]
 );
 
 
-module.directive('tdReportingField', function() {
+module.directive('tdReportingField', function () {
 	return {
 		controllerAs: '$ctrl',
 		restrict: 'A',
@@ -18,7 +15,10 @@ module.directive('tdReportingField', function() {
 
 		bindToController: {
 			value: '<',
-			indicator: '<',
+			baseline: '<',
+			target: '<',
+			colorize: '<',
+			unit: '<'
 		},
 
 		template: '{{$ctrl.display}}<i ng-if="$ctrl.logo" class="fa" ng-class="$ctrl.logo" title="{{$ctrl.value}}"></i>',
@@ -28,7 +28,6 @@ module.directive('tdReportingField', function() {
 			constructor($element, $filter, $sce) {
 				this.$sce = $sce;
 				this.$element = $element;
-				this.indicatorUnit = $filter('indicatorUnit');
 			}
 
 			$onChanges(changes) {
@@ -54,11 +53,9 @@ module.directive('tdReportingField', function() {
 				else if (typeof this.value === "number") {
 					this.logo = null;
 
-					const ind = this.indicator;
-
 					// Make color
-					if (ind && ind.colorize && ind.baseline !== null && ind.target !== null) {
-						let progress = (this.value - ind.baseline) / (ind.target - ind.baseline);
+					if (this.colorize && this.baseline !== null && this.target !== null) {
+						let progress = (this.value - this.baseline) / (this.target - this.baseline);
 						progress = Math.max(0, progress);
 						progress = Math.min(1, progress);
 
@@ -79,12 +76,11 @@ module.directive('tdReportingField', function() {
 						this.display = value;
 
 					// Add unit
-					const unit = this.indicatorUnit(this.indicator);
-					if (unit)
+					if (this.unit)
 						this.display = this.display + unit;
 				}
 				else {
-					this.logo = 'fa-question-circle';
+					this.logo = 'fa-question-circle-o';
 					this.value = this.value + '';
 					this.$element.css('background-color', '');
 				}

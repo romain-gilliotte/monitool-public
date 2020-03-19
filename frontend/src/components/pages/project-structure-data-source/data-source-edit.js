@@ -1,5 +1,5 @@
 import angular from 'angular';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 
 import uiRouter from '@uirouter/angularjs';
 import uiSelect from 'ui-select';
@@ -64,7 +64,7 @@ module.component('dataSourceEdition', {
 				// Are we creating a new data source?
 				this.editableDataSource = angular.copy(this.project.forms.find(ds => ds.id == this.dsId));
 				if (!this.editableDataSource) {
-					this.editableDataSource = {id: this.dsId, name: '', periodicity: 'month', entities: [], start: null, end: null, elements: []};
+					this.editableDataSource = { id: this.dsId, name: '', periodicity: 'month', entities: [], start: null, end: null, elements: [] };
 					this.onFieldChange();
 				}
 			}

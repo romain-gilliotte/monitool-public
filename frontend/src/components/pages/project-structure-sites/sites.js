@@ -1,5 +1,5 @@
 import angular from 'angular';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 
 import uiRouter from '@uirouter/angularjs';
 import uiSelect from 'ui-select';
@@ -68,7 +68,7 @@ module.component('projectSites', {
 		}
 
 		onCreateEntityClicked() {
-			this.editableProject.entities.push({id: uuid(), name: '', start: null, end: null});
+			this.editableProject.entities.push({ id: uuid(), name: '', start: null, end: null });
 			this.onFieldChange();
 		}
 
@@ -79,7 +79,7 @@ module.component('projectSites', {
 		}
 
 		onCreateGroupClicked() {
-			this.editableProject.groups.push({id: uuid(), name: '', members: []});
+			this.editableProject.groups.push({ id: uuid(), name: '', members: [] });
 			this.onFieldChange();
 		}
 

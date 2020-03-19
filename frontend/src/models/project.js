@@ -72,45 +72,28 @@ export default class Project {
 			const dices = [...query.dice, ...query.parameters[key].dice]
 			const variableDimensions = this
 				.getDimensions(variableId, dices)
-				.filter(dim => !query.parameters[key].dice.find(dice => dice.id == dim.id));
+				// If filtered in the formula, we don't want to manipulate it.
+				.filter(dim => !query.parameters[key].dice.find(dice => dice.id == dim.id))
+				// Do not allow manipulating the dimension used in the columns.
+				.filter(dim => !query.aggregate.find(agg => agg.id === dim.id))
+				// If only one item is available, it makes no sense to disagregate
+				.filter(dim => dim.numItems > 1);
 
 			dimensions.push(variableDimensions);
 		}
 
-		return dimensions.reduce((dimensions1, dimensions2) => {
-			dimensions1 = dimensions1.filter(dim1 => dimensions2.find(dim2 => dim1.id == dim2.id));
-			dimensions2 = dimensions1.map(dim1 => dimensions2.find(dim => dim1.id == dim.id));
+		if (dimensions.length == 0) {
+			return [];
+		}
 
-			for (let i = 0; i < dimensions1.length; ++i) {
-				let dimension1 = dimensions1[i],
-					dimension2 = dimensions2[i];
-
-				// Drill-up one of the cubes so that their dimensions have the same rootAttribute
-				if (dimension1.rootAttribute !== dimension2.rootAttribute) {
-					if (dimension2.attributes.includes(dimension1.rootAttribute))
-						dimension2 = dimension2.drillUp(dimension1.rootAttribute);
-					else if (dimension1.attributes.includes(dimension2.rootAttribute))
-						dimension1 = dimension1.drillUp(dimension2.rootAttribute);
-					else
-						throw new Error(`The dimension ${dimensionId} is not compatible between the cubes`);
-				}
-
-				// Intersect them
-				if (dimension1.id === 'time') {
-					throw new Error('implement me.')
-				}
-				else {
-					let commonItems = dimension1.getItems().filter(i => dimension2.getItems().indexOf(i) !== -1);
-					dimension1 = dimension1.dice(dimension1.rootAttribute, commonItems, false);
-					dimension2 = dimension2.dice(dimension2.rootAttribute, commonItems, true);
-				}
-
-				dimensions1[i] = dimension1;
-				dimensions2[i] = dimension2;
-			}
-
-			return dimensions1;
-		});
+		return dimensions.reduce((dimensions1, dimensions2) =>
+			dimensions1
+				.map(dimension => {
+					const otherDimension = dimensions2.find(dim => dim.id == dimension.id);
+					return otherDimension ? dimension.intersect(otherDimension) : null
+				})
+				.filter(dimension => dimension !== null)
+		);
 	}
 
 	getDimensions(variableId, dices = []) {
@@ -121,6 +104,7 @@ export default class Project {
 		const start = [this.start, form.start].filter(a => a).sort().pop();
 		const end = [this.end, form.end, new Date().toISOString().substring(0, 10)].sort().shift();
 		const time = new TimeDimension(
+			'time',
 			form.periodicity,
 			TimeSlot.fromDate(start, form.periodicity).value,
 			TimeSlot.fromDate(end, form.periodicity).value
@@ -129,7 +113,7 @@ export default class Project {
 		// location dimension
 		const entity = new GenericDimension('location', 'entity', form.entities);
 		this.groups.forEach(group => {
-			dim.addChildAttribute(
+			entity.addChildAttribute(
 				'entity',
 				group.id,
 				entityId => group.members.includes(entityId) ? 'in' : 'out'

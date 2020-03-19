@@ -27,7 +27,6 @@ module.component('generalTable', {
 		}
 
 		$onChanges(changes) {
-
 			if (changes.query) {
 				this.columns = this._makeColumnsFromQuery(changes.query.currentValue);
 				this.rows = this._makeRows();
@@ -71,7 +70,7 @@ module.component('generalTable', {
 
 			if (query.aggregate.length === 1 && query.aggregate[0].id === 'time') {
 				const dice = query.dice.find(d => d.id == 'time');
-				const dimension = new TimeDimension(dice.attribute, dice.range[0], dice.range[1]);
+				const dimension = new TimeDimension('time', dice.attribute, dice.range[0], dice.range[1]);
 				const items = dimension.drillUp(query.aggregate[0].attribute).getItems();
 
 				columns = items.map(item => ({ id: item, name: item, title: item }))
@@ -93,92 +92,88 @@ module.component('generalTable', {
 
 		_makeRows() {
 			return [
-				...this.project.logicalFrames.reduce((m, logFrame, i) => [
+				...this.project.logicalFrames.reduce((m, logFrame) => [
 					...m,
-					...this._makeRowsFromLogicalFramework(logFrame, i)
+					...this._makeRowsFromLogicalFramework(logFrame)
 				], []),
-				...this.project.forms.reduce((m, dataSource, i) => [
+				...this.project.forms.reduce((m, dataSource) => [
 					...m,
-					...this._makeRowsFromDataSource(dataSource, i)
+					...this._makeRowsFromDataSource(dataSource)
 				], [])
 			];
 		}
 
-		_makeRowsFromLogicalFramework(logFrame, lfIndex) {
-			const rowId = `lf.${lfIndex}`;
+		_makeRowsFromLogicalFramework(logFrame) {
+			const rowId = `lf.${logFrame.id}`;
 
 			return [
 				{
-					id: rowId,
+					id: `${rowId}`,
 					type: 'title',
 					subtype: 'project.logical_frame',
 					title: logFrame.name
 				},
-				{
-					id: rowId,
-					type: 'title',
-					subtype: 'project.goal',
-					title: logFrame.goal
-				},
-				...logFrame.indicators.reduce((m, indicator, index) => [
-					...m,
-					this._makeRowsFromQuery()
-				])
-
+				...(
+					this.sectionOpen[rowId] ? [
+						{
+							id: `${rowId}.goal`,
+							type: 'subtitle',
+							subtype: 'project.goal',
+							title: logFrame.goal
+						},
+						...logFrame.indicators.reduce((m, indicator) => [
+							...m,
+							...this._makeRowsFromIndicator(logFrame, indicator)
+						], []),
+						...logFrame.purposes.reduce((m, purpose, pIndex) => [
+							...m,
+							{
+								id: `${rowId}.purpose.${pIndex}`,
+								type: 'subtitle',
+								subtype: 'project.purpose',
+								title: purpose.description,
+								indent: 1
+							},
+							...purpose.indicators.reduce((m, indicator) => [
+								...m,
+								...this._makeRowsFromIndicator(logFrame, indicator, 1)
+							], []),
+							...purpose.outputs.reduce((m, output, oIndex) => [
+								...m,
+								{
+									id: `${rowId}.purpose.${pIndex}.output.${oIndex}`,
+									type: 'subtitle',
+									subtype: 'project.output',
+									title: output.description,
+									indent: 2
+								},
+								...output.indicators.reduce((m, indicator) => [
+									...m,
+									...this._makeRowsFromIndicator(logFrame, indicator, 2)
+								], []),
+								...output.activities.reduce((m, activity, aIndex) => [
+									...m,
+									{
+										id: `${rowId}.purpose.${pIndex}.output.${oIndex}.activity.${aIndex}`,
+										type: 'subtitle',
+										subtype: 'project.activity',
+										title: activity.description,
+										indent: 3
+									},
+									...activity.indicators.reduce((m, indicator) => [
+										...m,
+										...this._makeRowsFromIndicator(logFrame, indicator, 3)
+									], []),
+								], [])
+							], [])
+						], [])
+					] : []
+				)
 			]
-
-
-
-			const tbody = {
-				id: logicalFramework.id,
-				prefix: 'project.logical_frame',
-				name: logicalFramework.name,
-				sections: []
-			};
-
-			tbody.sections.push({
-				id: logicalFramework.id,
-				prefix: 'project.goal',
-				name: logicalFramework.goal,
-				indicators: logicalFramework.indicators.map(i => Object.assign({}, i, { id: uuid() })),
-				indent: 0
-			});
-
-			logicalFramework.purposes.forEach(purpose => {
-				tbody.sections.push({
-					id: uuid(),
-					prefix: 'project.purpose',
-					name: purpose.description,
-					indicators: purpose.indicators.map(i => Object.assign({}, i, { id: uuid() })),
-					indent: 1
-				});
-
-				purpose.outputs.forEach(output => {
-					tbody.sections.push({
-						id: uuid(),
-						prefix: 'project.output',
-						name: output.description,
-						indicators: output.indicators.map(i => Object.assign({}, i, { id: uuid() })),
-						indent: 2
-					});
-
-					output.activities.forEach(activity => {
-						tbody.sections.push({
-							id: uuid(),
-							prefix: 'project.activity',
-							name: activity.description,
-							indicators: activity.indicators.map(i => Object.assign({}, i, { id: uuid() })),
-							indent: 3
-						});
-					});
-				});
-			});
-
-
 		}
 
-		_makeRowsFromDataSource(dataSource, dsIndex) {
-			const rowId = `ds.${dsIndex}`;
+		_makeRowsFromDataSource(dataSource) {
+			const rowId = `ds.${dataSource.id}`;
 
 			return [
 				{
@@ -189,81 +184,80 @@ module.component('generalTable', {
 				},
 				...(
 					this.sectionOpen[rowId] ?
-						dataSource.elements.reduce((m, variable, varIndex) => [
+						dataSource.elements.reduce((m, variable) => [
 							...m,
-							...this._makeRowsFromVariable(dsIndex, varIndex)
+							...this._makeRowsFromVariable(variable)
 						], []) :
 						[]
 				)
 			];
 		}
 
-		_makeRowsFromVariable(dsIndex, varIndex, extraDice = []) {
-			const variable = this.project.forms[dsIndex].elements[varIndex];
+		_makeRowsFromIndicator(logicalFramework, indicator, indent = 0) {
+			// Compute parameters from indicator definition
+			const parameters = {}
+			for (let key in indicator.computation.parameters) {
+				const parameter = indicator.computation.parameters[key];
 
-			// Create query
+				parameters[key] = {
+					variableId: parameter.elementId,
+					dice: []
+				};
+
+				for (let partitionId in parameter.filter) {
+					dice.push({
+						id: partitionId,
+						attribute: 'element',
+						items: parameter.filter[partitionId]
+					});
+				}
+			}
+
+			// Add extra dices provided by the logical framework.
+			const dice = this.query.dice.slice();
+			dice.push({ id: 'location', attribute: 'entity', items: logicalFramework.entities })
+			if (logicalFramework.start)
+				dice.push({ id: 'time', attribute: 'day', range: [logicalFramework.start, null] })
+			if (logicalFramework.end)
+				dice.push({ id: 'time', attribute: 'day', range: [null, logicalFramework.end] })
+
 			const query = {
-				formula: 'toto',
-				parameters: { toto: { variableId: variable.id, dice: [] } },
-				dice: [...this.query.dice, ...extraDice],
+				formula: indicator.computation.formula,
+				parameters: parameters,
+				aggregate: this.query.aggregate,
+				dice
+			}
+
+			console.log(query)
+
+			return this._makeRowsFromQuery(indicator.id, indicator.display, query, indent, indicator.baseline, indicator.target, indicator.colorize);
+		}
+
+		_makeRowsFromVariable(variable) {
+			const query = {
+				formula: 'variable',
+				parameters: { variable: { variableId: variable.id, dice: [] } },
+				dice: this.query.dice,
 				aggregate: this.query.aggregate
 			};
 
-			// List dimensions which are usable.
-			const dimensions = this.project
-				.getDimensions(variable.id, query.dice)
-				.filter(dim => !query.aggregate.find(agg => agg.id === dim.id) && dim.numItems > 1);
+			return this._makeRowsFromQuery(variable.id, variable.name, query);
+		}
 
-			// Create base row.
-			const rows = [];
-			const rowId = `ds.${dsIndex}.var.${varIndex}.${JSON.stringify(extraDice)}`;
+		_makeRowsFromQuery(queryId, title, query, indent = 0, baseline = null, target = null, colorize = false) {
+			const rowId = `${queryId}.${JSON.stringify(query.dice)}`;
 			const disagregateBy = this.activeDisagregations[rowId];
-
-			rows.push({
-				id: rowId,
-				type: 'data',
-				title: extraDice.length ? extraDice[extraDice.length - 1].items[0] : variable.name,
-				dimensions: dimensions,
-				query: query,
-				disagregated: !!disagregateBy
-			});
-
-			// Recurse if the base row was disagregated.
-			if (disagregateBy) {
-				// The dimension may not be available if the user disagregated first, and then
-				// filtered in the global filter leaving a single item.
-				const dimension = dimensions.find(d => d.id == disagregateBy.id);
-				if (dimension) {
-					const items = dimension.getItems(disagregateBy.attribute);
-
-					items.forEach(item => {
-						const dice = [...extraDice, { ...disagregateBy, items: [item] }];
-						const subRows = this._makeRowsFromVariable(dsIndex, varIndex, dice);
-
-						rows.push(...subRows);
-					});
-				}
-			}
-
-			return rows;
-		}
-
-		_makeRowsFromQuery(queryId, title, query, extraDice = []) {
-			const rowId = `${queryId}.${JSON.stringify(extraDice)}`;
-			const disagregateBy = this.activeDisagregations[queryId];
-			const dimensions = this.project
-				.getQueryDimensions(query)
-				.filter(dim => !query.aggregate.find(agg => agg.id === dim.id) && dim.numItems > 1);
+			const dimensions = this.project.getQueryDimensions(query);
 
 			const rows = [];
 			rows.push({
 				id: rowId,
 				type: 'data',
-				title: extraDice.length ? extraDice[extraDice.length - 1].items[0] : title,
-				dimensions: dimensions,
-				query: query,
-				disagregated: !!disagregateBy
+				disagregated: !!disagregateBy,
+				title, dimensions, query, indent, baseline, target, colorize
 			});
+
+			// @ todo implement groups in a better way, and computation disagregation
 
 			// Recurse if the base row was disagregated.
 			if (disagregateBy) {
@@ -271,11 +265,14 @@ module.component('generalTable', {
 				// filtered in the global filter leaving a single item.
 				const dimension = dimensions.find(d => d.id == disagregateBy.id);
 				if (dimension) {
-					const items = dimension.getItems(disagregateBy.attribute);
-
-					items.forEach(item => {
-						const dice = [...extraDice, { ...disagregateBy, items: [item] }];
-						const subRows = this._makeRowsFromQuery(queryId, title, query, dice);
+					dimension.getItems(disagregateBy.attribute).forEach(item => {
+						const subQuery = Object.assign(
+							{},
+							query,
+							{ dice: [...query.dice, { ...disagregateBy, items: [item] }] },
+						);
+						const subTitle = this._getRowTitle(disagregateBy, item);
+						const subRows = this._makeRowsFromQuery(queryId, subTitle, subQuery, indent + 1, baseline, target, colorize);
 
 						rows.push(...subRows);
 					});
@@ -285,6 +282,31 @@ module.component('generalTable', {
 			return rows;
 		}
 
+		_getRowTitle(disagregateBy, item) {
+			if (disagregateBy.id === 'time')
+				return item;
+			else if (disagregateBy.id === 'location' && disagregateBy.attribute === 'entity')
+				return this.project.entities.find(site => site.id === item).name;
+			else if (disagregateBy.id === 'location') {
+				const group = this.project.groups.find(group => group.id === disagregateBy.attribute);
+				return `${item == 'in' ? '∈' : '∉'} ${group.name}`
+			}
+			else {
+				const partition = this.project.forms
+					.reduce((m, f) => [
+						...m,
+						f.elements.reduce((m, v) => [...m, ...v.partitions], [])
+					], [])
+					.find(p => disagregateBy.id === p.id);
+
+				if (disagregateBy.attribute === 'element')
+					return partition.elements.find(e => e.id === item).name;
+				else {
+					const group = partition.groups.find(group => group.id === disagregateBy.attribute);
+					return `${item == 'in' ? '∈' : '∉'} ${group.name}`
+				}
+			}
+		}
 	}
 });
 

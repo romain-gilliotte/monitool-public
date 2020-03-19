@@ -21,7 +21,7 @@
 			<ul class="dropdown-menu" uib-dropdown-menu>
 				<li ng-repeat="agg in $ctrl.aggregations track by agg.attribute">
 					<a ng-click="$ctrl.onDisagregateClicked({dimensionId: agg.id, attribute: agg.attribute})">
-						{{agg.attribute|translate}}
+						{{agg.label|translate}}
 					</a>
 				</li>
 			</ul>
@@ -29,16 +29,17 @@
 	</div>
 </td>
 
-<td class="row-baseline" ng-class="{empty: $ctrl.indicator.baseline === null}">
-	<span>{{$ctrl.indicator.baseline}}{{$ctrl.indicator|indicatorUnit}}</span>
+<td class="row-baseline" ng-class="{empty: $ctrl.row.baseline === null}">
+	<span>{{$ctrl.row.baseline}}{{$ctrl.row.query.formula|indicatorUnit}}</span>
 </td>
-<td class="row-target" ng-class="{empty: $ctrl.indicator.target === null}">
-	<span>{{$ctrl.indicator.target}}{{$ctrl.indicator|indicatorUnit}}</span>
+<td class="row-target" ng-class="{empty: $ctrl.row.target === null}">
+	<span>{{$ctrl.row.target}}{{$ctrl.row.query.formula|indicatorUnit}}</span>
 </td>
 
 <td colspan="{{$ctrl.columns.length + 1}}" ng-if="!$ctrl.values" style="background-color: rgb(238, 238, 238);">
 	{{$ctrl.errorMessage|translate}}
 </td>
 
-<td ng-repeat="value in $ctrl.values track by $index" td-reporting-field value="value" indicator="$ctrl.indicator">
+<td ng-repeat="value in $ctrl.values track by $index" td-reporting-field value="value" baseline="$ctrl.row.baseline"
+	target="$ctrl.row.target" colorize="$ctrl.row.colorize" unit="$ctrl.query.formula|indicatorUnit">
 </td>

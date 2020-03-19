@@ -29,7 +29,16 @@ export default class Input {
 		const query = {
 			formula: dataSource.elements.map((v, i, a) => '!isNaN(variable_' + i + ')/' + a.length).join('+'),
 			parameters: {},
-			dice: [],
+			dice: [
+				{
+					id: 'time',
+					attribute: 'day',
+					range: [
+						null,
+						new Date().toISOString().substring(0, 10)
+					]
+				}
+			],
 			aggregate: [
 				{ id: 'time', attribute: dataSource.periodicity },
 				{ id: 'location', attribute: 'entity' }

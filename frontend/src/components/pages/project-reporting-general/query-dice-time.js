@@ -20,8 +20,9 @@ module.component('queryDiceTime', {
         }
 
         $onChanges(changes) {
+            const now = new Date().toISOString().substring(0, 10)
             this.startDate = this.project.start;
-            this.endDate = this.project.end;
+            this.endDate = this.project.end < now ? this.project.end : now;
 
             this.onFilterChange();
         }

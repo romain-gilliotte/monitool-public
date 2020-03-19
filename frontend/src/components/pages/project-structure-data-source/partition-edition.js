@@ -1,5 +1,5 @@
 import angular from 'angular';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 
 const module = angular.module(
 	'monitool.components.ui-modals.partition-edition',
@@ -44,7 +44,7 @@ module.component('partitionEditionModal', {
 				this.master = {
 					id: uuid(),
 					name: "",
-					elements: [{id: uuid(), name: ""}, {id: uuid(), name: ""}],
+					elements: [{ id: uuid(), name: "" }, { id: uuid(), name: "" }],
 					groups: [],
 					aggregation: "sum"
 				};
@@ -64,7 +64,7 @@ module.component('partitionEditionModal', {
 			if (!this.useGroups)
 				this.partition.groups.length = 0;
 
-			this.close({'$value': this.partition});
+			this.close({ '$value': this.partition });
 		}
 
 		reset() {
@@ -73,7 +73,7 @@ module.component('partitionEditionModal', {
 		}
 
 		createPartitionElement() {
-			this.partition.elements.push({id: uuid(), name: ''});
+			this.partition.elements.push({ id: uuid(), name: '' });
 			this.partitionForm.$setValidity('elementLength', this.partition.elements.length >= 2);
 		}
 
@@ -90,7 +90,7 @@ module.component('partitionEditionModal', {
 		}
 
 		createGroup() {
-			this.partition.groups.push({id: uuid(), name: '', members: []});
+			this.partition.groups.push({ id: uuid(), name: '', members: [] });
 		}
 
 		deleteGroup(pgId) {

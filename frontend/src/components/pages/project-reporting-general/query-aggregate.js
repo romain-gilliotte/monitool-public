@@ -1,5 +1,6 @@
 
 import angular from 'angular';
+import { TimeDimension } from 'olap-in-memory';
 import TimeSlot from 'timeslot-dag';
 
 
@@ -61,28 +62,14 @@ module.component('queryAggregate', {
 		}
 
 		_chooseDefaultGroupBy() {
-			let startDate = new Date(this.project.start + 'T00:00:00Z');
-			let endDate = new Date(this.project.end + 'T00:00:00Z');
+			const now = new Date().toISOString().substring(0, 10)
+			const start = this.project.start;
+			const end = this.project.end < now ? this.project.end : now;
 
-			let chosen = this.periodicities[this.periodicities.length - 1];
-
-			for (var i = 0; i < this.periodicities.length; ++i) {
-				const startSlot = TimeSlot.fromDate(startDate, this.periodicities[i]);
-				const endSlot = TimeSlot.fromDate(endDate, this.periodicities[i]);
-
-				let length = 0, slot = startSlot;
-				do {
-					length++;
-					slot = slot.next();
-				}
-				while (slot.value !== endSlot.value && length < 15);
-
-				if (length < 15) {
-					break;
-				}
-			}
-
-			return chosen;
+			const dimension = new TimeDimension('time', 'day', start, end);
+			return this.periodicities.find(periodicity => {
+				return dimension.getItems(periodicity).length < 15;
+			}) || this.periodicities[this.periodicities.length - 1];
 		}
 
 	}

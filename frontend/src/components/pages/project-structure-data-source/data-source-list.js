@@ -1,5 +1,5 @@
 import angular from 'angular';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 
 import uiRouter from '@uirouter/angularjs';
 import 'angular-legacy-sortablejs-maintained';
@@ -60,11 +60,11 @@ module.component('dataSourceList', {
 		 * tell parent component that we updated the project.
 		 */
 		onFieldChange() {
-			this.onProjectUpdate({newProject: this.editableProject, isValid: true});
+			this.onProjectUpdate({ newProject: this.editableProject, isValid: true });
 		}
 
 		onCreateFormClicked() {
-			this.$state.go('main.project.structure.collection_form_edition', {dataSourceId: uuid()});
+			this.$state.go('main.project.structure.collection_form_edition', { dataSourceId: uuid() });
 		}
 
 		onDeleteClicked(dataSource) {

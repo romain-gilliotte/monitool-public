@@ -51,7 +51,7 @@ class LogicalFrame extends Model {
 			var error = new Error('invalid_data');
 			error.detail = errors;
 			error.model = data;
-			throw error;
+			// throw error;
 		}
 	}
 

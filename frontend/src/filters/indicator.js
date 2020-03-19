@@ -7,12 +7,12 @@ const module = angular.module(
 	]
 );
 
-module.filter('indicatorUnit', function() {
-	return function(indicator) {
-		if (indicator && indicator.computation) {
-			if (/1000/.test(indicator.computation.formula))
+module.filter('indicatorUnit', function () {
+	return function (formula) {
+		if (formula) {
+			if (/1000/.test(formula))
 				return '‰';
-			else if (/100/.test(indicator.computation.formula))
+			else if (/100/.test(formula))
 				return '%';
 		}
 	}
