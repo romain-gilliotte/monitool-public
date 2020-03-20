@@ -22,7 +22,7 @@ function* _generatePeriods(project, indicator, filter) {
 
 			try {
 				let t = TimeSlot.fromDate(new Date(), dataSource.periodicity);
-				t.toUpperSlot(periodicity);
+				t.toParentPeriodicity(periodicity);
 				return true;
 			}
 			catch (e) {
@@ -42,7 +42,7 @@ function* _generatePeriods(project, indicator, filter) {
 			if (TIME_PERIODICITIES.includes(key) && filter[key].length < 2) { // don't invert the test: it will crash
 				try {
 					let t = TimeSlot.fromDate(new Date(), key);
-					t.toUpperSlot(periodicity);
+					t.toParentPeriodicity(periodicity);
 					return false;
 				}
 				catch (e) {
@@ -299,7 +299,7 @@ export function* generateProjectDimensions(project) {
 			try {
 				TimeSlot
 					.fromDate(new Date(), dataSource.periodicity)
-					.toUpperSlot(periodicity);
+					.toParentPeriodicity(periodicity);
 
 				isValid = true;
 				break;
@@ -359,7 +359,7 @@ export function computeCompatiblePeriodicities(project, computation) { //fixme r
 
 			try {
 				let t = TimeSlot.fromDate(new Date(), dsPeriodicity);
-				t.toUpperSlot(periodicity);
+				t.toParentPeriodicity(periodicity);
 				return true;
 			}
 			catch (e) {

@@ -215,11 +215,11 @@ module.component('generalTable', {
 
 			// Add extra dices provided by the logical framework.
 			const dice = this.query.dice.slice();
-			dice.push({ id: 'location', attribute: 'entity', items: logicalFramework.entities })
+			dice.push({ id: 'location', attribute: 'entity', items: logicalFramework.entities });
 			if (logicalFramework.start)
-				dice.push({ id: 'time', attribute: 'day', range: [logicalFramework.start, null] })
+				dice.push({ id: 'time', attribute: 'day', range: [logicalFramework.start, null] });
 			if (logicalFramework.end)
-				dice.push({ id: 'time', attribute: 'day', range: [null, logicalFramework.end] })
+				dice.push({ id: 'time', attribute: 'day', range: [null, logicalFramework.end] });
 
 			const query = {
 				formula: indicator.computation.formula,
@@ -227,8 +227,6 @@ module.component('generalTable', {
 				aggregate: this.query.aggregate,
 				dice
 			}
-
-			console.log(query)
 
 			return this._makeRowsFromQuery(indicator.id, indicator.display, query, indent, indicator.baseline, indicator.target, indicator.colorize);
 		}
@@ -257,7 +255,7 @@ module.component('generalTable', {
 				title, dimensions, query, indent, baseline, target, colorize
 			});
 
-			// @ todo implement groups in a better way, and computation disagregation
+			//FIXME c'est tout pétépas beau
 
 			// Recurse if the base row was disagregated.
 			if (disagregateBy) {
@@ -265,17 +263,20 @@ module.component('generalTable', {
 				// filtered in the global filter leaving a single item.
 				const dimension = dimensions.find(d => d.id == disagregateBy.id);
 				if (dimension) {
-					dimension.getItems(disagregateBy.attribute).forEach(item => {
-						const subQuery = Object.assign(
-							{},
-							query,
-							{ dice: [...query.dice, { ...disagregateBy, items: [item] }] },
-						);
-						const subTitle = this._getRowTitle(disagregateBy, item);
-						const subRows = this._makeRowsFromQuery(queryId, subTitle, subQuery, indent + 1, baseline, target, colorize);
+					dimension.attributes.forEach(attribute => {
+						dimension.getItems(attribute).forEach(item => {
+							const subQuery = Object.assign(
+								{},
+								query,
+								{ dice: [...query.dice, { id: disagregateBy.id, attribute, items: [item] }] },
+							);
+							const subTitle = this._getRowTitle({ id: disagregateBy.id, attribute }, item);
+							const subRows = this._makeRowsFromQuery(queryId, subTitle, subQuery, indent + 1, baseline, target, colorize);
 
-						rows.push(...subRows);
-					});
+							rows.push(...subRows);
+						});
+
+					})
 				}
 			}
 

@@ -52,7 +52,7 @@ module.component('queryAggregate', {
 
 					try {
 						let t = TimeSlot.fromDate(new Date(), dataSource.periodicity);
-						t.toUpperSlot(periodicity);
+						t.toParentPeriodicity(periodicity);
 						return true;
 					}
 					catch (e) {

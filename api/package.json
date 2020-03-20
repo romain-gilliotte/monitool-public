@@ -27,7 +27,7 @@
     "olap-in-memory": "^4.4.1",
     "pdfmake": "^0.1.65",
     "roboto-fontface": "^0.10.0",
-    "timeslot-dag": "^0.3.3",
+    "timeslot-dag": "^2.0.0",
     "uuid": "^3.3.2",
     "winston": "^3.2.1"
   },
