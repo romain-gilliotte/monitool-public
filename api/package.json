@@ -38,6 +38,7 @@
   },
   "scripts": {
     "start": "nodemon src/main-webapp.js --inspect=0.0.0.0:9229",
+    "start:worker": "nodemon src/main-worker.js",
     "serve": "node src/main-webapp.js",
     "test": "mocha"
   }

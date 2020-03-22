@@ -48,7 +48,7 @@ module.component('generalTable', {
 		 */
 		onRowDisagregate(rowId, dimensionId, attribute) {
 			// Update state
-			if (dimensionId && attribute) {
+			if (dimensionId) {
 				this.activeDisagregations[rowId] = {
 					id: dimensionId,
 					attribute: attribute
@@ -255,22 +255,22 @@ module.component('generalTable', {
 				title, dimensions, query, indent, baseline, target, colorize
 			});
 
-			//FIXME c'est tout pétépas beau
-
 			// Recurse if the base row was disagregated.
 			if (disagregateBy) {
 				// The dimension may not be available if the user disagregated first, and then
 				// filtered in the global filter leaving a single item.
 				const dimension = dimensions.find(d => d.id == disagregateBy.id);
 				if (dimension) {
-					dimension.attributes.forEach(attribute => {
-						dimension.getItems(attribute).forEach(item => {
+					const attributes = disagregateBy.attribute ? [disagregateBy.attribute] : dimension.attributes;
+
+					attributes.forEach(attribute => {
+						dimension.getEntries(attribute).forEach(([item, subTitle]) => {
 							const subQuery = Object.assign(
 								{},
 								query,
 								{ dice: [...query.dice, { id: disagregateBy.id, attribute, items: [item] }] },
 							);
-							const subTitle = this._getRowTitle({ id: disagregateBy.id, attribute }, item);
+
 							const subRows = this._makeRowsFromQuery(queryId, subTitle, subQuery, indent + 1, baseline, target, colorize);
 
 							rows.push(...subRows);
@@ -283,31 +283,6 @@ module.component('generalTable', {
 			return rows;
 		}
 
-		_getRowTitle(disagregateBy, item) {
-			if (disagregateBy.id === 'time')
-				return item;
-			else if (disagregateBy.id === 'location' && disagregateBy.attribute === 'entity')
-				return this.project.entities.find(site => site.id === item).name;
-			else if (disagregateBy.id === 'location') {
-				const group = this.project.groups.find(group => group.id === disagregateBy.attribute);
-				return `${item == 'in' ? '∈' : '∉'} ${group.name}`
-			}
-			else {
-				const partition = this.project.forms
-					.reduce((m, f) => [
-						...m,
-						f.elements.reduce((m, v) => [...m, ...v.partitions], [])
-					], [])
-					.find(p => disagregateBy.id === p.id);
-
-				if (disagregateBy.attribute === 'element')
-					return partition.elements.find(e => e.id === item).name;
-				else {
-					const group = partition.groups.find(group => group.id === disagregateBy.attribute);
-					return `${item == 'in' ? '∈' : '∉'} ${group.name}`
-				}
-			}
-		}
 	}
 });
 

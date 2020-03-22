@@ -111,24 +111,28 @@ export default class Project {
 		);
 
 		// location dimension
-		const entity = new GenericDimension('location', 'entity', form.entities);
+		const siteIdToName = siteId => this.entities.find(s => s.id == siteId).name;
+		const entity = new GenericDimension('location', 'entity', form.entities, siteIdToName);
 		this.groups.forEach(group => {
 			entity.addChildAttribute(
 				'entity',
 				group.id,
-				entityId => group.members.includes(entityId) ? 'in' : 'out'
+				entityId => group.members.includes(entityId) ? 'in' : 'out',
+				item => `${item == 'in' ? '∈' : '∉'} ${group.name}`
 			);
 		});
 
 		// partitions
 		const partitions = variable.partitions.map(partition => {
-			const dim = new GenericDimension(partition.id, 'element', partition.elements.map(e => e.id));
+			const elementIdToName = elementId => partition.elements.find(el => el.id == elementId).name;
+			const dim = new GenericDimension(partition.id, 'element', partition.elements.map(e => e.id), elementIdToName);
 
 			partition.groups.forEach(group => {
 				dim.addChildAttribute(
 					'element',
 					group.id,
-					elementId => group.members.includes(elementId) ? 'in' : 'out'
+					elementId => group.members.includes(elementId) ? 'in' : 'out',
+					item => `${item == 'in' ? '∈' : '∉'} ${group.name}`
 				);
 			})
 

@@ -19,7 +19,7 @@
 			</button>
 
 			<ul class="dropdown-menu" uib-dropdown-menu>
-				<li ng-repeat="agg in $ctrl.aggregations track by agg.attribute">
+				<li ng-repeat="agg in $ctrl.aggregations track by $index">
 					<a ng-click="$ctrl.onDisagregateClicked({dimensionId: agg.id, attribute: agg.attribute})">
 						{{agg.label|translate}}
 					</a>

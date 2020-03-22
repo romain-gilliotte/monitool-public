@@ -33,40 +33,40 @@ module.directive('trData', () => {
 			}
 
 			$onChanges(changes) {
-				this.aggregations = this.trData.dimensions.reduce((m, dim) => [
-					...m,
-					...dim.attributes
-						.filter(attribute => dim.getItems(attribute).length > 1)
-						.map(attr => ({
-							id: dim.id,
-							attribute: attr,
-							label: this._getDisagregationLabel(dim.id, attr)
-						}))
-				], []);
-
+				this.aggregations = this._getDisagregations(this.trData.dimensions);
 				this.row = this.trData
-
 				this._fetchData()
 			}
 
-			_getDisagregationLabel(dimensionId, attribute) {
-				if (dimensionId === 'time')
-					return `project.dimensions.${attribute}`;
-				else if (dimensionId === 'location') {
-					if (attribute === 'entity')
-						return 'project.dimensions.entity';
-					else
-						return this.project.groups.find(g => g.id === attribute).name;
-				}
-				else {
-					return this.project.forms
-						.reduce((m, f) => [
-							...m,
-							f.elements.reduce((m, v) => [...m, ...v.partitions], [])
-						], [])
-						.find(p => disagregateBy.id === p.id)
-						.name;
-				}
+			_getDisagregations(dimensions) {
+				const aggregations = [];
+				dimensions.forEach(dimension => {
+					let agg;
+					if (dimension.id === 'time')
+						agg = dim.attributes.map(attr => ({
+							id: 'time',
+							attribute: attr,
+							label: `project.dimensions.${attribute}`
+						}))
+
+					else if (dimension.id === 'location')
+						agg = [{ id: 'location', label: `project.dimensions.entity` }]
+
+					else {
+						const partition = this.project.forms
+							.reduce((m, f) => [
+								...m,
+								f.elements.reduce((m, v) => [...m, ...v.partitions], [])
+							], [])
+							.find(p => disagregateBy.id === p.id);
+
+						agg = [{ id: dimension.id, label: partition.name }]
+					}
+
+					aggregations.push(...agg);
+				});
+
+				return aggregations;
 			}
 
 			async _fetchData() {
