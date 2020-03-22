@@ -77,7 +77,7 @@ module.directive('tdReportingField', function () {
 
 					// Add unit
 					if (this.unit)
-						this.display = this.display + unit;
+						this.display = this.display + this.unit;
 				}
 				else {
 					this.logo = 'fa-question-circle-o';
