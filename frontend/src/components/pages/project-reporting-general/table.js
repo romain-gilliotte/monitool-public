@@ -24,12 +24,13 @@ module.component('generalTable', {
 		constructor() {
 			this.sectionOpen = {};
 			this.activeDisagregations = {};
+			this.rows = [];
 		}
 
 		$onChanges(changes) {
 			if (changes.query) {
 				this.columns = this._makeColumnsFromQuery(changes.query.currentValue);
-				this.rows = this._makeRows();
+				this._updateRows();
 			}
 		}
 
@@ -38,7 +39,7 @@ module.component('generalTable', {
 			this.sectionOpen[rowId] = !this.sectionOpen[rowId];
 
 			// Regen all rows
-			this.rows = this._makeRows();
+			this._updateRows();
 		}
 
 		/**
@@ -59,23 +60,27 @@ module.component('generalTable', {
 			}
 
 			// Regen all rows
-			this.rows = this._makeRows();
+			this._updateRows();
 		}
 
 		/**
 		 * Computes the columns that need to be displayed according to a given query.
 		 */
 		_makeColumnsFromQuery(query) {
-			let columns;
+			if (query.aggregate.length !== 1)
+				throw new Error('Not supported');
 
-			if (query.aggregate.length === 1 && query.aggregate[0].id === 'time') {
+			const aggregate = query.aggregate[0];
+
+			let columns;
+			if (aggregate.id === 'time') {
 				const dice = query.dice.find(d => d.id == 'time');
 				const dimension = new TimeDimension('time', dice.attribute, dice.range[0], dice.range[1]);
-				const items = dimension.drillUp(query.aggregate[0].attribute).getItems();
+				const items = dimension.getItems(aggregate.attribute);
 
 				columns = items.map(item => ({ id: item, name: item, title: item }))
 			}
-			else if (query.aggregate.length === 1 && query.aggregate[0].id === 'location') {
+			else if (aggregate.id === 'location') {
 				const dice = query.dice.find(d => d.id == 'location');
 
 				columns = dice.items.map(item => {
@@ -88,6 +93,31 @@ module.component('generalTable', {
 			}
 
 			return columns;
+		}
+
+		/** Avoid triggering changes/refetch on all rows for small modifications */
+		_updateRows() {
+			const oldRows = this.rows;
+			const newRows = this._makeRows();
+
+			for (let i = 0; i < newRows.length; ++i) {
+				const newRow = newRows[i];
+				const oldRow = oldRows.find(oldRow => oldRow.id == newRow.id);
+
+				if (oldRow && angular.equals(oldRow, newRow)) {
+					newRows[i] = oldRow;
+				}
+				else if (oldRow) {
+					for (let key in newRow)
+						if (!angular.equals(newRow[key], oldRow[key]))
+							oldRow[key] = newRow[key];
+
+					newRows[i] = oldRow;
+				}
+			}
+
+			this.rows.length = 0;
+			this.rows.push(...newRows);
 		}
 
 		_makeRows() {
@@ -242,47 +272,54 @@ module.component('generalTable', {
 			return this._makeRowsFromQuery(variable.id, variable.name, query);
 		}
 
-		_makeRowsFromQuery(queryId, title, query, indent = 0, baseline = null, target = null, colorize = false) {
-			const rowId = `${queryId}.${JSON.stringify(query.dice)}`;
-			const disagregateBy = this.activeDisagregations[rowId];
-			const dimensions = this.project.getQueryDimensions(query);
+		_makeRowsFromQuery(queryId, label, query, indent = 0, baseline = null, target = null, colorize = false) {
+			const id = `${queryId}.${JSON.stringify(query.dice)}`;
+			const disagregateBy = this.activeDisagregations[id];
 
-			const rows = [];
-			rows.push({
-				id: rowId,
-				type: 'data',
-				disagregated: !!disagregateBy,
-				title, dimensions, query, indent, baseline, target, colorize
-			});
+			// Root row.
+			const rows = [{ type: 'data', id, label, query, indent, baseline, target, colorize }];
+			if (!disagregateBy)
+				return rows;
 
-			// Recurse if the base row was disagregated.
-			if (disagregateBy) {
-				// The dimension may not be available if the user disagregated first, and then
-				// filtered in the global filter leaving a single item.
-				const dimension = dimensions.find(d => d.id == disagregateBy.id);
-				if (dimension) {
-					const attributes = disagregateBy.attribute ? [disagregateBy.attribute] : dimension.attributes;
+			// Split by computation
+			if (disagregateBy.id === 'computation') {
+				for (let paramName in query.parameters) {
+					const subQuery = Object.assign(
+						{},
+						query,
+						{ formula: paramName, parameters: { [paramName]: query.parameters[paramName] } }
+					);
 
-					attributes.forEach(attribute => {
-						dimension.getEntries(attribute).forEach(([item, subTitle]) => {
-							const subQuery = Object.assign(
-								{},
-								query,
-								{ dice: [...query.dice, { id: disagregateBy.id, attribute, items: [item] }] },
-							);
-
-							const subRows = this._makeRowsFromQuery(queryId, subTitle, subQuery, indent + 1, baseline, target, colorize);
-
-							rows.push(...subRows);
-						});
-
-					})
+					rows.push(...this._makeRowsFromQuery(`${queryId}.${paramName}`, paramName, subQuery, indent + 1));
 				}
+
+				return rows;
 			}
+
+			// Generic split
+			const dimension = this.project.getQueryDimensions(query).find(d => d.id == disagregateBy.id);
+			if (!dimension) {
+				// The requested disagregation is no longer valid because the this.query changed.
+				delete this.activeDisagregations[id];
+				return rows;
+			}
+
+			const attributes = disagregateBy.attribute ? [disagregateBy.attribute] : dimension.attributes;
+
+			attributes.forEach(attribute => {
+				dimension.getEntries(attribute).forEach(([item, subLabel]) => {
+					const subQuery = Object.assign(
+						{},
+						query,
+						{ dice: [...query.dice, { id: disagregateBy.id, attribute, items: [item] }] },
+					);
+
+					rows.push(...this._makeRowsFromQuery(queryId, subLabel, subQuery, indent + 1, baseline, target, colorize));
+				});
+			});
 
 			return rows;
 		}
-
 	}
 });
 

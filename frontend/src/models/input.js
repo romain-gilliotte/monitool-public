@@ -70,16 +70,13 @@ export default class Input {
 				parameters: {
 					cst: {
 						variableId: v.id,
-						dice: v.partitions.map(p => ({
-							id: p.id,
-							attribute: 'element',
-							items: p.elements.map(pe => pe.id),
-						}))
+						dice: []
 					}
 				},
 				dice: [
 					{ id: 'time', attribute: dataSource.periodicity, range: [previousPeriod, period], },
 					{ id: 'location', attribute: 'entity', items: [siteId], },
+					...v.partitions.map(p => ({ id: p.id, attribute: 'element', items: p.elements.map(pe => pe.id) }))
 				],
 				aggregate: [
 					{ id: 'time', attribute: dataSource.periodicity },

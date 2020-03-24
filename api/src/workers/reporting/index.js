@@ -7,8 +7,12 @@ const loader = new CubeLoader();
 queue.process('compute-report', async job => {
     // Load cube.
     try {
+        console.log(job.data)
+
         const { projectId, formula, parameters } = job.data;
         let cube = await loader.getIndicatorCube(projectId, formula, parameters);
+
+        console.log(cube)
 
         // Execute query (dice, keepDimensions, drillUp).
         const { dice, aggregate } = job.data;
@@ -16,9 +20,13 @@ queue.process('compute-report', async job => {
             if (dice.range) cube = cube.diceRange(dice.id, dice.attribute, dice.range[0], dice.range[1]);
             else cube = cube.dice(dice.id, dice.attribute, dice.items);
         })
-        cube = cube.keepDimensions(aggregate.map(agg => agg.id));
+
+        cube = cube.project(aggregate.map(agg => agg.id));
         aggregate.forEach(agg => {
+            // if (cube.getDimension(agg.id).attributes.includes(agg.attribute))
             cube = cube.drillUp(agg.id, agg.attribute);
+            // else
+            //     cube = cube.drillDown(agg.id, agg.attribute);
         });
 
         // Format response.

@@ -21,7 +21,7 @@ module.component('queryAggregate', {
 	controller: class GeneralGroupBy {
 
 		$onChanges(changes) {
-			this.periodicities = this._computeCompatiblePeriodicities();
+			this.periodicities = this.project.compatiblePeriodicities;
 			this.groupBy = this._chooseDefaultGroupBy();
 
 			this.onValueChange();
@@ -35,30 +35,6 @@ module.component('queryAggregate', {
 				value = { id: 'time', attribute: this.groupBy }
 
 			this.onUpdate({ aggregate: value })
-		}
-
-		_computeCompatiblePeriodicities() {
-			const timePeriodicities = [
-				'day', 'month_week_sat', 'month_week_sun', 'month_week_mon', 'week_sat', 'week_sun',
-				'week_mon', 'month', 'quarter', 'semester', 'year'
-			];
-
-			return timePeriodicities.filter(periodicity => {
-				for (var i = 0; i < this.project.forms.length; ++i) {
-					var dataSource = this.project.forms[i];
-
-					if (dataSource.periodicity === periodicity)
-						return true;
-
-					try {
-						let t = TimeSlot.fromDate(new Date(), dataSource.periodicity);
-						t.toParentPeriodicity(periodicity);
-						return true;
-					}
-					catch (e) {
-					}
-				}
-			});
 		}
 
 		_chooseDefaultGroupBy() {

@@ -6,8 +6,8 @@
 			<th class="row-dimension"></th>
 			<th translate="project.baseline"></th>
 			<th translate="project.target"></th>
-			<th ng-repeat="col in $ctrl.columns track by col.id" title="{{col.title}}">
-				{{col.name}}
+			<th ng-repeat="col in $ctrl.columns track by col.id" title="{{col.title|formatSlotRange}}">
+				{{col.name|formatSlot}}
 			</th>
 			<th translate="project.total"></th>
 		</tr>
@@ -40,8 +40,10 @@
 		</tr>
 
 		<!-- Data -->
-		<tr ng-repeat-end ng-if="row.type == 'data'" project="$ctrl.project" class="indent{{row.indent}}" tr-data="row"
-			columns="$ctrl.columns" on-disagregate-clicked="$ctrl.onRowDisagregate(row.id, dimensionId, attribute)">
+		<tr ng-repeat-end ng-if="row.type == 'data'" class="indent{{row.indent}}" tr-data project="$ctrl.project"
+			disagregated="!!$ctrl.activeDisagregations[row.id]" label="row.label" query="row.query" indent="row.indent"
+			baseline="row.baseline" target="row.target" colorize="row.colorize" columns="$ctrl.columns"
+			on-disagregate-clicked="$ctrl.onRowDisagregate(row.id, dimensionId, attribute)">
 		</tr>
 	</tbody>
 </table>

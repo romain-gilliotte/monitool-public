@@ -14,6 +14,7 @@ module.directive('tdReportingField', function () {
 		scope: {}, // Isolate
 
 		bindToController: {
+			interpolated: '<',
 			value: '<',
 			baseline: '<',
 			target: '<',
@@ -60,6 +61,15 @@ module.directive('tdReportingField', function () {
 						progress = Math.min(1, progress);
 
 						this.$element.css('background-color', 'hsl(' + progress * 120 + ', 100%, 75%)');
+					}
+
+					if (this.interpolated) {
+						this.$element.css('font-style', 'italic');
+						this.$element.attr('title', 'This value is interpolated');
+					}
+					else {
+						this.$element.css('font-style', 'normal');
+						this.$element.removeAttr('title');
 					}
 
 					// Split value by thousands

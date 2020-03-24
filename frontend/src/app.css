@@ -39,6 +39,10 @@ p {
   font-size: 13px;
 }
 
+tr[tr-data]:hover {
+  color: darkblue
+}
+
 .btn {
   padding: 3px 6px;
   font-size: 12px;

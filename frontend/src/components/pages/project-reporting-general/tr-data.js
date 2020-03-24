@@ -20,8 +20,17 @@ module.directive('trData', () => {
 		bindToController: {
 			project: '<',
 			columns: '<',
-			trData: '<',
-			onDisagregateClicked: '&'
+
+			disagregated: '<',
+			label: '<',
+			query: '<',
+			indent: '<',
+			baseline: '<',
+			target: '<',
+			colorize: '<',
+
+			onDisagregateClicked: '&',
+			onPlotClicked: '&'
 		},
 
 		template: require('./tr-data.html'),
@@ -33,49 +42,79 @@ module.directive('trData', () => {
 			}
 
 			$onChanges(changes) {
-				this.aggregations = this._getDisagregations(this.trData.dimensions);
-				this.row = this.trData
-				this._fetchData()
+				if (changes.query) {
+					this.aggregations = this._getDisagregations(this.query);
+					this.interpolationWarning = this._getInterpolationWarning(this.query);
+					this._fetchData(this.query);
+				}
 			}
 
-			_getDisagregations(dimensions) {
-				const aggregations = [];
-				dimensions.forEach(dimension => {
-					let agg;
-					if (dimension.id === 'time')
-						agg = dim.attributes.map(attr => ({
-							id: 'time',
-							attribute: attr,
-							label: `project.dimensions.${attribute}`
-						}))
+			_getInterpolationWarning(query) {
+				const availableDimensions = this.project.getQueryDimensions({ ...query, aggregate: [] });
+				// console.log(query, availableDimensions)
 
-					else if (dimension.id === 'location')
-						agg = [{ id: 'location', label: `project.dimensions.entity` }]
+				for (let i = 0; i < query.aggregate.length; ++i) {
+					const aggregate = query.aggregate[i];
+					const dimension = availableDimensions.find(dim => dim.id === aggregate.id);
 
-					else {
-						const partition = this.project.forms
-							.reduce((m, f) => [
-								...m,
-								f.elements.reduce((m, v) => [...m, ...v.partitions], [])
-							], [])
-							.find(p => disagregateBy.id === p.id);
+					if (!dimension.attributes.includes(aggregate.attribute))
+						return true;
+				}
 
-						agg = [{ id: dimension.id, label: partition.name }]
-					}
-
-					aggregations.push(...agg);
-				});
-
-				return aggregations;
+				return false;
 			}
 
-			async _fetchData() {
+			/** Compute list of disagregations in drop-down list from dimensions */
+			_getDisagregations(query) {
+				const numParameters = Object.values(query.parameters).length;
+				const computationDisagregations = numParameters > 1 ? [{ id: 'computation', label: 'project.computation' }] : [];
+
+				const partitionDisagregations = this.project
+					.getQueryDimensions(query)
+					.reduce((aggregations, dimension) => {
+						// Split up time by attribute, leave the rest unchanged.
+						let newAggregations;
+						if (dimension.id === 'time') {
+							newAggregations = dimension.attributes.map(attr => {
+								return { id: 'time', attribute: attr, label: `project.dimensions.${attr}` };
+							});
+						}
+						else {
+							newAggregations = [{ id: dimension.id, label: dimension.label }];
+						}
+
+						// Keep only rows which have multiple children
+						newAggregations = newAggregations.filter(aggregation => {
+							if (dimension.numItems < 2)
+								return false;
+
+							if (aggregation.attribute)
+								return dimension.getItems(aggregation.attribute).length > 1;
+							else
+								return dimension.attributes.reduce((m, attr) => m + dimension.getItems(attr).length, 0) > 1;
+						});
+
+						return [...aggregations, ...newAggregations]
+					}, []);
+
+				return [...computationDisagregations, ...partitionDisagregations];
+			}
+
+			/** Fetch data from query */
+			async _fetchData(query) {
 				try {
+					// No need to load if no computation is defined for the indicator.
+					if (!query.formula)
+						throw new Error('project.indicator_computation_missing');
+
+					// Set loading message
 					delete this.values;
 					this.errorMessage = 'shared.loading';
+
+					// Load data
 					const response = await axios.post(
 						`/resources/project/${this.project._id}/reporting`,
-						{ output: 'report', ...this.trData.query }
+						{ output: 'report', ...query }
 					);
 
 					this.values = [

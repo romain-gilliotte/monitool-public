@@ -6,28 +6,28 @@ const _ = require('lodash');
 
 class CubeLoader {
 
-    async getIndicatorCube(projectId, formula, parameters) {
-        const documentId = `${projectId}:${hash({ formula, parameters })}`;
-        const document = await database.collection('cube').findOne({ '_id': documentId });
+    // async getIndicatorCube(projectId, formula, parameters) {
+    //     const documentId = `${projectId}:${hash({ formula, parameters })}`;
+    //     const document = await database.collection('cube').findOne({ '_id': documentId });
 
-        let cube;
-        if (document) {
-            cube = Cube.deserialize(document.cube.buffer);
-        }
-        else {
-            cube = await this._generateIndicatorCube(projectId, formula, parameters);
-            await database.collection('cube').insertOne({
-                _id: documentId,
-                projectId: new ObjectId(projectId),
-                cube: new Binary(Buffer.from(cube.serialize()))
-            });
-        }
+    //     let cube;
+    //     if (document) {
+    //         cube = Cube.deserialize(document.cube.buffer);
+    //     }
+    //     else {
+    //         cube = await this._generateIndicatorCube(projectId, formula, parameters);
+    //         await database.collection('cube').insertOne({
+    //             _id: documentId,
+    //             projectId: new ObjectId(projectId),
+    //             cube: new Binary(Buffer.from(cube.serialize()))
+    //         });
+    //     }
 
-        return cube;
-    }
+    //     return cube;
+    // }
 
     /** Generate an indicator cube from scratch */
-    async _generateIndicatorCube(projectId, formula, parameters) {
+    async getIndicatorCube(projectId, formula, parameters) {
         const cubes = await Promise.all(_.toPairs(parameters).map(async ([paramName, parameter]) => {
             let cube = await this.getVariableCube(projectId, parameter.variableId);
             cube = cube.renameMeasure('main', paramName)
@@ -56,37 +56,37 @@ class CubeLoader {
      * Load complete cube for a given variable from the database
      * and cache it for next calls.
      */
-    async getVariableCube(projectId, variableId) {
-        const documentId = `${projectId}:${variableId}`;
-        const document = await database.collection('cube').findOne({ '_id': documentId });
+    // async getVariableCube(projectId, variableId) {
+    //     const documentId = `${projectId}:${variableId}`;
+    //     const document = await database.collection('cube').findOne({ '_id': documentId });
 
-        let cube;
-        if (document) {
-            cube = Cube.deserialize(document.cube.buffer);
-        }
-        else {
-            cube = await this._generateVariableCube(projectId, variableId);
+    //     let cube;
+    //     if (document) {
+    //         cube = Cube.deserialize(document.cube.buffer);
+    //     }
+    //     else {
+    //         cube = await this._generateVariableCube(projectId, variableId);
 
-            await database.collection('cube').insertOne({
-                _id: documentId,
-                projectId: new ObjectId(projectId),
-                cube: new Binary(Buffer.from(cube.serialize()))
-            });
-        }
+    //         await database.collection('cube').insertOne({
+    //             _id: documentId,
+    //             projectId: new ObjectId(projectId),
+    //             cube: new Binary(Buffer.from(cube.serialize()))
+    //         });
+    //     }
 
-        return cube;
-    }
+    //     return cube;
+    // }
 
     /** Generate a variable cube from scratch */
-    async _generateVariableCube(projectId, variableId) {
+    async getVariableCube(projectId, variableId) {
         const project = await this._loadProject(projectId);
         const form = project.forms.find(f => f.elements.find(v => v.id === variableId));
         const variable = form.elements.find(v => v.id === variableId);
 
-        const dimensions = this._createVariableDimensions(project, form, variable);
+        const dimensions = this._createVariableDimensions(project, form, variable, true);
         const aggregation = this._createVariableAggregation(variable);
 
-        const cube = new Cube(dimensions);
+        let cube = new Cube(dimensions);
         cube.createStoredMeasure('main', aggregation);
 
         await database.collection('input')
@@ -101,12 +101,10 @@ class CubeLoader {
                 input.content.forEach(content => {
                     // FIXME
                     const dimensions = content.dimensions.map(dim => {
-                        if (dim.id === 'time') {
+                        if (dim.id === 'time')
                             return new TimeDimension('time', dim.attribute, dim.items[0], dim.items[dim.items.length - 1]);
-                        }
-                        else {
+                        else
                             return new GenericDimension(dim.id, dim.attribute, dim.items);
-                        }
                     });
 
                     const inputCube = new Cube(dimensions);
@@ -148,15 +146,16 @@ class CubeLoader {
     }
 
     /** Create Cube dimensions for a given variable. This is needed to build a cube */
-    _createVariableDimensions(project, form, variable) {
+    _createVariableDimensions(project, form, variable, drillDownTime = false) {
         // Time dimension
+        const periodicity = drillDownTime ? 'day' : form.periodicity;
         const start = [project.start, form.start].filter(a => a).sort().pop();
         const end = [project.end, form.end].sort().shift();
         const time = new TimeDimension(
             'time',
-            form.periodicity,
-            TimeSlot.fromDate(start, form.periodicity).value,
-            TimeSlot.fromDate(end, form.periodicity).value
+            periodicity,
+            TimeSlot.fromDate(start, periodicity).value,
+            TimeSlot.fromDate(end, periodicity).value
         );
 
         // location dimension

@@ -22,6 +22,30 @@ export default class Project {
 		return this.forms.some(f => f.elements.length && f.entities.length);
 	}
 
+	get compatiblePeriodicities() {
+		const timePeriodicities = [
+			'day', 'month_week_sat', 'month_week_sun', 'month_week_mon', 'week_sat', 'week_sun',
+			'week_mon', 'month', 'quarter', 'semester', 'year'
+		];
+
+		return timePeriodicities.filter(periodicity => {
+			for (var i = 0; i < this.forms.length; ++i) {
+				var dataSource = this.forms[i];
+
+				if (dataSource.periodicity === periodicity)
+					return true;
+
+				try {
+					let t = TimeSlot.fromDate(new Date(), dataSource.periodicity);
+					t.toParentPeriodicity(periodicity);
+					return true;
+				}
+				catch (e) {
+				}
+			}
+		});
+	}
+
 	constructor(data) {
 		var now = new Date().toISOString().substring(0, 10);
 		var oneYear = new Date();
@@ -64,29 +88,29 @@ export default class Project {
 		return false;
 	}
 
+
+
 	/** Get the disagregation dimensions available for any given query */
 	getQueryDimensions(query) {
-		const dimensions = [];
+		const varDimsGroups = [];
 		for (let key in query.parameters) {
 			const variableId = query.parameters[key].variableId;
 			const dices = [...query.dice, ...query.parameters[key].dice]
-			const variableDimensions = this
-				.getDimensions(variableId, dices)
+			const varDims = this
+				.getVariableDimensions(variableId, dices)
 				// If filtered in the formula, we don't want to manipulate it.
 				.filter(dim => !query.parameters[key].dice.find(dice => dice.id == dim.id))
 				// Do not allow manipulating the dimension used in the columns.
-				.filter(dim => !query.aggregate.find(agg => agg.id === dim.id))
-				// If only one item is available, it makes no sense to disagregate
-				.filter(dim => dim.numItems > 1);
+				.filter(dim => !query.aggregate.find(agg => agg.id === dim.id));
 
-			dimensions.push(variableDimensions);
+			varDimsGroups.push(varDims);
 		}
 
-		if (dimensions.length == 0) {
+		if (varDimsGroups.length == 0) {
 			return [];
 		}
 
-		return dimensions.reduce((dimensions1, dimensions2) =>
+		return varDimsGroups.reduce((dimensions1, dimensions2) =>
 			dimensions1
 				.map(dimension => {
 					const otherDimension = dimensions2.find(dim => dim.id == dimension.id);
@@ -96,25 +120,27 @@ export default class Project {
 		);
 	}
 
-	getDimensions(variableId, dices = []) {
+	getVariableDimensions(variableId, dices = [], strictTime = true) {
 		const form = this.forms.find(f => f.elements.find(v => v.id === variableId));
 		const variable = form.elements.find(v => v.id === variableId);
 
 		// Time dimension
+		const periodicity = strictTime ? form.periodicity : 'day';
 		const start = [this.start, form.start].filter(a => a).sort().pop();
 		const end = [this.end, form.end, new Date().toISOString().substring(0, 10)].sort().shift();
 		const time = new TimeDimension(
 			'time',
-			form.periodicity,
+			periodicity,
 			TimeSlot.fromDate(start, form.periodicity).value,
-			TimeSlot.fromDate(end, form.periodicity).value
+			TimeSlot.fromDate(end, form.periodicity).value,
+			`project.dimensions.time`
 		);
 
 		// location dimension
 		const siteIdToName = siteId => this.entities.find(s => s.id == siteId).name;
-		const entity = new GenericDimension('location', 'entity', form.entities, siteIdToName);
+		const location = new GenericDimension('location', 'entity', form.entities, `project.dimensions.entity`, siteIdToName);
 		this.groups.forEach(group => {
-			entity.addChildAttribute(
+			location.addChildAttribute(
 				'entity',
 				group.id,
 				entityId => group.members.includes(entityId) ? 'in' : 'out',
@@ -125,7 +151,7 @@ export default class Project {
 		// partitions
 		const partitions = variable.partitions.map(partition => {
 			const elementIdToName = elementId => partition.elements.find(el => el.id == elementId).name;
-			const dim = new GenericDimension(partition.id, 'element', partition.elements.map(e => e.id), elementIdToName);
+			const dim = new GenericDimension(partition.id, 'element', partition.elements.map(e => e.id), partition.name, elementIdToName);
 
 			partition.groups.forEach(group => {
 				dim.addChildAttribute(
@@ -139,7 +165,7 @@ export default class Project {
 			return dim;
 		});
 
-		const dimensions = [time, entity, ...partitions];
+		const dimensions = [time, location, ...partitions];
 		dices.forEach(dice => {
 			let dimIndex = dimensions.findIndex(dim => dim.id === dice.id);
 			if (dice.range) {
