@@ -1,6 +1,6 @@
 const jwt = require('koa-jwt');
 const jwksRsa = require('jwks-rsa');
-const config = require('../config/config');
+const config = require('../config');
 
 module.exports = jwt({
     secret: jwksRsa.koaJwtSecret({

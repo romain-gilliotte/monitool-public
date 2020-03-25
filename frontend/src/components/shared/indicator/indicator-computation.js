@@ -12,8 +12,8 @@ const module = angular.module(
 
 
 const PERCENTAGE_FORMULA = '100 * numerator / denominator';
-const PERMILLE_FORMULA   = '1000 * numerator / denominator';
-const COPY_FORMULA       = 'copied_value';
+const PERMILLE_FORMULA = '1000 * numerator / denominator';
+const COPY_FORMULA = 'copied_value';
 
 module.component('indicatorComputation', {
 	require: {
@@ -56,18 +56,14 @@ module.component('indicatorComputation', {
 				this.dataSources.forEach(dataSource => {
 					dataSource.elements.forEach(variable => {
 						this.variablesById[variable.id] = variable; // Use to find partition on view
-						this.selectElements.push({id: variable.id, name: variable.name, group: dataSource.name}); // Used by selectbox
+						this.selectElements.push({ id: variable.id, name: variable.name, group: dataSource.name }); // Used by selectbox
 					});
 				});
 			}
 		}
 
 		onTypeChange() {
-			// change fixed formula only if it is needed.
-			if (this.computation.type === 'fixed' && isNaN(this.computation.formula))
-				this.computation.formula = '0';
-
-			else if (this.computation.type === 'copy')
+			if (this.computation.type === 'copy')
 				this.computation.formula = COPY_FORMULA;
 
 			else if (this.computation.type === 'percentage')
@@ -94,7 +90,7 @@ module.component('indicatorComputation', {
 
 				// Add new symbols to formula
 				addedSymbols.forEach(s => {
-					this.computation.parameters[s] = {elementId: null, filter: {}};
+					this.computation.parameters[s] = { elementId: null, filter: {} };
 				});
 			}
 
@@ -113,31 +109,26 @@ module.component('indicatorComputation', {
 			// why not filter out the parameters that are not needed in the modelValue here instead of before save in the model?
 			if (viewValue.type === 'unavailable')
 				return null;
-			else if (viewValue.type === 'fixed')
-				return {formula: viewValue.formula, parameters: {}};
 			else
-				return {formula: viewValue.formula, parameters: viewValue.parameters};
+				return { formula: viewValue.formula, parameters: viewValue.parameters };
 		}
 
 		_modelToView(modelValue) {
 			// Guess formula type with the content.
 			if (modelValue === null)
-				return {type: 'unavailable', formula: '', parameters: {}};
-
-			else if (!isNaN(modelValue.formula))
-				return {type: 'fixed', formula: modelValue.formula, parameters: {}};
+				return { type: 'unavailable', formula: '', parameters: {} };
 
 			else if (modelValue.formula === COPY_FORMULA)
-				return {type: 'copy', formula: COPY_FORMULA, parameters: modelValue.parameters};
+				return { type: 'copy', formula: COPY_FORMULA, parameters: modelValue.parameters };
 
 			else if (modelValue.formula === PERCENTAGE_FORMULA)
-				return {type: 'percentage', formula: PERCENTAGE_FORMULA, parameters: modelValue.parameters};
+				return { type: 'percentage', formula: PERCENTAGE_FORMULA, parameters: modelValue.parameters };
 
 			else if (modelValue.formula === PERMILLE_FORMULA)
-				return {type: 'permille', formula: PERMILLE_FORMULA, parameters: modelValue.parameters};
+				return { type: 'permille', formula: PERMILLE_FORMULA, parameters: modelValue.parameters };
 
 			else
-				return {type: 'formula', formula: modelValue.formula, parameters: modelValue.parameters};
+				return { type: 'formula', formula: modelValue.formula, parameters: modelValue.parameters };
 		}
 	}
 });

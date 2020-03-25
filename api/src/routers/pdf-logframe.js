@@ -5,19 +5,6 @@ const { ObjectId } = require('mongodb');
 const router = new Router();
 
 /**
- * More boilerplate needed to start-up pdfmake
- */
-const styles = {
-    header: { fontSize: 16, bold: true, alignment: 'center', margin: [100, 0, 100, 0] },
-    header3: { fontSize: 16, bold: true, alignment: 'center', margin: [0, 0, 0, 10] },
-    header2: { fontSize: 14, bold: true, margin: [0, 15, 0, 0] },
-    variableName: { fontSize: 10, bold: true, margin: [0, 10, 0, 5] },
-    bold: { bold: true },
-    normal: { fontSize: 9 },
-    italic: { fontSize: 9, italics: true, margin: [10, 0, 0, 0] }
-};
-
-/**
  * Create preconfigured printer
  */
 const printer = new PdfPrinter({
@@ -105,6 +92,15 @@ function computeLogFrameDocDef(logFrame, pageOrientation, dataSources, language 
     var doc = {};
     doc.pageSize = "A4";
     doc.pageOrientation = pageOrientation;
+    doc.styles = {
+        header: { fontSize: 16, bold: true, alignment: 'center', margin: [100, 0, 100, 0] },
+        header3: { fontSize: 16, bold: true, alignment: 'center', margin: [0, 0, 0, 10] },
+        header2: { fontSize: 14, bold: true, margin: [0, 15, 0, 0] },
+        variableName: { fontSize: 10, bold: true, margin: [0, 10, 0, 5] },
+        bold: { bold: true },
+        normal: { fontSize: 9 },
+        italic: { fontSize: 9, italics: true, margin: [10, 0, 0, 0] }
+    };
 
     doc.content = [
         { text: logFrame.name, style: 'header3' }

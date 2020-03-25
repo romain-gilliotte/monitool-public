@@ -1,4 +1,4 @@
-const config = require('../config/config');
+const config = require('../config');
 const AuthenticationClient = require('auth0').AuthenticationClient;
 const ObjectId = require('mongodb').ObjectID;
 

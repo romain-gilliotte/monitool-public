@@ -4,44 +4,12 @@ const { ObjectId } = require('mongodb');
 
 const router = new Router();
 
-/**
- * More boilerplate needed to start-up pdfmake
- */
-const styles = {
-	header: { fontSize: 16, bold: true, alignment: 'center', margin: [100, 0, 100, 0] },
-	variableName: { fontSize: 10, bold: true, margin: [0, 10, 0, 5] },
-	normal: { fontSize: 9 },
-};
-
-/**
- * Create preconfigured printer
- */
 const printer = new PdfPrinter({
 	Roboto: {
 		normal: 'node_modules/roboto-fontface/fonts/roboto/Roboto-Regular.woff',
 		bold: 'node_modules/roboto-fontface/fonts/roboto/Roboto-Medium.woff'
 	}
 });
-
-
-const strings = Object.freeze({
-	fr: Object.freeze({
-		collection_site: "Lieu de collecte",
-		covered_period: "Période couverte",
-		collected_by: "Saisie par"
-	}),
-	en: Object.freeze({
-		collection_site: "Collection site",
-		covered_period: "Covered period",
-		collected_by: "Collected by"
-	}),
-	es: Object.freeze({
-		collection_site: "Lugar de colecta",
-		covered_period: "Periodo",
-		collected_by: "Rellenado por"
-	})
-});
-
 
 /**
  * Render a PDF file containing a sample paper form (for a datasource).
@@ -63,7 +31,6 @@ router.get('/resources/project/:id/data-source/:dataSourceId.pdf', async ctx => 
 		// Create document definition.
 		const title = dataSource.name || 'data-source';
 		const docDef = createDataSourceDocDef(dataSource, ctx.request.query.orientation, ctx.request.query.language);
-		docDef.styles = styles;
 
 		// Send to user.
 		ctx.response.type = 'application/pdf';
@@ -76,11 +43,37 @@ router.get('/resources/project/:id/data-source/:dataSourceId.pdf', async ctx => 
 	}
 });
 
+module.exports = router;
+
+
+const strings = Object.freeze({
+	fr: Object.freeze({
+		collection_site: "Lieu de collecte",
+		covered_period: "Période couverte",
+		collected_by: "Saisie par"
+	}),
+	en: Object.freeze({
+		collection_site: "Collection site",
+		covered_period: "Covered period",
+		collected_by: "Collected by"
+	}),
+	es: Object.freeze({
+		collection_site: "Lugar de colecta",
+		covered_period: "Periodo",
+		collected_by: "Rellenado por"
+	})
+});
+
 
 function createDataSourceDocDef(dataSource, pageOrientation, language = 'en') {
 	return {
 		pageSize: "A4",
 		pageOrientation: pageOrientation,
+		styles: {
+			header: { fontSize: 16, bold: true, alignment: 'center', margin: [100, 0, 100, 0] },
+			variableName: { fontSize: 10, bold: true, margin: [0, 10, 0, 5] },
+			normal: { fontSize: 9 },
+		},
 		content: [
 			{ text: dataSource.name, style: 'header' },
 			{
@@ -243,7 +236,3 @@ function makeLeftCols(partitions) {
 
 	return result;
 }
-
-
-
-module.exports = router;

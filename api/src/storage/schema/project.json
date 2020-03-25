@@ -1,6 +1,4 @@
 {
-	"$schema": "http://json-schema.org/schema#",
-	"title": "Monitool project schema",
 	"type": "object",
 	"additionalProperties": false,
 	"required": [
@@ -89,6 +87,7 @@
 					},
 					"members": {
 						"type": "array",
+						"uniqueItems": true,
 						"items": {
 							"$ref": "#/definitions/uuid"
 						}
@@ -171,113 +170,6 @@
 			}
 		},
 		"extraIndicators": {
-			"type": "array",
-			"items": {
-				"$ref": "#/definitions/indicator"
-			}
-		}
-	},
-	"definitions": {
-		"uuid": {
-			"type": "string",
-			"pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"
-		},
-		"computation": {
-			"oneOf": [
-				{
-					"type": "object",
-					"additionalProperties": false,
-					"required": [
-						"formula",
-						"parameters"
-					],
-					"properties": {
-						"formula": {
-							"type": "string",
-							"minLength": 1
-						},
-						"parameters": {
-							"type": "object",
-							"additionalProperties": false,
-							"patternProperties": {
-								".*": {
-									"type": "object",
-									"additionalProperties": false,
-									"required": [
-										"elementId",
-										"filter"
-									],
-									"properties": {
-										"elementId": {
-											"$ref": "#/definitions/uuid"
-										},
-										"filter": {
-											"type": "object",
-											"additionalProperties": false,
-											"patternProperties": {
-												".*": {
-													"type": "array",
-													"items": {
-														"$ref": "#/definitions/uuid"
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				},
-				{
-					"type": "null"
-				}
-			]
-		},
-		"indicator": {
-			"type": "object",
-			"additionalProperties": false,
-			"required": [
-				"baseline",
-				"target",
-				"colorize",
-				"display",
-				"computation"
-			],
-			"properties": {
-				"display": {
-					"type": "string",
-					"minLength": 1
-				},
-				"baseline": {
-					"oneOf": [
-						{
-							"type": "null"
-						},
-						{
-							"type": "number"
-						}
-					]
-				},
-				"target": {
-					"oneOf": [
-						{
-							"type": "null"
-						},
-						{
-							"type": "number"
-						}
-					]
-				},
-				"colorize": {
-					"type": "boolean"
-				},
-				"computation": {
-					"$ref": "#/definitions/computation"
-				}
-			}
-		},
-		"indicators": {
 			"type": "array",
 			"items": {
 				"$ref": "#/definitions/indicator"

@@ -29,7 +29,6 @@ router.put('/resources/input/:id', async ctx => {
 	ctx.response.body = input;
 });
 
-
 router.post('/resources/project/:id/reporting', async ctx => {
 	const job = await queue.add('compute-report', {
 		projectId: ctx.params.id,

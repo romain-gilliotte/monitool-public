@@ -1,7 +1,5 @@
-
 <select class="form-control" ng-model="$ctrl.computation.type" ng-change="$ctrl.onTypeChange()">
 	<option value="unavailable" translate="project.computations.unavailable"></option>
-	<option value="fixed" translate="project.computations.fixed"></option>
 	<option value="copy" translate="project.computations.copy"></option>
 	<option value="percentage" translate="project.computations.percentage"></option>
 	<option value="permille" translate="project.computations.permille"></option>
@@ -9,24 +7,17 @@
 </select>
 
 
-<input type="text"
-	   class="form-control"
-	   ng-if="$ctrl.computation.type === 'fixed'"
-	   style="margin-top: 3px"
-	   ng-model="$ctrl.computation.formula"
-	   ng-change="$ctrl.onOtherChange()"
-	   ng-pattern="'\\d+'"
-	   required
-	   placeholder="{{'project.indicator_ph_fixed'|translate}}" />
+<input type="text" class="form-control" ng-if="$ctrl.computation.type === 'fixed'" style="margin-top: 3px"
+	ng-model="$ctrl.computation.formula" ng-change="$ctrl.onOtherChange()" ng-pattern="'\\d+'" required
+	placeholder="{{'project.indicator_ph_fixed'|translate}}" />
 
 <p class="help-block">
 	<i class="fa fa-info-circle"></i>
 	<span translate="project.indicator_help_computation"></span>
 </p>
 
-<table class="table table-bordered table-condensed table-stripped"
-	   style="margin-top: 10px"
-	   ng-if="$ctrl.computation.type !== 'unavailable' && $ctrl.computation.type !== 'fixed'">
+<table class="table table-bordered table-condensed table-stripped" style="margin-top: 10px"
+	ng-if="$ctrl.computation.type !== 'unavailable' && $ctrl.computation.type !== 'fixed'">
 
 	<thead>
 		<tr>
@@ -38,12 +29,8 @@
 	<tbody>
 		<tr>
 			<td colspan="3">
-				<input
-					expression
-					class="form-control"
-					ng-model="$ctrl.computation.formula"
-					ng-change="$ctrl.onFormulaChange()"
-					ng-disabled="$ctrl.computation.type !== 'formula'" />
+				<input expression class="form-control" ng-model="$ctrl.computation.formula"
+					ng-change="$ctrl.onFormulaChange()" ng-disabled="$ctrl.computation.type !== 'formula'" />
 			</td>
 		</tr>
 		<tr ng-repeat="key in $ctrl.symbols">
@@ -55,19 +42,14 @@
 
 			<!-- elementId -->
 			<td>
-				<select
-					required
-					class="form-control"
-					ng-model="$ctrl.computation.parameters[key].elementId"
+				<select required class="form-control" ng-model="$ctrl.computation.parameters[key].elementId"
 					ng-change="$ctrl.onOtherChange()"
 					ng-options="v.id as v.name group by v.group for v in $ctrl.selectElements"></select>
 
 			</td>
 
 			<td ng-show="$ctrl.variablesById[$ctrl.computation.parameters[key].elementId].partitions.length">
-				<partition-filter
-					ng-model="$ctrl.computation.parameters[key].filter"
-					ng-change="$ctrl.onOtherChange()"
+				<partition-filter ng-model="$ctrl.computation.parameters[key].filter" ng-change="$ctrl.onOtherChange()"
 					variable="$ctrl.variablesById[$ctrl.computation.parameters[key].elementId]"></partition-filter>
 			</td>
 
@@ -91,4 +73,3 @@
 		</tr>
 	</tbody>
 </table>
-

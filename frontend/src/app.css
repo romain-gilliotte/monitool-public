@@ -577,9 +577,7 @@ td.empty > span {
     border-top-width: 1px;
   }
 
-  cc-indicator-group-by,
-  indicator-group-by,
-  project-group-by,
+  query-aggregate,
   select-indicator,
   indicator-filter .panel,
   olap-dimensions .panel

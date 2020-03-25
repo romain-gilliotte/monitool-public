@@ -1,0 +1,196 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"id",
+		"name",
+		"periodicity",
+		"start",
+		"end",
+		"elements"
+	],
+	"properties": {
+		"id": {
+			"$ref": "#/definitions/uuid"
+		},
+		"name": {
+			"type": "string",
+			"minLength": 1
+		},
+		"entities": {
+			"type": "array",
+			"uniqueItems": true,
+			"items": {
+				"$ref": "#/definitions/uuid"
+			}
+		},
+		"periodicity": {
+			"type": "string",
+			"enum": [
+				"day",
+				"week_sat",
+				"week_sun",
+				"week_mon",
+				"month_week_sat",
+				"month_week_sun",
+				"month_week_mon",
+				"month",
+				"quarter",
+				"semester",
+				"year"
+			]
+		},
+		"start": {
+			"oneOf": [
+				{
+					"type": "null"
+				},
+				{
+					"type": "string",
+					"format": "date"
+				}
+			]
+		},
+		"end": {
+			"oneOf": [
+				{
+					"type": "null"
+				},
+				{
+					"type": "string",
+					"format": "date"
+				}
+			]
+		},
+		"elements": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"id",
+					"name",
+					"timeAgg",
+					"geoAgg",
+					"partitions",
+					"distribution"
+				],
+				"properties": {
+					"id": {
+						"$ref": "#/definitions/uuid"
+					},
+					"name": {
+						"type": "string",
+						"minLength": 1
+					},
+					"timeAgg": {
+						"type": "string",
+						"enum": [
+							"none",
+							"sum",
+							"average",
+							"highest",
+							"lowest",
+							"last"
+						]
+					},
+					"geoAgg": {
+						"type": "string",
+						"enum": [
+							"none",
+							"sum",
+							"average",
+							"highest",
+							"lowest",
+							"last"
+						]
+					},
+					"distribution": {
+						"type": "number"
+					},
+					"partitions": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"additionalProperties": false,
+							"required": [
+								"id",
+								"name",
+								"aggregation",
+								"elements",
+								"groups"
+							],
+							"properties": {
+								"id": {
+									"$ref": "#/definitions/uuid"
+								},
+								"name": {
+									"type": "string",
+									"minLength": 1
+								},
+								"aggregation": {
+									"type": "string",
+									"enum": [
+										"sum",
+										"average",
+										"highest",
+										"lowest",
+										"last"
+									]
+								},
+								"elements": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"additionalProperties": false,
+										"required": [
+											"id",
+											"name"
+										],
+										"properties": {
+											"id": {
+												"$ref": "#/definitions/uuid"
+											},
+											"name": {
+												"type": "string",
+												"minLength": 1
+											}
+										}
+									}
+								},
+								"groups": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"additionalProperties": false,
+										"required": [
+											"id",
+											"name",
+											"members"
+										],
+										"properties": {
+											"id": {
+												"$ref": "#/definitions/uuid"
+											},
+											"name": {
+												"type": "string",
+												"minLength": 1
+											},
+											"members": {
+												"type": "array",
+												"uniqueItems": true,
+												"items": {
+													"$ref": "#/definitions/uuid"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

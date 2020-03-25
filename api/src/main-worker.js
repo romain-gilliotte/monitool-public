@@ -1,13 +1,10 @@
-const MongoClient = require('mongodb').MongoClient;
+const database = require('./storage/database');
 
 async function startApplication() {
-    const client = await MongoClient.connect('mongodb://admin:admin@localhost:27017', {
-        useUnifiedTopology: true
-    });
-    global.database = client.db('monitool');
+    global.database = await database;
 }
 
 startApplication();
 
-require('./workers/mail');
-require('./workers/reporting');
+require('./tasks/mail');
+require('./tasks/reporting');

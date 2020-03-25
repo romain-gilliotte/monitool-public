@@ -1,8 +1,8 @@
 const jsonpatch = require('fast-json-patch');
 const Router = require('koa-router');
 const ObjectId = require('mongodb').ObjectID;
-const Project = require('../resource/model/project');
 const JSONStream = require('JSONStream');
+const validateProject = require('../storage/validator/project');
 
 const router = new Router();
 
@@ -58,39 +58,25 @@ router.get('/resources/project/:id/revisions', async ctx => {
 	ctx.response.body = revisions.pipe(JSONStream.stringify());
 });
 
+/**
+ * Create project
+ */
 router.post('/resources/project', async ctx => {
-	let project;
+	const project = ctx.request.body;
 
-	if (!ctx.request.query.from) {
-		project = ctx.request.body;
-		if (project.owner !== ctx.state.profile.email)
-			throw new Error('you must own the project');
+	const errors = validateProject(project);
+	if (errors.length) {
+		ctx.response.status = 400;
+		ctx.response.body = errors;
+		return;
+	}
 
-	} else {
-		project = await database.collection('project').findOne(
-			{
-				_id: new ObjectId(ctx.params.id),
-				$or: [
-					{ owner: ctx.state.profile.email },
-					{ 'users.email': ctx.state.profile.email },
-				]
-			},
-			{ _id: false, users: false }
-		);
-
-		project.owner = ctx.state.profile.email;
-		project.users = [];
+	if (project.owner !== ctx.state.profile.email) {
+		ctx.response.status = 400;
+		return;
 	}
 
 	await database.collection('project').insertOne(project);
-
-	// Recreate all inputs asynchronously. No need to have the user waiting.
-	if (ctx.request.query.from && ctx.request.query.with_data == 'true') {
-		// clone inputs
-		;
-	}
-
-	// Give the project to the user.
 	ctx.response.body = project;
 });
 
@@ -98,32 +84,38 @@ router.post('/resources/project', async ctx => {
  * Save an existing project
  */
 router.put('/resources/project/:id', async ctx => {
-	delete ctx.request.body._id;
-	Project.validate(ctx.request.body);
-
 	const newProject = ctx.request.body;
+	delete newProject._id;
+
+	const errors = validateProject(newProject);
+	if (errors.length) {
+		ctx.response.status = 400;
+		ctx.response.body = errors;
+		return;
+	}
+
 	const { value: oldProject } = await database.collection('project').findOneAndReplace(
 		{
 			_id: new ObjectId(ctx.params.id),
 			$or: [
 				{ owner: ctx.state.profile.email },
-				{
-					users: {
-						email: ctx.state.profile.email, role: 'owner'
-					}
-				}
+				{ users: { email: ctx.state.profile.email, role: 'owner' } }
 			]
 		},
 		newProject,
 		{ projection: { _id: false } }
 	);
 
+	if (!oldProject) {
+		ctx.response.status = 404;
+		return;
+	}
+
 	await database.collection('revision').insertOne({
 		projectId: new ObjectId(ctx.params.id),
 		user: ctx.state.profile.email,
 		time: new Date(),
-		backwards: jsonpatch.compare(newProject, oldProject),
-		forwards: jsonpatch.compare(oldProject, newProject)
+		backwards: jsonpatch.compare(newProject, oldProject)
 	});
 
 	ctx.response.body = { _id: ctx.params.id, ...newProject };
