@@ -1,20 +1,7 @@
 <table id="reporting" class="table table-bordered table-condensed">
-	<thead>
-		<tr>
-			<th class="row-graph"></th>
-			<th class="row-title" translate="shared.name"></th>
-			<th class="row-dimension"></th>
-			<th translate="project.baseline"></th>
-			<th translate="project.target"></th>
-			<th ng-repeat="col in $ctrl.columns track by col.id" title="{{col.title|formatSlotRange}}">
-				{{col.name|formatSlot}}
-			</th>
-			<th translate="project.total"></th>
-		</tr>
-	</thead>
 	<tbody>
 		<!-- Main section titles (i.e. logframes, datasources) -->
-		<tr ng-repeat-start="row in $ctrl.rows track by row.id" ng-if="row.type == 'title'"
+		<tr class="section-header-row" ng-repeat-start="row in $ctrl.rows track by row.id" ng-if="row.type == 'title'"
 			ng-click="$ctrl.onSectionToggle(row.id)">
 			<th colspan="{{6 + $ctrl.columns.length}}">
 				<fa-open value="$ctrl.sectionOpen[row.id]" class="noprint"></fa-open>
@@ -26,7 +13,7 @@
 		</tr>
 
 		<!-- Subsections (i.e. outputs, activities) -->
-		<tr ng-if="row.type == 'subtitle'" class="indent{{row.indent}}">
+		<tr class="section-header-row" ng-if="row.type == 'subtitle'" class="indent{{row.indent}}">
 			<td class="noprint"></td>
 
 			<th colspan="{{5 + $ctrl.columns.length}}" class="row-header-title">
@@ -41,9 +28,23 @@
 
 		<!-- Data -->
 		<tr ng-repeat-end ng-if="row.type == 'data'" class="indent{{row.indent}}" tr-data project="$ctrl.project"
-			disagregated="!!$ctrl.activeDisagregations[row.id]" label="row.label" query="row.query" indent="row.indent"
-			baseline="row.baseline" target="row.target" colorize="row.colorize" columns="$ctrl.columns"
-			on-disagregate-clicked="$ctrl.onRowDisagregate(row.id, dimensionId, attribute)">
+			label="row.label" query="row.query" indent="row.indent" baseline="row.baseline" target="row.target"
+			colorize="row.colorize" columns="$ctrl.columns" disagregated="!!$ctrl.activeDisagregations[row.id]"
+			on-disagregate-clicked="$ctrl.onRowDisagregate(row.id, dimensionId, attribute)"
+			plotted="!!$ctrl.activePlots[row.id]" on-plot-clicked="$ctrl.onRowPlot(row.id, values)">
 		</tr>
 	</tbody>
+	<thead>
+		<tr>
+			<th class="row-graph"></th>
+			<th class="row-title" translate="shared.name"></th>
+			<th class="row-dimension"></th>
+			<th translate="project.baseline"></th>
+			<th translate="project.target"></th>
+			<th ng-repeat="col in $ctrl.columns track by col.id" title="{{col.title|formatSlotRange}}">
+				{{col.name|formatSlot}}
+			</th>
+			<th translate="project.total"></th>
+		</tr>
+	</thead>
 </table>

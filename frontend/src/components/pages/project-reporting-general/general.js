@@ -4,6 +4,7 @@ import uiRouter from '@uirouter/angularjs';
 
 import mtProjectQuery from './project-query';
 import mtTable from './table';
+import mtGraph from '../../shared/reporting/graph';
 
 const module = angular.module(
 	'monitool.components.pages.project.reporting_general',
@@ -11,7 +12,8 @@ const module = angular.module(
 		uiRouter, // for $stateProvider
 
 		mtProjectQuery,
-		mtTable
+		mtTable,
+		mtGraph
 	]
 );
 
@@ -39,6 +41,10 @@ module.component('generalReporting', {
 
 		onQueryUpdate(query) {
 			this.query = query;
+		}
+
+		onPlotChange(plotData) {
+			this.plotData = plotData;
 		}
 	}
 });

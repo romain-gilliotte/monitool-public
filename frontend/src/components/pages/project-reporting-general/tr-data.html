@@ -1,6 +1,6 @@
 <td class="row-graph">
-	<i class="fa fa-line-chart" ng-click="$ctrl.toggleGraph()"
-		ng-style="{color: $ctrl.graphToggled ? 'black' : 'revert'}"></i>
+	<i class="fa fa-line-chart" ng-click="$ctrl.onPlotClicked({values: $ctrl.plotValues})"
+		ng-style="{color: $ctrl.plotted ? 'black' : 'revert'}"></i>
 </td>
 
 <td class="row-title" title="{{$ctrl.label}}">
@@ -36,11 +36,11 @@
 	<span>{{$ctrl.target}}{{$ctrl.query.formula|indicatorUnit}}</span>
 </td>
 
-<td colspan="{{$ctrl.columns.length + 1}}" ng-if="!$ctrl.values" style="background-color: rgb(238, 238, 238);">
+<td colspan="{{$ctrl.columns.length + 1}}" ng-if="!$ctrl.tableValues" style="background-color: rgb(238, 238, 238);">
 	{{$ctrl.errorMessage|translate}}
 </td>
 
-<td ng-repeat="value in $ctrl.values track by $index" td-reporting-field value="value" baseline="$ctrl.baseline"
+<td ng-repeat="value in $ctrl.tableValues track by $index" td-reporting-field value="value" baseline="$ctrl.baseline"
 	target="$ctrl.target" colorize="$ctrl.colorize" unit="$ctrl.query.formula|indicatorUnit"
 	interpolated="$ctrl.interpolationWarning">
 </td>

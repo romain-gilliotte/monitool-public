@@ -17,13 +17,17 @@ module.component('generalTable', {
 	bindings: {
 		project: '<',
 		query: '<',
+		onPlotChange: '&'
 	},
 	template: require('./table.html'),
 	controller: class GeneralTableController {
 
-		constructor() {
-			this.sectionOpen = {};
-			this.activeDisagregations = {};
+		constructor($element) {
+			this._element = $element[0];
+
+			this.sectionOpen = {}; // { rowId: <boolean> }
+			this.activeDisagregations = {}; // { rowId: { id: <dimId>|'computation' [, attribute: <dimattr>] }}
+			this.activePlots = {};
 			this.rows = [];
 		}
 
@@ -31,7 +35,26 @@ module.component('generalTable', {
 			if (changes.query) {
 				this.columns = this._makeColumnsFromQuery(changes.query.currentValue);
 				this._updateRows();
+				this._updatePlots();
 			}
+		}
+
+		$onInit() {
+			this._element.addEventListener('scroll', this._onScroll);
+		}
+
+		$onDestroy() {
+			this._element.removeEventListener('scroll', this._onScroll);
+		}
+
+		_onScroll(e) {
+			const target = e.currentTarget;
+			const topHeader = target.querySelector('thead');
+			const leftHeaders = target.querySelectorAll('.section-header-row,.row-graph,.row-title,.row-dimension')
+
+			topHeader.style.transform = `translate(0, ${target.scrollTop}px)`;
+			for (let i = 0; i < leftHeaders.length; ++i)
+				leftHeaders[i].style.transform = `translate(${target.scrollLeft}px)`;
 		}
 
 		onSectionToggle(rowId) {
@@ -40,6 +63,7 @@ module.component('generalTable', {
 
 			// Regen all rows
 			this._updateRows();
+			this._updatePlots();
 		}
 
 		/**
@@ -61,6 +85,35 @@ module.component('generalTable', {
 
 			// Regen all rows
 			this._updateRows();
+			this._updatePlots();
+		}
+
+		onRowPlot(rowId, values) {
+			if (!this.activePlots[rowId]) {
+				this.activePlots[rowId] = values;
+			}
+			else {
+				delete this.activePlots[rowId];
+			}
+
+			this._updatePlots();
+		}
+
+		_updatePlots() {
+			const plotData = {
+				x: this.columns.map(col => col.name),
+				ys: [],
+				presentation: this.query.aggregate[0].id === 'time' ? 'line' : 'bar'
+			};
+
+			for (let rowId in this.activePlots) {
+				const row = this.rows.find(row => row.id === rowId);
+				if (row) {
+					plotData.ys.push({ label: row.label, data: this.activePlots[rowId] })
+				}
+			}
+
+			this.onPlotChange({ plotData });
 		}
 
 		/**

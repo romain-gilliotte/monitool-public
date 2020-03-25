@@ -1,14 +1,9 @@
 import angular from 'angular';
-import c3 from 'c3';
-import 'c3/c3.min.css';
-
-import exportSvg from './export-svg';
-
 
 const module = angular.module(
 	'monitool.components.shared.reporting.graph',
 	[
-		exportSvg
+		// exportSvg
 	]
 );
 
@@ -24,12 +19,18 @@ module.component('reportingGraph', {
 
 	controller: class GraphController {
 
-		constructor($element) {
+		constructor($element, $scope) {
+			this.$scope = $scope;
 			this.element = $element[0].querySelector('div>div');
 			this._formattedYs = [];
+
+			this.c3 = import('c3');
+			import('c3/c3.min.css');
 		}
 
-		$postLink() {
+		async $postLink() {
+			const c3 = await this.c3;
+
 			this.chart = c3.generate({
 				size: {
 					height: 200
@@ -55,7 +56,9 @@ module.component('reportingGraph', {
 			});
 		}
 
-		$onChanges(changes) {
+		async $onChanges(changes) {
+			await this.c3;
+
 			if (changes.x || changes.ys) {
 				const formerData = this._formattedYs;
 				this._formattedYs = this._format(this.x, this.ys);
@@ -79,23 +82,20 @@ module.component('reportingGraph', {
 
 			if (changes.presentation && this.chart)
 				this.chart.transform(this.presentation);
+
+			this.$scope.$apply()
 		}
 
-		$onDestroy() {
-			this.chart.destroy();
+		async $onDestroy() {
+			if (this.chart)
+				this.chart.destroy();
 		}
 
 		_format(x, ys) {
 			// Format series according to what c3 is expecting.
 			const result = [
-				['x', ...x.map(x => x.name)],
-				...Object.keys(ys).map(rowId => [
-					ys[rowId].name,
-					...this.x.map(x => {
-						const result = Math.round(ys[rowId].data[x.id]);
-						return typeof result === 'number' && !Number.isNaN(result) ? result : null
-					})
-				])
+				['x', ...x],
+				...ys.map(({ label, data }) => [label, ...data])
 			];
 
 			// Remove duplicate names, c3 can't handle them.

@@ -21,13 +21,15 @@ module.directive('trData', () => {
 			project: '<',
 			columns: '<',
 
-			disagregated: '<',
 			label: '<',
 			query: '<',
 			indent: '<',
 			baseline: '<',
 			target: '<',
 			colorize: '<',
+
+			disagregated: '<', // boolean to indicate the state of disagregation
+			plotted: '<', // boolean to indicate if graph is toggled
 
 			onDisagregateClicked: '&',
 			onPlotClicked: '&'
@@ -51,7 +53,6 @@ module.directive('trData', () => {
 
 			_getInterpolationWarning(query) {
 				const availableDimensions = this.project.getQueryDimensions({ ...query, aggregate: [] });
-				// console.log(query, availableDimensions)
 
 				for (let i = 0; i < query.aggregate.length; ++i) {
 					const aggregate = query.aggregate[i];
@@ -117,10 +118,8 @@ module.directive('trData', () => {
 						{ output: 'report', ...query }
 					);
 
-					this.values = [
-						...this.columns.map(col => response.data.detail[col.id]),
-						response.data.total
-					];
+					this.plotValues = this.columns.map(col => response.data.detail[col.id]);
+					this.tableValues = [...this.plotValues, response.data.total];
 				}
 				catch (e) {
 					this.errorMessage = e.message;
