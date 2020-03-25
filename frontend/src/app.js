@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.css';
-import '@bower_components/font-awesome/css/font-awesome.min.css';
+import 'font-awesome/css/font-awesome.min.css';
 import "./app.css";
 
 import "regenerator-runtime/runtime";
