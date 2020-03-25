@@ -1,6 +1,6 @@
 const Router = require('koa-router');
 const PdfPrinter = require('pdfmake');
-const Project = require('../resource/model/project');
+const { ObjectId } = require('mongodb');
 
 const router = new Router();
 
@@ -18,10 +18,8 @@ const styles = {
  */
 const printer = new PdfPrinter({
 	Roboto: {
-		normal: 'node_modules/roboto-fontface/fonts/Roboto/Roboto-Regular.ttf',
-		bold: 'node_modules/roboto-fontface/fonts/Roboto/Roboto-Medium.ttf',
-		italics: 'node_modules/roboto-fontface/fonts/Roboto/Roboto-RegularItalic.ttf',
-		bolditalics: 'node_modules/roboto-fontface/fonts/Roboto/Roboto-MediumItalic.ttf'
+		normal: 'node_modules/roboto-fontface/fonts/roboto/Roboto-Regular.woff',
+		bold: 'node_modules/roboto-fontface/fonts/roboto/Roboto-Medium.woff'
 	}
 });
 
@@ -49,19 +47,33 @@ const strings = Object.freeze({
  * Render a PDF file containing a sample paper form (for a datasource).
  */
 router.get('/resources/project/:id/data-source/:dataSourceId.pdf', async ctx => {
-	const project = await Project.storeInstance.get(ctx.params.id);
-	const dataSource = project.getDataSourceById(ctx.params.dataSourceId);
+	const project = await database.collection('project').findOne(
+		{
+			_id: new ObjectId(ctx.params.id),
+			$or: [{ owner: ctx.state.profile.email }, { 'users.email': ctx.state.profile.email }],
+		},
+		{
+			projection: { 'forms': { $elemMatch: { id: ctx.params.dataSourceId } } }
+		}
+	);
 
-	// Create document definition.
-	const title = dataSource.name || 'data-source';
-	const docDef = createDataSourceDocDef(dataSource, ctx.request.query.orientation, ctx.request.query.language);
-	docDef.styles = styles;
+	if (project && project.forms.length) {
+		const dataSource = project.forms[0];;
 
-	// Send to user.
-	ctx.response.type = 'application/pdf';
-	ctx.response.body = printer.createPdfKitDocument(docDef);
-	ctx.response.attachment(title + '.pdf');
-	ctx.response.body.end();
+		// Create document definition.
+		const title = dataSource.name || 'data-source';
+		const docDef = createDataSourceDocDef(dataSource, ctx.request.query.orientation, ctx.request.query.language);
+		docDef.styles = styles;
+
+		// Send to user.
+		ctx.response.type = 'application/pdf';
+		ctx.response.body = printer.createPdfKitDocument(docDef);
+		ctx.response.attachment(title + '.pdf');
+		ctx.response.body.end();
+	}
+	else {
+		ctx.response.status = 404;
+	}
 });
 
 
@@ -132,6 +144,8 @@ function createVariableDocDef(variable) {
 				rowSpan: index == 0 ? topRows.length : 1
 			});
 	});
+
+	body = topRows.concat(bodyRows);
 
 	widths = [];
 	for (var i = 0; i < rowPartitions.length; ++i)

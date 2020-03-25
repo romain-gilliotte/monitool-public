@@ -9,12 +9,12 @@
 
 	<div class="pull-right" style="text-align: right">
 		<a target="_blank"
-			href="{{::$root.serviceUrl}}/resources/project/{{::$ctrl.project._id}}/data-source/{{::$ctrl.dataSource.id}}.pdf?orientation=portrait"
+			href="{{::$root.serviceUrl}}/resources/project/{{::$ctrl.project._id}}/data-source/{{::$ctrl.dataSource.id}}.pdf?orientation=portrait&token={{$root.accessToken}}"
 			class="btn btn-default pdf-export" style="margin-bottom: 5px; display: inline-block">
 			<i class="fa fa-file-pdf-o"></i>
 			<span translate="project.download_portrait"></span>
 		</a><br /><a target="_blank"
-			href="{{::$root.serviceUrl}}/resources/project/{{::$ctrl.project._id}}/data-source/{{::$ctrl.dataSource.id}}.pdf?orientation=landscape"
+			href="{{::$root.serviceUrl}}/resources/project/{{::$ctrl.project._id}}/data-source/{{::$ctrl.dataSource.id}}.pdf?orientation=landscape&token={{$root.accessToken}}"
 			class="btn btn-default pdf-export">
 			<i class="fa fa-file-pdf-o fa-rotate-270"></i>
 			<span translate="project.download_landscape"></span>

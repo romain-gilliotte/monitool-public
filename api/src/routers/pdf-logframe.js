@@ -1,6 +1,6 @@
 const Router = require('koa-router');
 const PdfPrinter = require('pdfmake');
-const Project = require('../resource/model/project');
+const { ObjectId } = require('mongodb');
 
 const router = new Router();
 
@@ -22,10 +22,10 @@ const styles = {
  */
 const printer = new PdfPrinter({
     Roboto: {
-        normal: 'node_modules/roboto-fontface/fonts/Roboto/Roboto-Regular.ttf',
-        bold: 'node_modules/roboto-fontface/fonts/Roboto/Roboto-Medium.ttf',
-        italics: 'node_modules/roboto-fontface/fonts/Roboto/Roboto-RegularItalic.ttf',
-        bolditalics: 'node_modules/roboto-fontface/fonts/Roboto/Roboto-MediumItalic.ttf'
+        normal: 'node_modules/roboto-fontface/fonts/roboto/Roboto-Regular.woff',
+        bold: 'node_modules/roboto-fontface/fonts/roboto/Roboto-Medium.woff',
+        italics: 'node_modules/roboto-fontface/fonts/roboto/Roboto-RegularItalic.woff',
+        bolditalics: 'node_modules/roboto-fontface/fonts/roboto/Roboto-MediumItalic.woff'
     }
 });
 
@@ -68,29 +68,46 @@ const strings = Object.freeze({
  * Render a PDF file describing the given logical frame.
  */
 router.get('/resources/project/:id/logical-frame/:logicalFrameId.pdf', async ctx => {
-    const project = await Project.storeInstance.get(ctx.params.id);
-    const logicalFramework = project.getLogicalFrameById(ctx.params.logicalFrameId)
+    const project = await database.collection('project').findOne(
+        {
+            _id: new ObjectId(ctx.params.id),
+            $or: [{ owner: ctx.state.profile.email }, { 'users.email': ctx.state.profile.email }],
+        },
+        {
+            projection: {
+                'logicalFrames': { $elemMatch: { id: ctx.params.logicalFrameId } },
+                'forms': true
+            }
+        }
+    );
 
-    // Create document definition.
-    const title = logicalFramework.name || 'logical-framework';
-    const docDef = logicalFramework.getPdfDocDefinition(ctx.request.query.orientation, project.forms, ctx.request.query.language);
-    docDef.styles = styles;
+    if (project && project.forms.length) {
+        const logicalFramework = project.logicalFrames[0];
 
-    // Send to user.
-    ctx.response.type = 'application/pdf';
-    ctx.response.body = printer.createPdfKitDocument(docDef);
-    ctx.response.attachment(title + '.pdf');
-    ctx.response.body.end();
+        // Create document definition.
+        const title = logicalFramework.name || 'logical-framework';
+        const docDef = computeLogFrameDocDef(logicalFramework, ctx.request.query.orientation, project.forms, ctx.request.query.language);
+        docDef.styles = styles;
+
+        // Send to user.
+        ctx.response.type = 'application/pdf';
+        ctx.response.body = printer.createPdfKitDocument(docDef);
+        ctx.response.attachment(title + '.pdf');
+        ctx.response.body.end();
+    }
+    else {
+        ctx.response.status = 404;
+    }
 });
 
 
-function getPdfDocDefinition(pageOrientation, dataSources, language = 'en') {
+function computeLogFrameDocDef(logFrame, pageOrientation, dataSources, language = 'en') {
     var doc = {};
     doc.pageSize = "A4";
     doc.pageOrientation = pageOrientation;
 
     doc.content = [
-        { text: this.name, style: 'header3' }
+        { text: logFrame.name, style: 'header3' }
     ];
 
     var table = {
@@ -109,58 +126,57 @@ function getPdfDocDefinition(pageOrientation, dataSources, language = 'en') {
     table.body.push([
         [
             { text: strings[language].goal, style: "bold" },
-            { text: this.goal, style: 'normal' }
+            { text: logFrame.goal, style: 'normal' }
         ],
-        ...this._computeIndicatorsSources(this.indicators, dataSources),
+        ...computeIndicatorsSourcesDocDef(logFrame.indicators, dataSources),
         ""
     ]);
 
-    this.purposes.forEach(function (purpose, purposeIndex) {
+    logFrame.purposes.forEach(function (purpose, purposeIndex) {
         table.body.push([
             [
-                { text: strings[language].purpose + " " + (this.purposes.length > 1 ? " " + (purposeIndex + 1) : ""), style: "bold" },
+                { text: `${strings[language].purpose} ${logFrame.purposes.length > 1 ? ` ${purposeIndex + 1}` : ""}`, style: "bold" },
                 { text: purpose.description, style: 'normal' }
             ],
-            ...this._computeIndicatorsSources(purpose.indicators, dataSources),
+            ...computeIndicatorsSourcesDocDef(purpose.indicators, dataSources),
             { text: purpose.assumptions, style: 'normal' }
         ]);
-    }, this);
+    });
 
-    this.purposes.forEach(function (purpose, purposeIndex) {
+    logFrame.purposes.forEach(function (purpose, purposeIndex) {
         purpose.outputs.forEach(function (output, outputIndex) {
             table.body.push([
                 [
-                    { text: strings[language].output + " " + (this.purposes.length > 1 ? " " + (purposeIndex + 1) + '.' : "") + (outputIndex + 1), style: "bold" },
+                    { text: strings[language].output + " " + (logFrame.purposes.length > 1 ? " " + (purposeIndex + 1) + '.' : "") + (outputIndex + 1), style: "bold" },
                     { text: output.description, style: 'normal' }
                 ],
-                ...this._computeIndicatorsSources(output.indicators, dataSources),
+                ...computeIndicatorsSourcesDocDef(output.indicators, dataSources),
                 { text: output.assumptions, style: 'normal' }
             ]);
-        }, this);
-    }, this);
+        });
+    });
 
-    this.purposes.forEach(function (purpose, purposeIndex) {
+    logFrame.purposes.forEach(function (purpose, purposeIndex) {
         purpose.outputs.forEach(function (output, outputIndex) {
             output.activities.forEach(function (activity, activityIndex) {
 
                 table.body.push([
                     [
-                        { text: strings[language].activity + " " + (this.purposes.length > 1 ? " " + (purposeIndex + 1) + '.' : "") + (outputIndex + 1) + '.' + (activityIndex + 1), style: "bold" },
+                        { text: `${strings[language].activity} ${logFrame.purposes.length > 1 ? ` ${purposeIndex + 1}.` : ""}${outputIndex + 1}.${activityIndex + 1}`, style: "bold" },
                         { text: activity.description, style: 'normal' }
                     ],
-                    ...this._computeIndicatorsSources(activity.indicators, dataSources),
+                    ...computeIndicatorsSourcesDocDef(activity.indicators, dataSources),
                     " "
                 ]);
-            }, this);
-        }, this);
-    }, this);
-
+            });
+        });
+    });
 
     doc.content.push({ table: table });
     return doc;
 }
 
-function _computeIndicatorsSources(indicators, dataSources) {
+function computeIndicatorsSourcesDocDef(indicators, dataSources) {
     let myDataSources = dataSources.map(ds => Object.assign({}, ds));
 
     let index = 1;
@@ -200,7 +216,7 @@ function _computeIndicatorsSources(indicators, dataSources) {
                     indexes = ['?'];
                 }
 
-                return i.display + (indexes.length ? ' [' + indexes.join(', ') + ']' : '');
+                return `${i.display}${indexes.length ? ` [${indexes.join(', ')}]` : ''}`;
             }),
             style: 'normal'
         },
@@ -209,7 +225,7 @@ function _computeIndicatorsSources(indicators, dataSources) {
                 return [
                     ds.name,
                     ...ds.elements.map(variable => {
-                        return { text: variable.index + '. ' + variable.name, style: 'italic' }
+                        return { text: `${variable.index}.${variable.name}`, style: 'italic' }
                     })
                 ]
             }),

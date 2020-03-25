@@ -7,7 +7,7 @@ const auth0Client = new AuthenticationClient({
 });
 
 module.exports = async (ctx, next) => {
-    const token = ctx.request.header['authorization'].replace(/^Bearer /, '');
+    const token = (ctx.request.header.authorization || ctx.request.query.token).replace(/^Bearer /, '');
 
     ctx.state.profile = JSON.parse(await redis.get(ctx.state.user.sub));
     if (!ctx.state.profile) {

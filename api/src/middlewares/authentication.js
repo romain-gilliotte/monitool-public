@@ -11,5 +11,9 @@ module.exports = jwt({
     }),
     audience: config.jwt.audience,
     issuer: config.jwt.issuer,
-    algorithms: ['RS256']
-})
+    algorithms: ['RS256'],
+    getToken: function (ctx) {
+        const token = (ctx.request.header.authorization || ctx.request.query.token);
+        return token ? token.replace(/^Bearer /, '') : undefined;
+    }
+});

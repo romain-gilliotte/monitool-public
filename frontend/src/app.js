@@ -85,6 +85,7 @@ function startApp(accessToken, profile) {
 
 		// Set api url in $rootScope (needed to download pdfs)
 		$rootScope.serviceUrl = SERVICE_URL
+		$rootScope.accessToken = accessToken;
 
 		// Put user email in $rootScope
 		$rootScope.profile = profile;
