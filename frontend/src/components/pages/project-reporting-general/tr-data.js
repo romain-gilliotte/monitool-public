@@ -45,9 +45,16 @@ module.directive('trData', () => {
 
 			$onChanges(changes) {
 				if (changes.query) {
-					this.aggregations = this._getDisagregations(this.query);
-					this.interpolationWarning = this._getInterpolationWarning(this.query);
-					this._fetchData(this.query);
+					if (this.query) {
+						this.aggregations = this._getDisagregations(this.query);
+						this.interpolationWarning = this._getInterpolationWarning(this.query);
+						this._fetchData(this.query);
+					}
+					else {
+						this.aggregations = [];
+						this.interpolationWarning = false;
+						this.errorMessage = 'project.indicator_computation_missing';
+					}
 				}
 			}
 
@@ -104,10 +111,6 @@ module.directive('trData', () => {
 			/** Fetch data from query */
 			async _fetchData(query) {
 				try {
-					// No need to load if no computation is defined for the indicator.
-					if (!query.formula)
-						throw new Error('project.indicator_computation_missing');
-
 					// Set loading message
 					delete this.values;
 					this.errorMessage = 'shared.loading';

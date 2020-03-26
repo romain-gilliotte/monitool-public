@@ -23,11 +23,11 @@ module.component('generalTable', {
 	controller: class GeneralTableController {
 
 		constructor($element) {
-			this._element = $element[0];
+			this._element = $element[0]; // Used to spy scroll and translate headers
 
 			this.sectionOpen = {}; // { rowId: <boolean> }
 			this.activeDisagregations = {}; // { rowId: { id: <dimId>|'computation' [, attribute: <dimattr>] }}
-			this.activePlots = {};
+			this.activePlots = {}; // { rowId: [45, 43, 23, 45, 56, ...], ...}
 			this.rows = [];
 		}
 
@@ -116,9 +116,7 @@ module.component('generalTable', {
 			this.onPlotChange({ plotData });
 		}
 
-		/**
-		 * Computes the columns that need to be displayed according to a given query.
-		 */
+		/** Computes the columns that need to be displayed according to a given query. */
 		_makeColumnsFromQuery(query) {
 			if (query.aggregate.length !== 1)
 				throw new Error('Not supported');
@@ -298,43 +296,48 @@ module.component('generalTable', {
 		}
 
 		_makeRowsFromIndicator(id, logicalFramework, indicator, indent = 0) {
-			// Compute parameters from indicator definition
-			const parameters = {}
-			for (let key in indicator.computation.parameters) {
-				const parameter = indicator.computation.parameters[key];
+			if (indicator.computation) {
+				// Compute parameters from indicator definition
+				const parameters = {}
+				for (let key in indicator.computation.parameters) {
+					const parameter = indicator.computation.parameters[key];
 
-				parameters[key] = {
-					variableId: parameter.elementId,
-					dice: []
-				};
+					parameters[key] = {
+						variableId: parameter.elementId,
+						dice: []
+					};
 
-				for (let partitionId in parameter.filter) {
-					dice.push({
-						id: partitionId,
-						attribute: 'element',
-						items: parameter.filter[partitionId]
-					});
+					for (let partitionId in parameter.filter) {
+						dice.push({
+							id: partitionId,
+							attribute: 'element',
+							items: parameter.filter[partitionId]
+						});
+					}
 				}
-			}
 
-			// Add extra dices provided by the logical framework.
-			const dice = this.query.dice.slice();
-			if (logicalFramework) {
-				dice.push({ id: 'location', attribute: 'entity', items: logicalFramework.entities });
-				if (logicalFramework.start)
-					dice.push({ id: 'time', attribute: 'day', range: [logicalFramework.start, null] });
-				if (logicalFramework.end)
-					dice.push({ id: 'time', attribute: 'day', range: [null, logicalFramework.end] });
-			}
+				// Add extra dices provided by the logical framework.
+				const dice = this.query.dice.slice();
+				if (logicalFramework) {
+					dice.push({ id: 'location', attribute: 'entity', items: logicalFramework.entities });
+					if (logicalFramework.start)
+						dice.push({ id: 'time', attribute: 'day', range: [logicalFramework.start, null] });
+					if (logicalFramework.end)
+						dice.push({ id: 'time', attribute: 'day', range: [null, logicalFramework.end] });
+				}
 
-			const query = {
-				formula: indicator.computation.formula,
-				parameters: parameters,
-				aggregate: this.query.aggregate,
-				dice
-			}
+				const query = {
+					formula: indicator.computation.formula,
+					parameters: parameters,
+					aggregate: this.query.aggregate,
+					dice
+				}
 
-			return this._makeRowsFromQuery(id, indicator.display, query, indent, indicator.baseline, indicator.target, indicator.colorize);
+				return this._makeRowsFromQuery(id, indicator.display, query, indent, indicator.baseline, indicator.target, indicator.colorize);
+			}
+			else {
+				return [{ type: 'data', id, label: indicator.display, query: null, indent }];
+			}
 		}
 
 		_makeRowsFromVariable(variable) {
