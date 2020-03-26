@@ -1,4 +1,5 @@
 {
+	"$id": "http://monitool.org/schemas/schema.json",
 	"type": "object",
 	"additionalProperties": false,
 	"required": [
@@ -42,34 +43,37 @@
 		"entities": {
 			"type": "array",
 			"items": {
-				"id": {
-					"$ref": "#/definitions/uuid"
-				},
-				"name": {
-					"type": "string",
-					"minLength": 1
-				},
-				"start": {
-					"oneOf": [
-						{
-							"type": "null"
-						},
-						{
-							"type": "string",
-							"format": "date"
-						}
-					]
-				},
-				"end": {
-					"oneOf": [
-						{
-							"type": "null"
-						},
-						{
-							"type": "string",
-							"format": "date"
-						}
-					]
+				"type": "object",
+				"properties": {
+					"id": {
+						"$ref": "#/definitions/uuid"
+					},
+					"name": {
+						"type": "string",
+						"minLength": 1
+					},
+					"start": {
+						"oneOf": [
+							{
+								"type": "null"
+							},
+							{
+								"type": "string",
+								"format": "date"
+							}
+						]
+					},
+					"end": {
+						"oneOf": [
+							{
+								"type": "null"
+							},
+							{
+								"type": "string",
+								"format": "date"
+							}
+						]
+					}
 				}
 			}
 		},
