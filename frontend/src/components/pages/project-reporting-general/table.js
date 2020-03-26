@@ -179,6 +179,7 @@ module.component('generalTable', {
 					...m,
 					...this._makeRowsFromLogicalFramework(logFrame)
 				], []),
+				...this._makeRowsFromExtraIndicators(this.project.extraIndicators),
 				...this.project.forms.reduce((m, dataSource) => [
 					...m,
 					...this._makeRowsFromDataSource(dataSource)
@@ -255,6 +256,26 @@ module.component('generalTable', {
 			]
 		}
 
+		_makeRowsFromExtraIndicators(extraIndicators) {
+			const rowId = 'extra';
+
+			return [
+				{
+					id: rowId,
+					type: 'title',
+					subtype: 'indicator.extra'
+				},
+				...(
+					this.sectionOpen[rowId] ?
+						extraIndicators.reduce((m, indicator, index) => [
+							...m,
+							...this._makeRowsFromIndicator(`${rowId}.${index}`, null, indicator, 0)
+						], []) :
+						[]
+				)
+			]
+		}
+
 		_makeRowsFromDataSource(dataSource) {
 			const rowId = `ds.${dataSource.id}`;
 
@@ -298,11 +319,13 @@ module.component('generalTable', {
 
 			// Add extra dices provided by the logical framework.
 			const dice = this.query.dice.slice();
-			dice.push({ id: 'location', attribute: 'entity', items: logicalFramework.entities });
-			if (logicalFramework.start)
-				dice.push({ id: 'time', attribute: 'day', range: [logicalFramework.start, null] });
-			if (logicalFramework.end)
-				dice.push({ id: 'time', attribute: 'day', range: [null, logicalFramework.end] });
+			if (logicalFramework) {
+				dice.push({ id: 'location', attribute: 'entity', items: logicalFramework.entities });
+				if (logicalFramework.start)
+					dice.push({ id: 'time', attribute: 'day', range: [logicalFramework.start, null] });
+				if (logicalFramework.end)
+					dice.push({ id: 'time', attribute: 'day', range: [null, logicalFramework.end] });
+			}
 
 			const query = {
 				formula: indicator.computation.formula,

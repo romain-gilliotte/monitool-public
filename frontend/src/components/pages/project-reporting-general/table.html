@@ -5,10 +5,7 @@
 			ng-click="$ctrl.onSectionToggle(row.id)">
 			<th colspan="{{6 + $ctrl.columns.length}}">
 				<fa-open value="$ctrl.sectionOpen[row.id]" class="noprint"></fa-open>
-				<span ng-if="row.subtype">
-					{{row.subtype|translate}}:
-				</span>
-				{{row.title}}
+				<span ng-if="row.subtype">{{row.subtype|translate}}</span><span ng-if="row.title">: {{row.title}}</span>
 			</th>
 		</tr>
 
