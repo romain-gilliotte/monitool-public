@@ -191,7 +191,7 @@ module.component('generalTable', {
 
 			return [
 				{
-					id: `${rowId}`,
+					id: rowId,
 					type: 'title',
 					subtype: 'project.logical_frame',
 					title: logFrame.name
@@ -204,9 +204,9 @@ module.component('generalTable', {
 							subtype: 'project.goal',
 							title: logFrame.goal
 						},
-						...logFrame.indicators.reduce((m, indicator) => [
+						...logFrame.indicators.reduce((m, indicator, i) => [
 							...m,
-							...this._makeRowsFromIndicator(logFrame, indicator)
+							...this._makeRowsFromIndicator(`${rowId}.i.${i}`, logFrame, indicator)
 						], []),
 						...logFrame.purposes.reduce((m, purpose, pIndex) => [
 							...m,
@@ -217,9 +217,9 @@ module.component('generalTable', {
 								title: purpose.description,
 								indent: 1
 							},
-							...purpose.indicators.reduce((m, indicator) => [
+							...purpose.indicators.reduce((m, indicator, i) => [
 								...m,
-								...this._makeRowsFromIndicator(logFrame, indicator, 1)
+								...this._makeRowsFromIndicator(`${rowId}.p.${pIndex}.i.${i}`, logFrame, indicator, 1)
 							], []),
 							...purpose.outputs.reduce((m, output, oIndex) => [
 								...m,
@@ -230,9 +230,9 @@ module.component('generalTable', {
 									title: output.description,
 									indent: 2
 								},
-								...output.indicators.reduce((m, indicator) => [
+								...output.indicators.reduce((m, indicator, i) => [
 									...m,
-									...this._makeRowsFromIndicator(logFrame, indicator, 2)
+									...this._makeRowsFromIndicator(`${rowId}.p.${pIndex}.o.${oIndex}.i.${i}`, logFrame, indicator, 2)
 								], []),
 								...output.activities.reduce((m, activity, aIndex) => [
 									...m,
@@ -243,9 +243,9 @@ module.component('generalTable', {
 										title: activity.description,
 										indent: 3
 									},
-									...activity.indicators.reduce((m, indicator) => [
+									...activity.indicators.reduce((m, indicator, i) => [
 										...m,
-										...this._makeRowsFromIndicator(logFrame, indicator, 3)
+										...this._makeRowsFromIndicator(`${rowId}.p.${pIndex}.o.${oIndex}.a.${aIndex}.i.${i}`, logFrame, indicator, 3)
 									], []),
 								], [])
 							], [])
@@ -276,7 +276,7 @@ module.component('generalTable', {
 			];
 		}
 
-		_makeRowsFromIndicator(logicalFramework, indicator, indent = 0) {
+		_makeRowsFromIndicator(id, logicalFramework, indicator, indent = 0) {
 			// Compute parameters from indicator definition
 			const parameters = {}
 			for (let key in indicator.computation.parameters) {
@@ -311,7 +311,7 @@ module.component('generalTable', {
 				dice
 			}
 
-			return this._makeRowsFromQuery(indicator.id, indicator.display, query, indent, indicator.baseline, indicator.target, indicator.colorize);
+			return this._makeRowsFromQuery(id, indicator.display, query, indent, indicator.baseline, indicator.target, indicator.colorize);
 		}
 
 		_makeRowsFromVariable(variable) {
