@@ -32,6 +32,10 @@ function validate(project) {
 	const variables = project.forms.reduce((m, f) => [...m, ...f.elements], []);
 	const partitions = variables.reduce((m, v) => [...m, ...v.partitions], []);
 	const pElements = partitions.reduce((m, p) => [...m, ...p.elements], []);
+
+	if (!variables.every(v => v.distribution >= 0 && v.distribution <= v.partitions.length))
+		errors.push({ code: 'invalid distribution', message: 'must be between 0 and partition.length included' });
+
 	const isValid =
 		// Validate uniqueness
 		hasUniqueId(project.entities)
