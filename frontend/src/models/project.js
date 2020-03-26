@@ -1,7 +1,7 @@
 import axios from 'axios';
 import exprEval from 'expr-eval';
 import TimeSlot from 'timeslot-dag';
-import { Cube, TimeDimension, GenericDimension } from 'olap-in-memory';
+import { TimeDimension, GenericDimension } from 'olap-in-memory';
 
 export default class Project {
 

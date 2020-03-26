@@ -1,6 +1,5 @@
 import axios from 'axios';
-import jsonpatch from 'fast-json-patch';
-
+import jiff from 'jiff';
 
 export default class Revision {
 
@@ -21,12 +20,8 @@ export default class Revision {
 
 			// Compute before and after state
 			revisions[i].after = i === 0 ? project : revisions[i - 1].before;
-
-			revisions[i].before = jsonpatch.applyPatch(
-				jsonpatch.deepClone(revisions[i].after),
-				revisions[i].backwards
-			).newDocument;
-
+			revisions[i].before = jiff.patch(revisions[i].backwards, revisions[i].after);
+			revisions[i].forwards = jiff.diff(revisions[i].before, revisions[i].after, item => item.id || item.display)
 			revisions[i].isEquivalent = angular.equals(project, revisions[i].before);
 		}
 	}

@@ -1,4 +1,4 @@
-const jsonpatch = require('fast-json-patch');
+const jiff = require('jiff');
 const Router = require('koa-router');
 const ObjectId = require('mongodb').ObjectID;
 const JSONStream = require('JSONStream');
@@ -87,6 +87,7 @@ router.put('/resources/project/:id', async ctx => {
 	const newProject = ctx.request.body;
 	delete newProject._id;
 
+	// Check that new project is valid.
 	const errors = validateProject(newProject);
 	if (errors.length) {
 		ctx.response.status = 400;
@@ -94,6 +95,7 @@ router.put('/resources/project/:id', async ctx => {
 		return;
 	}
 
+	// Update database and fetch previous version.
 	const { value: oldProject } = await database.collection('project').findOneAndReplace(
 		{
 			_id: new ObjectId(ctx.params.id),
@@ -111,11 +113,15 @@ router.put('/resources/project/:id', async ctx => {
 		return;
 	}
 
+	// Insert patch in database.
 	await database.collection('revision').insertOne({
 		projectId: new ObjectId(ctx.params.id),
 		user: ctx.state.profile.email,
 		time: new Date(),
-		backwards: jsonpatch.compare(newProject, oldProject)
+		backwards: jiff.diff(
+			newProject, oldProject,
+			{ invertible: false, makeContext: () => undefined }
+		)
 	});
 
 	ctx.response.body = { _id: ctx.params.id, ...newProject };

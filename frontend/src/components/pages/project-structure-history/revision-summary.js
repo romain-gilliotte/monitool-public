@@ -1,5 +1,5 @@
 import angular from 'angular';
-import jsonpatch from 'fast-json-patch';
+import jiff from 'jiff';
 
 const module = angular.module(
 	'monitool.components.pages.project.structure.history.revision-summary',
@@ -35,25 +35,26 @@ module.component('revisionSummary', {
 			if (!this._watch)
 				return;
 
-			var before = jsonpatch.deepClone(this.revision.before),
-				after  = jsonpatch.deepClone(this.revision.before);
+			var beforeOperation = this.revision.before,
+				afterOperation = this.revision.before;
 
 			this.patches = [];
 
 			for (var i = 0; i < this.revision.forwards.length; ++i) {
 				var operation = this.revision.forwards[i];
+				if (operation.op !== 'test') {
+					afterOperation = jiff.patch([operation], afterOperation);
 
-				after = jsonpatch.applyOperation(after, operation).newDocument;
+					var str = this.translate(
+						this._getTranslationKey(operation),
+						this._getTranslationData(operation, beforeOperation, afterOperation)
+					);
 
-				var str = this.translate(
-					this._getTranslationKey(operation),
-					this._getTranslationData(operation, before, after)
-				);
+					if (!this.patches.includes(str))
+						this.patches.push(str);
 
-				if (!this.patches.includes(str))
-					this.patches.push(str);
-
-				before = jsonpatch.applyOperation(before, operation).newDocument;
+					beforeOperation = afterOperation;
+				}
 			}
 
 			// FIXME: this may allow a XSS attack on co-owners of the project.
