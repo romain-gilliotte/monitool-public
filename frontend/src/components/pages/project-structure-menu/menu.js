@@ -108,6 +108,7 @@ module.component('projectEditMenu', {
 				this.projectSaveRunning = true;
 
 				try {
+					this.childProject.sanitize();
 					await this.childProject.save();
 
 					// Tell parent component that we saved the project.

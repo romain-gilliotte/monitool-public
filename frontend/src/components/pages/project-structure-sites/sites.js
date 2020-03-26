@@ -74,7 +74,6 @@ module.component('projectSites', {
 
 		onDeleteEntityClicked(entityId) {
 			this.editableProject.entities = this.editableProject.entities.filter(e => e.id !== entityId);
-			this.editableProject.sanitize();
 			this.onFieldChange();
 		}
 
