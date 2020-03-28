@@ -56,8 +56,8 @@
 				<a ng-if="p.active" class="btn btn-default btn-xxs"
 					ui-sref="main.project.reporting.home({projectId: p._id})" translate="shared.open"></a>
 
-				<a ng-if="!p.active && p.isOwner" class="btn btn-default btn-xxs" ng-click="$ctrl.onRestoreClicked(p)"
-					translate="shared.restore"></a>
+				<a acl-has-project-role="owner" acl-project="p" ng-if="!p.active" class="btn btn-default btn-xxs"
+					ng-click="$ctrl.onRestoreClicked(p)" translate="shared.restore"></a>
 
 				<div class="btn-group" uib-dropdown ng-if="p.active && $ctrl.showDropDown">
 					<a class="btn btn-default btn-xxs" uib-dropdown-toggle>

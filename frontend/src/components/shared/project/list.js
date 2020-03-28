@@ -41,10 +41,7 @@ module.component('projectList', {
 			this.displayedProjects = this.projects.slice();
 
 			this.displayedProjects.forEach(p => {
-				const user = p.users.find(u => u.email == this.userEmail);
-
 				p.running = p.end > new Date().toISOString().slice(0, 10);
-				p.isOwner = user && user.role === 'owner';
 				p.favorite = !!localStorage['favorites::projects::' + p._id];
 			});
 
@@ -110,13 +107,6 @@ module.component('projectList', {
 		createProject() {
 			this.$state.go('main.project.structure.home', { projectId: 'new' });
 		}
-
-		// onOpenClicked(project) {
-		// 	if (project.isOwner && !this.preferReporting)
-		// 		this.$state.go("main.project.structure.home", { projectId: project._id });
-		// 	else
-		// 		this.$state.go("main.project.reporting.home", { projectId: project._id });
-		// }
 
 		async onCloneClicked(project) {
 			var question = this.translate('project.are_you_sure_to_clone');
