@@ -1,8 +1,8 @@
 {
   "name": "monitool",
-  "description": "Indicator monitoring application for Medecins du Monde",
+  "description": "Indicator monitoring application",
   "version": "2.7.0",
-  "repository": "git@github.com:medecins-du-monde/monitool.git",
+  "repository": "git@github.com:romain-gilliotte/monitool.git",
   "license": "GPL-3.0+",
   "private": true,
   "dependencies": {
