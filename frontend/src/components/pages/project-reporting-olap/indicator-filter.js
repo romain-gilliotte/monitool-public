@@ -1,6 +1,5 @@
 
 import mtMselectWithGroups from '../../shared/ng-models/mselect-with-groups';
-import {computeSplitPartitions} from '../../../helpers/indicator';
 
 const module = angular.module(
 	'monitool.component.shared.reporting.project-filter',
@@ -13,8 +12,7 @@ const module = angular.module(
 module.component('indicatorFilter', {
 	bindings: {
 		project: '<',
-		logicalFramework: '<',
-		indicator: '<',
+		query: '<',
 		onUpdate: '&'
 	},
 
@@ -27,77 +25,88 @@ module.component('indicatorFilter', {
 		}
 
 		$onChanges(changes) {
-			if (changes.project || changes.indicator) {
-				this._computeBounds();
-				this.partitions = computeSplitPartitions(this.project, this.indicator.computation);
-
-				// By default filter takes every possible input.
-				this.filter = {
-					_start: this.minDate,
-					_end: this.maxDate,
-					entity: this.availableSites.map(site => site.id)
-				};
-
-				this.partitions.forEach(partition => {
-					this.filter[partition.id] = partition.elements.map(e => e.id);
-				});
+			if (changes.query) {
+				this._createChoices();
+				this._selectAll();
+				this.onFilterChange();
 			}
-
-			this.onFilterChange();
-		}
-
-		_computeBounds() {
-			this.minDate = this.project.start;
-			this.maxDate = this.project.end;
-			this.availableSites = this.project.entities;
-
-			// Limit bounds against data sources.
-			if (this.indicator.computation) {
-				Object.values(this.indicator.computation.parameters).forEach(param => {
-					const dataSource = this.project.forms.find(ds => {
-						return ds.elements.some(variable => variable.id === param.elementId)
-					});
-
-					// The list of available entities is the intersection of the entities for the different variables.
-					this.availableSites = this.availableSites.filter(site => dataSource.entities.includes(site.id));
-
-					// Same for the dates.
-					if (dataSource.start && this.minDate < dataSource.start)
-						this.minDate = dataSource.start;
-					if (dataSource.end && this.maxDate > dataSource.end)
-						this.maxDate = dataSource.end;
-				});
-			}
-
-			// Limit bounds against logical frame, if provided (not the case for extraIndicators, cc...)
-			if (this.logicalFramework) {
-				if (this.logicalFramework.start && this.minDate < this.logicalFramework.start)
-					this.minDate = this.logicalFramework.start;
-				if (this.logicalFramework.end && this.maxDate > this.logicalFramework.end)
-					this.maxDate = dataSource.end;
-
-				this.availableSites = this.availableSites.filter(site => this.logicalFramework.entities.includes(site.id));
-			}
-
-			this.availableGroups = this.project.groups
-				.map(group => {
-					const newGroup = angular.copy(group);
-
-					// Compute intersection, and keep the same ordering than the sites specified
-					// by the project's owners.
-					newGroup.members = this.availableSites
-						.filter(site => group.members.includes(site.id))
-						.map(site => site.id);
-
-					return newGroup;
-				})
-				.filter(group => !!group.members.length);
 		}
 
 		onFilterChange() {
-			this.onUpdate({filter: angular.copy(this.filter)});
+			const dices = [
+				{ id: 'time', attribute: 'day', range: [this.start, this.end] },
+				...Object.keys(this.selectedItems).map(dimensionId => {
+					let attribute;
+					if (dimensionId === 'location')
+						attribute = 'entity';
+					else
+						attribute = 'element';
+
+					return {
+						id: dimensionId,
+						attribute,
+						items: this.selectedItems[dimensionId]
+					}
+				})
+			];
+
+			this.onUpdate({ dices })
 		}
 
+		_selectAll() {
+			this.selectedItems = {};
+			this.dimensions.forEach(dimension => {
+				this.selectedItems[dimension.id] = dimension.elements.map(e => e.id);
+			});
+		}
+
+		_createChoices() {
+			this.dimensions = [];
+			this.project.getQueryDimensions(this.query, false).forEach(dimension => {
+				if (dimension.id === 'time') {
+					const items = dimension.getItems();
+					this.start = items[0];
+					this.end = items[items.length - 1];
+				}
+
+				else if (dimension.id === 'location') {
+					const groups = this.project.groups.map(group => ({
+						...group,
+						members: group.members.filter(id => dimension.getItems().includes(id))
+					}));
+
+					this.dimensions.push({
+						id: 'location',
+						label: 'project.dimensions.entity',
+						elements: dimension.getEntries().map(([id, label]) => ({ id, name: label })),
+						groups: groups
+					});
+				}
+
+				else {
+					const partition = this.project.forms.reduce(
+						(m, f) => m ? m : f.elements.reduce(
+							(m, v) => m ? m : v.partitions.find(p => p.id === dimension.id),
+							null
+						),
+						null
+					);
+
+					const groups = partition.groups.map(group => ({
+						...group,
+						members: group.members.filter(id => dimension.getItems().includes(id))
+					}));
+
+					this.dimensions.push({
+						id: dimension.id,
+						label: dimension.label,
+						elements: dimension.getEntries().map(([id, label]) => ({ id, name: label })),
+						groups: groups
+					})
+				}
+			});
+
+		}
 	}
 });
 

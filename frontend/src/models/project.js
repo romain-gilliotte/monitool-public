@@ -125,7 +125,7 @@ export default class Project {
 		// Time dimension
 		const periodicity = strictTime ? form.periodicity : 'day';
 		const start = [this.start, form.start].filter(a => a).sort().pop();
-		const end = [this.end, form.end, new Date().toISOString().substring(0, 10)].sort().shift();
+		const end = [this.end, form.end].sort().shift();
 		const time = new TimeDimension(
 			'time',
 			periodicity,

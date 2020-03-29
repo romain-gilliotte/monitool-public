@@ -6,20 +6,16 @@
 </ol>
 
 
-<select-indicator
-	project="$ctrl.project"
-	on-update="$ctrl.onIndicatorUpdated(indicator, logicalFramework)"></select-indicator>
+<query-computation project="$ctrl.project" on-update="$ctrl.onBaseQueryUpdated(query, baseline, target, colorize)">
+</query-computation>
 
-<olap-dimensions
-	project="$ctrl.project"
-	indicator="$ctrl.indicator"
-	on-update="$ctrl.onDimensionsUpdated(dimensions)"></olap-dimensions>
+<olap-dimensions project="$ctrl.project" query="$ctrl.baseQuery"
+	on-update="$ctrl.onAggregateUpdated(aggregate, distribution, showTotals)">
+</olap-dimensions>
 
-<indicator-filter
-	project="$ctrl.project"
-	indicator="$ctrl.indicator"
-	logical-framework="$ctrl.logicalFramework"
-	on-update="$ctrl.onFilterUpdated(filter)"></indicator-filter>
+
+<indicator-filter project="$ctrl.project" query="$ctrl.baseQuery" on-update="$ctrl.onDiceUpdated(dices)">
+</indicator-filter>
 
 <div ng-if="$ctrl.indicator">
 	<span ng-if="$ctrl.indicator.baseline !== null">
@@ -30,12 +26,6 @@
 	</span>
 </div>
 
-<olap-grid
-	ng-if="!$ctrl.errorMessage"
-	project="$ctrl.project"
-	indicator="$ctrl.indicator"
-	dimensions="$ctrl.dimensions"
-	filter="$ctrl.filter"
-	data="$ctrl.data"></olap-grid>
-
 <span ng-if="$ctrl.errorMessage">{{$ctrl.errorMessage|translate}}</span>
+<olap-grid ng-if="!$ctrl.errorMessage" project="$ctrl.project" query="$ctrl.query" distribution="$ctrl.distribution"
+	show-totals="$ctrl.showTotals" data="$ctrl.data"></olap-grid>

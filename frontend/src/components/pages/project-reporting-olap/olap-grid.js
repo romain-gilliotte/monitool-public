@@ -1,6 +1,5 @@
 import angular from 'angular';
-import {generateIndicatorDimensions} from '../../../helpers/indicator';
-import {product} from '../../../helpers/array';
+import { product } from '../../../helpers/array';
 
 const module = angular.module(
 	'monitool.components.shared.reporting.olap-grid',
@@ -12,9 +11,9 @@ const module = angular.module(
 module.component('olapGrid', {
 	bindings: {
 		project: '<',
-		indicator: '<',
-		dimensions: '<',
-		filter: '<',
+		query: '<',
+		distribution: '<',
+		showTotals: '<',
 		data: '<'
 	},
 
@@ -49,74 +48,112 @@ module.component('olapGrid', {
 		}
 
 		$onChanges(changes) {
-			const dimensions = generateIndicatorDimensions(this.project, this.indicator, this.filter);
+			const dimensions = this.project
+				.getQueryDimensions({ ...this.query, aggregate: [] }, false)
+				.map(dim => {
+					const aggregate = this.query.aggregate.find(agg => agg.id === dim.id)
+					if (aggregate)
+						return dim.getEntries(aggregate.attribute).map(entry => ({
+							id: entry[0],
+							name: entry[1]
+						}));
+					else
+						return null;
+				})
+				.filter(entries => entries);
 
-			const rows = this.dimensions.rows.map(id => dimensions.find(d => d.id == id).rows);
-			const cols = this.dimensions.cols.map(id => dimensions.find(d => d.id == id).rows);
+			const rows = dimensions.slice(0, this.distribution);
+			const cols = dimensions.slice(this.distribution);
+			this._buildGridGeneric(rows, cols, this.data);
+		}
 
-			if (!rows.length) {
-				rows.push([]);
-				this.data = {_total: this.data};
+		_buildGridGeneric(rowss, colss, data) {
+			if (colss.length === 0) {
+				colss = [[{ id: '_total', name: 'total' }]];
+				data = this._addTotalStep(data);
 			}
-			if (!cols.length) {
-				cols.push([])
-				for (let key in this.data)
-					this.data[key] = {_total: this.data[key]}
+			else if (this.showTotals)
+				colss = colss.map(col => [...col, { id: '_total', name: 'total' }]);
+
+			if (rowss.length === 0) {
+				rowss = [[{ id: '_total', name: 'total' }]];
+				data = { _total: data };
 			}
-
-			if (this.dimensions.showTotals || !this.dimensions.rows.length)
-				rows.forEach(row => row.push({id: '_total', name: 'total', isGroup: true}));
-
-			if (this.dimensions.showTotals || !this.dimensions.cols.length)
-				cols.forEach(col => col.push({id: '_total', name: 'total', isGroup: true}));
+			else if (this.showTotals)
+				rowss = rowss.map(row => [...row, { id: '_total', name: 'total' }]);
 
 			// Create empty grid.
-			this.grid = {header: [], body: []};
+			this.grid = {
+				header: this._buildHeader(colss),
+				body: this._buildDataRows(rowss, colss, data)
+			};
+		}
+
+		_buildHeader(colss) {
+			const header = [];
 
 			// Create header rows.
-			var totalCols = cols.reduce((memo, col) => memo * col.length, 1),
+			var totalCols = colss.reduce((memo, cols) => memo * cols.length, 1),
 				colspan = totalCols, // current colspan is total number of columns.
 				numCols = 1; // current numCols is 1.
 
-			for (var i = 0; i < cols.length; ++i) {
+			for (var i = 0; i < colss.length; ++i) {
 				// adapt colspan and number of columns
-				colspan /= cols[i].length;
-				numCols *= cols[i].length;
+				colspan /= colss[i].length;
+				numCols *= colss[i].length;
 
 				// Create header row
-				var row = {colspan: colspan, cols: []};
+				var row = { colspan: colspan, cols: [] };
 				for (var k = 0; k < numCols; ++k)
-					row.cols.push(cols[i][k % cols[i].length]);
+					row.cols.push(colss[i][k % colss[i].length]);
 
-				this.grid.header.push(row);
+				header.push(row);
 			}
+
+			return header;
+		}
+
+		_buildDataRows(rowss, colss, data) {
+			const body = [];
 
 			// Create data rows.
-			this.rowspans = [];
-			var rowspan = rows.reduce((memo, row) => memo * row.length, 1);
-			for (var i = 0; i < rows.length; ++i) {
-				rowspan /= rows[i].length;
-				this.rowspans[i] = rowspan;
+			const rowspans = [];
+			let rowspan = rowss.reduce((memo, rows) => memo * rows.length, 1);
+			for (var i = 0; i < rowss.length; ++i) {
+				rowspan /= rowss[i].length;
+				rowspans[i] = rowspan;
 			}
 
-			product(rows).forEach(headers => {
-				this.grid.body.push({
-					headerCols: headers,
-					dataCols: product([...headers.map(a => [a]), ...cols]).map(els => {
-						try {
-							var result = this.data;
-							var numEls = els.length;
-							for (var i = 0 ; i < numEls; ++i)
-								result = result[els[i].id];
+			product(rowss).forEach((headers, rowIndex) => {
+				const headerCols = headers
+					.map((header, i) => ({ ...header, rowspan: rowspans[i] }))
+					.filter(header => rowIndex % header.rowspan == 0);
 
-							return result;
-						}
-						catch (e) {
-							return undefined;
-						}
-					})
-				});
+				const colsPaths = product([...headers.map(a => [a]), ...colss]);
+				const dataCols = colsPaths.map(els => {
+					var result = data;
+					var numEls = els.length;
+					for (var i = 0; i < numEls; ++i)
+						result = result[els[i].id];
+
+					return result;
+				})
+
+				body.push({ headerCols, dataCols });
 			});
+
+			return body;
+		}
+
+		_addTotalStep(data) {
+			if (data === null || typeof data === 'number')
+				return { _total: data };
+			else {
+				const obj = {};
+				for (let key in data)
+					obj[key] = this._addTotalStep(data[key]);
+				return obj;
+			}
 		}
 	}
 })

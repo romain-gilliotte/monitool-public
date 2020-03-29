@@ -578,7 +578,7 @@ td.empty > span {
   }
 
   query-aggregate,
-  select-indicator,
+  query-computation,
   indicator-filter .panel,
   olap-dimensions .panel
 

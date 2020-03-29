@@ -2,11 +2,8 @@ import angular from 'angular';
 import axios from 'axios'
 
 import uiRouter from '@uirouter/angularjs';
-import uiSelect from 'ui-select';
 
-import 'ui-select/dist/select.min.css';
-
-import mtSelectIndicator from './select-indicator';
+import mtQueryComputation from './query-computation';
 import mtIndicatorFilter from './indicator-filter';
 import mtDimensions from './dimensions';
 import mtOlapGrid from './olap-grid';
@@ -15,9 +12,8 @@ const module = angular.module(
 	'monitool.components.pages.project.reporting.olap',
 	[
 		uiRouter, // for $stateProvider
-		uiSelect,
 
-		mtSelectIndicator,
+		mtQueryComputation,
 		mtIndicatorFilter,
 		mtDimensions,
 		mtOlapGrid
@@ -46,57 +42,59 @@ module.component('olapReporting', {
 		constructor($scope) {
 			this.$scope = $scope;
 
-			// Autoincrementing id, to work around
-			// slow fetches breaking interface for long ones.
-			this._fetchId = 0;
-			this._timeout = null;
+			this.baseQueryUpdated = false;
+			this.aggregateUpdated = false;
+			this.diceUpdated = false;
 		}
 
-		onIndicatorUpdated(indicator, logicalFramework) {
-			this.indicator = indicator;
-			this.logicalFramework = logicalFramework;
-			this._fetchDataSoon();
+		onBaseQueryUpdated(query, baseline, target, colorize) {
+			this.baseQueryUpdated = true;
+			this.aggregateUpdated = false;
+			this.diceUpdated = false;
+
+			this.baseline = baseline;
+			this.target = target;
+			this.colorize = colorize;
+			this.baseQuery = query;
+
+			this._fetchData();
 		}
 
-		onFilterUpdated(filter) {
-			this.filter = filter;
-			this._fetchDataSoon();
+		onAggregateUpdated(aggregate, distribution, showTotals) {
+			this.aggregateUpdated = true;
+
+			this.showTotals = showTotals;
+			this.distribution = distribution;
+			this.aggregate = aggregate;
+
+			this._fetchData();
 		}
 
-		onDimensionsUpdated(dimensions) {
-			this.dimensions = dimensions;
-			this._fetchDataSoon();
-		}
+		onDiceUpdated(dices) {
+			this.diceUpdated = true;
+			this.extraDices = dices;
 
-		_fetchDataSoon() {
-			if (this._timeout !== null)
-				clearTimeout(this._timeout);
-
-			this._timeout = setTimeout(async () => {
-				await this._fetchData();
-				this._timeout = null; // FIXME this son't work
-			}, 200);
+			this._fetchData();
 		}
 
 		async _fetchData() {
-			const myFetchId = ++this._fetchId;
-
 			// Tell display that we are loading results.
 			this.errorMessage = 'shared.loading';
 			this.data = null;
-			this.$scope.$apply();
 
-			// Query server
-			const response = await axios.post('/reporting/project/' + this.project._id, {
-				dimensionIds: [...this.dimensions.rows, ...this.dimensions.cols],
-				filter: this.filter,
-				withTotals: true,
-				withGroups: true,
-				computation: this.indicator.computation
-			});
+			if (this.baseQueryUpdated && this.aggregateUpdated && this.diceUpdated) {
+				this.query = {
+					...this.baseQuery,
+					dice: [...this.baseQuery.dice, ...this.extraDices],
+					aggregate: [...this.baseQuery.aggregate, ...this.aggregate]
+				};
 
-			// Ignore query result if a new query was launched in between.
-			if (this._fetchId === myFetchId) {
+				const response = await axios.post(
+					`/resources/project/${this.project._id}/reporting`,
+					{ output: 'report', ...this.query }
+				);
+
+				// Ignore query result if a new query was launched in between.
 				this.errorMessage = null;
 				this.data = response.data;
 				this.$scope.$apply();

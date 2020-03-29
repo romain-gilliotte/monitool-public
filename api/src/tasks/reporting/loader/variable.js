@@ -12,6 +12,7 @@ const PROJECT_PROJECTION = {
     'forms.end': true,
     'forms.entities': true,
     'forms.periodicity': true,
+    // FIXME this projection is overfetching, we need only access to a single variable
     'forms.elements.id': true,
     'forms.elements.timeAgg': true,
     'forms.elements.geoAgg': true,
