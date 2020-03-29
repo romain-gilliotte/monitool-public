@@ -4,10 +4,11 @@ const { executeQuery } = require('./query-runner');
 
 
 queue.process('compute-report', async job => {
-    // Load cube.
     try {
         const { projectId, output, ...query } = job.data;
-        return executeQuery(projectId, output, query);
+        const result = await executeQuery(projectId, output, query);
+
+        return result;
     }
     catch (e) {
         console.log(e);

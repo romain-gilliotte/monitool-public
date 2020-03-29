@@ -1,17 +1,38 @@
+const _ = require('lodash');
+const { GenericDimension } = require('olap-in-memory');
 const { getIndicatorCube } = require('./loader/indicator');
 
 async function executeQuery(projectId, output, query) {
-    let cube = await loadQueryCube(projectId, query);
+    const cube = await loadQueryCube(projectId, query);
 
     // Format response.
     if (output == 'report') {
-        const report = cube.getNestedObject('main');
-        while (cube.dimensions.length > 0) {
-            cube = cube.removeDimension(cube.dimensionIds[cube.dimensions.length - 1]);
-            mergeNestedObject(report, cube.getNestedObject('main'));
+        if (query.aggregate.length === 0) {
+            return cube.getNestedObject('main')
         }
+        else {
+            const report = {};
 
-        return report;
+            for (let j = 0; j < 2 ** cube.dimensions.length; ++j) {
+                const dimensionIds = cube.dimensionIds.slice();
+
+                let subCube = cube;
+                for (let i = 0; i < cube.dimensions.length; ++i) {
+                    const include = j & (1 << i);
+                    if (include !== 0) {
+                        dimensionIds[i] = `total_${i}`;
+                        subCube = subCube
+                            .removeDimension(cube.dimensions[i].id)
+                            .addDimension(new GenericDimension(`total_${i}`, 'none', ['_total']))
+                    }
+                }
+
+                const subReport = subCube.reorderDimensions(dimensionIds).getNestedObject('main');
+                _.merge(report, subReport);
+            }
+
+            return report;
+        }
     }
     else if (output == 'flatArray') return cube.getFlatArray('main');
     else if (output == 'nestedArray') return cube.getNestedArray('main');
@@ -35,17 +56,6 @@ async function loadQueryCube(projectId, query) {
     });
 
     return cube;
-}
-
-function mergeNestedObject(base, totals) {
-    if (typeof totals === 'number') {
-        base._total = totals;
-    }
-    else {
-        for (let key in base) {
-            mergeNestedObject(base[key], totals[key]);
-        }
-    }
 }
 
 module.exports = { executeQuery };
