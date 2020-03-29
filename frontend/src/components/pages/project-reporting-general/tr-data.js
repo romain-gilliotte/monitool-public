@@ -121,8 +121,8 @@ module.directive('trData', () => {
 						{ output: 'report', ...query }
 					);
 
-					this.plotValues = this.columns.map(col => response.data.detail[col.id]);
-					this.tableValues = [...this.plotValues, response.data.total];
+					this.plotValues = this.columns.map(col => response.data[col.id]);
+					this.tableValues = [...this.plotValues, response.data._total];
 				}
 				catch (e) {
 					this.errorMessage = e.message;

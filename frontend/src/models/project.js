@@ -88,16 +88,14 @@ export default class Project {
 		return false;
 	}
 
-
-
 	/** Get the disagregation dimensions available for any given query */
-	getQueryDimensions(query) {
+	getQueryDimensions(query, strictTime = true) {
 		const varDimsGroups = [];
 		for (let key in query.parameters) {
 			const variableId = query.parameters[key].variableId;
 			const dices = [...query.dice, ...query.parameters[key].dice]
 			const varDims = this
-				.getVariableDimensions(variableId, dices)
+				.getVariableDimensions(variableId, dices, strictTime)
 				// If filtered in the formula, we don't want to manipulate it.
 				.filter(dim => !query.parameters[key].dice.find(dice => dice.id == dim.id))
 				// Do not allow manipulating the dimension used in the columns.
@@ -131,8 +129,8 @@ export default class Project {
 		const time = new TimeDimension(
 			'time',
 			periodicity,
-			TimeSlot.fromDate(start, form.periodicity).value,
-			TimeSlot.fromDate(end, form.periodicity).value,
+			TimeSlot.fromDate(start, periodicity).value,
+			TimeSlot.fromDate(end, periodicity).value,
 			`project.dimensions.time`
 		);
 

@@ -1,8 +1,6 @@
 
 import angular from 'angular';
 import { TimeDimension } from 'olap-in-memory';
-import TimeSlot from 'timeslot-dag';
-
 
 const module = angular.module(
 	'monitool.components.pages.project.reporting.query-aggregate',

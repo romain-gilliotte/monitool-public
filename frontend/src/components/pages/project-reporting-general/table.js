@@ -3,6 +3,8 @@ import { TimeDimension } from 'olap-in-memory';
 
 import mtTrData from './tr-data';
 import mtFaOpen from '../../shared/misc/plus-minus-icon';
+import { buildQueryFromIndicator, buildQueryFromVariable } from '../../../helpers/query-builder';
+import { updateArrayInPlace } from '../../../helpers/array';
 
 const module = angular.module(
 	'monitool.components.pages.project.reporting_general.table',
@@ -146,33 +148,8 @@ module.component('generalTable', {
 			return columns;
 		}
 
-		/** Avoid triggering changes/refetch on all rows for small modifications */
 		_updateRows() {
-			const oldRows = this.rows;
-			const newRows = this._makeRows();
-
-			for (let i = 0; i < newRows.length; ++i) {
-				const newRow = newRows[i];
-				const oldRow = oldRows.find(oldRow => oldRow.id == newRow.id);
-
-				if (oldRow && angular.equals(oldRow, newRow)) {
-					newRows[i] = oldRow;
-				}
-				else if (oldRow) {
-					for (let key in newRow)
-						if (!angular.equals(newRow[key], oldRow[key]))
-							oldRow[key] = newRow[key];
-
-					newRows[i] = oldRow;
-				}
-			}
-
-			this.rows.length = 0;
-			this.rows.push(...newRows);
-		}
-
-		_makeRows() {
-			return [
+			const newRows = [
 				...this.project.logicalFrames.reduce((m, logFrame) => [
 					...m,
 					...this._makeRowsFromLogicalFramework(logFrame)
@@ -183,6 +160,8 @@ module.component('generalTable', {
 					...this._makeRowsFromDataSource(dataSource)
 				], [])
 			];
+
+			updateArrayInPlace(this.rows, newRows);
 		}
 
 		_makeRowsFromLogicalFramework(logFrame) {
@@ -288,7 +267,7 @@ module.component('generalTable', {
 					this.sectionOpen[rowId] ?
 						dataSource.elements.reduce((m, variable) => [
 							...m,
-							...this._makeRowsFromVariable(variable)
+							...this._makeRowsFromVariable(variable, dataSource)
 						], []) :
 						[]
 				)
@@ -296,57 +275,27 @@ module.component('generalTable', {
 		}
 
 		_makeRowsFromIndicator(id, logicalFramework, indicator, indent = 0) {
-			if (indicator.computation) {
-				// Compute parameters from indicator definition
-				const parameters = {}
-				for (let key in indicator.computation.parameters) {
-					const parameter = indicator.computation.parameters[key];
+			const query = buildQueryFromIndicator(
+				indicator, logicalFramework, this.project,
+				this.query.aggregate, this.query.dice
+			);
 
-					parameters[key] = {
-						variableId: parameter.elementId,
-						dice: []
-					};
-
-					for (let partitionId in parameter.filter) {
-						dice.push({
-							id: partitionId,
-							attribute: 'element',
-							items: parameter.filter[partitionId]
-						});
-					}
-				}
-
-				// Add extra dices provided by the logical framework.
-				const dice = this.query.dice.slice();
-				if (logicalFramework) {
-					dice.push({ id: 'location', attribute: 'entity', items: logicalFramework.entities });
-					if (logicalFramework.start)
-						dice.push({ id: 'time', attribute: 'day', range: [logicalFramework.start, null] });
-					if (logicalFramework.end)
-						dice.push({ id: 'time', attribute: 'day', range: [null, logicalFramework.end] });
-				}
-
-				const query = {
-					formula: indicator.computation.formula,
-					parameters: parameters,
-					aggregate: this.query.aggregate,
-					dice
-				}
-
-				return this._makeRowsFromQuery(id, indicator.display, query, indent, indicator.baseline, indicator.target, indicator.colorize);
-			}
-			else {
-				return [{ type: 'data', id, label: indicator.display, query: null, indent }];
-			}
+			if (query)
+				return this._makeRowsFromQuery(
+					id, indicator.display, query, indent,
+					indicator.baseline, indicator.target, indicator.colorize
+				);
+			else
+				return [
+					{ type: 'data', id, label: indicator.display, query: null, indent }
+				];
 		}
 
-		_makeRowsFromVariable(variable) {
-			const query = {
-				formula: 'variable',
-				parameters: { variable: { variableId: variable.id, dice: [] } },
-				dice: this.query.dice,
-				aggregate: this.query.aggregate
-			};
+		_makeRowsFromVariable(variable, dataSource) {
+			const query = buildQueryFromVariable(
+				variable, dataSource, this.project,
+				this.query.aggregate, this.query.dice
+			);
 
 			return this._makeRowsFromQuery(variable.id, variable.name, query);
 		}
@@ -363,13 +312,24 @@ module.component('generalTable', {
 			// Split by computation
 			if (disagregateBy.id === 'computation') {
 				for (let paramName in query.parameters) {
+					const parameter = query.parameters[paramName];
 					const subQuery = Object.assign(
 						{},
 						query,
-						{ formula: paramName, parameters: { [paramName]: query.parameters[paramName] } }
+						{ formula: paramName, parameters: { [paramName]: parameter } }
 					);
 
-					rows.push(...this._makeRowsFromQuery(`${queryId}.${paramName}`, paramName, subQuery, indent + 1));
+					const variableName = this.project.forms
+						.reduce((m, f) => [...m, ...f.elements], [])
+						.find(v => v.id == parameter.variableId)
+						.name
+
+					rows.push(...this._makeRowsFromQuery(
+						`${queryId}.${paramName}`,
+						`${paramName} (${variableName})`,
+						subQuery,
+						indent + 1
+					));
 				}
 
 				return rows;

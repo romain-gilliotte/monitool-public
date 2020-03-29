@@ -50,3 +50,25 @@ export function range(start, end) {
 	return integerRange;
 };
 
+
+
+export function updateArrayInPlace(array, newValues) {
+	for (let i = 0; i < newValues.length; ++i) {
+		const newRow = newValues[i];
+		const oldRow = array.find(oldRow => oldRow.id == newRow.id);
+
+		if (oldRow && angular.equals(oldRow, newRow)) {
+			newValues[i] = oldRow;
+		}
+		else if (oldRow) {
+			for (let key in newRow)
+				if (!angular.equals(newRow[key], oldRow[key]))
+					oldRow[key] = newRow[key];
+
+			newValues[i] = oldRow;
+		}
+	}
+
+	array.length = 0;
+	array.push(...newValues);
+}
