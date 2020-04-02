@@ -1,6 +1,5 @@
 const { ObjectId } = require('mongodb');
 const { Cube, TimeDimension, GenericDimension } = require('olap-in-memory');
-const TimeSlot = require('timeslot-dag');
 
 const PROJECT_PROJECTION = {
     'start': true,
