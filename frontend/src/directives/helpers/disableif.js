@@ -1,15 +1,10 @@
 import angular from 'angular';
 
+const module = angular.module(__moduleName, []);
 
-const module = angular.module(
-	'monitool.directives.helpers.disableif',
-	[]
-);
+module.directive('disableIf', function () {
 
-
-module.directive('disableIf', function() {
-
-	var inhibitHandler = function(event) {
+	var inhibitHandler = function (event) {
 		event.stopImmediatePropagation();
 		event.preventDefault();
 		return false;
@@ -21,8 +16,8 @@ module.directive('disableIf', function() {
 		scope: {
 			disableIf: "="
 		},
-		link: function($scope, element, attributes) {
-			$scope.$watch('disableIf', function(disable) {
+		link: function ($scope, element) {
+			$scope.$watch('disableIf', function (disable) {
 				if (disable) {
 					element.addClass('disabled')
 					element.on('click', inhibitHandler);

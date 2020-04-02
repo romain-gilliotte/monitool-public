@@ -3,16 +3,9 @@ import exprEval from 'expr-eval';
 import Handsontable from 'handsontable/dist/handsontable.js';
 import 'handsontable/dist/handsontable.css';
 
-
-const module = angular.module(
-	'monitool.components.ng-models.number-table',
-	[
-	]
-);
-
+const module = angular.module(__moduleName, []);
 
 const onScreenGrids = [];
-
 
 /**
  * Warning: do not rebind variable after the component has initialized.
@@ -25,7 +18,7 @@ module.component('inputGrid', {
 	require: {
 		'ngModelCtrl': 'ngModel'
 	},
-	template: require('./number-table.html'),
+	template: require(__templatePath),
 
 	controller: class InputGridController {
 

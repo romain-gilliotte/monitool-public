@@ -1,11 +1,7 @@
 import angular from 'angular';
 
-const module = angular.module(
-	'monitool.components.shared.reporting.graph',
-	[
-		// exportSvg
-	]
-);
+
+const module = angular.module(__moduleName, []);
 
 module.component('reportingGraph', {
 
@@ -15,7 +11,7 @@ module.component('reportingGraph', {
 		presentation: '<'
 	},
 
-	template: require('./graph.html'),
+	template: require(__templatePath),
 
 	controller: class GraphController {
 

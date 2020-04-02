@@ -3,13 +3,7 @@ import axios from 'axios';
 import mtReportingField from '../../shared/reporting/td-reporting-field';
 import mtIndicatorUnit from '../../../filters/indicator';
 
-const module = angular.module(
-	'monitool.components.pages.project.reporting.tr-data',
-	[
-		mtReportingField,
-		mtIndicatorUnit
-	]
-);
+const module = angular.module(__moduleName, [mtReportingField, mtIndicatorUnit]);
 
 module.directive('trData', () => {
 	return {
@@ -35,7 +29,7 @@ module.directive('trData', () => {
 			onPlotClicked: '&'
 		},
 
-		template: require('./tr-data.html'),
+		template: require(__templatePath),
 
 		controller: class TrDataController {
 

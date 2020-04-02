@@ -1,20 +1,9 @@
 import angular from 'angular';
-
 import Input from '../../../models/input';
-
 import uiRouter from '@uirouter/angularjs';
-
 import mtFilterTimeSlot from '../../../filters/time-slot';
 
-const module = angular.module(
-	'monitool.components.pages.project.input.list',
-	[
-		uiRouter, // for $stateProvider
-
-		mtFilterTimeSlot
-	]
-);
-
+const module = angular.module(__moduleName, [uiRouter, mtFilterTimeSlot]);
 
 module.config($stateProvider => {
 
@@ -34,7 +23,7 @@ module.component('projectInputList', {
 		'project': '<',
 		'dataSourceId': '<',
 	},
-	template: require('./input-list.html'),
+	template: require(__templatePath),
 
 	controller: class ProjectInputListController {
 

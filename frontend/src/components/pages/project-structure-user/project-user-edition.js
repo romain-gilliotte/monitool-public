@@ -1,14 +1,7 @@
 import angular from 'angular';
 import uiModal from 'angular-ui-bootstrap/src/modal/index';
 
-const module = angular.module(
-	'monitool.components.ui-modals.project-user-edition',
-	[
-		uiModal
-	]
-);
-
-
+const module = angular.module(__moduleName, [uiModal]);
 
 /**
  * Component used on a modal called from "main.project.structure.user_list"
@@ -22,7 +15,7 @@ module.component('projectUserModal', {
 		dismiss: '&'
 	},
 
-	template: require('./project-user-edition.html'),
+	template: require(__templatePath),
 
 	controller: class ProjectUserModalController {
 

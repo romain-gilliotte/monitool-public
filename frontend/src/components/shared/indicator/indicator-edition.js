@@ -3,16 +3,7 @@ import uiModal from 'angular-ui-bootstrap/src/modal/index';
 import mtNumberOptional from '../ng-models/number-optional';
 import mtIndicatorComputation from './indicator-computation';
 
-const module = angular.module(
-	'monitool.components.ui-modals.indicator-edition',
-	[
-		uiModal, // for $uibModal
-
-		mtNumberOptional,
-		mtIndicatorComputation
-	]
-);
-
+const module = angular.module(__moduleName, [uiModal, mtNumberOptional, mtIndicatorComputation]);
 
 const defaultPlanning = {
 	display: '',
@@ -30,7 +21,7 @@ module.component('indicatorEditionModal', {
 		dismiss: '&'
 	},
 
-	template: require('./indicator-edition.html'),
+	template: require(__templatePath),
 
 	controller: class IndicatorEditionModal {
 
@@ -56,7 +47,7 @@ module.component('indicatorEditionModal', {
 		}
 
 		save() {
-			this.close({'$value': this.planning});
+			this.close({ '$value': this.planning });
 		}
 	}
 });

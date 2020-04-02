@@ -1,16 +1,13 @@
 import angular from 'angular';
-
 import uiRouter from '@uirouter/angularjs';
 import uiModal from 'angular-ui-bootstrap/src/modal/index';
 import 'angular-legacy-sortablejs-maintained';
-
 import mtIndicatorDisplay from '../../shared/indicator/display';
 import mtIndicatorModal from '../../shared/indicator/indicator-edition';
 import mtDirectiveAutoresize from '../../../directives/helpers/autoresize';
 
-
 const module = angular.module(
-	'monitool.components.pages.project.structure.logicalframe.edit',
+	__moduleName,
 	[
 		uiRouter, // for $stateProvider
 		uiModal, // for $uibModal
@@ -49,7 +46,7 @@ module.component('logicalFrameEdit', {
 		from: '<'
 	},
 
-	template: require('./logframe-edit.html'),
+	template: require(__templatePath),
 
 	controller: class ProjectLogicalFrameEditController {
 
@@ -79,7 +76,7 @@ module.component('logicalFrameEdit', {
 
 				// Or create a blank one.
 				if (!this.editableLogFrame)
-					this.editableLogFrame = {name: '', goal: '', start: null, end: null, indicators: [], purposes: []};
+					this.editableLogFrame = { name: '', goal: '', start: null, end: null, indicators: [], purposes: [] };
 
 				// and make sure that the id is defined.
 				this.editableLogFrame.id = this.logicalFrameId;
@@ -93,20 +90,20 @@ module.component('logicalFrameEdit', {
 			// @see https://github.com/RubaXa/Sortable/issues/581
 			// @see https://github.com/RubaXa/Sortable/issues/722
 			this.purposeSortOptions = {
-				group:'purposes',
+				group: 'purposes',
 				handle: '.purpose-handle',
 				onUpdate: this.onFieldChange.bind(this)
 
 			};
 
 			this.outputSortOptions = {
-				group:'outputs',
+				group: 'outputs',
 				handle: '.output-handle',
 				onUpdate: this.onFieldChange.bind(this)
 			};
 
 			this.activitySortOptions = {
-				group:'activities',
+				group: 'activities',
 				handle: '.activity-handle',
 				onUpdate: this.onFieldChange.bind(this)
 			};

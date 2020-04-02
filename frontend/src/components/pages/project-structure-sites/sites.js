@@ -1,22 +1,17 @@
 import angular from 'angular';
 import { v4 as uuid } from 'uuid';
-
 import uiRouter from '@uirouter/angularjs';
 import uiSelect from 'ui-select';
 import 'angular-legacy-sortablejs-maintained';
-
 import 'ui-select/dist/select.min.css';
-
 import mtDatePickerOptional from '../../shared/ng-models/datepicker-optional';
 
-
 const module = angular.module(
-	'monitool.components.pages.project.structure.site',
+	__moduleName,
 	[
 		uiRouter, // for $stateProvider
 		uiSelect, // for site groups
 		'ng-sortable', // order sites
-
 		mtDatePickerOptional, // Datepicker start & end
 	]
 );
@@ -39,7 +34,7 @@ module.component('projectSites', {
 		onProjectUpdate: '&'
 	},
 
-	template: require('./sites.html'),
+	template: require(__templatePath),
 
 	controller: class ProjectSitesController {
 

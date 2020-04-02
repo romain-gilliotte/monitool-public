@@ -1,12 +1,7 @@
 import angular from 'angular';
 import { v4 as uuid } from 'uuid';
 
-const module = angular.module(
-	'monitool.components.ui-modals.partition-edition',
-	[
-	]
-);
-
+const module = angular.module(__moduleName, []);
 
 module.component('partitionEditionModal', {
 	bindings: {
@@ -15,7 +10,7 @@ module.component('partitionEditionModal', {
 		close: '&',
 		dismiss: '&'
 	},
-	template: require('./partition-edition.html'),
+	template: require(__templatePath),
 	controller: class PartitionEditionModalController {
 
 		constructor($scope, $filter) {

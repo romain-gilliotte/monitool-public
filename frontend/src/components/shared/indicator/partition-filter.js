@@ -1,11 +1,6 @@
 import angular from 'angular';
 
-const module = angular.module(
-	'monitool.components.ng-models.partition-filter',
-	[
-	]
-);
-
+const module = angular.module(__moduleName, []);
 
 module.component('partitionFilter', {
 	require: {
@@ -16,7 +11,7 @@ module.component('partitionFilter', {
 		variable: '<'
 	},
 
-	template: require('./partition-filter.html'),
+	template: require(__templatePath),
 
 	controller: class PartitionFilterController {
 

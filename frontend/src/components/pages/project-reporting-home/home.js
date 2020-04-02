@@ -1,13 +1,7 @@
 import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
 
-const module = angular.module(
-	'monitool.components.pages.project.reporting.home',
-	[
-		uiRouter, // for $stateProvider
-	]
-);
-
+const module = angular.module(__moduleName, [uiRouter]);
 
 module.config($stateProvider => {
 
@@ -24,7 +18,7 @@ module.component('projectReportingHome', {
 	bindings: {
 		project: '<'
 	},
-	template: require('./home.html'),
+	template: require(__templatePath),
 });
 
 module.component('projectReportingHomeEn', {

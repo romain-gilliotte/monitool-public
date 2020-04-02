@@ -1,25 +1,21 @@
 import angular from 'angular';
 
+const module = angular.module(__moduleName, []);
 
-const module = angular.module(
-	'monitool.directives.validators.max',
-	[]
-);
-
-const isEmpty = function(value) {
+const isEmpty = function (value) {
 	return angular.isUndefined(value) || value === '' || value === null || value !== value;
 };
 
-module.directive('ngMax', function() {
+module.directive('ngMax', function () {
 	return {
 		restrict: 'A',
 		require: 'ngModel',
-		link: function($scope, elem, attributes, controller) {
-			$scope.$watch(attributes.ngMax, function(){
+		link: function ($scope, elem, attributes, controller) {
+			$scope.$watch(attributes.ngMax, function () {
 				controller.$setViewValue(controller.$viewValue);
 			});
 
-			var maxValidator = function(value) {
+			var maxValidator = function (value) {
 				var max = $scope.$eval(attributes.ngMax) || Infinity;
 				if (!isEmpty(value) && value > max) {
 					controller.$setValidity('ngMax', false);

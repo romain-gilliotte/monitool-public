@@ -1,12 +1,7 @@
-
+import angular from 'angular';
 import mtMselectWithGroups from '../../shared/ng-models/mselect-with-groups';
 
-const module = angular.module(
-	'monitool.component.shared.reporting.project-filter',
-	[
-		mtMselectWithGroups
-	]
-);
+const module = angular.module(__moduleName, [mtMselectWithGroups]);
 
 /** 
  * FIXME This whole component feels a bit hacky.
@@ -21,7 +16,7 @@ module.component('indicatorFilter', {
 		onUpdate: '&'
 	},
 
-	template: require('./indicator-filter.html'),
+	template: require(__templatePath),
 
 	controller: class IndicatorFilterController {
 

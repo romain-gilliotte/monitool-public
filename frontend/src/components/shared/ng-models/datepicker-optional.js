@@ -1,21 +1,14 @@
 import angular from 'angular';
-
 import uiDatepickerPopup from 'angular-ui-bootstrap/src/datepickerPopup/index';
 
-const module = angular.module(
-	'monitool.components.ng-models.datepicker-optional',
-	[
-		uiDatepickerPopup
-	]
-);
-
+const module = angular.module(__moduleName, [uiDatepickerPopup]);
 
 module.component('optionalDate', {
 	require: {
 		ngModelCtrl: 'ngModel'
 	},
 
-	template: require('./datepicker-optional.html'),
+	template: require(__templatePath),
 
 	bindings: {
 		default: '<',

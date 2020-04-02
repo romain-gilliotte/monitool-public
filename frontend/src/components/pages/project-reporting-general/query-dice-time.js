@@ -1,9 +1,6 @@
+import angular from "angular";
 
-const module = angular.module(
-    'monitool.component.page.project-reporting-general.query-dice-time',
-    [
-    ]
-);
+const module = angular.module(__moduleName, []);
 
 module.component('queryDiceTime', {
     bindings: {
@@ -11,7 +8,7 @@ module.component('queryDiceTime', {
         onUpdate: '&'
     },
 
-    template: require('./query-dice-time.html'),
+    template: require(__templatePath),
 
     controller: class ProjectFilterController {
 
@@ -34,6 +31,5 @@ module.component('queryDiceTime', {
         }
     }
 });
-
 
 export default module.name;

@@ -1,11 +1,6 @@
 import angular from 'angular';
 
-
-const module = angular.module(
-	'monitool.components.ng-models.mselect-with-groups',
-	[
-	]
-);
+const module = angular.module(__moduleName, []);
 
 
 /**
@@ -17,7 +12,7 @@ module.component('elementFilter', {
 		ngModelCtrl: 'ngModel'
 	},
 
-	template: require('./mselect-with-groups.html'),
+	template: require(__templatePath),
 
 	bindings: {
 		elements: '<',
@@ -43,7 +38,7 @@ module.component('elementFilter', {
 		$onChanges(changes) {
 			// Reset the list of selectable elements.
 			this.selectableElements = [
-				{id: 'all', name: 'project.all_elements'},
+				{ id: 'all', name: 'project.all_elements' },
 				...(this.groups || []),
 				...this.elements
 			];

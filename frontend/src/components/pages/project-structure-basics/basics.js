@@ -1,23 +1,11 @@
 import angular from 'angular';
-
 import uiRouter from '@uirouter/angularjs';
-
 import 'ui-select/dist/select.min.css';
-
 import mtUtcDatepicker from '../../shared/ng-models/datepicker';
 import mtFormGroup from '../../shared/misc/form-group';
 
 
-const module = angular.module(
-	'monitool.components.pages.project.structure.basics',
-	[
-		uiRouter, // for $stateProvider
-
-		mtUtcDatepicker, // Datepicker start & end
-		mtFormGroup
-	]
-);
-
+const module = angular.module(__moduleName, [uiRouter, mtUtcDatepicker, mtFormGroup]);
 
 module.config($stateProvider => {
 	$stateProvider.state('main.project.structure.basics', {
@@ -35,7 +23,7 @@ module.component('projectBasics', {
 		onProjectUpdate: '&'
 	},
 
-	template: require('./basics.html'),
+	template: require(__templatePath),
 
 	controller: class ProjectBasicsController {
 

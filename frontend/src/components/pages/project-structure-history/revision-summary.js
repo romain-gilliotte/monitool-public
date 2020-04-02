@@ -1,19 +1,13 @@
 import angular from 'angular';
 import jiff from 'jiff';
 
-const module = angular.module(
-	'monitool.components.pages.project.structure.history.revision-summary',
-	[
-	]
-);
-
-
+const module = angular.module(__moduleName, []);
 
 module.component('revisionSummary', {
 	bindings: {
 		'revision': '<'
 	},
-	template: require('./revision-summary.html'),
+	template: require(__templatePath),
 	controller: class RevisionSummaryController {
 
 		constructor($filter, $sce, $rootScope) {

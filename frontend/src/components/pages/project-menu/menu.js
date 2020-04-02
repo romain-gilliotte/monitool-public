@@ -1,25 +1,11 @@
 import angular from 'angular';
-
 import Project from '../../../models/project';
-
 import uiRouter from '@uirouter/angularjs';
+import mtAclProjectRole from '../../../directives/acl/project-role';
+import mtAclProjectInput from '../../../directives/acl/project-input';
+import mtDisableIf from '../../../directives/helpers/disableif';
 
-import mtDirectiveAclProjectRole from '../../../directives/acl/project-role';
-import mtDirectiveAclProjectInput from '../../../directives/acl/project-input';
-import mtDirectiveDisableIf from '../../../directives/helpers/disableif';
-
-
-const module = angular.module(
-	'monitool.components.pages.project.menu',
-	[
-		uiRouter, // for $stateProvider
-
-		mtDirectiveAclProjectRole,
-		mtDirectiveAclProjectInput,
-		mtDirectiveDisableIf
-	]
-);
-
+const module = angular.module(__moduleName, [uiRouter, mtAclProjectRole, mtAclProjectInput, mtDisableIf]);
 
 module.config($stateProvider => {
 
@@ -46,7 +32,7 @@ module.component('projectMenu', {
 		loadedProject: '<'
 	},
 
-	template: require('./menu.html'),
+	template: require(__templatePath),
 
 	controller: class ProjectMenuController {
 

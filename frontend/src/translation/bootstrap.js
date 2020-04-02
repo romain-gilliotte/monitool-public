@@ -13,9 +13,8 @@ import frenchLocale from './fr/locale';
 import englishLocale from './en/locale';
 import spanishLocale from './es/locale';
 
-
 const module = angular.module(
-	'monitool.translation',
+	__moduleName,
 	[
 		ngTranslate,
 		ngTranslateLocalStorage,
@@ -24,11 +23,10 @@ const module = angular.module(
 	]
 );
 
-
 /**
  * Init translation modules
  */
-module.config(function($translateProvider) {
+module.config(function ($translateProvider) {
 	$translateProvider.translations('fr', frenchTranslation);
 	$translateProvider.translations('en', englishTranslation);
 	$translateProvider.translations('es', spanishTranslation);
@@ -39,13 +37,13 @@ module.config(function($translateProvider) {
 });
 
 
-module.run(function($translate, $rootScope, $locale) {
+module.run(function ($translate, $rootScope, $locale) {
 	// Set list of available languages
-	$rootScope.languages = {fr: "french", en: "english", es: 'spanish'};
+	$rootScope.languages = { fr: "french", en: "english", es: 'spanish' };
 
 	// Expose scope function to change the language everywhere
 	// in the application.
-	$rootScope.changeLanguage = function(langKey) {
+	$rootScope.changeLanguage = function (langKey) {
 		$translate.use(langKey);
 
 		if (langKey == 'fr')

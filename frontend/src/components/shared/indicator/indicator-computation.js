@@ -1,15 +1,8 @@
 import angular from 'angular';
 import exprEval from 'expr-eval';
-
 import mtPartitionFilter from './partition-filter';
 
-const module = angular.module(
-	'monitool.components.ng-models.indicator-computation',
-	[
-		mtPartitionFilter
-	]
-);
-
+const module = angular.module(__moduleName, [mtPartitionFilter]);
 
 const PERCENTAGE_FORMULA = '100 * numerator / denominator';
 const PERMILLE_FORMULA = '1000 * numerator / denominator';
@@ -24,7 +17,7 @@ module.component('indicatorComputation', {
 		'dataSources': '<'
 	},
 
-	template: require('./indicator-computation.html'),
+	template: require(__templatePath),
 
 	controller: class IndicatorComputationController {
 

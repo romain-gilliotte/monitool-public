@@ -1,25 +1,21 @@
 import angular from 'angular';
 import axios from 'axios'
-
 import uiRouter from '@uirouter/angularjs';
-
 import mtQueryComputation from './query-computation';
 import mtIndicatorFilter from './indicator-filter';
 import mtDimensions from './dimensions';
 import mtOlapGrid from './olap-grid';
 
 const module = angular.module(
-	'monitool.components.pages.project.reporting.olap',
+	__moduleName,
 	[
-		uiRouter, // for $stateProvider
-
+		uiRouter,
 		mtQueryComputation,
 		mtIndicatorFilter,
 		mtDimensions,
 		mtOlapGrid
 	]
 );
-
 
 module.config($stateProvider => {
 	$stateProvider.state('main.project.reporting.olap', {
@@ -35,7 +31,7 @@ module.component('olapReporting', {
 		project: '<',
 	},
 
-	template: require('./olap.html'),
+	template: require(__templatePath),
 
 	controller: class OlapReportingController {
 

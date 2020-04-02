@@ -1,14 +1,7 @@
 import angular from 'angular';
+import { range } from '../../../helpers/array';
 
-import {range} from '../../../helpers/array';
-
-
-const module = angular.module(
-	'monitool.components.ng-models.partition-order',
-	[
-	]
-);
-
+const module = angular.module(__moduleName, []);
 
 module.component('partitionOrder', {
 	bindings: {
@@ -16,7 +9,7 @@ module.component('partitionOrder', {
 		distribution: '<',
 		onUpdate: '&'
 	},
-	template: require('./partition-order.html'),
+	template: require(__templatePath),
 
 	controller: class PartitionOrderController {
 
@@ -43,7 +36,7 @@ module.component('partitionOrder', {
 			const dupIndex = this.editablePartitions.findIndex((op, i) => i !== index && op.id === this.editablePartitions[index].id);
 
 			this.editablePartitions[dupIndex] = angular.copy(missing);
-			this.onUpdate({partitions: this.editablePartitions});
+			this.onUpdate({ partitions: this.editablePartitions });
 		}
 	}
 });

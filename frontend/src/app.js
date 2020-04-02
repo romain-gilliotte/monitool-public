@@ -47,14 +47,7 @@ async function authenticate() {
 }
 
 function startApp(accessToken, profile) {
-	const module = angular.module(
-		'monitool.app',
-		[
-			mtPages,
-			mtTranslation,
-			mtFilterMisc
-		]
-	);
+	const module = angular.module(__moduleName, [mtPages, mtTranslation, mtFilterMisc]);
 
 	module.config(function ($urlRouterProvider) {
 		$urlRouterProvider.otherwise('/projects');

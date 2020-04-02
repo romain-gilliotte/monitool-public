@@ -27,7 +27,7 @@ import projectReportingOlap from "./project-reporting-olap/olap";
 
 
 const module = angular.module(
-	'monitool.components.pages.all-pages',
+	__moduleName,
 	[
 		menu,
 		projectList,

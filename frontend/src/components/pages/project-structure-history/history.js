@@ -1,21 +1,10 @@
 import angular from 'angular';
-
 import Revision from '../../../models/revision';
 import Project from '../../../models/project';
-
 import uiRouter from '@uirouter/angularjs';
-
 import mtRevisionSummary from './revision-summary';
 
-const module = angular.module(
-	'monitool.components.pages.project.structure.history.history',
-	[
-		uiRouter, // for $stateProvider
-
-		mtRevisionSummary
-	]
-);
-
+const module = angular.module(__moduleName, [uiRouter, mtRevisionSummary]);
 
 module.config($stateProvider => {
 
@@ -35,7 +24,7 @@ module.component('history', {
 		onProjectUpdate: '&'
 	},
 
-	template: require('./history.html'),
+	template: require(__templatePath),
 
 	controller: class ProjectHistoryController {
 

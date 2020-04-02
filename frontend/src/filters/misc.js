@@ -1,30 +1,26 @@
 import angular from 'angular';
 
+const module = angular.module(__moduleName, []);
 
-const module = angular.module(
-	'monitool.filters.misc',
-	[]
-);
-
-module.filter('length', function() {
-	return function(obj) {
+module.filter('length', function () {
+	return function (obj) {
 		return obj ? Object.keys(obj).length : 0;
 	};
 });
 
-module.filter('isEmpty', function() {
-	return function(obj) {
+module.filter('isEmpty', function () {
+	return function (obj) {
 		return Object.keys(obj).length == 0;
 	};
 });
 
-module.filter('join', function() {
-	return function(list, token) {
-		return (list||[]).join(token);
+module.filter('join', function () {
+	return function (list, token) {
+		return (list || []).join(token);
 	};
 });
 
-module.filter('pluck', function() {
+module.filter('pluck', function () {
 	function pluck(objects, property) {
 		if (!(objects && property && angular.isArray(objects)))
 			return [];
@@ -43,13 +39,13 @@ module.filter('pluck', function() {
 		});
 	}
 
-	return function(objects, property) {
+	return function (objects, property) {
 		return pluck(objects, property);
 	}
 });
 
-module.filter('getObjects', function() {
-	return function(ids, objects) {
+module.filter('getObjects', function () {
+	return function (ids, objects) {
 		objects = objects || {};
 		ids = ids || [];
 
@@ -63,8 +59,8 @@ module.filter('getObjects', function() {
 	}
 });
 
-module.filter('maxLength', function() {
-	return function(string, size) {
+module.filter('maxLength', function () {
+	return function (string, size) {
 		if (!string)
 			return string;
 

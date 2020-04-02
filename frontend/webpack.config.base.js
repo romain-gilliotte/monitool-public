@@ -29,7 +29,7 @@ module.exports = {
 									{
 										targets: "> 0.25%, not dead",
 										useBuiltIns: "usage",
-										corejs: 3,
+										corejs: 3, // still needed?
 									}
 								]
 							],
@@ -64,9 +64,41 @@ module.exports = {
 	},
 
 	plugins: [
+		// Clear /dist folder before building.
 		new CleanWebpackPlugin(),
 
-		// Load only fr/es/en locales for moment in the bundle.
+		// Define __moduleName, __templatePath, __cssPath and __componentName macros.
+		// This makes it much easier to move files around when bearing with AngularJS module system.
+		new webpack.DefinePlugin({
+			__moduleName: webpack.DefinePlugin.runtimeValue(
+				({ module }) => {
+					const relPath = path.relative(path.join(__dirname, 'src'), module.resource);
+					const moduleName = relPath.replace(/\//g, '.').replace(/\.[^/.]+$/, "");
+					return `'${moduleName}'`;
+				}
+			),
+			__templatePath: webpack.DefinePlugin.runtimeValue(
+				({ module }) => {
+					const basename = path.basename(module.resource, '.js');
+					return `'./${basename}.html'`;
+				}
+			),
+			__cssPath: webpack.DefinePlugin.runtimeValue(
+				({ module }) => {
+					const basename = path.basename(module.resource, '.js');
+					return `'./${basename}.css'`
+				}
+			),
+			__componentName: webpack.DefinePlugin.runtimeValue(
+				({ module }) => {
+					const basename = path.basename(module.resource, '.js');
+					const camelBaseName = basename.replace(/-[a-z]/g, v => v[1].toUpperCase());
+					return `'${camelBaseName}'`;
+				}
+			),
+		}),
+
+		// Only load fr/es/en locales for moment in the bundle.
 		new webpack.ContextReplacementPlugin(
 			/moment[\/\\]locale$/,
 			/(fr|es|en)\.js/
@@ -75,7 +107,7 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			favicon: null,
 			filename: 'index.html',
-			template: 'src/template.html',
+			template: './src/template.html',
 			inject: 'body',
 			chunks: ['index']
 		})

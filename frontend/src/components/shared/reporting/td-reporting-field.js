@@ -1,11 +1,7 @@
 import angular from 'angular';
 
-const module = angular.module(
-	'monitool.components.shared.reporting.field',
-	[
-	]
-);
 
+const module = angular.module(__moduleName, []);
 
 module.directive('tdReportingField', function () {
 	return {

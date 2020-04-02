@@ -1,18 +1,13 @@
 import angular from 'angular';
 
-const module = angular.module(
-	'monitool.components.ng-models.number-optional',
-	[
-	]
-);
-
+const module = angular.module(__moduleName, []);
 
 module.component('optionalNumber', {
 	require: {
 		ngModelCtrl: 'ngModel'
 	},
 
-	template: require('./number-optional.html'),
+	template: require(__templatePath),
 
 	bindings: {
 		default: '<',

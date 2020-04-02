@@ -1,26 +1,22 @@
 import angular from 'angular';
 
+const module = angular.module(__moduleName, []);
 
-const module = angular.module(
-	'monitool.directives.validators.min',
-	[]
-);
-
-const isEmpty = function(value) {
+const isEmpty = function (value) {
 	return angular.isUndefined(value) || value === '' || value === null || value !== value;
 };
 
 
-module.directive('ngMin', function() {
+module.directive('ngMin', function () {
 	return {
 		restrict: 'A',
 		require: 'ngModel',
-		link: function($scope, elem, attributes, controller) {
-			$scope.$watch(attributes.ngMin, function(){
+		link: function ($scope, elem, attributes, controller) {
+			$scope.$watch(attributes.ngMin, function () {
 				controller.$setViewValue(controller.$viewValue);
 			});
 
-			var minValidator = function(value) {
+			var minValidator = function (value) {
 				var min = $scope.$eval(attributes.ngMin) || 0;
 				if (!isEmpty(value) && value < min) {
 					controller.$setValidity('ngMin', false);

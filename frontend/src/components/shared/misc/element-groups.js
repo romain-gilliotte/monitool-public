@@ -1,10 +1,6 @@
 import angular from 'angular';
 
-const module = angular.module(
-	'monitool.components.misc.collection-sites',
-	[]
-);
-
+const module = angular.module(__moduleName, []);
 
 module.component('elementGroups', {
 	bindings: {
@@ -13,7 +9,7 @@ module.component('elementGroups', {
 		groups: '<'
 	},
 
-	template: require('./element-groups.html'),
+	template: require(__templatePath),
 
 	controller: class ElementGroupsController {
 
@@ -25,7 +21,7 @@ module.component('elementGroups', {
 			groups = groups || [];
 
 			if (model.length == elements.length)
-				return [{name: 'project.all_elements'}];
+				return [{ name: 'project.all_elements' }];
 
 			// retrieve all groups that are in the list.
 			const selectedGroups = groups.filter(group => {
@@ -43,6 +39,5 @@ module.component('elementGroups', {
 		}
 	}
 });
-
 
 export default module.name;

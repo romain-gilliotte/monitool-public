@@ -6,14 +6,7 @@ import mtFaOpen from '../../shared/misc/plus-minus-icon';
 import { buildQueryFromIndicator, buildQueryFromVariable } from '../../../helpers/query-builder';
 import { updateArrayInPlace } from '../../../helpers/array';
 
-const module = angular.module(
-	'monitool.components.pages.project.reporting_general.table',
-	[
-		mtTrData,
-		mtFaOpen
-	]
-);
-
+const module = angular.module(__moduleName, [mtTrData, mtFaOpen]);
 
 module.component('generalTable', {
 	bindings: {
@@ -21,7 +14,7 @@ module.component('generalTable', {
 		query: '<',
 		onPlotChange: '&'
 	},
-	template: require('./table.html'),
+	template: require(__templatePath),
 	controller: class GeneralTableController {
 
 		constructor($element) {

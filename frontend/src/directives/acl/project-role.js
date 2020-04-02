@@ -1,12 +1,7 @@
 
 import angular from 'angular';
 
-
-const module = angular.module(
-	'monitool.directives.acl.projectrole',
-	[]
-);
-
+const module = angular.module(__moduleName, []);
 
 const isAllowedProject = function (userEmail, scope, attributes) {
 	// FIXME: shouldn't this be the other way around? $eval(attr) || defaultValue

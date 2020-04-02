@@ -1,12 +1,7 @@
-
 import angular from 'angular';
 import { TimeDimension } from 'olap-in-memory';
 
-const module = angular.module(
-	'monitool.components.pages.project.reporting.query-aggregate',
-	[
-	]
-);
+const module = angular.module(__moduleName, []);
 
 module.component('queryAggregate', {
 
@@ -14,7 +9,7 @@ module.component('queryAggregate', {
 		project: '<',
 		onUpdate: '&'
 	},
-	template: require('./query-aggregate.html'),
+	template: require(__templatePath),
 
 	controller: class GeneralGroupBy {
 

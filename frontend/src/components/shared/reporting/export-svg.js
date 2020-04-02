@@ -1,17 +1,14 @@
 import angular from 'angular';
 import c3css from '!css-loader!c3/c3.min.css';
 
-const module = angular.module(
-	'monitool.components.shared.reporting.export-svg',
-	[
-	]
-);
+
+const module = angular.module(__moduleName, []);
 
 module.component('exportSvg', {
 	bindings: {
 		filename: '<'
 	},
-	template: require('./export-svg.html'),
+	template: require(__templatePath),
 	controller: class ExportSvgController {
 
 		onClick() {
@@ -25,7 +22,7 @@ module.component('exportSvg', {
 
 			var image = new Image();
 			image.src = uri;
-			image.onload = function() {
+			image.onload = function () {
 				var canvas = document.createElement('canvas');
 				canvas.width = image.width;
 				canvas.height = image.height;
@@ -53,11 +50,11 @@ module.component('exportSvg', {
 				c3css.toString().replace(/\.c3/g, '')
 				+ "\n]]>";
 
-			var outer  = document.createElement("div"),
-				clone  = el.cloneNode(true),
-				width  = parseInt(clone.getAttribute('width') || clone.style.width || out$.getComputedStyle(el).getPropertyValue('width')),
+			var outer = document.createElement("div"),
+				clone = el.cloneNode(true),
+				width = parseInt(clone.getAttribute('width') || clone.style.width || out$.getComputedStyle(el).getPropertyValue('width')),
 				height = parseInt(clone.getAttribute('height') || clone.style.height || out$.getComputedStyle(el).getPropertyValue('height')),
-				xmlns  = "http://www.w3.org/2000/xmlns/";
+				xmlns = "http://www.w3.org/2000/xmlns/";
 
 			clone.setAttribute("version", "1.1");
 			clone.setAttributeNS(xmlns, "xmlns", "http://www.w3.org/2000/svg");

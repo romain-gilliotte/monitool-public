@@ -1,10 +1,6 @@
 import angular from 'angular';
 
-const module = angular.module(
-	'monitool.components.misc.form-group',
-	[
-	]
-);
+const module = angular.module(__moduleName, []);
 
 module.component('formGroup', {
 	bindings: {
@@ -17,7 +13,7 @@ module.component('formGroup', {
 
 	transclude: true,
 
-	template: require('./form-group.html')
+	template: require(__templatePath)
 });
 
 

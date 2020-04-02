@@ -1,14 +1,7 @@
 import angular from 'angular';
+import { range } from '../../../helpers/array';
 
-import {range} from '../../../helpers/array';
-
-
-const module = angular.module(
-	'monitool.components.ng-models.partition-distribution',
-	[
-	]
-);
-
+const module = angular.module(__moduleName, []);
 
 module.component('partitionDistribution', {
 	require: {
@@ -17,7 +10,7 @@ module.component('partitionDistribution', {
 	bindings: {
 		numPartitions: '<'
 	},
-	template: require('./partition-distribution.html'),
+	template: require(__templatePath),
 
 	controller: class PartitionDistributionController {
 

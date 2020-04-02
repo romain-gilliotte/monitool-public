@@ -4,14 +4,7 @@ import uiRouter from '@uirouter/angularjs';
 import progressBar from '../../shared/misc/progress-bar';
 
 
-const module = angular.module(
-	'monitool.components.pages.project.structure.home',
-	[
-		uiRouter, // for $stateProvider
-		progressBar
-	]
-);
-
+const module = angular.module(__moduleName, [uiRouter, progressBar]);
 
 module.config($stateProvider => {
 
@@ -30,7 +23,7 @@ module.component('projectStructureHome', {
 		project: '<'
 	},
 
-	template: require('./home.html'),
+	template: require(__templatePath),
 
 	controller: class ProjectStructureHomeController {
 

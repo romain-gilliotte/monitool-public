@@ -1,11 +1,6 @@
 import angular from 'angular';
 
-
-const module = angular.module(
-	'monitool.filters.indicator',
-	[
-	]
-);
+const module = angular.module(__moduleName, []);
 
 module.filter('indicatorUnit', function () {
 	return function (formula) {

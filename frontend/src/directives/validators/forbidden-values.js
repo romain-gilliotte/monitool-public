@@ -1,18 +1,13 @@
 import angular from 'angular';
 
-const module = angular.module(
-	'monitool.directives.validators.forbiddenvalues',
-	[
-	]
-);
+const module = angular.module(__moduleName, []);
 
-
-module.directive('forbiddenValues', function() {
+module.directive('forbiddenValues', function () {
 	return {
 		restrict: "A",
 		require: 'ngModel',
-		link: function($scope, element, attributes, ngModelController) {
-			ngModelController.$validators.forbiddenValues = function(modelValue, viewValue) {
+		link: function ($scope, element, attributes, ngModelController) {
+			ngModelController.$validators.forbiddenValues = function (modelValue, viewValue) {
 				var values = $scope.$eval(attributes.forbiddenValues);
 				return !values.includes(viewValue);
 			};

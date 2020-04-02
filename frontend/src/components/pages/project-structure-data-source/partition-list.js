@@ -3,20 +3,14 @@ import uiModal from 'angular-ui-bootstrap/src/modal/index';
 
 import mtPartitionEdition from './partition-edition';
 
-const module = angular.module(
-	'monitool.components.data-source.partition-list',
-	[
-		uiModal,
-		mtPartitionEdition
-	]
-);
+const module = angular.module(__moduleName, [uiModal, mtPartitionEdition]);
 
 module.component('partitionList', {
 	bindings: {
 		'readOnlyPartitions': '<partitions',
 		'onUpdate': '&'
 	},
-	template: require('./partition-list.html'),
+	template: require(__templatePath),
 	controller: class PartitionListController {
 
 		constructor($uibModal) {
@@ -43,9 +37,9 @@ module.component('partitionList', {
 					else
 						this.partitions.splice(this.partitions.indexOf(partition), 1);
 
-					this.onUpdate({partitions: this.partitions});
+					this.onUpdate({ partitions: this.partitions });
 				})
-				.catch(e => {});
+				.catch(e => { });
 		};
 
 		addPartition() {
@@ -59,9 +53,9 @@ module.component('partitionList', {
 					this.partitions.push(newPartition);
 
 					console.log('added')
-					this.onUpdate({partitions: this.partitions});
+					this.onUpdate({ partitions: this.partitions });
 				})
-				.catch(e => {});
+				.catch(e => { });
 		};
 	}
 });

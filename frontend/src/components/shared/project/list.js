@@ -1,17 +1,10 @@
 import angular from 'angular';
 import axios from 'axios';
 import diacritics from 'diacritics';
-
 import Project from '../../../models/project';
-
 import mtAclProjectRole from '../../../directives/acl/project-role';
 
-const module = angular.module(
-	'monitool.components.shared.project.list',
-	[
-		mtAclProjectRole
-	]
-);
+const module = angular.module(__moduleName, [mtAclProjectRole]);
 
 module.component('projectList', {
 	bindings: {
@@ -21,7 +14,7 @@ module.component('projectList', {
 		'preferReporting': '<'
 	},
 
-	template: require('./list.html'),
+	template: require(__templatePath),
 
 	controller: class ProjectListController {
 

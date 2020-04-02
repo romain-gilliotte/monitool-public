@@ -1,16 +1,12 @@
 import angular from 'angular';
 
-const module = angular.module(
-	'monitool.components.misc.check-times-icon',
-	[]
-);
-
+const module = angular.module(__moduleName, []);
 
 module.component('faOk', {
 	bindings: {
 		value: '<'
 	},
-	template: require('./check-times-icon.html')
+	template: require(__templatePath)
 });
 
 

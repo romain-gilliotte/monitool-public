@@ -1,16 +1,12 @@
 import angular from 'angular';
 
-const module = angular.module(
-	'monitool.components.misc.plusminusicon',
-	[]
-);
-
+const module = angular.module(__moduleName, []);
 
 module.component('faOpen', {
 	bindings: {
 		value: '<'
 	},
-	template: require('./plus-minus-icon.html')
+	template: require(__templatePath)
 });
 
 

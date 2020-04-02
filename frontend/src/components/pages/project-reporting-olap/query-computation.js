@@ -1,19 +1,14 @@
 import angular from 'angular';
 import { buildQueryFromIndicator, buildQueryFromVariable } from '../../../helpers/query-builder';
 
-const module = angular.module(
-	'monitool.components.shared.reporting.query-computation',
-	[
-	]
-);
-
+const module = angular.module(__moduleName, []);
 
 module.component('queryComputation', {
 	bindings: {
 		project: '<', // To get the indicators
 		onUpdate: '&'
 	},
-	template: require('./query-computation.html'),
+	template: require(__templatePath),
 	controller: class IndicatorSelectController {
 
 		constructor($filter) {

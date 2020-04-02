@@ -1,22 +1,17 @@
 import angular from 'angular';
 import exprEval from 'expr-eval';
 
-const module = angular.module(
-	'directives.validators.expression',
-	[
-	]
-);
+const module = angular.module(__moduleName, []);
 
-
-module.directive('expression', function() {
+module.directive('expression', function () {
 	return {
 		restrict: 'A',
 		require: '?ngModel',
-		link: function($scope, $element, attributes, controller) {
+		link: function ($scope, $element, attributes, controller) {
 			if (!controller)
 				return;
 
-			controller.$validators.expression = function(value) {
+			controller.$validators.expression = function (value) {
 				try {
 					exprEval.Parser.parse(value);
 					return true

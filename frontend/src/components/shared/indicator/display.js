@@ -1,19 +1,9 @@
 import angular from 'angular';
-
 import uibModal from 'angular-ui-bootstrap/src/modal/index';
-
 import mtEditionModal from './indicator-edition';
 import mtIndicatorUnit from '../../../filters/indicator';
 
-const module = angular.module(
-	'monitool.components.shared.indicator.display',
-	[
-		uibModal, // for $uibModal
-		mtEditionModal,
-		mtIndicatorUnit
-	]
-);
-
+const module = angular.module(__moduleName, [uibModal, mtEditionModal, mtIndicatorUnit]);
 
 module.component('indicator', {
 	bindings: {
@@ -24,7 +14,7 @@ module.component('indicator', {
 		onDeleted: '&'
 	},
 
-	template: require('./display.html'),
+	template: require(__templatePath),
 
 	controller: class IndicatorController {
 
@@ -46,14 +36,14 @@ module.component('indicator', {
 				.result
 				.then(newIndicator => {
 					if (newIndicator)
-						this.onUpdated({newIndicator: newIndicator, previousValue: this.indicator});
+						this.onUpdated({ newIndicator: newIndicator, previousValue: this.indicator });
 					else
-						this.onDeleted({indicator: this.indicator});
+						this.onDeleted({ indicator: this.indicator });
 				});
 		}
 
 		onDeleteClicked() {
-			this.onDeleted({indicator: this.indicator});
+			this.onDeleted({ indicator: this.indicator });
 		}
 	}
 });

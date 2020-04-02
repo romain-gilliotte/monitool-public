@@ -1,10 +1,7 @@
 import angular from 'angular';
 import TimeSlot from 'timeslot-dag';
 
-const module = angular.module(
-	'monitool.filters.timeslot',
-	[]
-);
+const module = angular.module(__moduleName, []);
 
 module.filter('formatSlot', function ($rootScope) {
 	return function (slotValue) {

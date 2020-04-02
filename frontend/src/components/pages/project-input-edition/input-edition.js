@@ -1,21 +1,10 @@
 import angular from 'angular';
-import Input from '../../../models/input';
-
 import uiRouter from '@uirouter/angularjs';
 import mtFilterTimeSlot from '../../../filters/time-slot';
+import Input from '../../../models/input';
 import mtNumberTable from './number-table';
-import { P } from 'handsontable/dist/handsontable';
 
-
-const module = angular.module(
-	'monitool.components.pages.project.input.edit',
-	[
-		uiRouter, // for $stateProvider
-		mtFilterTimeSlot,
-		mtNumberTable
-	]
-);
-
+const module = angular.module(__moduleName, [uiRouter, mtFilterTimeSlot, mtNumberTable]);
 
 module.config($stateProvider => {
 
@@ -34,7 +23,6 @@ module.config($stateProvider => {
 	});
 });
 
-
 module.component('projectInputEdition', {
 	bindings: {
 		project: '<',
@@ -46,7 +34,7 @@ module.component('projectInputEdition', {
 		previousInput: '<',
 	},
 
-	template: require('./input-edition.html'),
+	template: require(__templatePath),
 
 	controller: class ProjectInputEditionController {
 

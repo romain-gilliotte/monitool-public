@@ -3,16 +3,7 @@ import angular from 'angular';
 import 'angular-legacy-sortablejs-maintained';
 import mtProjectUserEditModal from './project-user-edition';
 
-const module = angular.module(
-	'monitool.components.pages.project.structure.user',
-	[
-		uiRouter, // for $stateProvider
-		'ng-sortable',
-
-		mtProjectUserEditModal
-	]
-);
-
+const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtProjectUserEditModal]);
 
 module.config($stateProvider => {
 
@@ -31,7 +22,7 @@ module.component('projectUserList', {
 		onProjectUpdate: '&'
 	},
 
-	template: require('./user-list.html'),
+	template: require(__templatePath),
 
 	controller: class ProjectUserListController {
 

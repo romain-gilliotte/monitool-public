@@ -1,21 +1,17 @@
 import angular from 'angular';
 import { v4 as uuid } from 'uuid';
-
 import uiRouter from '@uirouter/angularjs';
 import uiSelect from 'ui-select';
 import 'angular-legacy-sortablejs-maintained';
-
 import 'ui-select/dist/select.min.css';
-
 import mtOptionalDate from '../../shared/ng-models/datepicker-optional';
 import mtElementFilter from '../../shared/ng-models/mselect-with-groups';
 import mtPartitionList from './partition-list';
 import mtPartitionDistribution from './partition-distribution';
 import mtPartitionOrder from './partition-order';
 
-
 const module = angular.module(
-	'monitool.components.pages.project.structure.datasource.edit',
+	__moduleName,
 	[
 		uiRouter, // for $stateProvider
 		'ng-sortable',
@@ -55,7 +51,7 @@ module.component('dataSourceEdition', {
 		onProjectUpdate: '&',
 	},
 
-	template: require('./data-source-edit.html'),
+	template: require(__templatePath),
 
 	controller: class DataSourceEdition {
 

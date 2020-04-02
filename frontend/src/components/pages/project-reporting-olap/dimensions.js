@@ -2,11 +2,7 @@
 
 import angular from 'angular';
 
-const module = angular.module(
-	'monitool.components.pages.project-reporting-olap.dimensions',
-	[
-	]
-);
+const module = angular.module(__moduleName, []);
 
 module.component('olapDimensions', {
 
@@ -17,7 +13,7 @@ module.component('olapDimensions', {
 		onUpdate: '&'
 	},
 
-	template: require('./dimensions.html'),
+	template: require(__templatePath),
 
 	controller: class OlapDimensionsController {
 

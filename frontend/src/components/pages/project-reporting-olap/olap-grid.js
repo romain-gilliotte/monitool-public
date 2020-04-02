@@ -1,12 +1,7 @@
 import angular from 'angular';
 import { product } from '../../../helpers/array';
 
-const module = angular.module(
-	'monitool.components.shared.reporting.olap-grid',
-	[
-	]
-);
-
+const module = angular.module(__moduleName, []);
 
 module.component('olapGrid', {
 	bindings: {
@@ -17,7 +12,7 @@ module.component('olapGrid', {
 		data: '<'
 	},
 
-	template: require('./olap-grid.html'),
+	template: require(__templatePath),
 
 	controller: class OlapGridController {
 

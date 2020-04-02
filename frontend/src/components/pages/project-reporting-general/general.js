@@ -1,22 +1,10 @@
 import angular from 'angular';
-
 import uiRouter from '@uirouter/angularjs';
-
 import mtProjectQuery from './project-query';
 import mtTable from './table';
 import mtGraph from '../../shared/reporting/graph';
 
-const module = angular.module(
-	'monitool.components.pages.project.reporting_general',
-	[
-		uiRouter, // for $stateProvider
-
-		mtProjectQuery,
-		mtTable,
-		mtGraph
-	]
-);
-
+const module = angular.module(__moduleName, [uiRouter, mtProjectQuery, mtTable, mtGraph]);
 
 module.config($stateProvider => {
 
@@ -32,7 +20,7 @@ module.component('generalReporting', {
 	bindings: {
 		project: '<',
 	},
-	template: require('./general.html'),
+	template: require(__templatePath),
 	controller: class GeneralReportingController {
 
 		constructor() {

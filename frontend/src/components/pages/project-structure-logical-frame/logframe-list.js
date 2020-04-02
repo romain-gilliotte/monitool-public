@@ -1,18 +1,9 @@
 import angular from 'angular';
 import { v4 as uuid } from 'uuid';
-
 import uiRouter from '@uirouter/angularjs';
 import 'angular-legacy-sortablejs-maintained';
 
-
-const module = angular.module(
-	'monitool.components.pages.project.structure.logicalframe.list',
-	[
-		uiRouter, // for $stateProvider
-		'ng-sortable'
-	]
-);
-
+const module = angular.module(__moduleName, [uiRouter, 'ng-sortable']);
 
 module.config($stateProvider => {
 
@@ -32,7 +23,7 @@ module.component('logicalFrameworkList', {
 		onProjectUpdate: '&'
 	},
 
-	template: require('./logframe-list.html'),
+	template: require(__templatePath),
 
 	controller: class ProjectLogicalFrameListController {
 

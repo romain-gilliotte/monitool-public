@@ -1,11 +1,6 @@
 import angular from 'angular';
 
-
-const module = angular.module(
-	'monitool.directives.acl.projectinput',
-	[]
-);
-
+const module = angular.module(__moduleName, []);
 
 const isAllowedForm = function (userEmail, scope, attributes) {
 

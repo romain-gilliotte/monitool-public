@@ -2,13 +2,7 @@ import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
 
 
-const module = angular.module(
-	'monitool.components.pages.project.reporting.menu',
-	[
-		uiRouter // for $stateProvider
-	]
-);
-
+const module = angular.module(__moduleName, [uiRouter]);
 
 module.config($stateProvider => {
 
@@ -26,7 +20,7 @@ module.component('projectReportingMenu', {
 		project: '<'
 	},
 
-	template: require('./menu.html'),
+	template: require(__templatePath),
 
 	controller: class ProjectReportingController {
 

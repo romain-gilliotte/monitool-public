@@ -1,22 +1,10 @@
 import angular from 'angular';
-
 import uiRouter from '@uirouter/angularjs';
 import uiModal from 'angular-ui-bootstrap/src/modal/index';
 import 'angular-legacy-sortablejs-maintained';
-
 import mtIndicatorEditionModal from '../../shared/indicator/indicator-edition';
 
-const module = angular.module(
-	'monitool.components.pages.project.structure.extraindicator',
-	[
-		uiRouter, // for $stateProvider
-		uiModal,
-		'ng-sortable',
-
-		mtIndicatorEditionModal,
-	]
-);
-
+const module = angular.module(__moduleName, [uiRouter, uiModal, 'ng-sortable', mtIndicatorEditionModal]);
 
 module.config($stateProvider => {
 
@@ -37,7 +25,7 @@ module.component('extraIndicatorList', {
 		onProjectUpdate: '&'
 	},
 
-	template: require('./extra-indicators.html'),
+	template: require(__templatePath),
 
 	controller: class ProjectExtraIndicators {
 
@@ -48,7 +36,7 @@ module.component('extraIndicatorList', {
 		$onInit() {
 			this.sortableOptions = {
 				handle: '.indicator-handle',
-				onUpdate: () => this.onProjectUpdate({newProject: this.editableProject, isValid: true})
+				onUpdate: () => this.onProjectUpdate({ newProject: this.editableProject, isValid: true })
 			};
 		}
 
@@ -62,14 +50,14 @@ module.component('extraIndicatorList', {
 			const index = this.editableProject.extraIndicators.indexOf(formerIndicator);
 			this.editableProject.extraIndicators.splice(index, 1, newIndicator);
 
-			this.onProjectUpdate({newProject: this.editableProject, isValid: true});
+			this.onProjectUpdate({ newProject: this.editableProject, isValid: true });
 		}
 
 		onIndicatorDeleted(indicator) {
 			const index = this.editableProject.extraIndicators.indexOf(indicator);
 			this.editableProject.extraIndicators.splice(index, 1);
 
-			this.onProjectUpdate({newProject: this.editableProject, isValid: true});
+			this.onProjectUpdate({ newProject: this.editableProject, isValid: true });
 		}
 
 		onAddIndicatorClick() {
@@ -87,7 +75,7 @@ module.component('extraIndicatorList', {
 				.then(newIndicator => {
 					if (newIndicator) {
 						this.editableProject.extraIndicators.push(newIndicator);
-						this.onProjectUpdate({newProject: this.editableProject, isValid: true});
+						this.onProjectUpdate({ newProject: this.editableProject, isValid: true });
 					}
 				});
 		}

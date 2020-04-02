@@ -1,19 +1,12 @@
 import angular from 'angular';
-
 import uiDatepickerPopup from 'angular-ui-bootstrap/src/datepickerPopup/index';
 
-const module = angular.module(
-	'monitool.components.ng-models.utcdatepicker',
-	[
-		uiDatepickerPopup
-	]
-);
-
+const module = angular.module(__moduleName, [uiDatepickerPopup]);
 
 /**
  * Init datepicker modules
  */
-module.config(function(uibDatepickerConfig, uibDatepickerPopupConfig) {
+module.config(function (uibDatepickerConfig, uibDatepickerPopupConfig) {
 	uibDatepickerConfig.showWeeks = false;
 	uibDatepickerConfig.startingDay = 1;
 	uibDatepickerPopupConfig.showButtonBar = false;
@@ -27,7 +20,7 @@ module.component('utcDatepicker', {
 		ngModelCtrl: 'ngModel'
 	},
 
-	template: require('./datepicker.html'),
+	template: require(__templatePath),
 
 	controller: class UtcDatepickerController {
 

@@ -1,14 +1,7 @@
 import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
 
-
-const module = angular.module(
-	'monitool.components.pages.project.structure.menu',
-	[
-		uiRouter // for $stateProvider
-	]
-);
-
+const module = angular.module(__moduleName, [uiRouter]);
 
 module.config($stateProvider => {
 
@@ -16,9 +9,7 @@ module.config($stateProvider => {
 		abstract: true,
 		component: 'projectEditMenu',
 	});
-
 });
-
 
 module.component('projectEditMenu', {
 
@@ -27,7 +18,7 @@ module.component('projectEditMenu', {
 		onProjectSaveSuccess: '&'
 	},
 
-	template: require('./menu.html'),
+	template: require(__templatePath),
 
 	controller: class ProjectEditController {
 

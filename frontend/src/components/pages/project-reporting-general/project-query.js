@@ -3,14 +3,7 @@ import queryAggregate from './query-aggregate';
 import queryDiceLocation from './query-dice-location';
 import queryDiceTime from './query-dice-time';
 
-const module = angular.module(
-	'monitool.component.page.project-reporting-general.project-filter',
-	[
-		queryAggregate,
-		queryDiceLocation,
-		queryDiceTime
-	]
-);
+const module = angular.module(__moduleName, [queryAggregate, queryDiceLocation, queryDiceTime]);
 
 module.component('projectQuery', {
 	bindings: {
@@ -18,7 +11,7 @@ module.component('projectQuery', {
 		onUpdate: '&'
 	},
 
-	template: require('./project-query.html'),
+	template: require(__templatePath),
 
 	controller: class ProjectFilterController {
 

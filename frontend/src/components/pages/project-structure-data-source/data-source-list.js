@@ -1,22 +1,10 @@
 import angular from 'angular';
 import { v4 as uuid } from 'uuid';
-
 import uiRouter from '@uirouter/angularjs';
 import 'angular-legacy-sortablejs-maintained';
-
 import mtElementGroups from '../../shared/misc/element-groups';
 
-
-const module = angular.module(
-	'monitool.components.pages.project.structure.datasource.list',
-	[
-		uiRouter, // for $stateProvider
-		'ng-sortable',
-
-		mtElementGroups
-	]
-);
-
+const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtElementGroups]);
 
 module.config($stateProvider => {
 	$stateProvider.state('main.project.structure.collection_form_list', {
@@ -34,7 +22,7 @@ module.component('dataSourceList', {
 		onProjectUpdate: '&'
 	},
 
-	template: require('./data-source-list.html'),
+	template: require(__templatePath),
 
 	controller: class ProjectDataSourcesController {
 

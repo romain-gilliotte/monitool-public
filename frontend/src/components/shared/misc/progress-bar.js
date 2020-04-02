@@ -1,17 +1,13 @@
 import angular from 'angular';
 
-const module = angular.module(
-	'monitool.components.misc.progressbar',
-	[]
-);
-
+const module = angular.module(__moduleName, []);
 
 module.component('progressBar', {
 	bindings: {
 		done: '<',
 		incomplete: '<'
 	},
-	template: require('./progress-bar.html'),
+	template: require(__templatePath),
 	controller: class ProgressBarController {
 
 		$onChanges(changes) {
@@ -22,6 +18,4 @@ module.component('progressBar', {
 	}
 });
 
-
 export default module.name;
-
