@@ -2,8 +2,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.min.css';
 import "./app.css";
 
-import "regenerator-runtime/runtime";
-
 import angular from 'angular';
 import axios from 'axios';
 import createAuth0Client from '@auth0/auth0-spa-js';
