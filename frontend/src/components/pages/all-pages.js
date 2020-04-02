@@ -1,7 +1,7 @@
 import angular from 'angular';
 
 import topMenu from "./top-menu/top-menu";
-import list from "./list/project-list-page";
+import list from "./list/project-list";
 
 import menu from "./menu/project-menu";
 

@@ -1,8 +1,8 @@
-import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
-import mtProjectQuery from './project-query';
-import mtTable from './general-table';
+import angular from 'angular';
 import mtGraph from '../../shared/reporting/reporting-graph';
+import mtTable from './general-table';
+import mtProjectQuery from './project-query';
 
 const module = angular.module(__moduleName, [uiRouter, mtProjectQuery, mtTable, mtGraph]);
 

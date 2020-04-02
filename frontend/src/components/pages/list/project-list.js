@@ -1,19 +1,30 @@
+import uiRouter from '@uirouter/angularjs';
 import angular from 'angular';
 import axios from 'axios';
 import diacritics from 'diacritics';
-import Project from '../../../models/project';
 import mtAclProjectRole from '../../../directives/acl/project-role';
+import Project from '../../../models/project';
 import mtColumnsPanel from '../../shared/misc/columns-panel';
+
 require(__cssPath);
 
-const module = angular.module(__moduleName, [mtAclProjectRole, mtColumnsPanel]);
+const module = angular.module(__moduleName, [uiRouter, mtAclProjectRole, mtColumnsPanel]);
+
+module.config($stateProvider => {
+	$stateProvider.state('main.projects', {
+		acceptedUsers: ['loggedIn'],
+		url: '/projects',
+		component: __componentName,
+		resolve: {
+			projects: () => Project.fetchAll()
+		}
+	});
+
+});
 
 module.component(__componentName, {
 	bindings: {
 		'projects': '<',
-		'showDropDown': '<',
-		'showCreate': '<',
-		'preferReporting': '<'
 	},
 
 	template: require(__templatePath),

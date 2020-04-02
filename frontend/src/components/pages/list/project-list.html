@@ -1,9 +1,13 @@
+<ol class="breadcrumb noprint">
+	<li class="active" translate="shared.projects"></li>
+</ol>
+
 <div style="margin-bottom: 10px">
 	<input type="text" ng-change="$ctrl.filter()" ng-model="$ctrl.filterValue" class="form-control"
 		placeholder="{{'project.filter_placeholder'|translate}}">
 </div>
 <div style="margin-bottom: 10px">
-	<div class="pull-right" ng-if="$ctrl.showCreate">
+	<div class="pull-right">
 		<a class="btn btn-primary" ng-click="$ctrl.createProject()">
 			<i class="fa fa-plus"></i>
 			<span translate="project.create"></span>
@@ -54,7 +58,7 @@
 				<a acl-has-project-role="owner" acl-project="p" ng-if="!p.active" class="btn btn-default btn-xxs"
 					ng-click="$ctrl.onRestoreClicked(p)" translate="shared.restore"></a>
 
-				<div class="btn-group" uib-dropdown ng-if="p.active && $ctrl.showDropDown">
+				<div class="btn-group" uib-dropdown ng-if="p.active">
 					<a class="btn btn-default btn-xxs" uib-dropdown-toggle>
 						<span class="caret"></span>
 					</a>

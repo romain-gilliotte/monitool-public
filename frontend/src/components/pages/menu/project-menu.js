@@ -1,9 +1,9 @@
-import angular from 'angular';
-import Project from '../../../models/project';
 import uiRouter from '@uirouter/angularjs';
-import mtAclProjectRole from '../../../directives/acl/project-role';
+import angular from 'angular';
 import mtAclProjectInput from '../../../directives/acl/project-input';
+import mtAclProjectRole from '../../../directives/acl/project-role';
 import mtDisableIf from '../../../directives/helpers/disableif';
+import Project from '../../../models/project';
 
 const module = angular.module(__moduleName, [uiRouter, mtAclProjectRole, mtAclProjectInput, mtDisableIf]);
 
