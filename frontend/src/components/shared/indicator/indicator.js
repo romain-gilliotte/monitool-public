@@ -2,9 +2,11 @@ import angular from 'angular';
 import uibModal from 'angular-ui-bootstrap/src/modal/index';
 import mtEditionModal from './indicator-edition-modal';
 import mtIndicatorUnit from '../../../filters/indicator';
+import mtColumnsPanel from '../misc/columns-panel';
+
 require(__cssPath);
 
-const module = angular.module(__moduleName, [uibModal, mtEditionModal, mtIndicatorUnit]);
+const module = angular.module(__moduleName, [uibModal, mtEditionModal, mtIndicatorUnit, mtColumnsPanel]);
 
 module.component(__componentName, {
 	bindings: {

@@ -2,8 +2,9 @@ import angular from 'angular';
 import { v4 as uuid } from 'uuid';
 import uiRouter from '@uirouter/angularjs';
 import 'angular-legacy-sortablejs-maintained';
+import mtColumnsPanel from '../../shared/misc/columns-panel';
 
-const module = angular.module(__moduleName, [uiRouter, 'ng-sortable']);
+const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtColumnsPanel]);
 
 module.config($stateProvider => {
 

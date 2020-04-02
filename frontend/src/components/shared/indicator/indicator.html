@@ -1,22 +1,19 @@
-<div class="panel panel-default">
-
-	<div class="panel-heading" title="{{$ctrl.indicator.display}}">
-		<i class="fa fa-arrows fa-fw indicator-handle"></i>
-		{{$ctrl.indicator.display|maxLength:90}}
-	</div>
-
-	<div class="panel-body">
+<columns-panel sortable="true" title="$ctrl.indicator.display" handle-class="indicator-handle">
+	<pane-title>{{$ctrl.indicator.display|maxLength:90}}</pane-title>
+	<pane-body>
 		<!-- Baseline -->
 		<div>
 			<strong>{{'project.baseline'|translate}}:</strong>
-			<span ng-if="$ctrl.indicator.baseline != null">{{$ctrl.indicator.baseline}}{{$ctrl.indicator|indicatorUnit}}</span>
+			<span
+				ng-if="$ctrl.indicator.baseline != null">{{$ctrl.indicator.baseline}}{{$ctrl.indicator|indicatorUnit}}</span>
 			<span ng-if="$ctrl.indicator.baseline == null">?</span>
 		</div>
 
 		<!-- Target -->
 		<div>
 			<strong>{{'project.target'|translate}}:</strong>
-			<span ng-if="$ctrl.indicator.target != null">{{$ctrl.indicator.target}}{{$ctrl.indicator|indicatorUnit}}</span>
+			<span
+				ng-if="$ctrl.indicator.target != null">{{$ctrl.indicator.target}}{{$ctrl.indicator|indicatorUnit}}</span>
 			<span ng-if="$ctrl.indicator.target == null">?</span>
 		</div>
 
@@ -25,11 +22,11 @@
 			<strong>{{'project.computation'|translate}}:</strong>
 			<span class="text-danger" ng-if="!$ctrl.indicator.computation">
 				{{'project.indicator_is_not_computed'|translate}}
-				<i class="fa fa-unlink" ></i>
+				<i class="fa fa-unlink"></i>
 			</span>
 			<span class="text-success" ng-if="$ctrl.indicator.computation">
 				{{'project.indicator_is_computed'|translate}}
-				<i class="fa fa-link" ></i>
+				<i class="fa fa-link"></i>
 			</span>
 		</div>
 
@@ -44,7 +41,7 @@
 					<span class="caret"></span>
 				</a>
 
-				  <ul class="dropdown-menu">
+				<ul class="dropdown-menu">
 					<li>
 						<a ng-click="$ctrl.onDeleteClicked()">
 							<i class="fa fa-trash text-danger"></i>
@@ -53,9 +50,6 @@
 					</li>
 				</ul>
 			</div>
-
 		</div>
-
-
-	</div>
-</div>
+	</pane-body>
+</columns-panel>

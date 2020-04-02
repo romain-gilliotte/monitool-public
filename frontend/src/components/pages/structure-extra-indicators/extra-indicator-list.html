@@ -10,13 +10,8 @@
 <p ng-if="$ctrl.editableProject.extraIndicators.length == 0" translate="project.no_extra_indicators"></p>
 
 <div ng-sortable="$ctrl.sortableOptions">
-
-	<indicator
-		class="columns-panel"
-		ng-repeat="indicator in $ctrl.editableProject.extraIndicators"
-		indicator="indicator"
-		project="$ctrl.project"
-		on-updated="$ctrl.onIndicatorUpdated(newIndicator, previousValue)"
+	<indicator ng-repeat="indicator in $ctrl.editableProject.extraIndicators" indicator="indicator"
+		project="$ctrl.project" on-updated="$ctrl.onIndicatorUpdated(newIndicator, previousValue)"
 		on-deleted="$ctrl.onIndicatorDeleted(indicator)"></indicator>
 </div>
 

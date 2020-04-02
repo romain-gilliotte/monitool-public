@@ -3,9 +3,10 @@ import axios from 'axios';
 import diacritics from 'diacritics';
 import Project from '../../../models/project';
 import mtAclProjectRole from '../../../directives/acl/project-role';
+import mtColumnsPanel from '../../shared/misc/columns-panel';
 require(__cssPath);
 
-const module = angular.module(__moduleName, [mtAclProjectRole]);
+const module = angular.module(__moduleName, [mtAclProjectRole, mtColumnsPanel]);
 
 module.component(__componentName, {
 	bindings: {
@@ -37,6 +38,10 @@ module.component(__componentName, {
 			this.displayedProjects.forEach(p => {
 				p.running = p.end > new Date().toISOString().slice(0, 10);
 				p.favorite = !!localStorage['favorites::projects::' + p._id];
+
+				if (!p.active) p.variant = 'deleted';
+				else if (!p.running) p.variant = 'dashed';
+				else p.variant = 'default';
 			});
 
 			this.displayedProjects = this.displayedProjects.filter(p => {

@@ -2,8 +2,9 @@ import uiRouter from '@uirouter/angularjs';
 import angular from 'angular';
 import 'angular-legacy-sortablejs-maintained';
 import mtProjectUserEditModal from './project-user-modal';
+import mtColumnsPanel from '../../shared/misc/columns-panel';
 
-const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtProjectUserEditModal]);
+const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtProjectUserEditModal, mtColumnsPanel]);
 
 module.config($stateProvider => {
 
@@ -13,7 +14,6 @@ module.config($stateProvider => {
 		component: __componentName
 	});
 });
-
 
 module.component(__componentName, {
 	bindings: {

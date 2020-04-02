@@ -7,17 +7,10 @@
 
 <div class="alert alert-info" translate="project.collection_form_list_info"></div>
 
-
 <div ng-sortable="$ctrl.ngSortableOptions">
-	<div class="panel panel-default columns-panel" ng-repeat="dataSource in $ctrl.editableProject.forms">
-
-		<div class="panel-heading">
-			<div class="panel-title">
-				<i class="fa fa-arrows fa-fw handle"></i>
-				{{dataSource.name}}
-			</div>
-		</div>
-		<div class="panel-body">
+	<columns-panel sortable="true" ng-repeat="dataSource in $ctrl.editableProject.forms">
+		<pane-title>{{dataSource.name}}</pane-title>
+		<pane-body>
 			<div>
 				<strong translate="shared.date"></strong>
 				{{dataSource.start|date}} - {{dataSource.end|date}}
@@ -68,9 +61,8 @@
 					</ul>
 				</div>
 			</div>
-
-		</div>
-	</div>
+		</pane-body>
+	</columns-panel>
 </div>
 
 <a class="btn btn-default" ng-click="$ctrl.onCreateFormClicked()">

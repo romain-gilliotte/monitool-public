@@ -8,18 +8,9 @@
 <div class="alert alert-info" translate="project.users_list_info"></div>
 
 <div ng-sortable="$ctrl.sortableOptions">
-	<div class="panel panel-default columns-panel" ng-repeat="user in $ctrl.editableProject.users">
-
-		<div class="panel-heading">
-			<div class="panel-title">
-				<i class="fa fa-arrows fa-fw handle"></i>
-			</div>
-		</div>
-		<div class="panel-body">
-			<div>
-				<strong translate="project.email"></strong>
-				{{user.email}}
-			</div>
+	<columns-panel sortable="true" ng-repeat="user in $ctrl.editableProject.users">
+		<pane-title>{{user.email}}</pane-title>
+		<pane-body>
 			<div>
 				<strong translate="project.user_role"></strong>
 				{{('project.user_roles.' + user.role)|translate}}
@@ -55,8 +46,8 @@
 					</ul>
 				</div>
 			</div>
-		</div>
-	</div>
+		</pane-body>
+	</columns-panel>
 </div>
 
 <a class="btn btn-default" ng-click="$ctrl.onEditUserClicked()">

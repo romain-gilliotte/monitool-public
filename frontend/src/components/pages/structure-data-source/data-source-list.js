@@ -3,8 +3,9 @@ import { v4 as uuid } from 'uuid';
 import uiRouter from '@uirouter/angularjs';
 import 'angular-legacy-sortablejs-maintained';
 import mtElementGroups from '../../shared/misc/element-groups';
+import mtColumnsPanel from '../../shared/misc/columns-panel';
 
-const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtElementGroups]);
+const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtElementGroups, mtColumnsPanel]);
 
 module.config($stateProvider => {
 	$stateProvider.state('main.project.structure.collection_form_list', {

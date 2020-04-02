@@ -8,16 +8,12 @@
 <div class="alert alert-info" translate="project.logical_frame_list_info"></div>
 
 <div ng-sortable="$ctrl.ngSortableOptions">
-	<div class="panel panel-default columns-panel" ng-repeat="logicalFrame in $ctrl.editableProject.logicalFrames">
-
-		<div class="panel-heading">
-			<div class="panel-title">
-				<i class="fa fa-arrows fa-fw handle"></i>
-				<span ng-show="logicalFrame.name">{{logicalFrame.name}}</span>
-				<span ng-hide="logicalFrame.name" translate="project.unnamed_logframe"></span>
-			</div>
-		</div>
-		<div class="panel-body">
+	<columns-panel sortable="true" ng-repeat="logicalFrame in $ctrl.editableProject.logicalFrames">
+		<pane-title>
+			<span ng-show="logicalFrame.name">{{logicalFrame.name}}</span>
+			<span ng-hide="logicalFrame.name" translate="project.unnamed_logframe"></span>
+		</pane-title>
+		<pane-body>
 			<div>
 				<strong translate="shared.date"></strong>
 				{{logicalFrame.start|date}} - {{logicalFrame.end|date}}
@@ -71,8 +67,8 @@
 				</div>
 
 			</div>
-		</div>
-	</div>
+		</pane-body>
+	</columns-panel>
 </div>
 
 <a ng-click="$ctrl.onCreateLogicalFrameClicked()" class="btn btn-default">

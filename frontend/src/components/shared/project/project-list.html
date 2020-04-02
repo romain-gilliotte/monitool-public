@@ -20,23 +20,18 @@
 	</div>
 </div>
 
-
+<div ng-if="!$ctrl.displayedProjects.length" translate="project.no_matches"></div>
 
 <div>
-	<div class="panel columns-panel"
-		ng-class="{'panel-default': p.active && p.running, 'panel-dashed': p.active && !p.running, 'panel-deleted': !p.active}"
-		ng-repeat="p in $ctrl.displayedProjects track by p._id">
-
-		<div class="panel-heading">
-			<div class="panel-title">
-				<i class="fa pull-right fa-star" ng-if="p.favorite" style="margin-top: 3px; cursor: pointer"
-					ng-click="$ctrl.toggleFavorite(p)"></i>
-				<i class="fa pull-right fa-star-o" ng-if="!p.favorite" style="margin-top: 3px; cursor: pointer"
-					ng-click="$ctrl.toggleFavorite(p)"></i>
-				{{p.country}}
-			</div>
-		</div>
-		<div class="panel-body">
+	<columns-panel ng-repeat="p in $ctrl.displayedProjects track by p._id" sortable="false" variant="p.variant">
+		<pane-title>
+			<i class="fa pull-right fa-star" ng-if="p.favorite" style="margin-top: 3px; cursor: pointer"
+				ng-click="$ctrl.toggleFavorite(p)"></i>
+			<i class="fa pull-right fa-star-o" ng-if="!p.favorite" style="margin-top: 3px; cursor: pointer"
+				ng-click="$ctrl.toggleFavorite(p)"></i>
+			{{p.country}}
+		</pane-title>
+		<pane-body>
 			<div>
 				<strong translate="shared.name"></strong>
 				{{p.name}}
@@ -86,19 +81,16 @@
 					</ul>
 				</div>
 			</div>
-
-			<div class="bl-info">
-				<div ng-if="!p.active" class="text-danger">
-					<i class="fa fa-trash"></i>
-					<span translate="project.was_deleted"></span>
-				</div>
-				<div ng-if="p.active && !p.running" class="text-warning">
-					<i class="fa fa-warning"></i>
-					<span translate="project.is_finished"></span>
-				</div>
+		</pane-body>
+		<pane-bottom-line>
+			<div ng-if="!p.active" class="text-danger">
+				<i class="fa fa-trash"></i>
+				<span translate="project.was_deleted"></span>
 			</div>
-		</div>
-	</div>
+			<div ng-if="p.active && !p.running" class="text-warning">
+				<i class="fa fa-warning"></i>
+				<span translate="project.is_finished"></span>
+			</div>
+		</pane-bottom-line>
+	</columns-panel>
 </div>
-
-<div ng-if="!$ctrl.displayedProjects.length" translate="project.no_matches"></div>
