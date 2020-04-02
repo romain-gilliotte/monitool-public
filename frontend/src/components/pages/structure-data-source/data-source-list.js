@@ -9,7 +9,6 @@ const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtElementG
 
 module.config($stateProvider => {
 	$stateProvider.state('main.project.structure.collection_form_list', {
-		acceptedUsers: ['loggedIn'],
 		url: '/data-source',
 		component: __componentName
 	});

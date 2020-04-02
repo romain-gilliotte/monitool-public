@@ -12,7 +12,6 @@ const module = angular.module(__moduleName, [uiRouter, mtAclProjectRole, mtColum
 
 module.config($stateProvider => {
 	$stateProvider.state('main.projects', {
-		acceptedUsers: ['loggedIn'],
 		url: '/projects',
 		component: __componentName,
 		resolve: {

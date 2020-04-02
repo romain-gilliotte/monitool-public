@@ -9,7 +9,6 @@ const module = angular.module(__moduleName, [uiRouter, mtFilterTimeSlot]);
 module.config($stateProvider => {
 
 	$stateProvider.state('main.project.input.list', {
-		acceptedUsers: ['loggedIn'],
 		url: '/input/:dataSourceId/list',
 		component: __componentName,
 		resolve: {

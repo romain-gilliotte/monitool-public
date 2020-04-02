@@ -9,7 +9,6 @@ const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtColumnsP
 module.config($stateProvider => {
 
 	$stateProvider.state('main.project.structure.logical_frame_list', {
-		acceptedUsers: ['loggedIn'],
 		url: '/logical-frame',
 		component: __componentName
 	});

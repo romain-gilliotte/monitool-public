@@ -10,7 +10,6 @@ const module = angular.module(__moduleName, [uiRouter, mtRevisionSummary]);
 module.config($stateProvider => {
 
 	$stateProvider.state('main.project.structure.history', {
-		acceptedUsers: ['loggedIn'],
 		url: '/history',
 		component: __componentName
 	});

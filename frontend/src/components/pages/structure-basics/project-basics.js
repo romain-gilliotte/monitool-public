@@ -8,7 +8,6 @@ const module = angular.module(__moduleName, [uiRouter, mtUtcDatepicker, mtFormGr
 
 module.config($stateProvider => {
 	$stateProvider.state('main.project.structure.basics', {
-		acceptedUsers: ['loggedIn'],
 		url: '/basics',
 		component: __componentName
 	});

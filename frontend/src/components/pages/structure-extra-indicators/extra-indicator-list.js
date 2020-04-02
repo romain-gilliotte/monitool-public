@@ -9,7 +9,6 @@ const module = angular.module(__moduleName, [uiRouter, uiModal, 'ng-sortable', m
 module.config($stateProvider => {
 
 	$stateProvider.state('main.project.structure.extra', {
-		acceptedUsers: ['loggedIn'],
 		url: '/extra',
 		component: __componentName,
 	});

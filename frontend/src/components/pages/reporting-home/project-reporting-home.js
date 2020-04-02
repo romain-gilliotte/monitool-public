@@ -6,7 +6,6 @@ const module = angular.module(__moduleName, [uiRouter]);
 module.config($stateProvider => {
 
 	$stateProvider.state('main.project.reporting.home', {
-		acceptedUsers: ['loggedIn'],
 		url: '/reporting-home',
 		component: __componentName,
 	});

@@ -9,7 +9,6 @@ const module = angular.module(__moduleName, [uiRouter, mtProjectQuery, mtTable, 
 module.config($stateProvider => {
 
 	$stateProvider.state('main.project.reporting.general', {
-		acceptedUsers: ['loggedIn'],
 		url: '/general',
 		component: __componentName,
 	});

@@ -19,7 +19,6 @@ const module = angular.module(
 
 module.config($stateProvider => {
 	$stateProvider.state('main.project.structure.collection_site_list', {
-		acceptedUsers: ['loggedIn'],
 		url: '/sites',
 		component: __componentName
 	});
