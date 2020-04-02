@@ -2,7 +2,7 @@ import angular from 'angular';
 
 const module = angular.module(__moduleName, []);
 
-module.component('elementGroups', {
+module.component(__componentName, {
 	bindings: {
 		ids: '<',
 		items: '<',

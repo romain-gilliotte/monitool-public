@@ -68,8 +68,8 @@ module.exports = {
 		new CleanWebpackPlugin(),
 
 		// Define __moduleName, __templatePath, __cssPath and __componentName macros.
-		// This makes it much easier to move files around when bearing with AngularJS module system.
 		new webpack.DefinePlugin({
+			// 'components.pages.project-structure-basics.project-basics'
 			__moduleName: webpack.DefinePlugin.runtimeValue(
 				({ module }) => {
 					const relPath = path.relative(path.join(__dirname, 'src'), module.resource);
@@ -77,18 +77,24 @@ module.exports = {
 					return `'${moduleName}'`;
 				}
 			),
+
+			// './project-basics.html'
 			__templatePath: webpack.DefinePlugin.runtimeValue(
 				({ module }) => {
 					const basename = path.basename(module.resource, '.js');
 					return `'./${basename}.html'`;
 				}
 			),
+
+			// './project-basics.css'
 			__cssPath: webpack.DefinePlugin.runtimeValue(
 				({ module }) => {
 					const basename = path.basename(module.resource, '.js');
 					return `'./${basename}.css'`
 				}
 			),
+
+			// 'projectBasics'
 			__componentName: webpack.DefinePlugin.runtimeValue(
 				({ module }) => {
 					const basename = path.basename(module.resource, '.js');

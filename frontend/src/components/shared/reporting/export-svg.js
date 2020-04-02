@@ -4,7 +4,7 @@ import c3css from '!css-loader!c3/c3.min.css';
 
 const module = angular.module(__moduleName, []);
 
-module.component('exportSvg', {
+module.component(__componentName, {
 	bindings: {
 		filename: '<'
 	},

@@ -1,9 +1,8 @@
 import angular from 'angular';
 
-
 const module = angular.module(__moduleName, []);
 
-module.directive('tdReportingField', function () {
+module.directive(__componentName, function () {
 	return {
 		controllerAs: '$ctrl',
 		restrict: 'A',

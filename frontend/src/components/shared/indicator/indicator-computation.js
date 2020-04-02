@@ -8,7 +8,7 @@ const PERCENTAGE_FORMULA = '100 * numerator / denominator';
 const PERMILLE_FORMULA = '1000 * numerator / denominator';
 const COPY_FORMULA = 'copied_value';
 
-module.component('indicatorComputation', {
+module.component(__componentName, {
 	require: {
 		ngModelCtrl: 'ngModel'
 	},

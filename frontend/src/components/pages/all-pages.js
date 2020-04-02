@@ -1,56 +1,58 @@
 import angular from 'angular';
 
-import menu from "./menu/menu";
-import projectList from "./project-list/list";
-import projectMenu from "./project-menu/menu";
-import projectStructMenu from "./project-structure-menu/menu";
-import projectStructHome from "./project-structure-home/home";
-import projectStructBasics from "./project-structure-basics/basics";
-import projectStructSites from "./project-structure-sites/sites";
-import projectStructDsList from "./project-structure-data-source/data-source-list";
-import projectStructDsEdit from "./project-structure-data-source/data-source-edit";
-import projectStructExtra from "./project-structure-extra-indicators/extra-indicators";
-import projectStructHistory from "./project-structure-history/history";
-import projectStructLfList from "./project-structure-logical-frame/logframe-list";
-import projectStructLfEdit from "./project-structure-logical-frame/logframe-edit";
-import projectStructUserList from "./project-structure-user/user-list";
+import topMenu from "./top-menu/top-menu";
+import list from "./list/project-list-page";
 
-import projectInputMenu from "./project-input-menu/menu";
-import projectInputHome from "./project-input-home/home";
-import projectInputList from "./project-input-list/input-list";
-import projectInputEdition from "./project-input-edition/input-edition";
+import menu from "./menu/project-menu";
 
-import projectReportingMenu from "./project-reporting-menu/menu";
-import projectReportingHome from "./project-reporting-home/home";
-import projectReportingGeneral from "./project-reporting-general/general";
-import projectReportingOlap from "./project-reporting-olap/olap";
+import structMenu from "./structure-menu/project-edit-menu";
+import structHome from "./structure-home/project-structure-home";
+import structBasics from "./structure-basics/project-basics";
+import structSites from "./structure-sites/project-sites";
+import structDsList from "./structure-data-source/data-source-list";
+import structDsEdit from "./structure-data-source/data-source-edition";
+import structExtra from "./structure-extra-indicators/extra-indicator-list";
+import structHistory from "./structure-history/history";
+import structLfList from "./structure-logical-frame/logical-framework-list";
+import structLfEdit from "./structure-logical-frame/logical-frame-edit";
+import structUserList from "./structure-user/project-user-list";
+
+import inputMenu from "./input-menu/project-input-menu";
+import inputHome from "./input-home/project-input-home";
+import inputList from "./input-list/project-input-list";
+import inputEdition from "./input-edition/project-input-edition";
+
+import reportingMenu from "./reporting-menu/project-reporting-menu";
+import reportingHome from "./reporting-home/project-reporting-home";
+import reportingGeneral from "./reporting-general/general-reporting";
+import reportingOlap from "./reporting-olap/olap-reporting";
 
 
 const module = angular.module(
 	__moduleName,
 	[
+		topMenu,
+		list,
 		menu,
-		projectList,
-		projectMenu,
-		projectStructMenu,
-		projectStructHome,
-		projectStructBasics,
-		projectStructSites,
-		projectStructDsList,
-		projectStructDsEdit,
-		projectStructExtra,
-		projectStructHistory,
-		projectStructLfList,
-		projectStructLfEdit,
-		projectStructUserList,
-		projectInputMenu,
-		projectInputHome,
-		projectInputList,
-		projectInputEdition,
-		projectReportingMenu,
-		projectReportingHome,
-		projectReportingGeneral,
-		projectReportingOlap
+		structMenu,
+		structHome,
+		structBasics,
+		structSites,
+		structDsList,
+		structDsEdit,
+		structExtra,
+		structHistory,
+		structLfList,
+		structLfEdit,
+		structUserList,
+		inputMenu,
+		inputHome,
+		inputList,
+		inputEdition,
+		reportingMenu,
+		reportingHome,
+		reportingGeneral,
+		reportingOlap
 	]
 );
 

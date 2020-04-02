@@ -4,17 +4,11 @@ const module = angular.module(__moduleName, []);
 
 module.component(__componentName, {
 	bindings: {
-		inputId: '@',
-		label: '@',
-
-		help: '@',
-		helpValues: '<',
+		value: '<'
 	},
-
-	transclude: true,
-
 	template: require(__templatePath)
 });
 
 
 export default module.name;
+

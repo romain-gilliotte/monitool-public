@@ -2,7 +2,7 @@ import angular from 'angular';
 
 const module = angular.module(__moduleName, []);
 
-module.component('partitionFilter', {
+module.component(__componentName, {
 	require: {
 		ngModelCtrl: 'ngModel'
 	},

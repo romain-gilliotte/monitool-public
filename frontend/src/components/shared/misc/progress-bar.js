@@ -2,7 +2,7 @@ import angular from 'angular';
 
 const module = angular.module(__moduleName, []);
 
-module.component('progressBar', {
+module.component(__componentName, {
 	bindings: {
 		done: '<',
 		incomplete: '<'
