@@ -3,6 +3,7 @@ import Revision from '../../../models/revision';
 import Project from '../../../models/project';
 import uiRouter from '@uirouter/angularjs';
 import mtRevisionSummary from './revision-summary';
+require(__cssPath);
 
 const module = angular.module(__moduleName, [uiRouter, mtRevisionSummary]);
 

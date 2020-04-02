@@ -1,10 +1,10 @@
 import angular from 'angular';
 import { TimeDimension } from 'olap-in-memory';
-
 import mtTrData from './tr-data';
 import mtFaOpen from '../../shared/misc/plus-minus-icon';
 import { buildQueryFromIndicator, buildQueryFromVariable } from '../../../helpers/query-builder';
 import { updateArrayInPlace } from '../../../helpers/array';
+require(__cssPath);
 
 const module = angular.module(__moduleName, [mtTrData, mtFaOpen]);
 

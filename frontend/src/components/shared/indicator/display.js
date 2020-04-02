@@ -2,6 +2,7 @@ import angular from 'angular';
 import uibModal from 'angular-ui-bootstrap/src/modal/index';
 import mtEditionModal from './indicator-edition';
 import mtIndicatorUnit from '../../../filters/indicator';
+require(__cssPath);
 
 const module = angular.module(__moduleName, [uibModal, mtEditionModal, mtIndicatorUnit]);
 

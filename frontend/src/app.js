@@ -1,14 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.min.css';
-import "./app.css";
-
 import angular from 'angular';
 import axios from 'axios';
 import createAuth0Client from '@auth0/auth0-spa-js';
-
 import mtPages from './components/pages/all-pages';
 import mtTranslation from './translation/bootstrap';
 import mtFilterMisc from './filters/misc';
+require(__cssPath)
 
 async function authenticate() {
 	const auth0 = window.auth0 = await createAuth0Client({
@@ -52,7 +50,7 @@ function startApp(accessToken, profile) {
 	});
 
 	// Hook angular-ui-router transitions.
-	module.run(function ($window, $rootScope, $transitions) {
+	module.run(function ($window, $transitions) {
 
 		$transitions.onBefore({}, function (transition) {
 		});

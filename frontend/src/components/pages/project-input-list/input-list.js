@@ -2,6 +2,7 @@ import angular from 'angular';
 import Input from '../../../models/input';
 import uiRouter from '@uirouter/angularjs';
 import mtFilterTimeSlot from '../../../filters/time-slot';
+require(__cssPath);
 
 const module = angular.module(__moduleName, [uiRouter, mtFilterTimeSlot]);
 

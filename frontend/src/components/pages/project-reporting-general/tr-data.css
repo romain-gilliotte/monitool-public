@@ -1,0 +1,9 @@
+
+td.empty {
+    background-color: #eee;
+  }
+  
+  td.empty > span {
+    display: none;
+  }
+  

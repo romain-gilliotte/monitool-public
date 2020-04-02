@@ -3,6 +3,7 @@ import axios from 'axios';
 import diacritics from 'diacritics';
 import Project from '../../../models/project';
 import mtAclProjectRole from '../../../directives/acl/project-role';
+require(__cssPath);
 
 const module = angular.module(__moduleName, [mtAclProjectRole]);
 

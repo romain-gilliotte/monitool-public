@@ -1,5 +1,6 @@
 import angular from 'angular';
 import { range } from '../../../helpers/array';
+require(__cssPath);
 
 const module = angular.module(__moduleName, []);
 

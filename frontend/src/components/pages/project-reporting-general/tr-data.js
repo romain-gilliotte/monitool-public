@@ -2,6 +2,7 @@ import angular from 'angular';
 import axios from 'axios';
 import mtReportingField from '../../shared/reporting/td-reporting-field';
 import mtIndicatorUnit from '../../../filters/indicator';
+require(__cssPath);
 
 const module = angular.module(__moduleName, [mtReportingField, mtIndicatorUnit]);
 
