@@ -1,7 +1,8 @@
 import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
+import mtSaveBlock from '../../shared/project/save-block';
 
-const module = angular.module(__moduleName, [uiRouter]);
+const module = angular.module(__moduleName, [uiRouter, mtSaveBlock]);
 
 module.config($stateProvider => {
 

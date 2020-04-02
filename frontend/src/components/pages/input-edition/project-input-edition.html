@@ -54,36 +54,5 @@
 	</form>
 </div>
 
-
-<div id="saveblock" class="noprint">
-	<div class="pull-right">
-		<p ng-if="$ctrl.inputForm.$invalid" class="text-danger">
-			<i class="fa fa-exclamation-triangle"></i>
-			<span translate="project.form_error"></span>
-		</p>
-
-		<p ng-if="$ctrl.inputForm.$valid && $ctrl.isUnchanged" class="text-info">
-			<i class="fa fa-info-circle"></i>
-			<span translate="project.form_persisted"></span>
-		</p>
-
-		<p ng-if="$ctrl.inputForm.$valid && !$ctrl.isUnchanged" class="text-warning">
-			<i class="fa fa-exclamation-triangle"></i>
-			<span translate="project.form_changed"></span>
-		</p>
-	</div>
-
-	<a ng-click="$ctrl.save()" ng-disabled="$ctrl.isUnchanged || $ctrl.inputForm.$invalid || $ctrl.inputSaving"
-		class="btn btn-primary">
-		<i class="fa fa-floppy-o" ng-if="!$ctrl.inputSaving"></i>
-		<i class="fa fa-circle-o-notch fa-spin" ng-if="$ctrl.inputSaving"></i>
-
-		<span translate="shared.save"></span>
-	</a>
-
-	<a ng-click="$ctrl.reset()" ng-disabled="$ctrl.isUnchanged" class="btn btn-default">
-		<i class="fa fa-undo"></i>
-		<span translate="shared.remove_changes"></span>
-	</a>
-
-</div>
+<save-block is-valid="$ctrl.inputForm.$valid" is-changed="!$ctrl.isUnchanged" is-persisted="false"
+	is-saving="$ctrl.inputSaving" on-save-clicked="$ctrl.save()" on-reset-clicked="$ctrl.reset()"></save-block>

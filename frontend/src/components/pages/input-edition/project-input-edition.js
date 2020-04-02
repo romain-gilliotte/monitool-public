@@ -1,10 +1,11 @@
 import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
-import mtFilterTimeSlot from '../../../filters/time-slot';
 import Input from '../../../models/input';
+import mtFilterTimeSlot from '../../../filters/time-slot';
 import mtInputGrid from './input-grid';
+import mtSaveBlock from '../../shared/project/save-block';
 
-const module = angular.module(__moduleName, [uiRouter, mtFilterTimeSlot, mtInputGrid]);
+const module = angular.module(__moduleName, [uiRouter, mtFilterTimeSlot, mtInputGrid, mtSaveBlock]);
 
 module.config($stateProvider => {
 
