@@ -1,85 +1,80 @@
-<div class="project-columns">
-	<div class="project-menu">
-		<div class="panel-group">
-
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<i class="fa fa-caret-up pull-right"></i>
-					<h4 class="panel-title" translate="project.structure"></h4>
-				</div>
-
-				<div class="panel-collapse">
-					<div class="list-group">
-
-						<a ui-sref="main.project.structure.home" ui-sref-active="active" class="list-group-item">
-
-							<i class="fa fa-home fa-fw"></i>
-							<span translate="shared.home"></span>
-						</a>
-
-						<a ui-sref="main.project.structure.basics" ui-sref-active="active" class="list-group-item">
-
-							<i class="fa fa-object-group fa-fw"></i>
-							<span translate="project.basics"></span>
-						</a>
-
-						<a ui-sref="main.project.structure.collection_site_list" ui-sref-active="active"
-							class="list-group-item" disable-if="!$ctrl.project._id">
-
-							<span class="label label-default pull-right">{{$ctrl.project.entities.length}}</span>
-							<i class="fa fa-map-marker fa-fw"></i>
-							<span translate="project.collection_site_list"></span>
-						</a>
-
-						<a ui-sref="main.project.structure.collection_form_list" class="list-group-item"
-							ng-class="{active: $ctrl.$state.is('main.project.structure.collection_form_list') || $ctrl.$state.is('main.project.structure.collection_form_edition')}"
-							disable-if="!$ctrl.project._id">
-
-							<span class="label label-default pull-right">{{$ctrl.project.forms.length}}</span>
-							<i class="fa fa-sign-in fa-fw"></i>
-							<span translate="project.collection_form_list"></span>
-						</a>
-
-						<a ui-sref="main.project.structure.logical_frame_list"
-							ng-class="{active: $ctrl.$state.is('main.project.structure.logical_frame_list') || $ctrl.$state.is('main.project.structure.logical_frame_edition')}"
-							class="list-group-item" disable-if="!$ctrl.project._id">
-
-							<span class="label label-default pull-right">{{$ctrl.project.logicalFrames.length}}</span>
-							<i class="fa fa-sign-out fa-fw"></i>
-							<span translate="shared.logical_frames"></span>
-						</a>
-
-						<a ui-sref="main.project.structure.extra" ui-sref-active="active" class="list-group-item"
-							disable-if="!$ctrl.project._id">
-
-							<span class="label label-default pull-right">{{$ctrl.project.extraIndicators.length}}</span>
-							<i class="fa fa-sign-out fa-fw"></i>
-							<span translate="indicator.extra"></span>
-						</a>
-
-						<a ui-sref="main.project.structure.user_list" ui-sref-active="active" class="list-group-item"
-							disable-if="!$ctrl.project._id">
-
-							<span class="label label-default pull-right">{{$ctrl.project.users.length}}</span>
-							<i class="fa fa-user fa-fw"></i>
-							<span translate="project.users"></span>
-						</a>
-
-
-						<a ui-sref="main.project.structure.history" ui-sref-active="active" class="list-group-item"
-							disable-if="!$ctrl.project._id">
-
-							<i class="fa fa-history fa-fw"></i>
-							<span translate="project.revisions"></span>
-						</a>
-					</div>
-				</div>
+<project-columns>
+	<menus>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<i class="fa fa-caret-up pull-right"></i>
+				<h4 class="panel-title" translate="project.structure"></h4>
 			</div>
 
-		</div>
-	</div>
+			<div class="panel-collapse">
+				<div class="list-group">
 
-	<div class="project-content">
+					<a ui-sref="main.project.structure.home" ui-sref-active="active" class="list-group-item">
+
+						<i class="fa fa-home fa-fw"></i>
+						<span translate="shared.home"></span>
+					</a>
+
+					<a ui-sref="main.project.structure.basics" ui-sref-active="active" class="list-group-item">
+
+						<i class="fa fa-object-group fa-fw"></i>
+						<span translate="project.basics"></span>
+					</a>
+
+					<a ui-sref="main.project.structure.collection_site_list" ui-sref-active="active"
+						class="list-group-item" disable-if="!$ctrl.project._id">
+
+						<span class="label label-default pull-right">{{$ctrl.project.entities.length}}</span>
+						<i class="fa fa-map-marker fa-fw"></i>
+						<span translate="project.collection_site_list"></span>
+					</a>
+
+					<a ui-sref="main.project.structure.collection_form_list" class="list-group-item"
+						ng-class="{active: $ctrl.$state.is('main.project.structure.collection_form_list') || $ctrl.$state.is('main.project.structure.collection_form_edition')}"
+						disable-if="!$ctrl.project._id">
+
+						<span class="label label-default pull-right">{{$ctrl.project.forms.length}}</span>
+						<i class="fa fa-sign-in fa-fw"></i>
+						<span translate="project.collection_form_list"></span>
+					</a>
+
+					<a ui-sref="main.project.structure.logical_frame_list"
+						ng-class="{active: $ctrl.$state.is('main.project.structure.logical_frame_list') || $ctrl.$state.is('main.project.structure.logical_frame_edition')}"
+						class="list-group-item" disable-if="!$ctrl.project._id">
+
+						<span class="label label-default pull-right">{{$ctrl.project.logicalFrames.length}}</span>
+						<i class="fa fa-sign-out fa-fw"></i>
+						<span translate="shared.logical_frames"></span>
+					</a>
+
+					<a ui-sref="main.project.structure.extra" ui-sref-active="active" class="list-group-item"
+						disable-if="!$ctrl.project._id">
+
+						<span class="label label-default pull-right">{{$ctrl.project.extraIndicators.length}}</span>
+						<i class="fa fa-sign-out fa-fw"></i>
+						<span translate="indicator.extra"></span>
+					</a>
+
+					<a ui-sref="main.project.structure.user_list" ui-sref-active="active" class="list-group-item"
+						disable-if="!$ctrl.project._id">
+
+						<span class="label label-default pull-right">{{$ctrl.project.users.length}}</span>
+						<i class="fa fa-user fa-fw"></i>
+						<span translate="project.users"></span>
+					</a>
+
+
+					<a ui-sref="main.project.structure.history" ui-sref-active="active" class="list-group-item"
+						disable-if="!$ctrl.project._id">
+
+						<i class="fa fa-history fa-fw"></i>
+						<span translate="project.revisions"></span>
+					</a>
+				</div>
+			</div>
+		</div>
+	</menus>
+	<content>
 		<div>
 			<div id="formblock">
 				<!--
@@ -95,5 +90,5 @@
 				is-persisted="$ctrl.project._id" is-saving="$ctrl.projectSaveRunning"
 				on-save-clicked="$ctrl.onSaveClicked()" on-reset-clicked="$ctrl.onResetClicked()"></save-block>
 		</div>
-	</div>
-</div>
+	</content>
+</project-columns>

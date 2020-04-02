@@ -186,7 +186,6 @@ textarea {
       .panel-collapse .list-group-item li.list-group-item {border-top: 1px solid #DDD !important;}
 
 .print { display: none;}
-.main-content { padding-top: 45px; }
 
 @media print {
   .print { display: block; }
@@ -194,7 +193,6 @@ textarea {
   .print-only { display: block !important; }
   .print-full-width { width: 100% !important; }
 
-  .main-content { padding-top: 0; }
   .c3-tooltip-container { display: none !important; }
 
 
@@ -294,9 +292,6 @@ ul[ng-sortable] li *, i.fa.fa-bars {
   color: #555;
 }
 
-
-
-
   query-aggregate,
   query-computation,
   indicator-filter .panel,
@@ -307,12 +302,6 @@ ul[ng-sortable] li *, i.fa.fa-bars {
     margin-bottom: 5px;
   }
 
-
-
-
-
-
-
 general-reporting, olap-reporting {
   display: flex;
   height: 100vh;
@@ -321,32 +310,6 @@ general-reporting, olap-reporting {
   padding-top: 50px;
   padding-bottom: 10px
 }
-
-
-@media (min-width: 768px) {
-  .project-menu {
-    position: fixed;
-    width: 200px;
-    top: 0;
-    padding-top: 45px;
-    padding-bottom: 10px;
-    height: 100%;
-  }
-
-  .project-menu .panel-group {
-    height: 100%;
-    overflow-y: auto;
-  }
-
-  .project-content {
-    margin-left: 220px;
-  }
-}
-
-
-
-
-
 
 .table {
   background-color: white;

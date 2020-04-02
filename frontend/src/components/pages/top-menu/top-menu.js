@@ -2,6 +2,7 @@ import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
 import uiDropdown from 'angular-ui-bootstrap/src/dropdown';
 import uiCollapse from 'angular-ui-bootstrap/src/collapse';
+require(__cssPath);
 
 const module = angular.module(__moduleName, [uiRouter, uiDropdown, uiCollapse]);
 
