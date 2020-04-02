@@ -28,22 +28,23 @@ export default class Project {
 			'week_mon', 'month', 'quarter', 'semester', 'year'
 		];
 
-		return timePeriodicities.filter(periodicity => {
-			for (var i = 0; i < this.forms.length; ++i) {
-				var dataSource = this.forms[i];
+		return timePeriodicities
+		// .filter(periodicity => {
+		// 	for (var i = 0; i < this.forms.length; ++i) {
+		// 		var dataSource = this.forms[i];
 
-				if (dataSource.periodicity === periodicity)
-					return true;
+		// 		if (dataSource.periodicity === periodicity)
+		// 			return true;
 
-				try {
-					let t = TimeSlot.fromDate(new Date(), dataSource.periodicity);
-					t.toParentPeriodicity(periodicity);
-					return true;
-				}
-				catch (e) {
-				}
-			}
-		});
+		// 		try {
+		// 			let t = TimeSlot.fromDate(new Date(), dataSource.periodicity);
+		// 			t.toParentPeriodicity(periodicity);
+		// 			return true;
+		// 		}
+		// 		catch (e) {
+		// 		}
+		// 	}
+		// });
 	}
 
 	constructor(data) {

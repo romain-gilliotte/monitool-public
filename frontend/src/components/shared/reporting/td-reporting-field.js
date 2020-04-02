@@ -15,6 +15,7 @@ module.directive('tdReportingField', function () {
 
 		bindToController: {
 			interpolated: '<',
+			incomplete: '<',
 			value: '<',
 			baseline: '<',
 			target: '<',
@@ -22,7 +23,7 @@ module.directive('tdReportingField', function () {
 			unit: '<'
 		},
 
-		template: '{{$ctrl.display}}<i ng-if="$ctrl.logo" class="fa" ng-class="$ctrl.logo" title="{{$ctrl.value}}"></i>',
+		template: '<span ng-bind-html="$ctrl.display"></span><i ng-if="$ctrl.logo" class="fa" ng-class="$ctrl.logo"></i>',
 
 		controller: class ReportingFieldController {
 
@@ -34,26 +35,19 @@ module.directive('tdReportingField', function () {
 			$onChanges(changes) {
 				// Reset bgcolor
 				this.$element.css('background-color', '');
+				this.display = '';
+				this.logo = null;
 
 				if (this.value === undefined) {
-					this.display = '';
 					this.$element.css('background-color', '#eee');
-					this.logo = null;
 				}
-
-				else if (typeof this.value === "string") {
-					this.display = '';
-					this.logo = 'fa-ban';
+				else if (this.value === null) {
+					// Can either be because the value is NaN, or because the data entry is missing.
+					// fixme: differenciate those.
+					this.logo = 'fa-question-circle-o';
+					this.$element.attr('title', 'This value cannot be computed because the data entry was not done.');
 				}
-
-				else if (typeof this.value === "number" && isNaN(this.value)) {
-					this.display = '';
-					this.logo = 'fa-exclamation-triangle';
-				}
-
 				else if (typeof this.value === "number") {
-					this.logo = null;
-
 					// Make color
 					if (this.colorize && this.baseline !== null && this.target !== null) {
 						let progress = (this.value - this.baseline) / (this.target - this.baseline);
@@ -63,14 +57,16 @@ module.directive('tdReportingField', function () {
 						this.$element.css('background-color', 'hsl(' + progress * 120 + ', 100%, 75%)');
 					}
 
-					if (this.interpolated) {
-						this.$element.css('font-style', 'italic');
-						this.$element.attr('title', 'This value is interpolated');
-					}
-					else {
-						this.$element.css('font-style', 'normal');
+					this.$element.css('font-style', this.incomplete ? 'italic' : 'inherit');
+
+					if (this.interpolated && this.incomplete)
+						this.$element.attr('title', 'This value was computed from data which is interpolated and incomplete.');
+					else if (this.interpolated)
+						this.$element.attr('title', 'This value was computed from data which is interpolated.');
+					else if (this.incomplete)
+						this.$element.attr('title', 'This value was computed from data which is incomplete.');
+					else
 						this.$element.removeAttr('title');
-					}
 
 					// Split value by thousands
 					let value = Math.round(this.value).toString();
@@ -85,14 +81,15 @@ module.directive('tdReportingField', function () {
 					else
 						this.display = value;
 
+					if (this.interpolated) {
+						this.display = '≈&nbsp;' + this.display;
+					}
+
 					// Add unit
 					if (this.unit)
 						this.display = this.display + this.unit;
-				}
-				else {
-					this.logo = 'fa-question-circle-o';
-					this.value = this.value + '';
-					this.$element.css('background-color', '');
+
+					this.display = this.$sce.trustAsHtml(this.display)
 				}
 			}
 		}

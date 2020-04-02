@@ -47,29 +47,13 @@ module.directive('trData', () => {
 				if (changes.query) {
 					if (this.query) {
 						this.aggregations = this._getDisagregations(this.query);
-						this.interpolationWarning = this._getInterpolationWarning(this.query);
 						this._fetchData(this.query);
 					}
 					else {
 						this.aggregations = [];
-						this.interpolationWarning = false;
 						this.errorMessage = 'project.indicator_computation_missing';
 					}
 				}
-			}
-
-			_getInterpolationWarning(query) {
-				const availableDimensions = this.project.getQueryDimensions({ ...query, aggregate: [] });
-
-				for (let i = 0; i < query.aggregate.length; ++i) {
-					const aggregate = query.aggregate[i];
-					const dimension = availableDimensions.find(dim => dim.id === aggregate.id);
-
-					if (!dimension.attributes.includes(aggregate.attribute))
-						return true;
-				}
-
-				return false;
 			}
 
 			/** Compute list of disagregations in drop-down list from dimensions */
@@ -112,7 +96,7 @@ module.directive('trData', () => {
 			async _fetchData(query) {
 				try {
 					// Set loading message
-					delete this.values;
+					delete this.tableCells;
 					this.errorMessage = 'shared.loading';
 
 					// Load data
@@ -122,7 +106,18 @@ module.directive('trData', () => {
 					);
 
 					this.plotValues = this.columns.map(col => response.data[col.id]);
-					this.tableValues = [...this.plotValues, response.data._total];
+					this.tableCells = [
+						...this.columns.map(col => ({
+							value: response.data[col.id],
+							interpolated: !!response.data[col.id + ':interpolated'],
+							incomplete: !!response.data[col.id + ':incomplete'],
+						})),
+						{
+							value: response.data['all'],
+							interpolated: !!response.data['all:interpolated'],
+							incomplete: !!response.data['all:incomplete']
+						}
+					];
 				}
 				catch (e) {
 					this.errorMessage = e.message;

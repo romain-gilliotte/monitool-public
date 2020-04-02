@@ -8,7 +8,12 @@ const module = angular.module(
 	]
 );
 
-
+/** 
+ * FIXME This whole component feels a bit hacky.
+ * Ideally we should be able to do this only from the dimensions instead of
+ * using knowledge of how they were built to guess name things, and recreate
+ * the groups.
+ */
 module.component('indicatorFilter', {
 	bindings: {
 		project: '<',

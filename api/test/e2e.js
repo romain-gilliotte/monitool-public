@@ -9,7 +9,7 @@ const api = axios.create({
 })
 
 
-describe('test', () => {
+describe.skip('test', () => {
     let projectId;
 
     it('should create project', async () => {
