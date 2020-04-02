@@ -1,8 +1,9 @@
 import angular from 'angular';
 import { product } from '../../../helpers/array';
+import mtTdReportingField from '../../shared/reporting/td-reporting-field';
 require(__cssPath);
 
-const module = angular.module(__moduleName, []);
+const module = angular.module(__moduleName, [mtTdReportingField]);
 
 module.component(__componentName, {
 	bindings: {
@@ -10,7 +11,10 @@ module.component(__componentName, {
 		query: '<',
 		distribution: '<',
 		showTotals: '<',
-		data: '<'
+		data: '<',
+		baseline: '<',
+		target: '<',
+		colorize: '<'
 	},
 
 	template: require(__templatePath),
@@ -40,23 +44,22 @@ module.component(__componentName, {
 				transform: 'translate(' + this._element[0].scrollLeft + 'px)'
 			};
 
-			this.$scope.$apply();
+			this.$scope.$apply(); // remove this, way too expensive for a scroll event.
 		}
 
 		$onChanges(changes) {
-			const dimensions = this.project
-				.getQueryDimensions({ ...this.query, aggregate: [] }, false)
-				.map(dim => {
-					const aggregate = this.query.aggregate.find(agg => agg.id === dim.id)
-					if (aggregate)
-						return dim.getEntries(aggregate.attribute).map(entry => ({
-							id: entry[0],
-							name: entry[1]
-						}));
-					else
-						return null;
-				})
-				.filter(entries => entries);
+			const queryDimensions = this.project.getQueryDimensions(
+				{ ...this.query, aggregate: [] },
+				false
+			);
+
+			const dimensions = this.query.aggregate.map(aggregate => {
+				const dim = queryDimensions.find(d => d.id === aggregate.id);
+				return dim.getEntries(aggregate.attribute).map(entry => ({
+					id: entry[0],
+					name: entry[1]
+				}));
+			});
 
 			const rows = dimensions.slice(0, this.distribution);
 			const cols = dimensions.slice(this.distribution);
@@ -65,18 +68,18 @@ module.component(__componentName, {
 
 		_buildGridGeneric(rowss, colss, data) {
 			if (colss.length === 0) {
-				colss = [[{ id: '_total', name: 'total' }]];
-				data = this._addTotalStep(data);
+				colss = [[{ id: 'all', name: 'total' }]];
+				data = this._addFakeDimensionToData(data, rowss.length);
 			}
 			else if (this.showTotals)
-				colss = colss.map(col => [...col, { id: '_total', name: 'total' }]);
+				colss = colss.map(col => [...col, { id: 'all', name: 'total' }]);
 
 			if (rowss.length === 0) {
-				rowss = [[{ id: '_total', name: 'total' }]];
-				data = { _total: data };
+				rowss = [[{ id: 'all', name: 'total' }]];
+				data = this._addFakeDimensionToData(data, 0);
 			}
 			else if (this.showTotals)
-				rowss = rowss.map(row => [...row, { id: '_total', name: 'total' }]);
+				rowss = rowss.map(row => [...row, { id: 'all', name: 'total' }]);
 
 			// Create empty grid.
 			this.grid = {
@@ -132,8 +135,8 @@ module.component(__componentName, {
 					for (var i = 0; i < numEls; ++i)
 						result = result[els[i].id];
 
-					return result;
-				})
+					return { value: result.v, interpolated: !result.r, incomplete: result.c };
+				});
 
 				body.push({ headerCols, dataCols });
 			});
@@ -141,13 +144,13 @@ module.component(__componentName, {
 			return body;
 		}
 
-		_addTotalStep(data) {
-			if (data === null || typeof data === 'number')
-				return { _total: data };
+		_addFakeDimensionToData(data, at) {
+			if (at == 0)
+				return { all: data };
 			else {
 				const obj = {};
 				for (let key in data)
-					obj[key] = this._addTotalStep(data[key]);
+					obj[key] = this._addFakeDimensionToData(data[key], at - 1);
 				return obj;
 			}
 		}

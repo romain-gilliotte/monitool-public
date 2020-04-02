@@ -103,14 +103,14 @@ module.directive(__componentName, () => {
 					this.plotValues = this.columns.map(col => response.data[col.id]);
 					this.tableCells = [
 						...this.columns.map(col => ({
-							value: response.data[col.id],
-							interpolated: !!response.data[col.id + ':interpolated'],
-							incomplete: !!response.data[col.id + ':incomplete'],
+							value: response.data[col.id].v,
+							interpolated: !response.data[col.id].r,
+							incomplete: !response.data[col.id].c,
 						})),
 						{
-							value: response.data['all'],
-							interpolated: !!response.data['all:interpolated'],
-							incomplete: !!response.data['all:incomplete']
+							value: response.data['all'].v,
+							interpolated: !response.data['all'].r,
+							incomplete: !response.data['all'].c
 						}
 					];
 				}
