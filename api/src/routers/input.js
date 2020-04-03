@@ -1,9 +1,7 @@
 const Router = require('koa-router');
 const ObjectId = require('mongodb').ObjectID;
-const Bull = require('bull');
 
 const router = new Router();
-const queue = new Bull('reporting');
 
 router.post('/resources/input', async ctx => {
 	const { projectId, ...rest } = ctx.request.body;
@@ -19,8 +17,21 @@ router.post('/resources/input', async ctx => {
 
 router.put('/resources/input/:id', async ctx => {
 	const { _id, projectId, ...rest } = ctx.request.body;
-	const input = { _id: new ObjectId(_id), projectId: new ObjectId(projectId), ...rest }
 
+	// Check that user owns the inputs
+	if (!await ctx.profile.canViewProject(projectId)) {
+		ctx.response.status = 404;
+		return;
+	}
+
+	const fifteenMinsAgo = new Date(new Date().getTime() - 15 * 60 * 1000);
+	const inputDate = new ObjectId(_id).getTimestamp();
+	if (inputDate < fifteenMinsAgo) {
+		ctx.response.status = 403;
+		ctx.response.body = { error: 'This input can no longer be modified.' };
+	}
+
+	const input = { _id: new mongoId, projectId: new ObjectId(projectId), ...rest };
 	await database.collection('input').replaceOne(
 		{ _id: new ObjectId(_id) },
 		input
@@ -30,10 +41,17 @@ router.put('/resources/input/:id', async ctx => {
 });
 
 router.post('/rpc/build-report', async ctx => {
-	const job = await queue.add('compute-report', ctx.request.body);
+	const projectId = ctx.request.body.projectId;
 
-	ctx.response.type = 'application/json';
-	ctx.response.body = JSON.stringify(await job.finished());
+	if (await ctx.state.profile.canViewProject(projectId)) {
+		const job = await queue.add('compute-report', ctx.request.body);
+
+		ctx.response.type = 'application/json';
+		ctx.response.body = JSON.stringify(await job.finished());
+	}
+	else {
+		ctx.response.status = 403;
+	}
 });
 
 /** Get the data of the last data entry for all projects */

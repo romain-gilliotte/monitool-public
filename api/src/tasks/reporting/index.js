@@ -1,7 +1,4 @@
-const Bull = require('bull');
-const queue = new Bull('reporting');
 const { executeQuery } = require('./query-runner');
-
 
 queue.process('compute-report', async job => {
     try {
