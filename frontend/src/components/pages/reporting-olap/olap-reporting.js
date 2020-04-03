@@ -85,8 +85,8 @@ module.component(__componentName, {
 				};
 
 				const response = await axios.post(
-					`/resources/project/${this.project._id}/reporting`,
-					{ output: 'report', ...this.query }
+					'/rpc/build-report',
+					{ output: 'report', projectId: this.project._id, ...this.query }
 				);
 
 				// Ignore query result if a new query was launched in between.

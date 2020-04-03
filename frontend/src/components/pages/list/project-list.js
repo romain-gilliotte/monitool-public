@@ -15,7 +15,11 @@ module.config($stateProvider => {
 		url: '/projects',
 		component: __componentName,
 		resolve: {
-			projects: () => Project.fetchAll()
+			projects: () => Project.fetchAll(),
+			lastInputDate: async () => {
+				const response = await axios.get('/rpc/get-last-inputs');
+				return response.data;
+			}
 		}
 	});
 
@@ -23,7 +27,8 @@ module.config($stateProvider => {
 
 module.component(__componentName, {
 	bindings: {
-		'projects': '<',
+		projects: '<',
+		lastInputDate: '<'
 	},
 
 	template: require(__templatePath),

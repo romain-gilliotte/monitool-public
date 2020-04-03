@@ -47,8 +47,8 @@
 
 			<div>
 				<strong translate="project.last_entry"></strong>
-				<span ng-if="p.inputDate">{{p.inputDate|date}}</span>
-				<span ng-if="!p.inputDate" translate="shared.none"></span>
+				<span ng-if="$ctrl.lastInputDate[p._id]">{{$ctrl.lastInputDate[p._id]|date}}</span>
+				<span ng-if="!$ctrl.lastInputDate[p._id]" translate="shared.none"></span>
 			</div>
 
 			<div class="panel-buttons btn-group">

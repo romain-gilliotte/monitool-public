@@ -29,14 +29,32 @@ router.put('/resources/input/:id', async ctx => {
 	ctx.response.body = input;
 });
 
-router.post('/resources/project/:id/reporting', async ctx => {
-	const job = await queue.add('compute-report', {
-		projectId: ctx.params.id,
-		...ctx.request.body
-	});
+router.post('/rpc/build-report', async ctx => {
+	const job = await queue.add('compute-report', ctx.request.body);
 
 	ctx.response.type = 'application/json';
 	ctx.response.body = JSON.stringify(await job.finished());
+});
+
+/** Get the data of the last data entry for all projects */
+router.get('/rpc/get-last-inputs', async ctx => {
+	// We expect this to be faster than using $lookup, even with the added round trip.
+	const projects = await database.collection('project').find(
+		{ $or: [{ owner: ctx.state.profile.email }, { 'users.email': ctx.state.profile.email }] },
+		{ projection: { _id: true } }
+	).toArray();
+
+	ctx.response.body = await database
+		.collection('input')
+		.aggregate([
+			{ $match: { projectId: { $in: projects.map(p => new ObjectId(p._id)) } } },
+			{ $group: { _id: '$projectId', lastEntry: { $first: '$_id' } } },
+			{ $project: { value: [{ $toString: '$_id' }, { $toDate: '$lastEntry' }] } },
+			{ $group: { _id: null, value: { $push: '$value' } } },
+			{ $project: { value: { $arrayToObject: '$value' } } },
+			{ $replaceRoot: { newRoot: '$value' } }
+		])
+		.next();
 });
 
 module.exports = router;

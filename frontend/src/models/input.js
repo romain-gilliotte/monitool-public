@@ -27,6 +27,7 @@ export default class Input {
 		const dataSource = project.forms.find(ds => ds.id === dataSourceId);
 
 		const query = {
+			projectId: project._id,
 			formula: dataSource.elements.map((v, i, a) => '!isNaN(variable_' + i + ')/' + a.length).join('+'),
 			parameters: {},
 			dice: [
@@ -52,7 +53,7 @@ export default class Input {
 			}
 		})
 
-		const response = await axios.post(`/resources/project/${project._id}/reporting`, query);
+		const response = await axios.post(`/rpc/build-report`, query);
 		const result = response.data;
 
 		const sortedResult = {};
@@ -65,7 +66,8 @@ export default class Input {
 		const dataSource = project.forms.find(ds => ds.id === dataSourceId);
 		const previousPeriod = new TimeSlot(period).previous().value;
 		const data = await Promise.all(dataSource.elements.map(async (v) => {
-			const response = await axios.post(`/resources/project/${project._id}/reporting`, {
+			const response = await axios.post(`/rpc/build-report`, {
+				projectId: project._id,
 				formula: 'cst',
 				parameters: {
 					cst: {

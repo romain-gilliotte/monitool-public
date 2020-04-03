@@ -96,8 +96,8 @@ module.directive(__componentName, () => {
 
 					// Load data
 					const response = await axios.post(
-						`/resources/project/${this.project._id}/reporting`,
-						{ output: 'report', ...query }
+						'/rpc/build-report',
+						{ output: 'report', projectId: this.project._id, ...query }
 					);
 
 					this.plotValues = this.columns.map(col => response.data[col.id]);
