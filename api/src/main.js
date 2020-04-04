@@ -11,7 +11,7 @@ const MongoClient = require('mongodb').MongoClient;
 winston.add(new winston.transports.Console())
 
 // Catch the uncaught errors that weren't wrapped in a domain or try catch statement
-process.on('uncaughtException', function (err) {
+process.on('uncaughtException', e => {
 	// This should never be called, as we handle all errors insides promises.
 	winston.log('error', e.message);
 	process.exit(1)
@@ -26,13 +26,13 @@ global.server = null;
 
 async function start(web = true, worker = true) {
 	global.mongo = await MongoClient.connect(
-		'mongodb://admin:admin@localhost:27017',
+		config.mongo.uri,
 		{ useUnifiedTopology: true }
 	);
 
-	global.database = global.mongo.db('monitool');
-	global.redis = new Redis();
-	global.queue = new Bull('workers');
+	global.database = global.mongo.db(config.mongo.database);
+	global.redis = new Redis(config.redis.uri);
+	global.queue = new Bull('workers', config.redis.uri);
 
 	if (web) {
 		app = new Koa();
@@ -40,8 +40,14 @@ async function start(web = true, worker = true) {
 		app.use(responseTime());
 		app.use(bodyParser({ jsonLimit: '1mb' }));
 		app.use(require('./middlewares/error-handler'));
-		app.use(require('./middlewares/authentication'));
-		app.use(require('./middlewares/load-profile'));
+
+		if (process.env.NODE_ENV === 'test') {
+			app.use(require('./middlewares/load-profile-test'));
+		}
+		else {
+			app.use(require('./middlewares/authentication'));
+			app.use(require('./middlewares/load-profile'));
+		}
 		app.use(require('./routers/input').routes());
 		app.use(require('./routers/pdf-datasource').routes());
 		app.use(require('./routers/pdf-logframe').routes());
@@ -62,14 +68,14 @@ async function stop() {
 	if (global.mongo)
 		global.mongo.close(true);
 
+	if (global.queue)
+		global.queue.close();
+
 	if (global.redis)
 		global.redis.disconnect();
 
 	if (global.server)
 		global.server.close();
-
-	if (global.queue)
-		global.queue.close();
 }
 
 // Start application if this file is executed.

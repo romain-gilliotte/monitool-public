@@ -11,7 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/api/src/main-webapp.js",
+            "program": "${workspaceFolder}/api/src/main.js",
             "cwd": "${workspaceFolder}/api",
             "outputCapture": "std" // https://github.com/winstonjs/winston/issues/1544
         }
