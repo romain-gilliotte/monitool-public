@@ -36,7 +36,7 @@
 	<span>{{$ctrl.target}}{{$ctrl.query.formula|indicatorUnit}}</span>
 </td>
 
-<td colspan="{{$ctrl.columns.length + 1}}" ng-if="!$ctrl.tableCells" style="background-color: rgb(238, 238, 238);">
+<td colspan="{{$ctrl.columns.length + 1}}" ng-if="!$ctrl.tableCells" class="error-td">
 	{{$ctrl.errorMessage|translate}}
 </td>
 

@@ -39,10 +39,6 @@ p {
   font-size: 13px;
 }
 
-tr[tr-data]:hover {
-  color: darkblue
-}
-
 .btn {
   padding: 3px 6px;
   font-size: 12px;
@@ -227,18 +223,10 @@ textarea {
 }
 
 
-.handle {
-  text-align: center !important;
-  vertical-align: middle !important;
-}
 
 ul[ng-sortable] {
   padding-left: 3px;
   list-style-type: none;
-}
-
-.dragging .drag-destination {
-  min-height: 25px;
 }
 
 
@@ -284,11 +272,22 @@ ul[ng-sortable] li *, i.fa.fa-bars {
   }
 
 
-.fa-thumb-tack, #reporting .fa-line-chart {
+
+
+  .dragging .drag-destination {
+    min-height: 25px;
+  }
+  
+  .handle {
+    text-align: center !important;
+    vertical-align: middle !important;
+  }
+
+.fa-thumb-tack {
   color: #ccc;
   cursor: pointer;
 }
-.fa-thumb-tack:hover, #reporting .fa-line-chart:hover {
+.fa-thumb-tack:hover {
   color: #555;
 }
 

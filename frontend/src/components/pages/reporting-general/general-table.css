@@ -24,11 +24,6 @@ general-table table td:first-child, general-table table th:first-child {
     border-left-width: 1px !important;
 }
 
-general-table .row-baseline, general-table .row-target {
-    background: repeating-linear-gradient(-45deg, #fff, #fff 3px, #f0f0f0 3px, #f0f0f0 6px);
-}
-
-
 #reporting {
     width: auto;
     min-width: 100%;
