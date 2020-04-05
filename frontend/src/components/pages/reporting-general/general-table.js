@@ -227,8 +227,10 @@ module.component(__componentName, {
 		}
 
 		_makeRowsFromExtraIndicators(extraIndicators) {
-			const rowId = 'extra';
+			if (extraIndicators.length === 0)
+				return [];
 
+			const rowId = 'extra';
 			return [
 				{
 					id: rowId,
