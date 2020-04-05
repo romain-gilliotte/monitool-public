@@ -71,9 +71,15 @@
 							</a>
 						</li>
 						<li>
-							<a ng-click="$ctrl.onCloneClicked(p)">
+							<a ng-click="$ctrl.onCloneClicked(p, false)">
 								<i class="fa fa-clone"></i>
-								<span translate="shared.clone"></span>
+								<span translate="shared.clone_structure"></span>
+							</a>
+						</li>
+						<li>
+							<a ng-click="$ctrl.onCloneClicked(p, true)">
+								<i class="fa fa-clone"></i>
+								<span translate="shared.clone_all"></span>
 							</a>
 						</li>
 						<li acl-has-project-role="owner" acl-project="p">

@@ -1,27 +1,6 @@
 const { ObjectId } = require('mongodb');
 const { Cube, TimeDimension, GenericDimension } = require('olap-in-memory');
 
-const PROJECT_PROJECTION = {
-    'start': true,
-    'end': true,
-    'entities.id': true,
-    'groups.id': true,
-    'groups.members': true,
-    'forms.start': true,
-    'forms.end': true,
-    'forms.entities': true,
-    'forms.periodicity': true,
-    // FIXME this projection is overfetching, we need only access to a single variable
-    'forms.elements.id': true,
-    'forms.elements.timeAgg': true,
-    'forms.elements.geoAgg': true,
-    'forms.elements.partitions.id': true,
-    'forms.elements.partitions.aggregation': true,
-    'forms.elements.partitions.elements.id': true,
-    'forms.elements.partitions.groups.id': true,
-    'forms.elements.partitions.groups.members': true,
-};
-
 /**
  * Build a variable cube from data entries
  * 
@@ -29,14 +8,11 @@ const PROJECT_PROJECTION = {
  * @param {string} variableId 
  */
 async function getVariableCube(projectId, variableId, aggregate, dice) {
-    const project = await database.collection('project').findOne(
-        { _id: new ObjectId(projectId) },
-        { projection: PROJECT_PROJECTION }
-    );
-
-    // Deplacer vers build dimensions.
+    const project = await loadProject(projectId, variableId);
     const form = project.forms.find(f => f.elements.find(v => v.id === variableId));
     const variable = form.elements.find(v => v.id === variableId);
+
+    // Deplacer vers build dimensions.
     const rules = createVariableRules(variable);
     const varDims = createVariableDimensions(project, form, variable, 'day').filter(dimension =>
         // keep only dimension which are NEEDED FOR THE QUERY
@@ -63,9 +39,14 @@ async function getVariableCube(projectId, variableId, aggregate, dice) {
     overviewCube.createStoredMeasure('main', rules);
 
     // Load inputs in reverse chronological order.
+    const sequenceIds = await database.collection('input_seq').find(
+        { projectIds: new ObjectId(project._id) },
+        { projection: { _id: true } }
+    ).map(s => s._id).toArray();
+
     await database.collection('input')
         .find(
-            { 'projectId': new ObjectId(project._id), 'content.variableId': variable.id },
+            { 'sequenceId': { $in: sequenceIds }, 'content.variableId': variable.id },
             { projection: { 'content.$': true }, sort: [['_id', 1]] }
         )
         .forEach(input => void input.content.forEach(content => {
@@ -99,8 +80,15 @@ async function getVariableCube(projectId, variableId, aggregate, dice) {
         detailedCube = detailedCube.drillUp(agg.id, agg.attribute)
     });
 
-    // Steal the status vector from the overviewCube.
-    detailedCube.storedMeasures['main']._status = overviewCube.storedMeasures['main']._status;
+    // Steal interpolation status from the overviewCube.
+    const length = detailedCube.storedMeasures['main']._status.length;
+    for (let i = 0; i < length; ++i) {
+        const detailedStatus = detailedCube.storedMeasures['main']._status[i];
+        const overviewStatus = overviewCube.storedMeasures['main']._status[i];
+
+        detailedCube.storedMeasures['main']._status[i] = (~4 & detailedStatus) | (4 & overviewStatus);
+    }
+
     return detailedCube;
 }
 
@@ -141,7 +129,7 @@ function createVariableDimensions(project, form, variable, periodicity = null) {
                 group.id,
                 elementId => group.members.includes(elementId) ? 'in' : 'out'
             );
-        })
+        });
 
         return dim;
     });
@@ -159,6 +147,33 @@ function createVariableRules(variable) {
     });
 
     return aggregation
+}
+
+function loadProject(projectId, variableId) {
+    const projection = {
+        'start': true,
+        'end': true,
+        'entities.id': true,
+        'groups.id': true,
+        'groups.members': true,
+        'forms.start': true,
+        'forms.end': true,
+        'forms.entities': true,
+        'forms.periodicity': true,
+        'forms.elements.id': true,
+        'forms.elements.timeAgg': true,
+        'forms.elements.geoAgg': true,
+        'forms.elements.partitions.id': true,
+        'forms.elements.partitions.aggregation': true,
+        'forms.elements.partitions.elements.id': true,
+        'forms.elements.partitions.groups.id': true,
+        'forms.elements.partitions.groups.members': true,
+    };
+
+    return database.collection('project').findOne(
+        { _id: new ObjectId(projectId) },
+        { projection }
+    );
 }
 
 module.exports = { getVariableCube };

@@ -12,7 +12,7 @@ router.get('/resources/project', async ctx => {
 			{ owner: ctx.state.profile.email },
 			{ 'users.email': ctx.state.profile.email },
 		]
-	})
+	});
 
 	ctx.response.type = 'application/json';
 	ctx.response.body = projects.pipe(JSONStream.stringify());
@@ -22,16 +22,25 @@ router.get('/resources/project', async ctx => {
  * Retrieve one project
  */
 router.get('/resources/project/:id', async ctx => {
-	const project = await database.collection('project').findOne({
-		_id: new ObjectId(ctx.params.id),
-		$or: [
-			{ owner: ctx.state.profile.email },
-			{ 'users.email': ctx.state.profile.email },
-		]
-	});
+	try {
+		const project = await database.collection('project').findOne({
+			_id: new ObjectId(ctx.params.id),
+			$or: [
+				{ owner: ctx.state.profile.email },
+				{ 'users.email': ctx.state.profile.email },
+			]
+		});
 
-	if (project) {
+		if (!project)
+			throw new Error('Not found');
+
 		ctx.response.body = project;
+	}
+	catch (e) {
+		if (e.message === 'Not found' || /must be .* 24 hex characters/.test(e.message))
+			ctx.response.status = 404;
+		else
+			throw e;
 	}
 });
 
@@ -77,6 +86,8 @@ router.post('/resources/project', async ctx => {
 	}
 
 	await database.collection('project').insertOne(project);
+	await database.collection('input_seq').insertOne({ projectIds: [project._id] });
+
 	ctx.response.body = project;
 });
 

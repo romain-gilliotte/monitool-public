@@ -28,7 +28,8 @@ export default {
 
 		country: "Country",
 		apply: "Apply changes",
-		clone: "Clone",
+		clone_structure: "Clone structure",
+		clone_all: "Clone structure and data",
 		home: "Home",
 
 		date: "Date",

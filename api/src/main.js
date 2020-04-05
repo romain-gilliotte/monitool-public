@@ -52,6 +52,7 @@ async function start(web = true, worker = true) {
 		app.use(require('./routers/pdf-datasource').routes());
 		app.use(require('./routers/pdf-logframe').routes());
 		app.use(require('./routers/project').routes());
+		app.use(require('./routers/rpc').routes());
 
 		global.server = app.listen(config.port);
 		winston.log('info', `Listening on ${config.port}.`);

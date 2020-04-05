@@ -122,26 +122,16 @@ module.component(__componentName, {
 			this.$state.go('main.project.structure.home', { projectId: 'new' });
 		}
 
-		async onCloneClicked(project) {
-			var question = this.translate('project.are_you_sure_to_clone');
+		async onCloneClicked(project, withInputs) {
+			const response = await axios.post('/rpc/clone-project', { projectId: project._id, withInputs });
+			const newProject = response.data;
 
-			if (window.confirm(question)) {
-				await axios.post(
-					'/resources/project',
-					null,
-					{
-						params: {
-							from: project._id,
-							with_data: 'true'
-						}
-					}
-				)
+			this.projects.push(newProject);
+			this.lastInputDate[newProject._id] = withInputs ? this.lastInputDate[project._id] : null;
 
-				this.projects = await Project.fetchAll();
-				this.$onChanges();
-				this.$scope.$apply();
-				this.$window.scrollTo(0, 0);
-			}
+			this.$onChanges();
+			this.$scope.$apply();
+			this.$window.scrollTo(0, 0);
 		}
 
 		async onDeleteClicked(shortProject) {
