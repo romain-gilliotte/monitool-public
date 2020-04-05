@@ -1,15 +1,4 @@
 
-const axios = require('axios');
-
-const api = axios.create({
-    baseURL: 'http://localhost:8000',
-    headers: {
-        Authorization: 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1EWXdSalpGUlVRMVFVWTVOekJHTXpReVJUTTBRVUZFTjBJNE5UaEJRalZHUVRZd1FqYzNRUSJ9.eyJpc3MiOiJodHRwczovL21vbml0b29sLmV1LmF1dGgwLmNvbS8iLCJzdWIiOiJnb29nbGUtb2F1dGgyfDEwOTI3MDkxNjUzOTIzMTc3OTAzNiIsImF1ZCI6WyJodHRwczovL2FwaS5tb25pdG9vbC5vcmciLCJodHRwczovL21vbml0b29sLmV1LmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE1ODAyMzcwODksImV4cCI6MTU4MDMyMzQ4OSwiYXpwIjoiejMxS3Q2RllwOFlERzRCeXBINHFwMWliTGQxTnM0TUUiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIn0.kauGAuz4CesZQH46YVO-LgVqtP38lacXhba6SlGjqxD-GCI8Xn_QjROC6161poaKozTUKEfLrpymxY7I_EuxTLQgh_rykjuutJvTYvs79JuwX1b7n-7KVyqI1JPj1_Smwy-4z4D2o5jbCidrgSArbNpbYkRCZzJODf5wQ6MZf8UCI_O1cHOQ9rfbrQn4tk4yJlGR3oyzWNTWrUfvoDkEmuuEeAdGsEf4U5_oZmVrkOtQ9Ttrd3Gf8L9ipkRPnOq9Xl3HS9FtnUSdf_RHrZAqNSJUbkfRARC33JO_mmV4uqDPDgsBHXuzsnY4yKdHP-k1q3a12wLnpdBGhRhibWTmHg'
-    }
-})
-
-
-describe.skip('test', () => {
     let projectId;
 
     it('should create project', async () => {
@@ -21,12 +10,8 @@ describe.skip('test', () => {
             "start": "2010-01-01",
             "end": "2011-01-01",
             "entities": [
-                {
-                    "id": "0c243e08-8c21-4946-9f5f-ce255106901b", "name": "location1", "start": null, "end": null,
-                },
-                {
-                    "id": "otherloc", "name": "location1", "start": null, "end": null,
-                },
+                { "id": "0c243e08-8c21-4946-9f5f-ce255106901b", "name": "location1", "start": null, "end": null, },
+                { "id": "otherloc", "name": "location1", "start": null, "end": null, },
             ],
             "groups": [],
             "users": [],
@@ -254,4 +239,3 @@ describe.skip('test', () => {
 
         console.log(response.data)
     })
-});

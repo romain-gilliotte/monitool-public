@@ -23,7 +23,7 @@
 <div ng-if="!$ctrl.displayedProjects.length" translate="project.no_matches"></div>
 
 <div>
-	<columns-panel ng-repeat="p in $ctrl.displayedProjects track by p._id" sortable="false" variant="p.variant">
+	<columns-panel ng-repeat="p in $ctrl.displayedProjects track by p._id" variant="p.variant">
 		<pane-title>
 			<i class="fa pull-right fa-star" ng-if="p.favorite" style="margin-top: 3px; cursor: pointer"
 				ng-click="$ctrl.toggleFavorite(p)"></i>
