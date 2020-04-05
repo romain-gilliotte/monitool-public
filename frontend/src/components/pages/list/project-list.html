@@ -2,26 +2,22 @@
 	<li class="active" translate="shared.projects"></li>
 </ol>
 
-<div style="margin-bottom: 10px">
-	<input type="text" ng-change="$ctrl.filter()" ng-model="$ctrl.filterValue" class="form-control"
-		placeholder="{{'project.filter_placeholder'|translate}}">
-</div>
-<div style="margin-bottom: 10px">
-	<div class="pull-right">
-		<a class="btn btn-primary" ng-click="$ctrl.createProject()">
-			<i class="fa fa-plus"></i>
-			<span translate="project.create"></span>
-		</a>
-	</div>
 
-	<div class="btn-group">
-		<a ng-click="$ctrl.toggleOngoing()" class="btn btn-default" ng-class="{active: $ctrl.displayOngoing}"
-			translate="project.show_ongoing_projects"></a>
-		<a ng-click="$ctrl.toggleFinished()" class="btn btn-default" ng-class="{active: $ctrl.displayFinished}"
-			translate="project.show_finished_projects"></a>
-		<a ng-click="$ctrl.toggleDeleted()" class="btn btn-default" ng-class="{active: $ctrl.displayDeleted}"
-			translate="project.show_deleted_projects"></a>
-	</div>
+<input type="text" ng-change="$ctrl.filter()" ng-model="$ctrl.filterValue" class="form-control filter-text"
+	placeholder="{{'project.filter_placeholder'|translate}}">
+
+<a class="btn btn-primary create-button" ng-click="$ctrl.createProject()">
+	<i class="fa fa-plus"></i>
+	<span translate="project.create"></span>
+</a>
+
+<div class="btn-group filter-toggles">
+	<a ng-click="$ctrl.toggleOngoing()" class="btn btn-default" ng-class="{active: $ctrl.displayOngoing}"
+		translate="project.show_ongoing_projects"></a>
+	<a ng-click="$ctrl.toggleFinished()" class="btn btn-default" ng-class="{active: $ctrl.displayFinished}"
+		translate="project.show_finished_projects"></a>
+	<a ng-click="$ctrl.toggleDeleted()" class="btn btn-default" ng-class="{active: $ctrl.displayDeleted}"
+		translate="project.show_deleted_projects"></a>
 </div>
 
 <div ng-if="!$ctrl.displayedProjects.length" translate="project.no_matches"></div>
