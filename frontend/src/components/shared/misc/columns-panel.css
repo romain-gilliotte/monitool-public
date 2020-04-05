@@ -67,7 +67,7 @@ columns-panel .panel-body .panel-buttons {
     right: 10px;
 }
 
-columns-panel .panel-body .bl-info {
+columns-panel pane-bottom-line {
     display: block;
     margin-top: 5px;
     position: absolute;
