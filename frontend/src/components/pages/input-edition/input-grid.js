@@ -36,7 +36,7 @@ module.component(__componentName, {
 
 			this.ngModelCtrl.$render = () => this.handsOnTable.loadData(this.ngModelCtrl.$viewValue);
 
-			this.ngModelCtrl.$validators.isNumber = modelValue => modelValue.every(v => typeof v === 'number');
+			this.ngModelCtrl.$validators.isNumber = modelValue => modelValue.every(v => typeof v === 'number' || v === null);
 		}
 
 		$onDestroy() {
@@ -240,22 +240,31 @@ module.component(__componentName, {
 			// guard against infinite loop (the total update trigering another update etc...)
 			if (this.withSumX && !isSumX) {
 				sum = 0;
-				for (let x = this.variable.distribution; x < this._width - 1; ++x)
-					sum += this.handsOnTable.getDataAtCell(editedY, x);
+				for (let x = this.variable.distribution; x < this._width - 1; ++x) {
+					const val = this.handsOnTable.getDataAtCell(editedY, x);
+					if (typeof val === 'number')
+						sum += val;
+				}
 				this.handsOnTable.setDataAtCell(editedY, this._width - 1, sum);
 			}
 
 			if (this.withSumY && !isSumY) {
 				sum = 0;
-				for (let y = numPartitions - this.variable.distribution; y < this._height - 1; ++y)
-					sum += this.handsOnTable.getDataAtCell(y, editedX);
+				for (let y = numPartitions - this.variable.distribution; y < this._height - 1; ++y) {
+					const val = this.handsOnTable.getDataAtCell(y, editedX);
+					if (typeof val === 'number')
+						sum += val;
+				}
 				this.handsOnTable.setDataAtCell(this._height - 1, editedX, sum);
 			}
 
 			if (this.withSumX && this.withSumY && !isSumX && isSumY) {
 				sum = 0;
-				for (let x = this.variable.distribution; x < this._width - 1; ++x)
-					sum += this.handsOnTable.getDataAtCell(this._height - 1, x);
+				for (let x = this.variable.distribution; x < this._width - 1; ++x) {
+					const val = this.handsOnTable.getDataAtCell(this._height - 1, x);
+					if (typeof val === 'number')
+						sum += val;
+				}
 				this.handsOnTable.setDataAtCell(this._height - 1, this._width - 1, sum);
 			}
 		}
@@ -349,7 +358,7 @@ module.component(__componentName, {
 			for (var y = minY; y < maxY; ++y)
 				modelValue.push(...viewValue[y].slice(minX, maxX));
 
-			return modelValue.map(v => typeof v === 'number' ? v : NaN);
+			return modelValue.map(v => v === '' ? null : v);
 		}
 
 		/**
