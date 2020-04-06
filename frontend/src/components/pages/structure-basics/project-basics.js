@@ -3,11 +3,12 @@ import uiRouter from '@uirouter/angularjs';
 import 'ui-select/dist/select.min.css';
 import mtUtcDatepicker from '../../shared/ng-models/utc-datepicker';
 import mtFormGroup from '../../shared/misc/form-group';
+import mtHelpPanel from '../../shared/misc/help-panel';
 
-const module = angular.module(__moduleName, [uiRouter, mtUtcDatepicker, mtFormGroup]);
+const module = angular.module(__moduleName, [uiRouter, mtUtcDatepicker, mtFormGroup, mtHelpPanel]);
 
 module.config($stateProvider => {
-	$stateProvider.state('main.project.structure.basics', {
+	$stateProvider.state('project.structure.basics', {
 		url: '/basics',
 		component: __componentName
 	});

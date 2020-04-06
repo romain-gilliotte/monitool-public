@@ -4,7 +4,9 @@ require(__cssPath);
 const module = angular.module(__moduleName, []);
 
 module.component(__componentName, {
-    bindings: {},
+    bindings: {
+        back: '@'
+    },
     transclude: {
         'menus': 'menus',
         'content': 'content',

@@ -3,12 +3,13 @@ import uiRouter from '@uirouter/angularjs';
 import uiModal from 'angular-ui-bootstrap/src/modal';
 import 'angular-legacy-sortablejs-maintained';
 import mtIndicator from '../../shared/indicator/indicator';
+import mtHelpPanel from '../../shared/misc/help-panel';
 
-const module = angular.module(__moduleName, [uiRouter, uiModal, 'ng-sortable', mtIndicator]);
+const module = angular.module(__moduleName, [uiRouter, uiModal, 'ng-sortable', mtIndicator, mtHelpPanel]);
 
 module.config($stateProvider => {
 
-	$stateProvider.state('main.project.structure.extra', {
+	$stateProvider.state('project.structure.extra', {
 		url: '/extra',
 		component: __componentName,
 	});

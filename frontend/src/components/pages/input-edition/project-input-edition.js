@@ -1,15 +1,16 @@
 import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
 import Input from '../../../models/input';
-import mtFilterTimeSlot from '../../../filters/time-slot';
+import mtTimeSlot from '../../../filters/time-slot';
 import mtInputGrid from './input-grid';
 import mtSaveBlock from '../../shared/project/save-block';
+import mtHelpPanel from '../../shared/misc/help-panel';
 
-const module = angular.module(__moduleName, [uiRouter, mtFilterTimeSlot, mtInputGrid, mtSaveBlock]);
+const module = angular.module(__moduleName, [uiRouter, mtTimeSlot, mtInputGrid, mtSaveBlock, mtHelpPanel]);
 
 module.config($stateProvider => {
 
-	$stateProvider.state('main.project.input.edit', {
+	$stateProvider.state('project.input.edit', {
 		url: '/input/:dataSourceId/edit/:period/:entityId',
 		component: __componentName,
 		resolve: {

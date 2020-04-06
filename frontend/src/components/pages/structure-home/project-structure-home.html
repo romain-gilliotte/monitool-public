@@ -1,5 +1,5 @@
 <ol class="breadcrumb noprint">
-	<li><a ui-sref="main.projects" translate="shared.projects"></a></li>
+	<li><a ui-sref="projects" translate="shared.projects"></a></li>
 	<li class="active" title="{{$ctrl.project.country}}" ng-bind="$ctrl.project.country|maxLength:20"></li>
 	<li class="active" title="{{$ctrl.project.name}}" ng-bind="$ctrl.project.name|maxLength:50"></li>
 	<li class="active" translate="project.structure"></li>
@@ -7,21 +7,12 @@
 
 
 <div ng-switch="$root.language">
-	<project-structure-home-en
-		ng-switch-when="en"
-		project="$ctrl.project"
-		percentages="$ctrl.percentages">
+	<project-structure-home-en ng-switch-when="en" project="$ctrl.project" percentages="$ctrl.percentages">
 	</project-structure-home-en>
 
-	<project-structure-home-fr
-		ng-switch-when="fr"
-		project="$ctrl.project"
-		percentages="$ctrl.percentages">
+	<project-structure-home-fr ng-switch-when="fr" project="$ctrl.project" percentages="$ctrl.percentages">
 	</project-structure-home-fr>
 
-	<project-structure-home-es
-		ng-switch-when="es"
-		project="$ctrl.project"
-		percentages="$ctrl.percentages">
+	<project-structure-home-es ng-switch-when="es" project="$ctrl.project" percentages="$ctrl.percentages">
 	</project-structure-home-es>
 </div>

@@ -4,11 +4,12 @@ import uiRouter from '@uirouter/angularjs';
 import 'angular-legacy-sortablejs-maintained';
 import mtElementGroups from '../../shared/misc/element-groups';
 import mtColumnsPanel from '../../shared/misc/columns-panel';
+import mtHelpPanel from '../../shared/misc/help-panel';
 
-const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtElementGroups, mtColumnsPanel]);
+const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtElementGroups, mtColumnsPanel, mtHelpPanel]);
 
 module.config($stateProvider => {
-	$stateProvider.state('main.project.structure.collection_form_list', {
+	$stateProvider.state('project.structure.collection_form_list', {
 		url: '/data-source',
 		component: __componentName
 	});
@@ -52,7 +53,7 @@ module.component(__componentName, {
 		}
 
 		onCreateFormClicked() {
-			this.$state.go('main.project.structure.collection_form_edition', { dataSourceId: uuid() });
+			this.$state.go('project.structure.collection_form_edition', { dataSourceId: uuid() });
 		}
 
 		onDeleteClicked(dataSource) {

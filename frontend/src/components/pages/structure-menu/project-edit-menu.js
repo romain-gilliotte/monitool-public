@@ -7,7 +7,7 @@ const module = angular.module(__moduleName, [uiRouter, mtSaveBlock, mtProjectCol
 
 module.config($stateProvider => {
 
-	$stateProvider.state('main.project.structure', {
+	$stateProvider.state('project.structure', {
 		abstract: true,
 		component: __componentName,
 	});
@@ -76,7 +76,7 @@ module.component(__componentName, {
 			// Either project has not changed, or the user is OK with loosing changes.
 			// => We are leaving.
 			this.onResetClicked();
-			if (!transition.to().name.startsWith('main.project.structure'))
+			if (!transition.to().name.startsWith('project.structure'))
 				this._cancelTransitionListener();
 		}
 

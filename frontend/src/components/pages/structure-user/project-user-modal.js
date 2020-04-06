@@ -4,7 +4,7 @@ import uiModal from 'angular-ui-bootstrap/src/modal';
 const module = angular.module(__moduleName, [uiModal]);
 
 /**
- * Component used on a modal called from "main.project.structure.user_list"
+ * Component used on a modal called from "project.structure.user_list"
  * Allows to edit a user
  */
 module.component(__componentName, {

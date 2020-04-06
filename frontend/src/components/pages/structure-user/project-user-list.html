@@ -1,11 +1,11 @@
 <ol class="breadcrumb noprint">
-	<li><a ui-sref="main.projects" translate="shared.projects"></a></li>
+	<li><a ui-sref="projects" translate="shared.projects"></a></li>
 	<li class="active" title="{{$ctrl.project.country}}" ng-bind="$ctrl.project.country|maxLength:20"></li>
 	<li class="active" title="{{$ctrl.project.name}}" ng-bind="$ctrl.project.name|maxLength:50"></li>
 	<li class="active" translate="project.users"></li>
 </ol>
 
-<div class="alert alert-info" translate="project.users_list_info"></div>
+<help-panel page="user_list"></help-panel>
 
 <div ng-sortable="$ctrl.sortableOptions">
 	<columns-panel sortable="true" ng-repeat="user in $ctrl.editableProject.users">

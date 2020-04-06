@@ -2,6 +2,9 @@
 
 export default {
 	shared: {
+		configure: "Configuration",
+		back: "Retour",
+		project_list: "Liste des projets",
 		none: "Aucune",
 		percentage_done: "{{value}}% réalisé",
 		percentage_incomplete: "{{value}}% en cours",
@@ -92,6 +95,9 @@ export default {
 	},
 
 	project: {
+		downloads: "Téléchargements",
+		paper_forms: "Formulaires papier",
+		excel_export: "Exports Excel",
 		last_entry: "Dernière saisie",
 		show_totals: "Afficher les totaux",
 		input_fill_forms: "Remplir les {{numInputs}} saisies de",

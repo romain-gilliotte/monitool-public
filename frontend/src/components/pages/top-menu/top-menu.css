@@ -1,5 +1,0 @@
-.main-content { padding-top: 45px; }
-
-@media print {
-  .main-content { padding-top: 0; }
-}

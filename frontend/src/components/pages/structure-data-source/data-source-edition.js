@@ -9,6 +9,7 @@ import mtElementFilter from '../../shared/ng-models/element-filter';
 import mtPartitionList from './partition-list';
 import mtPartitionDistribution from './partition-distribution';
 import mtPartitionOrder from './partition-order';
+import mtHelpPanel from '../../shared/misc/help-panel';
 
 const module = angular.module(
 	__moduleName,
@@ -23,13 +24,14 @@ const module = angular.module(
 		mtPartitionList,
 		mtPartitionDistribution,
 		mtPartitionOrder,
+		mtHelpPanel
 	]
 );
 
 
 module.config($stateProvider => {
 
-	$stateProvider.state('main.project.structure.collection_form_edition', {
+	$stateProvider.state('project.structure.collection_form_edition', {
 		url: '/data-source/:dataSourceId',
 		component: __componentName,
 		resolve: {

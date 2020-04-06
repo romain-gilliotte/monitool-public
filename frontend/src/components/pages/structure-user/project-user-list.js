@@ -3,12 +3,13 @@ import angular from 'angular';
 import 'angular-legacy-sortablejs-maintained';
 import mtProjectUserEditModal from './project-user-modal';
 import mtColumnsPanel from '../../shared/misc/columns-panel';
+import mtHelpPanel from '../../shared/misc/help-panel';
 
-const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtProjectUserEditModal, mtColumnsPanel]);
+const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtProjectUserEditModal, mtColumnsPanel, mtHelpPanel]);
 
 module.config($stateProvider => {
 
-	$stateProvider.state('main.project.structure.user_list', {
+	$stateProvider.state('project.structure.user_list', {
 		url: '/users',
 		component: __componentName
 	});

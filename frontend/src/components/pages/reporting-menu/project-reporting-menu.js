@@ -6,7 +6,7 @@ const module = angular.module(__moduleName, [uiRouter, mtProjectColumns]);
 
 module.config($stateProvider => {
 
-	$stateProvider.state('main.project.reporting', {
+	$stateProvider.state('project.reporting', {
 		abstract: true,
 		component: __componentName,
 	});

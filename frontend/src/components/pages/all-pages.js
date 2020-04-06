@@ -1,6 +1,5 @@
 import angular from 'angular';
 
-import topMenu from "./top-menu/top-menu";
 import list from "./list/project-list";
 
 import menu from "./menu/project-menu";
@@ -22,8 +21,6 @@ import inputHome from "./input-home/project-input-home";
 import inputList from "./input-list/project-input-list";
 import inputEdition from "./input-edition/project-input-edition";
 
-import reportingMenu from "./reporting-menu/project-reporting-menu";
-import reportingHome from "./reporting-home/project-reporting-home";
 import reportingGeneral from "./reporting-general/general-reporting";
 import reportingOlap from "./reporting-olap/olap-reporting";
 
@@ -31,7 +28,6 @@ import reportingOlap from "./reporting-olap/olap-reporting";
 const module = angular.module(
 	__moduleName,
 	[
-		topMenu,
 		list,
 		menu,
 		structMenu,
@@ -49,8 +45,6 @@ const module = angular.module(
 		inputHome,
 		inputList,
 		inputEdition,
-		reportingMenu,
-		reportingHome,
 		reportingGeneral,
 		reportingOlap
 	]

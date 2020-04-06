@@ -1,4 +1,19 @@
-<div id="toolbar-label"></div>
-<div id="toolbar-content">
-    <ng-transclude></ng-transclude>
+<div class="toolbar-label" style="font-family: monospace;">
+    &nbsp;&lt;
+
+</div>
+<div class="toolbar-body">
+    <h2>
+        <span translate="shared.help"></span>:
+        <span ng-bind-html="$ctrl.title"></span>
+    </h2>
+
+    <p ng-bind-html="$ctrl.paragraph"></p>
+
+    <hr />
+    <div class="panel panel-default" ng-repeat="qa in $ctrl.qas">
+        <div class="panel-heading" ng-bind-html="qa.question" ng-click="$ctrl.onQaClick(qa)"></div>
+        <div class="panel-body" ng-if="qa.selected" ng-bind-html="qa.answer"></div>
+    </div>
+
 </div>

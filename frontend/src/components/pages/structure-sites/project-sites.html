@@ -1,12 +1,11 @@
 <ol class="breadcrumb">
-	<li><a ui-sref="main.projects" translate="shared.projects"></a></li>
+	<li><a ui-sref="projects" translate="shared.projects"></a></li>
 	<li class="active" title="{{$ctrl.project.country}}" ng-bind="$ctrl.project.country|maxLength:20"></li>
 	<li class="active" title="{{$ctrl.project.name}}" ng-bind="$ctrl.project.name|maxLength:50"></li>
 	<li class="active" translate="project.collection_site_list"></li>
 </ol>
 
-
-<div class="alert alert-info" translate="project.collection_site_info"></div>
+<help-panel page="sites"></help-panel>
 
 <form name="$ctrl.sitesForm" novalidate>
 
@@ -34,29 +33,19 @@
 				<td>
 					<ng-form name="center">
 						<div class="form-group" show-errors style="margin: 0">
-							<input type="text"
-								   name="name"
-								   ng-model="inputEntity.name"
-								   ng-change="$ctrl.onFieldChange()"
-								   class="form-control input-sm"
-								   placeholder="{{'project.entity_name_placeholder'|translate}}"
-								   required />
+							<input type="text" name="name" ng-model="inputEntity.name" ng-change="$ctrl.onFieldChange()"
+								class="form-control input-sm"
+								placeholder="{{'project.entity_name_placeholder'|translate}}" required />
 						</div>
 					</ng-form>
 				</td>
 				<td>
-					<optional-date
-						ng-model="inputEntity.start"
-						ng-change="$ctrl.onFieldChange()"
-						default="$ctrl.editableProject.start"
-						message="project.same_as_start"></optional-date>
+					<optional-date ng-model="inputEntity.start" ng-change="$ctrl.onFieldChange()"
+						default="$ctrl.editableProject.start" message="project.same_as_start"></optional-date>
 				</td>
 				<td>
-					<optional-date
-						ng-model="inputEntity.end"
-						ng-change="$ctrl.onFieldChange()"
-						default="$ctrl.editableProject.end"
-						message="project.same_as_end"></optional-date>
+					<optional-date ng-model="inputEntity.end" ng-change="$ctrl.onFieldChange()"
+						default="$ctrl.editableProject.end" message="project.same_as_end"></optional-date>
 				</td>
 				<td style="text-align: right">
 					<a class="btn btn-danger btn-sm" ng-click="$ctrl.onDeleteEntityClicked(inputEntity.id)">
@@ -100,19 +89,16 @@
 				<td>
 					<ng-form name="center">
 						<div class="form-group" show-errors style="margin: 0">
-							<input type="text"
-								   name="name"
-								   placeholder="{{'project.group_name_placeholder'|translate}}"
-								   ng-model="inputGroup.name"
-								   ng-change="$ctrl.onFieldChange()"
-								   class="form-control error input-sm"
-								   required />
+							<input type="text" name="name" placeholder="{{'project.group_name_placeholder'|translate}}"
+								ng-model="inputGroup.name" ng-change="$ctrl.onFieldChange()"
+								class="form-control error input-sm" required />
 						</div>
 					</ng-form>
 				</td>
 
 				<td>
-					<ui-select multiple ng-model="inputGroup.members" ng-change="$ctrl.onFieldChange()" theme="bootstrap">
+					<ui-select multiple ng-model="inputGroup.members" ng-change="$ctrl.onFieldChange()"
+						theme="bootstrap">
 						<ui-select-match placeholder="">{{$item.name}}</ui-select-match>
 						<ui-select-choices repeat="inputEntity.id as inputEntity in $ctrl.editableProject.entities">
 							{{inputEntity.name}}

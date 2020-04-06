@@ -108,7 +108,6 @@ export default {
 		filter_placeholder: "Entre texto para buscar proyectos",
 
 		revisions: "Historial",
-		revision_info: "El historial de modificaciones le permite consultar todos los cambios hechos en la estructura de su proyecto.",
 		revision_datetime: "Fecha & Usuario",
 		revision_changes: "Cambios",
 		revision_restore: "Volver a este punto",
@@ -533,33 +532,15 @@ export default {
 		users: "Usuarios",
 		owners: "Proprietarios",
 
-		basics_info: "<p>Los datos básicos permiten clasificar su proyecto entre los demas de la ONG.</p>",
 		basics_help_country: "En que país tiene lugar su proyecto? Si es un proyecto regional, entre el nombre de la región.",
 		basics_help_name: "El nombre del proyecto le permite encontrarlo en Monitool. Elija algo que sea suficientemente informativo, o copie el objectivo general.",
 		basics_help_thematics: "Las temáticas que elija van a determinar la lista de indicadores transversales que se deberan collectar.",
 		basics_help_begin: "La fecha de inicio es el momento en el que su proyecto empieza a colectar datos (usualemente, con la primeras actividades)",
 		basics_help_end: "La fecha de fin es el momento en el que termina la colecta de datos. Si no es conocida, entre una fecha en el futuro.",
 
-		collection_site_info:
-			"<p>Cuando un proyecto tiene las mismas actividades en varios lugares, se deben seguir por lugar, grupos de lugares y a nivel de proyecto.</p>" +
-			"<p>Entre aqui:</p>" +
-			"<ul>" +
-			"<li>La lista de lugares donde su proyecto trabaja (ej: la lista de centros de salud)</li>" +
-			"<li>los grupos que se usuran durante la vida del proyecto (ej: por región, o tipo de estructura)</li>" +
-			"</ul>",
-
-		users_list_info:
-			"<p>Muchas personas diferentes participan en crear y seguir un proyecto: coordination, equipo M&E, operadores de entrada de datos, partnerarios, ...</p>" +
-			"<p>Entre aqui la lista de todos los usuarios que deben tener acceso a los datos del programa.</p>",
-
 		user_help_role: "Este campo determina que podra hacer este usuario: los proprietarios pueden cambiar la estructura de los proyectos, los operadores de entrada solo entrar datos.",
 		user_help_sites: "Para que lugares podra este usuario entrar datos?",
 		user_help_datasources: "Para que fuentes de datos podra este usuario entrar datos?",
-
-		collection_form_list_info:
-			"<p>Las fuentes de datos son los diferentes soportes donde se encuentran los datos necesarios para seguir el proyecto (fichas de colecta, historiales clínicos, ficheros excel, ...).</p>" +
-			"<p>En Monitool, no hace falta entrar todos los datos disponibles en las fuentes de datos: solo lo que es relevante</p>" +
-			"<p>Para que sea mas facil entrar los datos, la fuentes deben corresponder a herramientas reales usadas en el terreno.</p>",
 
 		collection_edit_help_name: "Cual es el nombre de la fuente de datos de la que quiere extraer datos? ej. \"Historiales clínicos electronicos\", \"Fichas de colecta\", \"Informe SNIS\", ...",
 		collection_edit_help_sites: "Entre los lugares identificados en \"Lugares de colecta\", cuales son los que colectan esta fuente de datos?",
@@ -573,23 +554,6 @@ export default {
 		collection_edit_help_partition: "¿Quiere poder diferenciar <code>{{name}}</code> por edad, sexo, tipo de consulta, motivo de consulta, patología, hora del dia, ...? <br/>No desagrege por zona geográfica: los lugares de colecta ya se rellenaron en la otra página.",
 		collection_edit_help_distribution: "Si va a imprimir formulario en A4, prefiera tener columnas a la izquierda para que las tablas sean menor anchas.",
 		collection_edit_help_order: "En que ordén quiere que aparescan la desagregaciones en las tablas de entrada de datos?",
-
-		logical_frame_list_info:
-			"<p>Un marco lógico es un documento que describe los objectivos, resultados y actividades de un proyecto, asi como indicadores para seguir el progreso de cada uno de ellos</p>" +
-			"<p>Todos los indicadores deben ser calculables a partir de los datos describidos en las fuentes de datos</p>",
-
-		cross_cutting_list_info:
-			"<p>Los indicadores transversales se deciden según la lista de temáticas en \"Datos basicos\".</p>" +
-			"<p>Esta lista contiene todos los indicadores transversales que su proyecto debe colectar</p>",
-
-		input_list_info:
-			"<p>Este calendario de entrada hace la lista de todas las entradas de datos programadas para la fuente de datos \"{{name}}\"</p>" +
-			"<p>Para limitar los errores de entrada, es preferible entrar los datos cerca de donde se colectaron, directamente en Monitool.</p>" +
-			"<p>Si no es posible, una versión PDF del formulario esta provista.</p>",
-
-		extra_indicators_list_info:
-			"<p>Los indicadores adicionales son indicadores que no estan en ningún marco lógico.</p>" +
-			"<p>Permiten seguir elementos especificos del proyecto (datos medicales, logisticos, ...)</p>",
 
 		download_portrait: "Descargar PDF (vertical)",
 		download_landscape: "Descargar PDF (horizontal)",
@@ -658,57 +622,6 @@ export default {
 		fullname: "Nombre completo",
 		role: "Tipo",
 		save: "Guardar usuario",
-
-		list_info:
-			"<p>Esta página contiene la lista de todos los usuarios que se han conectado por lo menos una vez a Monitool</p>" +
-			"<p>No es necesario crear cuentas para usuario con una dirección de correo xxx@medecinsdumonde.net: apareceran automáticamente una vez se hayan conectado una vez. Para socios, es posible crear cuentas desde la páginas dedicadas a cada proyecto.</p>",
-
-		edit_info:
-			"<p>Puede editar aqui la permisiones de los demas usuarios. Haga click en \"Mostrar ayuda para este campo\" para mas detalles sobre los diferentes tipos de permision que son disponibles.</p>",
-
-		roles_short: {
-			admin: "Administrador",
-			project: "Creador proyectos",
-			common: "Normal",
-		},
-
-		permissions: {
-			thematics: "Crear y editar temáticas",
-			cross_cutting: "Crear y editar indicadores transversales",
-			user_roles: "Editar las permisiones de los demás usuarios",
-			own_all_projects: "Editar los datos y estructura de todos los proyectos",
-			create_projects: "Crear proyectos",
-			edit_projects: "Editar los datos y la estructura de proyecto donde se ha autorizado explicitamente",
-			see_reporting: "Ver los informes de todos los proyectos"
-		}
-	},
-
-	theme: {
-		list_info:
-			"<p>Esta página contiene la lista de las temáticas tratadas por la ONG.</p>" +
-			"<p>Los proyectos y los indicadores transversales se pueden conectar a temáticas.</p>",
-
-		edit_info:
-			"",
-
-		themes: "Temáticas",
-		edit_title: "Editar temática",
-		save: "Guardar la temática",
-
-		new_theme: "Nueva temática",
-		create_new: "Crear una nueva temática",
-
-		name_placeholder_fr: "i.e. Santé Sexuelle et Reproductive",
-		name_placeholder_es: "i.e. Salud Sexual y reproductiva",
-		name_placeholder_en: "i.e. Sexual and Reproductive Health",
-
-		info:
-			"<p>Entre aqui el nombre de la temática en todos los idiomas usados por su organización.</p>" +
-			"<p>Si no puede traducir a todos los idiomas:</p>" +
-			"<ol>" +
-			"<li>Entre manualmente todos los idiomas que pueda</li>" +
-			"<li>Pulse el botón a la izquierda para traducir automáticamente los demás</li>" +
-			"</ol>"
 	},
 
 	indicator: {
@@ -733,18 +646,6 @@ export default {
 		description_placeholder_fr: "On ne parle pas d'éducation pour la santé, mais de formation à du personnel soignant. On compte le nombre de participations et non pas le nombre de personnes différentes ayant participé à ces formations.",
 		description_placeholder_en: "We are not talking about health education, but training of medical staff. Count the number of entries and not the number of different people who attended these trainings.",
 		description_placeholder_es: "No se trata de educación para la salud, sino de formación para el personal sanitario. Se cuenta el número de participaciones y no el número de personas distintas que hayan participado.",
-
-		list_info:
-			"<p>Esta página contiene la lista de todos los indicadores transversales de la ONG.<br/>Colectar estos indicadores es obligatorio para todos los proyectos que tengan por los menos una temática en común con ese.</p>" +
-			"<p>Para ayudar los proyectos a planificar su colecta de datos, evite cambiar esta lista a menudo.</p>",
-
-		edit_info:
-			"<p>Esta página permite cambiar la definicion de un indicador transversal. Si have cambios, tenga cuidado en poner todos los idiomas a día.</p>" +
-			"<p>Si no puede traducir a todos los idiomas:</p>" +
-			"<ol>" +
-			"<li>Entre manualmente todos los idiomas que pueda</li>" +
-			"<li>Pulse el botón a la izquierda para traducir automáticamente los demás</li>" +
-			"</ol>",
 
 		save: "Guardar indicador"
 	}

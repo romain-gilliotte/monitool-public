@@ -3,12 +3,13 @@ import { v4 as uuid } from 'uuid';
 import uiRouter from '@uirouter/angularjs';
 import 'angular-legacy-sortablejs-maintained';
 import mtColumnsPanel from '../../shared/misc/columns-panel';
+import mtHelpPanel from '../../shared/misc/help-panel';
 
-const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtColumnsPanel]);
+const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtColumnsPanel, mtHelpPanel]);
 
 module.config($stateProvider => {
 
-	$stateProvider.state('main.project.structure.logical_frame_list', {
+	$stateProvider.state('project.structure.logical_frame_list', {
 		url: '/logical-frame',
 		component: __componentName
 	});
@@ -54,7 +55,7 @@ module.component(__componentName, {
 
 		onCreateLogicalFrameClicked(logicalFrame) {
 			this.$state.go(
-				'main.project.structure.logical_frame_edition',
+				'project.structure.logical_frame_edition',
 				{
 					logicalFrameId: uuid(),
 					from: logicalFrame ? logicalFrame.id : null

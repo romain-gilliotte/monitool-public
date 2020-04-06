@@ -1,28 +1,11 @@
 <ol class="breadcrumb">
-	<li><a ui-sref="main.projects" translate="shared.projects"></a></li>
+	<li><a ui-sref="projects" translate="shared.projects"></a></li>
 	<li class="active" title="{{::$ctrl.project.country}}" ng-bind="::$ctrl.project.country|maxLength:20"></li>
 	<li class="active" title="{{::$ctrl.project.name}}" ng-bind="::$ctrl.project.name|maxLength:50"></li>
 	<li class="active">{{::$ctrl.dataSource.name|maxLength:50}}</li>
 </ol>
 
-<div class="alert alert-info">
-
-	<div class="pull-right" style="text-align: right">
-		<a target="_blank"
-			href="{{::$root.serviceUrl}}/resources/project/{{::$ctrl.project._id}}/data-source/{{::$ctrl.dataSource.id}}.pdf?orientation=portrait&token={{$root.accessToken}}"
-			class="btn btn-default pdf-export" style="margin-bottom: 5px; display: inline-block">
-			<i class="fa fa-file-pdf-o"></i>
-			<span translate="project.download_portrait"></span>
-		</a><br /><a target="_blank"
-			href="{{::$root.serviceUrl}}/resources/project/{{::$ctrl.project._id}}/data-source/{{::$ctrl.dataSource.id}}.pdf?orientation=landscape&token={{$root.accessToken}}"
-			class="btn btn-default pdf-export">
-			<i class="fa fa-file-pdf-o fa-rotate-270"></i>
-			<span translate="project.download_landscape"></span>
-		</a>
-	</div>
-
-	<span translate="project.input_list_info" translate-values="::{name: $ctrl.dataSource.name}"></span>
-</div>
+<help-panel page="input_list"></help-panel>
 
 <div ng-if="!$ctrl.dataSource.entities.length">
 	<span translate="project.form_is_not_associated_with_site"></span>
@@ -38,12 +21,12 @@
 				<td ng-repeat="site in ::$ctrl.sites">
 					<div class="bodyField" ng-if="$ctrl.inputsStatus[date][site.id] !== undefined">
 						<a class="btn btn-xs btn-default" ng-if="$ctrl.inputsStatus[date][site.id] !== 0"
-							ui-sref="main.project.input.edit({dataSourceId: $ctrl.dataSource.id, period: date, entityId: site.id})"
+							ui-sref="project.input.edit({dataSourceId: $ctrl.dataSource.id, period: date, entityId: site.id})"
 							translate="project.input_status.done"
 							translate-values="::{value: $ctrl.inputsStatus[date][site.id]}">
 
 							<a class="btn btn-xs btn-primary"
-								ui-sref="main.project.input.edit({dataSourceId: $ctrl.dataSource.id, period: date, entityId: site.id})"
+								ui-sref="project.input.edit({dataSourceId: $ctrl.dataSource.id, period: date, entityId: site.id})"
 								ng-if="$ctrl.inputsStatus[date][site.id] === 0"
 								translate="project.input_status.expected"></a>
 					</div>

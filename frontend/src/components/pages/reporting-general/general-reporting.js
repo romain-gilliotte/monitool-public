@@ -3,12 +3,13 @@ import angular from 'angular';
 import mtGraph from '../../shared/reporting/reporting-graph';
 import mtTable from './general-table';
 import mtProjectQuery from './project-query';
+import mtHelpPanel from '../../shared/misc/help-panel';
 
-const module = angular.module(__moduleName, [uiRouter, mtProjectQuery, mtTable, mtGraph]);
+const module = angular.module(__moduleName, [uiRouter, mtProjectQuery, mtTable, mtGraph, mtHelpPanel]);
 
 module.config($stateProvider => {
 
-	$stateProvider.state('main.project.reporting.general', {
+	$stateProvider.state('project.input.general', {
 		url: '/general',
 		component: __componentName,
 	});

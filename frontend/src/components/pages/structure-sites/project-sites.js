@@ -5,6 +5,7 @@ import uiSelect from 'ui-select';
 import 'angular-legacy-sortablejs-maintained';
 import 'ui-select/dist/select.min.css';
 import mtOptionalDate from '../../shared/ng-models/optional-date';
+import mtHelpPanel from '../../shared/misc/help-panel';
 
 const module = angular.module(
 	__moduleName,
@@ -13,12 +14,13 @@ const module = angular.module(
 		uiSelect, // for site groups
 		'ng-sortable', // order sites
 		mtOptionalDate, // Datepicker start & end
+		mtHelpPanel
 	]
 );
 
 
 module.config($stateProvider => {
-	$stateProvider.state('main.project.structure.collection_site_list', {
+	$stateProvider.state('project.structure.collection_site_list', {
 		url: '/sites',
 		component: __componentName
 	});

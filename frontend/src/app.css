@@ -94,6 +94,9 @@ label {
   padding: 5px 10px;
   margin-bottom: 10px
 }
+.list-group {
+  margin-bottom: 10px;
+}
 
 .list-group-item {
   padding: 5px 10px;
@@ -332,4 +335,7 @@ general-reporting, olap-reporting {
 
 dd {
   margin-bottom: 5px;
+}
+body {
+  padding-right: 40px;
 }

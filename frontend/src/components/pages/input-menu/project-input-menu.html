@@ -1,21 +1,22 @@
-<project-columns>
+<project-columns back="projects">
 	<menus>
+		<div class="list-group">
+			<a ui-sref="project.input.home" ui-sref-active="active" class="list-group-item">
+				<i class="fa fa-home fa-fw"></i>
+				<span translate="shared.home"></span>
+			</a>
+		</div>
+
 		<div class="panel panel-default" acl-has-project-role="input" acl-project="$ctrl.project">
 			<div class="panel-heading">
-				<i class="fa fa-caret-up pull-right"></i>
 				<h4 class="panel-title" translate="project.input"></h4>
 			</div>
 
 			<div class="panel-collapse">
 				<div class="list-group">
-					<a ui-sref="main.project.input.home" ui-sref-active="active" class="list-group-item">
-						<i class="fa fa-home fa-fw"></i>
-						<span translate="shared.home"></span>
-					</a>
-
 					<a ng-repeat="dataSource in $ctrl.project.forms"
-						ui-sref="main.project.input.list({dataSourceId: dataSource.id})"
-						ng-class="{active: ($ctrl.$state.is('main.project.input.list') || $ctrl.$state.is('main.project.input.edit')) && $ctrl.$stateParams.dataSourceId == dataSource.id}"
+						ui-sref="project.input.list({dataSourceId: dataSource.id})"
+						ng-class="{active: ($ctrl.$state.is('project.input.list') || $ctrl.$state.is('project.input.edit')) && $ctrl.$stateParams.dataSourceId == dataSource.id}"
 						class="list-group-item" title="{{dataSource.name}}" acl-has-input-form="dataSource.id"
 						acl-project="$ctrl.project"
 						style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
@@ -32,14 +33,47 @@
 		</div>
 
 		<div class="panel panel-default">
-			<div class="panel-heading clickable" ui-sref="main.project.reporting.home">
-				<i class="fa fa-caret-down pull-right"></i>
+			<div class="panel-heading">
 				<h4 class="panel-title" translate="shared.reporting"></h4>
+			</div>
+
+			<div class="panel-collapse">
+				<div class="list-group">
+					<a ui-sref="project.input.general" ui-sref-active="active" class="list-group-item">
+
+						<i class="fa fa-line-chart fa-fw"></i>
+						<span translate="shared.reporting_general"></span>
+					</a>
+
+					<a ui-sref="project.input.olap" ui-sref-active="active" class="list-group-item">
+						<i class="fa fa-table fa-fw"></i>
+						<span translate="project.pivot_table"></span>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title" translate="project.downloads"></h4>
+			</div>
+
+			<div class="panel-collapse">
+				<div class="list-group">
+					<a ui-sref="project.input.paperforms" ui-sref-active="active" class="list-group-item">
+						<i class="fa fa-paper-plane-o fa-fw"></i>
+						<span translate="project.paper_forms"></span>
+					</a>
+					<a ui-sref="project.input.excel" ui-sref-active="active" class="list-group-item">
+						<i class="fa fa-file-excel-o fa-fw"></i>
+						<span translate="project.excel_export"></span>
+					</a>
+				</div>
+
 			</div>
 		</div>
 	</menus>
 	<content>
-
 		<ui-view project="$ctrl.project"></ui-view>
 	</content>
 </project-columns>

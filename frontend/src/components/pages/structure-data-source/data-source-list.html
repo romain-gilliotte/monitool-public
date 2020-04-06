@@ -1,11 +1,11 @@
 <ol class="breadcrumb">
-	<li><a ui-sref="main.projects" translate="shared.projects"></a></li>
+	<li><a ui-sref="projects" translate="shared.projects"></a></li>
 	<li class="active" title="{{$ctrl.project.country}}" ng-bind="$ctrl.project.country|maxLength:20"></li>
 	<li class="active" title="{{$ctrl.project.name}}" ng-bind="$ctrl.project.name|maxLength:50"></li>
 	<li class="active" translate="project.collection_form_list"></li>
 </ol>
 
-<div class="alert alert-info" translate="project.collection_form_list_info"></div>
+<help-panel page="datasource_list"></help-panel>
 
 <div ng-sortable="$ctrl.ngSortableOptions">
 	<columns-panel sortable="true" ng-repeat="dataSource in $ctrl.editableProject.forms">
@@ -27,7 +27,7 @@
 
 			<div class="panel-buttons btn-group">
 				<a class="btn btn-default btn-xxs"
-					ui-sref="main.project.structure.collection_form_edition({dataSourceId: dataSource.id})">
+					ui-sref="project.structure.collection_form_edition({dataSourceId: dataSource.id})">
 					<i class="fa fa-pencil"></i>
 					<span translate="shared.edit"></span>
 				</a>

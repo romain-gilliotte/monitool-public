@@ -3,13 +3,14 @@ import Revision from '../../../models/revision';
 import Project from '../../../models/project';
 import uiRouter from '@uirouter/angularjs';
 import mtRevisionSummary from './revision-summary';
+import mtHelpPanel from '../../shared/misc/help-panel';
 require(__cssPath);
 
-const module = angular.module(__moduleName, [uiRouter, mtRevisionSummary]);
+const module = angular.module(__moduleName, [uiRouter, mtRevisionSummary, mtHelpPanel]);
 
 module.config($stateProvider => {
 
-	$stateProvider.state('main.project.structure.history', {
+	$stateProvider.state('project.structure.history', {
 		url: '/history',
 		component: __componentName
 	});

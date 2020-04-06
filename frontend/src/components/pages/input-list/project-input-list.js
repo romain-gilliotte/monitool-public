@@ -2,13 +2,14 @@ import angular from 'angular';
 import Input from '../../../models/input';
 import uiRouter from '@uirouter/angularjs';
 import mtFilterTimeSlot from '../../../filters/time-slot';
+import mtHelpPanel from '../../shared/misc/help-panel';
 require(__cssPath);
 
-const module = angular.module(__moduleName, [uiRouter, mtFilterTimeSlot]);
+const module = angular.module(__moduleName, [uiRouter, mtFilterTimeSlot, mtHelpPanel]);
 
 module.config($stateProvider => {
 
-	$stateProvider.state('main.project.input.list', {
+	$stateProvider.state('project.input.list', {
 		url: '/input/:dataSourceId/list',
 		component: __componentName,
 		resolve: {
@@ -96,7 +97,7 @@ module.component(__componentName, {
 		}
 
 		addInput(entityId) {
-			this.$state.go('main.project.input.edit', {
+			this.$state.go('project.input.edit', {
 				period: this.newInputDate,
 				dataSourceId: this.dataSource.id,
 				entityId: entityId

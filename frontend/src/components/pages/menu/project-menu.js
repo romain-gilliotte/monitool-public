@@ -9,7 +9,7 @@ const module = angular.module(__moduleName, [uiRouter, mtAclProjectRole, mtAclPr
 
 module.config($stateProvider => {
 
-	$stateProvider.state('main.project', {
+	$stateProvider.state('project', {
 		abstract: true,
 		url: '/projects/:projectId',
 		component: __componentName,
@@ -31,7 +31,7 @@ module.component(__componentName, {
 	bindings: {
 		loadedProject: '<'
 	},
-
+	transclude: true,
 	template: require(__templatePath),
 
 	controller: class ProjectMenuController {

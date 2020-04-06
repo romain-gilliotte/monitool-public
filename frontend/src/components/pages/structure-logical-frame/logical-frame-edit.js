@@ -5,6 +5,7 @@ import 'angular-legacy-sortablejs-maintained';
 import mtIndicatorDisplay from '../../shared/indicator/indicator';
 import mtIndicatorModal from '../../shared/indicator/indicator-edition-modal';
 import mtDirectiveAutoresize from '../../../directives/helpers/autoresize';
+import mtHelpPanel from '../../shared/misc/help-panel';
 
 const module = angular.module(
 	__moduleName,
@@ -16,13 +17,14 @@ const module = angular.module(
 		mtIndicatorDisplay,
 		mtIndicatorModal,
 		mtDirectiveAutoresize,
+		mtHelpPanel
 	]
 );
 
 
 module.config($stateProvider => {
 
-	$stateProvider.state('main.project.structure.logical_frame_edition', {
+	$stateProvider.state('project.structure.logical_frame_edition', {
 		url: '/logical-frame/:logicalFrameId?from',
 		component: __componentName,
 		resolve: {

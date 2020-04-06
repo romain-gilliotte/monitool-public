@@ -2,16 +2,15 @@ import uiRouter from '@uirouter/angularjs';
 import angular from 'angular';
 import axios from 'axios';
 import diacritics from 'diacritics';
-import mtAclProjectRole from '../../../directives/acl/project-role';
 import Project from '../../../models/project';
-import mtColumnsPanel from '../../shared/misc/columns-panel';
-
+import mtHelpPanel from '../../shared/misc/help-panel';
+import mtProjectPanel from './project-panel';
 require(__cssPath);
 
-const module = angular.module(__moduleName, [uiRouter, mtAclProjectRole, mtColumnsPanel]);
+const module = angular.module(__moduleName, [uiRouter, mtHelpPanel, mtProjectPanel]);
 
 module.config($stateProvider => {
-	$stateProvider.state('main.projects', {
+	$stateProvider.state('projects', {
 		url: '/projects',
 		component: __componentName,
 		resolve: {
@@ -22,8 +21,8 @@ module.config($stateProvider => {
 			}
 		}
 	});
-
 });
+
 
 module.component(__componentName, {
 	bindings: {
@@ -91,6 +90,12 @@ module.component(__componentName, {
 			this.$onChanges();
 		}
 
+		logout() {
+			window.auth0.logout({
+				returnTo: window.location.origin
+			});
+		}
+
 		toggleOngoing() {
 			this.displayOngoing = !this.displayOngoing;
 			this.$onChanges();
@@ -106,20 +111,8 @@ module.component(__componentName, {
 			this.$onChanges();
 		}
 
-		toggleFavorite(p) {
-			const lsKey = 'favorites::projects::' + p._id
-
-			if (localStorage[lsKey])
-				delete localStorage[lsKey];
-			else
-				localStorage[lsKey] = 'yes';
-
-			this.$onChanges();
-			this.$window.scrollTo(0, 0);
-		}
-
 		createProject() {
-			this.$state.go('main.project.structure.home', { projectId: 'new' });
+			this.$state.go('project.structure.home', { projectId: 'new' });
 		}
 
 		async onCloneClicked(project, withInputs) {
