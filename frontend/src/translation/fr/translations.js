@@ -44,7 +44,7 @@ export default {
 		indicator: 'Indicateur',
 		indicators: 'Indicateurs',
 		indicators_catalog: 'Catalogue Indicateurs',
-		help: 'Aide',
+		help: 'Foire aux questions',
 		name: 'Nom',
 		start: 'Début',
 		end: 'Fin',
@@ -606,6 +606,7 @@ export default {
 		data: "Données",
 		general_informations: "Informations génerales",
 		fill_with_last_input: "Remplir avec les données de la période précédente",
+		fill_with_zeros: "Remplacer les valeurs manquantes par zéro",
 
 		variable_name_label: "Que mesurez-vous?",
 		variable_name_ph: "ex: Nombre de diagnostics effectués",

@@ -4,7 +4,7 @@ const ObjectId = require('mongodb').ObjectID;
 const router = new Router();
 
 router.post('/resources/input', async ctx => {
-	const { projectId, ...rest } = ctx.request.body;
+	const { projectId, content } = ctx.request.body;
 
 	if (!await ctx.state.profile.canViewProject(projectId)) {
 		ctx.response.status = 403;
@@ -16,7 +16,15 @@ router.post('/resources/input', async ctx => {
 		{ projection: { _id: true }, sort: [['_id', -1]] }
 	);
 
-	const input = { sequenceId: sequence._id, ...rest };
+	const input = {
+		sequenceId: sequence._id,
+		content: content.map(c => ({
+			variableId: c.variableId,
+			dimensions: c.dimensions,
+			data: c.data.map(d => typeof d === 'number' ? d : NaN) // cast null to NaN
+		}))
+	};
+
 	await database.collection('input').insertOne(input);
 
 	ctx.response.body = input;

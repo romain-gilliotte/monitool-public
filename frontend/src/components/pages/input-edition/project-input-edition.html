@@ -36,10 +36,17 @@
 		</div>
 
 		<legend>
-			<a ng-if="$ctrl.previousInput" ng-click="$ctrl.copy()" class="btn btn-default btn-xs noprint pull-right">
-				<i class="fa fa-magic"></i>
-				{{'project.fill_with_last_input'|translate}}
-			</a>
+			<div class="btn-group pull-right">
+				<a ng-click="$ctrl.fillWithZeros()" class="btn btn-default btn-xs">
+					<i class="fa fa-pencil"></i>
+					{{'project.fill_with_zeros'|translate}}
+				</a>
+
+				<a ng-if="$ctrl.previousInput" ng-click="$ctrl.copy()" class="btn btn-default btn-xs">
+					<i class="fa fa-clipboard"></i>
+					{{'project.fill_with_last_input'|translate}}
+				</a>
+			</div>
 
 			{{'project.data'|translate}}
 		</legend>

@@ -45,7 +45,7 @@ module.component(__componentName, {
                 this.title = this.$sce.trustAsHtml(help.pages[this.page].title);
                 this.paragraph = this.$sce.trustAsHtml(help.pages[this.page].paragraph);
                 this.qas = help.qas
-                    .filter(qa => qa.pages.includes(this.page))
+                    .filter(qa => qa.prefixes.some(prefix => this.page.startsWith(prefix)))
                     .map(qa => ({
                         question: this.$sce.trustAsHtml(qa.question),
                         answer: this.$sce.trustAsHtml(qa.answer),

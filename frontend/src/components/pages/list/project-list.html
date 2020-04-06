@@ -9,7 +9,7 @@
 
 		<div class="list-group">
 			<a href="#" class="list-group-item">
-				<img src="{{$root.profile.picture}}" style="width: 16px; height: 16px; border-radius: 8px; " />
+				<img ng-src="{{$root.profile.picture}}" style="width: 16px; height: 16px; border-radius: 8px; " />
 				{{$root.profile.name}}
 			</a>
 
@@ -95,7 +95,7 @@
 
 					<div class="panel-buttons btn-group">
 						<a ng-if="p.active" class="btn btn-default btn-xxs"
-							ui-sref="main.project.reporting.home({projectId: p._id})" translate="shared.open"></a>
+							ui-sref="project.usage.home({projectId: p._id})" translate="shared.open"></a>
 
 						<a acl-has-project-role="owner" acl-project="p" ng-if="!p.active"
 							class="btn btn-default btn-xxs" ng-click="$ctrl.onRestoreClicked(p)"
@@ -108,7 +108,7 @@
 
 							<ul class="dropdown-menu">
 								<li>
-									<a ui-sref="main.project.structure.home({projectId: p._id})">
+									<a ui-sref="project.config.home({projectId: p._id})">
 										<i class="fa fa-cogs"></i>
 										<span translate="shared.configure"></span>
 									</a>

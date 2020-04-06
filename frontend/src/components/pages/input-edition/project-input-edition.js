@@ -74,16 +74,17 @@ module.component(__componentName, {
 			this.form = this.project.forms.find(f => f.id === this.dsId);
 			this.entity = this.project.entities.find(f => f.id === this.siteId);
 
-			// replace values which were never entered by zeroes
-			// this.input.content.forEach(content => {
-			// 	content.data = content.data.map(v => v === null ? 0 : v);
-			// });
-
 			this.master = angular.copy(this.input);
 
 			this.variablesById = {};
 			this.project.forms.forEach(form => {
 				form.elements.forEach(variable => this.variablesById[variable.id] = variable);
+			});
+		}
+
+		fillWithZeros() {
+			this.input.content.forEach(content => {
+				content.data = content.data.map(d => d ? d : 0);
 			});
 		}
 

@@ -227,7 +227,7 @@ module.component(__componentName, {
 
 			// editable field
 			else
-				return { type: 'numeric', validator: /^\d+$/ };
+				return { type: 'numeric', validator: /^\d*$/ };
 		}
 
 		_updateSums(editedY, editedX) {
@@ -349,7 +349,7 @@ module.component(__componentName, {
 			for (var y = minY; y < maxY; ++y)
 				modelValue.push(...viewValue[y].slice(minX, maxX));
 
-			return modelValue;
+			return modelValue.map(v => typeof v === 'number' ? v : NaN);
 		}
 
 		/**

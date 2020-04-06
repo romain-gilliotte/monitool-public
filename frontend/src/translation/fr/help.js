@@ -2,7 +2,10 @@ module.exports = {
     pages: {
         'projects': {
             title: 'Liste de projets',
-            paragraph: ``
+            paragraph: `
+                La liste des projets est votre point d'entrée pour toutes les tâches que vous pourrez réaliser
+                sur l'outil.            
+            `
         },
         'project.config.home': {
             title: `Accueil configuration`,
@@ -101,34 +104,134 @@ module.exports = {
         }
     },
     qas: [
+        {
+            prefixes: ['projects', 'project.config.home', 'project.config.basics'],
+            question: `Un projet dans monitool c'est quoi?`,
+            answer: `
+                Sur Monitool, on ne parle pas de base de données, de requêtes, de dimensions, de jointures...<br/>
+                Un projet, est un projet au sens entendu dans une organisation humanitaire, le même que celui pour lequel 
+                vous rédigez un proposal à votre bailleur de fonds.
+            `
+        }, {
+            prefixes: ['projects'],
+            question: `Pourquoi peut-on créer plusieurs projets par compte, alors qu'un seul suffit?`,
+            answer: `
+                Ça n'a pas d'utilité d'un point de vue terrain, mais certains utilisateurs doivent pouvoir accéder 
+                à de nombreux projets qu'ils ne crée pas eux-même.<br/>
+                Notament:
+                <ul>
+                    <li>Consultants en ONG</li>
+                    <li>Salariés siège ou régionaux</li>
+                </ul>
+            `
+        }, {
+            prefixes: ['projects'],
+            question: `Comment retourner sur les pages de configuration sur un projet que j'ai déjà créé?`,
+            answer: `
+                Sur votre projet, à droite du bouton ouvrir, clickez sur
+                <span class="btn btn-default btn-xs"><span class="caret"></span>
+                pour les voir toutes les actions possibles.
+            `
+        }, {
+            prefixes: ['projects'],
+            question: `Quelle est l'utilité de pouvoir "Cloner la structure" d'un projet?`,
+            answer: `
+                    La fonctionalité "Cloner la structure uniquement" est pensée pour les ONGs qui réalisent des 
+                    programmes d'urgence. En effet dans ce cas, plutot que de prendre le temps de réflexion nécessaire
+                    à la construction d'un projet, il est fréquent de créer en avance différents
+                    squelettes de projets avec toutes les sources de données et le cadre logique prêts à l'emploi.
+                    <br/>
+                    Lorsqu'une nouvelle crise démarre le système de monitoring peut ainsi être opérationel en quelques
+                    minutes. Il suffit alors de cloner la structure du squelette adapté à la situation, et de renommer le projet,
+                    l'adaptation du projet au contexte viendra dans une phase ultérieur du projet.
+            `
+        }, {
+            prefixes: ['projects'],
+            question: `Quelle est l'utilité de pouvoir "Cloner structure et données" d'un projet?`,
+            answer: `
+                La fonctionalité "Cloner structure et données" intervient géneralement au moment d'un changement
+                de bailleur ou un changement majeur dans l'appareil de monitoring d'un projet long terme.<br/>
+                Il permet de prendre une photographie d'un projet, avec sa structure et toutes ses saisies à un instant donné
+                et à la conserver dans le long terme.
+            `
+        }, {
+            prefixes: ['projects'],
+            question: `J'ai supprimé mon projet par erreur, comment le récuperer?`,
+            answer: `
+                Cliquez sur <span class="btn btn-default btn-xs">Afficher les projets supprimés</span>,
+                puis sur <span class="btn btn-default btn-xs">Restaurer</span>
+            `
+        }, {
+            prefixes: ['projects'],
+            question: `À quoi sert la petite étoile en haut à droite de chaque projet?`,
+            answer: `
+                Pour les utilisateurs qui accèdent à de nombreux projets, elle permet de choisir ceux qui
+                vont toujours apparaître en premier dans leur liste.<br/>
+                Pour ceux qui n'ont encore qu'un seul projet, elle a un rôle ... décoratif. Créez en un deuxième!
+            `
+        }, {
+            prefixes: ['projects'],
+            question: `Mon projet a disparu! Où est-il?`,
+            answer: `
+                Pas de panique!<br/><br/>
+                Plusieurs explications sont possibles:
+                <ul>
+                    <li>Votre projet ne correspond pas au filtre que vous avez rentré. Videz la barre de saisie de texte en haut de la page</li>
+                    <li>Votre projet vient de terminer. Cliquez sur <span class="btn btn-default btn-xs">Afficher 
+                    les projets terminés</span>. Vous pouvez éditeur sa date de fin pour le prolonger.</li>
+                    <li>Votre projet a été supprimé par un des utilisateurs avec lequel vous le partagez. Cliquez
+                    sur <span class="btn btn-default btn-xs">Afficher les projets supprimés</span> puis sur
+                    <span class="btn btn-default btn-xs">Restaurer</span></li>
+                </ul>
+                <br/>
+                Si votre projet est toujours manquant, il est possible que vous ne soyez pas connecté avec
+                le même compte que celui que vous avez utilisé pour créer votre projet.<br/>
+                Cliquez sur <span class="btn btn-default btn-xs"><i class="fa fa-power-off"></i> Déconnecter</span>
+                puis connectez-vous avec le compte que vous avez utilisé pour créer votre projet.<br/>
+                Si vous le désirez, vous pourrez transférer le projet sur votre nouveau compte.
+            `
+        }, {
+            prefixes: ['projects'],
+            question: `Combien de temps mon projet va-t'il resté stocké sur Monitool?`,
+            answer: `
+                Pendant toute la durée de vie de l'outil: les coûts de stockage des projets sont faibles par rapport
+                aux coûts de développement et d'hébergement de la plateforme.<br/>
+                Il ne nous est donc pas nécessaire de supprimer les anciens projets pour « faire de la place ».<br/>
+                <br/>
+                Si votre ONG dispose de règles au sujet de l'archivage électronique pour les projet terminés, vous pouvez
+                télécharger toutes les données saisies par projet dans une archive ZIP contenant des fichiers CSV
+                (Excel n'étant pas un format déchiffrable sur le long terme à cause de l'obsolescence des versions).
+            `
+        },
+
         // Structure
         {
-            pages: ['project.config.basics', 'project.config.collection_form_edition'],
+            prefixes: ['project.config'],
             question: `Comment choisir des noms adaptés pour les lieux de collecte, sources de données, variables et indicateurs`,
             answer: `Utilisez des noms courts pour nommer les différents composants de votre projet.<br/>
             En évitant les acronymes vous améliorez la lisibilité de vos graphiques et tableaux et permettez une meilleur
             compréhension de votre projet par tous les acteurs concernés.`
         }, {
-            pages: ['project.config.basics', 'project.config.collection_form_edition'],
+            prefixes: ['project.config'],
             question: `Je viens de supprimer quelque chose de mon projet par erreur, mais je n'ai pas encore sauvegardé. Comment revenir en arrière?`,
             answer: `
                 En cas d'erreur, cliquez sur <a class="btn btn-default btn-xs"><i class="fa fa-undo"></i> Annuler les modifications</a> pour revenir à la
                 dernière version sauvegardée de votre projet`
         }, {
-            pages: ['project.config.basics', 'project.config.collection_form_edition'],
+            prefixes: ['project.config'],
             question: `J'ai supprimé quelque chose de mon projet par erreur, et j'ai sauvegardé ma modification. Comment revenir en arrière?`,
             answer: `
                 Rendez-vous sur la page <a class="btn btn-default btn-xs"><i class="fa fa-history"></i> Historique</a> la structure de votre projet.<br/>
                 Vous pouvez consulter toutes les modifications qui ont été réalisées depuis la création du projet, et
                 revenir au moment que vous désirez`
         }, {
-            pages: ['project.config.collection_form_edition'],
+            prefixes: ['project.config.collection_form_edition'],
             question: `Mes équipes passent trop de temps à saisir des données, comment réduire?`,
             answer: `
                 Réduisez la quantitée de données à collecter!<br/>
             `
         }, {
-            pages: ['project.config.collection_form_edition'],
+            prefixes: ['project.config.collection_form_edition'],
             question: `Je ne comprend pas les deux questions sur "Comment grouper les saisies"`,
             answer: `
                 Monitool vous affiche des rapports selon l'échelle de temps de votre choix (semaine, mois, trimestre...) et ne vous demande
@@ -137,15 +240,30 @@ module.exports = {
                 de la nature des données que vous saisissez.<br/>
                 <br/>
                 Quelques exemples:
-                <ul>
-                    <li>Un nombre de consultations se somme dans le temps: Si 10 consultations sont réalisés par jour, cela fait 70 consulations par semaine</li>
-                    <li>Un nombre de consultations se somme également entre sites: 10 consultations à Paris et 10 consultations à Lilles font 20 consultations</li>
-                    <li>Pour certains scores, c'est la valeur la plus basse de la periode qu'il faudra garder</li>
-                    <li>Mais la moyenne dans le temps</li>
-                </ul>
+
+                <table>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Comment grouper dans le temps</th>
+                        <th>Comment grouper entre sites</th>
+                    </tr>
+                    <tr>
+                        <td>Nombre de consultations médicales</td>
+                        <td>Si 10 consultations sont réalisés par jour, cela fait 70 consulations par semaine, donc "Somme"</td>
+                        <td>10 consultations à Paris et 10 consultations à Lilles font 20 consultations, donc "Somme" également</td>
+                    </tr>
+                    <tr>
+                        <td>Nombre de structures soutenues</td>
+                        <td>10 structures étaient soutenues en janvier, et 15 en février et 20 en mars, la valeur à garder 
+                        pour le trimestre est 15, donc "Moyenne"</td>
+                        <td>10 structures étaient soutenues à Paris, et 10 à Lilles, cela fait 20 structures, donc "Somme"</td>
+                    </tr>                    
+                </table>
+
+                Quelles seraient les règles pour aggréger la file active d'un projet (nombre de bénéficiaires), ou des score de qualité.
             `
         }, {
-            pages: ['project.config.collection_form_edition'],
+            prefixes: ['project.config.collection_form_edition'],
             question: `Je veux changer la périodicité de collecte de ma source de données alors que j'ai déjà réalisé des saisies`,
             answer: `
                 Pas de soucis!<br/>
@@ -156,7 +274,7 @@ module.exports = {
                 comme "faite"!
             `
         }, {
-            pages: ['project.config.collection_form_edition'],
+            prefixes: ['project.config.collection_form_edition'],
             question: `Je veux ajouter une variable mais j'ai déjà réalisé des saisies.`,
             answer: `
                 Vous pouvez ajouter des variables à tout moment sans perte de données.<br/>
@@ -164,7 +282,7 @@ module.exports = {
                 qui seront alors marquées comme "incomplètes" dans le tableau de bord du projet, sans autres conséquences.
             `
         }, {
-            pages: ['project.config.collection_form_edition'],
+            prefixes: ['project.config.collection_form_edition'],
             question: `Je veux arrêter de saisir une variable mais j'ai déjà réalisé des saisies.`,
             answer: `
                 Vous pouvez désactiver des variables à tout moment sans perte de données.<br/>
@@ -174,7 +292,7 @@ module.exports = {
                 Lorsque vous n'aurez plus usage de cette variable, vous pourrez alors la supprimer.
             `
         }, {
-            pages: ['project.config.collection_form_edition'],
+            prefixes: ['project.config.collection_form_edition'],
             question: `Je veux supprimer une variable mais j'ai déjà réalisé des saisies.`,
             answer: `
                 Elle disparaitra alors des formulaires de saisie, et rétroactivement de tous vos rapports.<br/>
@@ -184,7 +302,7 @@ module.exports = {
                 <span class="btn btn-default btn-xs"><i class="fa fa-history"></i> Historique</a> pour annuler la modification.
             `
         }, {
-            pages: ['project.config.collection_form_edition'],
+            prefixes: ['project.config.collection_form_edition'],
             question: `Je veux ajouter une désagrégation mais j'ai déjà réalisé des saisies`,
             answer: `
                 Par exemple rajouter une désagrégation par sexe du patient sur un nombre de consultations médicales, alors
@@ -201,7 +319,7 @@ module.exports = {
                 seront toutes précédées par le symbole ≈.
             `
         }, {
-            pages: ['project.config.collection_form_edition'],
+            prefixes: ['project.config.collection_form_edition'],
             question: `Je veux supprimer une désagrégation mais j'ai déjà réalisé des saisies`,
             answer: `
                 Toutes les données qui ont étés saisies jusqu'à ce jour vont être aggrégées, et la désagrégation va disparaitre rétroactivement
@@ -210,19 +328,19 @@ module.exports = {
                 Une alternative consiste à désactiver cette désagrégation.
             `
         }, {
-            pages: ['project.config.collection_form_edition'],
+            prefixes: ['project.config.collection_form_edition'],
             question: ``,
             answer: ``
         }, {
-            pages: ['project.config.collection_form_edition'],
+            prefixes: ['project.config.collection_form_edition'],
             question: ``,
             answer: ``
         }, {
-            pages: ['project.config.history'],
+            prefixes: ['project.config.history'],
             question: `Certaines modifications à la structure du projet sont réalisées par un utilisateur qui ne devrait pas avoir y avoir accès`,
             answer: `Vous pouvez gérer les droits des differents intervenants au projet dans la section "<i class="fa fa-share-alt"> Partage"`
         }, {
-            pages: ['project.config.history'],
+            prefixes: ['project.config.history'],
             question: `Je veux annuler une modification que j'ai réalisé il y a plusieurs semaines, sans perdre toutes les autres modifications que j'ai réalisé depuis.`,
             answer: `
                 Cette interface ne vous permet que de revenir à n'importe quel point en arrière,
@@ -234,54 +352,71 @@ module.exports = {
 
         // Data entry
         {
-            pages: ['project.usage.list'],
+            prefixes: ['project.usage.list'],
             question: `Pourquoi puis-je saisir les données du mois en cours, alors qu'il n'est pas terminé?`,
             answer: `
                 Car sur certains projets, des prédictions ou des objectifs sont utilisées comme variables et peuvent être saisies à l'avance!
             `
         }, {
-            pages: ['project.usage.edit'],
+            prefixes: ['project.usage.edit'],
             question: `Comment passer rapidement d'une case à l'autre?`,
             answer: `
                 Lors de la saisie de données, la touch Tab de votre clavier vous permet de naviguer entre les cases.<br/>
                 Pour revenir à la case précédente, utilisez Shift + Tab
             `
         }, {
-            pages: ['project.usage.edit'],
+            prefixes: ['project.usage.edit'],
             question: `Je saisie à partir de fiches papier remontées par plusieurs intervenants par lieu de collecte. Comment saisir plus rapidement?`,
             answer: `
                 Si vous disposez de plusieurs formulaires papier à saisir par lieu (par exemple, un par travailleur social),
                 et que désirez les additioner, vous pouvez rentrer des sommes dans les cases de saisies: "1+2+3".<br/>
             `
         }, {
-            pages: [],
-            question: ``,
-            answer: ``
+            prefixes: ['project.usage.edit'],
+            question: `À quoi sert le bouton "Remplir avec les données de la période précédente"`,
+            answer: `
+                À gagner du temps dans certains cas particuliers!<br/>
+                Si votre projet suit des indicateur qui nécessitent des indicateurs qui varient peu dans le temps (nombre de structure soutenues,
+                population de la zone ciblée, ...), il est souvent plus facile de copier les données de la saisie précédente et de corriger
+                les différences, que de réaliser la saisie à partir de zéro.
+            `
         }, {
-            pages: [],
-            question: ``,
-            answer: ``
+            prefixes: ['project.usage.edit'],
+            question: `À quoi sert le bouton "Remplacer les valeurs manquantes par zéro"`,
+            answer: `
+                À gagner du temps dans certains cas particuliers!<br/>
+                Pour certaines variables il peut arriver que la majorité des valeurs qui aient besoin d'être saisies soient des zéros.
+                Ceci se produit fréquement si plusieurs désagrégations sont utilisées sur la même variable.  
+            `
+        }, {
+            prefixes: ['project.usage.edit'],
+            question: `Que se passe-t'il si je laisse certaines cases en blanc?`,
+            answer: `
+                Attention!<br/>
+                Une case laissée blanche n'est pas équivalente à une case qui contient un zéro. Les données non saisies apparaitront comme telles
+                dans les rapports.
+            `
         },
 
         // Reporting
         {
-            pages: ['project.usage.general'],
+            prefixes: ['project.usage.general'],
             question: `Comment afficher un graphique?`,
             answer: `
                     À gauche de chaque ligne, le symbole <i class="fa fa-line-chart"></i> vous permet d'afficher un graphique
                     contenant les données de la ligne en cours.`
         }, {
-            pages: ['project.usage.general'],
+            prefixes: ['project.usage.general'],
             question: `Comment vérifier les données utilisées pour calculer un indicateur?`,
             answer: `Sur chaque indicateur le symbole <i class="fa fa-plus"></i> vous permet d'accéder aux différentes composantes utilisées pour
                 calculer chaque indicateur: choisissez "Calcul".<br/>
                 Cette option n'est accessible que pour les indicateurs calculés à partir des sources de données`
         }, {
-            pages: ['project.usage.general'],
+            prefixes: ['project.usage.general'],
             question: `Comment désagréger mes données par lieu de collecte?`,
             answer: `Sur chaque ligne le symbole <i class="fa fa-plus"></i> vous permet de désagréger votre résultat par lieu de collecte.`
         }, {
-            pages: ['project.usage.general'],
+            prefixes: ['project.usage.general'],
             question: `Comment désagréger mes données par tranche d'age, sexe, pathologie, contenu de formation, ...?`,
             answer: `
                     Si vous avez utilisé des désagrégations lors de la collecte de vos données celles-ci apparaitront dans le
@@ -289,11 +424,11 @@ module.exports = {
                     Pour les indicateurs calculés (cadres logiques, et indicateurs supplémentaires), il n'est possible de désagréger
                     les resultats que par lieu de collecte et par unité de temps.`
         }, {
-            pages: ['project.usage.general', 'project.usage.olap'],
+            prefixes: ['project.usage.general', 'project.usage.olap'],
             question: `Que signifie le symbole <i class="fa fa-question-circle-o"></i> qui s'affiche à la place de mes données?`,
             answer: `Ce symbole signifie que la saisie des données que vous essayez de consulter n'a pas encore été réalisée.`
         }, {
-            pages: ['project.usage.general', 'project.usage.olap'],
+            prefixes: ['project.usage.general', 'project.usage.olap'],
             question: `Pourquoi certaines données sont précédées par le symbole ≈?`,
             answer:
                 `Vous consultez ces données à un niveau d'aggrégation qui est inférieur à celui auquel vous les avez collecté!<br/>
@@ -310,7 +445,7 @@ module.exports = {
                 grossières de la réalité, et qu'elles ne peuvent servir qu'à avoir des ordres de grandeurs.
                 `
         }, {
-            pages: ['project.usage.general', 'project.usage.olap'],
+            prefixes: ['project.usage.general', 'project.usage.olap'],
             question: `Pourquoi certaines données sont affichées en <i>italique</i>?`,
             answer: `
                 Les données affichées en <i>italique</i> n'ont été que partiellement saisies. Le plus souvent, cela signifie que
