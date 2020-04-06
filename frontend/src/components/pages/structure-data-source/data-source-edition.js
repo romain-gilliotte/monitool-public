@@ -31,7 +31,7 @@ const module = angular.module(
 
 module.config($stateProvider => {
 
-	$stateProvider.state('project.structure.collection_form_edition', {
+	$stateProvider.state('project.config.collection_form_edition', {
 		url: '/data-source/:dataSourceId',
 		component: __componentName,
 		resolve: {

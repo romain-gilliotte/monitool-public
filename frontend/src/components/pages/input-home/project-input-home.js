@@ -5,7 +5,7 @@ import Input from '../../../models/input';
 const module = angular.module(__moduleName, [uiRouter]);
 
 module.config($stateProvider => {
-	$stateProvider.state('project.input.home', {
+	$stateProvider.state('project.usage.home', {
 		url: '/input-home',
 		component: __componentName,
 	});

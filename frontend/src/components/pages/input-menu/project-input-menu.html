@@ -1,7 +1,7 @@
 <project-columns back="projects">
 	<menus>
 		<div class="list-group">
-			<a ui-sref="project.input.home" ui-sref-active="active" class="list-group-item">
+			<a ui-sref="project.usage.home" ui-sref-active="active" class="list-group-item">
 				<i class="fa fa-home fa-fw"></i>
 				<span translate="shared.home"></span>
 			</a>
@@ -15,8 +15,8 @@
 			<div class="panel-collapse">
 				<div class="list-group">
 					<a ng-repeat="dataSource in $ctrl.project.forms"
-						ui-sref="project.input.list({dataSourceId: dataSource.id})"
-						ng-class="{active: ($ctrl.$state.is('project.input.list') || $ctrl.$state.is('project.input.edit')) && $ctrl.$stateParams.dataSourceId == dataSource.id}"
+						ui-sref="project.usage.list({dataSourceId: dataSource.id})"
+						ng-class="{active: ($ctrl.$state.is('project.usage.list') || $ctrl.$state.is('project.usage.edit')) && $ctrl.$stateParams.dataSourceId == dataSource.id}"
 						class="list-group-item" title="{{dataSource.name}}" acl-has-input-form="dataSource.id"
 						acl-project="$ctrl.project"
 						style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
@@ -39,13 +39,13 @@
 
 			<div class="panel-collapse">
 				<div class="list-group">
-					<a ui-sref="project.input.general" ui-sref-active="active" class="list-group-item">
+					<a ui-sref="project.usage.general" ui-sref-active="active" class="list-group-item">
 
 						<i class="fa fa-line-chart fa-fw"></i>
 						<span translate="shared.reporting_general"></span>
 					</a>
 
-					<a ui-sref="project.input.olap" ui-sref-active="active" class="list-group-item">
+					<a ui-sref="project.usage.olap" ui-sref-active="active" class="list-group-item">
 						<i class="fa fa-table fa-fw"></i>
 						<span translate="project.pivot_table"></span>
 					</a>
@@ -60,11 +60,11 @@
 
 			<div class="panel-collapse">
 				<div class="list-group">
-					<a ui-sref="project.input.paperforms" ui-sref-active="active" class="list-group-item">
+					<a ui-sref="project.usage.paperforms" ui-sref-active="active" class="list-group-item">
 						<i class="fa fa-paper-plane-o fa-fw"></i>
 						<span translate="project.paper_forms"></span>
 					</a>
-					<a ui-sref="project.input.excel" ui-sref-active="active" class="list-group-item">
+					<a ui-sref="project.usage.excel" ui-sref-active="active" class="list-group-item">
 						<i class="fa fa-file-excel-o fa-fw"></i>
 						<span translate="project.excel_export"></span>
 					</a>

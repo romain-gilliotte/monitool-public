@@ -9,7 +9,7 @@ const module = angular.module(__moduleName, [uiRouter, mtProjectQuery, mtTable, 
 
 module.config($stateProvider => {
 
-	$stateProvider.state('project.input.general', {
+	$stateProvider.state('project.usage.general', {
 		url: '/general',
 		component: __componentName,
 	});

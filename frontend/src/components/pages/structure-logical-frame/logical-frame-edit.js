@@ -24,7 +24,7 @@ const module = angular.module(
 
 module.config($stateProvider => {
 
-	$stateProvider.state('project.structure.logical_frame_edition', {
+	$stateProvider.state('project.config.logical_frame_edition', {
 		url: '/logical-frame/:logicalFrameId?from',
 		component: __componentName,
 		resolve: {

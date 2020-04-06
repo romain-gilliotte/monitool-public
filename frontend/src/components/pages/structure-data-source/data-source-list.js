@@ -9,7 +9,7 @@ import mtHelpPanel from '../../shared/misc/help-panel';
 const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtElementGroups, mtColumnsPanel, mtHelpPanel]);
 
 module.config($stateProvider => {
-	$stateProvider.state('project.structure.collection_form_list', {
+	$stateProvider.state('project.config.collection_form_list', {
 		url: '/data-source',
 		component: __componentName
 	});
@@ -53,7 +53,7 @@ module.component(__componentName, {
 		}
 
 		onCreateFormClicked() {
-			this.$state.go('project.structure.collection_form_edition', { dataSourceId: uuid() });
+			this.$state.go('project.config.collection_form_edition', { dataSourceId: uuid() });
 		}
 
 		onDeleteClicked(dataSource) {

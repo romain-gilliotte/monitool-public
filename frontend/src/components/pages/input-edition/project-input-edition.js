@@ -10,7 +10,7 @@ const module = angular.module(__moduleName, [uiRouter, mtTimeSlot, mtInputGrid, 
 
 module.config($stateProvider => {
 
-	$stateProvider.state('project.input.edit', {
+	$stateProvider.state('project.usage.edit', {
 		url: '/input/:dataSourceId/edit/:period/:entityId',
 		component: __componentName,
 		resolve: {

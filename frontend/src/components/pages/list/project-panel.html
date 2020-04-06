@@ -24,7 +24,7 @@
 
         <div class="panel-buttons btn-group">
             <a ng-if="$ctrl.project.active" class="btn btn-default btn-xxs"
-                ui-sref="project.input.home({projectId: $ctrl.project._id})" translate="shared.open"></a>
+                ui-sref="project.usage.home({projectId: $ctrl.project._id})" translate="shared.open"></a>
 
             <a acl-has-project-role="owner" acl-project="$ctrl.project" ng-if="!$ctrl.project.active"
                 class="btn btn-default btn-xxs" ng-click="$ctrl.onRestoreClicked(p)" translate="shared.restore"></a>
@@ -36,7 +36,7 @@
 
                 <ul class="dropdown-menu">
                     <li>
-                        <a ui-sref="project.structure.home({projectId: $ctrl.project._id})">
+                        <a ui-sref="project.config.home({projectId: $ctrl.project._id})">
                             <i class="fa fa-cogs"></i>
                             <span translate="shared.configure"></span>
                         </a>

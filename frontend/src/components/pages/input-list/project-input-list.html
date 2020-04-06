@@ -19,12 +19,12 @@
 				<td ng-repeat="site in ::$ctrl.sites">
 					<div class="bodyField" ng-if="$ctrl.inputsStatus[date][site.id] !== undefined">
 						<a class="btn btn-xs btn-default" ng-if="$ctrl.inputsStatus[date][site.id] !== 0"
-							ui-sref="project.input.edit({dataSourceId: $ctrl.dataSource.id, period: date, entityId: site.id})"
+							ui-sref="project.usage.edit({dataSourceId: $ctrl.dataSource.id, period: date, entityId: site.id})"
 							translate="project.input_status.done"
 							translate-values="::{value: $ctrl.inputsStatus[date][site.id]}">
 
 							<a class="btn btn-xs btn-primary"
-								ui-sref="project.input.edit({dataSourceId: $ctrl.dataSource.id, period: date, entityId: site.id})"
+								ui-sref="project.usage.edit({dataSourceId: $ctrl.dataSource.id, period: date, entityId: site.id})"
 								ng-if="$ctrl.inputsStatus[date][site.id] === 0"
 								translate="project.input_status.expected"></a>
 					</div>

@@ -10,7 +10,7 @@ const module = angular.module(__moduleName, [uiRouter, mtRevisionSummary, mtHelp
 
 module.config($stateProvider => {
 
-	$stateProvider.state('project.structure.history', {
+	$stateProvider.state('project.config.history', {
 		url: '/history',
 		component: __componentName
 	});

@@ -8,7 +8,7 @@ import mtHelpPanel from '../../shared/misc/help-panel';
 const module = angular.module(__moduleName, [uiRouter, mtUtcDatepicker, mtFormGroup, mtHelpPanel]);
 
 module.config($stateProvider => {
-	$stateProvider.state('project.structure.basics', {
+	$stateProvider.state('project.config.basics', {
 		url: '/basics',
 		component: __componentName
 	});

@@ -6,7 +6,7 @@ const module = angular.module(__moduleName, [uiRouter, progressBar]);
 
 module.config($stateProvider => {
 
-	$stateProvider.state('project.structure.home', {
+	$stateProvider.state('project.config.home', {
 		url: '/structure-home',
 		component: __componentName
 	});

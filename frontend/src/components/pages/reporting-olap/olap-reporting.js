@@ -20,7 +20,7 @@ const module = angular.module(
 );
 
 module.config($stateProvider => {
-	$stateProvider.state('project.input.olap', {
+	$stateProvider.state('project.usage.olap', {
 		url: '/olap',
 		component: __componentName
 	});

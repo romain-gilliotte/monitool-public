@@ -9,7 +9,7 @@ const module = angular.module(__moduleName, [uiRouter, uiModal, 'ng-sortable', m
 
 module.config($stateProvider => {
 
-	$stateProvider.state('project.structure.extra', {
+	$stateProvider.state('project.config.extra', {
 		url: '/extra',
 		component: __componentName,
 	});

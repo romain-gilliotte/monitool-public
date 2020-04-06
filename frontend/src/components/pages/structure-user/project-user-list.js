@@ -9,7 +9,7 @@ const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtProjectU
 
 module.config($stateProvider => {
 
-	$stateProvider.state('project.structure.user_list', {
+	$stateProvider.state('project.config.user_list', {
 		url: '/users',
 		component: __componentName
 	});

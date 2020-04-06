@@ -20,7 +20,7 @@ const module = angular.module(
 
 
 module.config($stateProvider => {
-	$stateProvider.state('project.structure.collection_site_list', {
+	$stateProvider.state('project.config.collection_site_list', {
 		url: '/sites',
 		component: __componentName
 	});

@@ -9,7 +9,7 @@ const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtColumnsP
 
 module.config($stateProvider => {
 
-	$stateProvider.state('project.structure.logical_frame_list', {
+	$stateProvider.state('project.config.logical_frame_list', {
 		url: '/logical-frame',
 		component: __componentName
 	});
@@ -55,7 +55,7 @@ module.component(__componentName, {
 
 		onCreateLogicalFrameClicked(logicalFrame) {
 			this.$state.go(
-				'project.structure.logical_frame_edition',
+				'project.config.logical_frame_edition',
 				{
 					logicalFrameId: uuid(),
 					from: logicalFrame ? logicalFrame.id : null

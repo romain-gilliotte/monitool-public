@@ -9,7 +9,7 @@ const module = angular.module(__moduleName, [uiRouter, mtFilterTimeSlot, mtHelpP
 
 module.config($stateProvider => {
 
-	$stateProvider.state('project.input.list', {
+	$stateProvider.state('project.usage.list', {
 		url: '/input/:dataSourceId/list',
 		component: __componentName,
 		resolve: {
@@ -97,7 +97,7 @@ module.component(__componentName, {
 		}
 
 		addInput(entityId) {
-			this.$state.go('project.input.edit', {
+			this.$state.go('project.usage.edit', {
 				period: this.newInputDate,
 				dataSourceId: this.dataSource.id,
 				entityId: entityId
