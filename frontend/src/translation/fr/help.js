@@ -1,14 +1,14 @@
 module.exports = {
     pages: {
-        project_list: {
+        'projects': {
             title: 'Liste de projets',
             paragraph: ``
         },
-        basics: {
+        'project.structure.basics': {
             title: 'Données de base',
             paragraph: `Les données de bases permettent de classer votre projet parmi les autres de l'ONG.`
         },
-        sites: {
+        'project.structure.collection_site_list': {
             title: 'Lieux de collecte',
             paragraph: `
             <p>
@@ -23,7 +23,7 @@ module.exports = {
                 </ul>
             </p>`
         },
-        datasource_list: {
+        'project.structure.collection_form_list': {
             title: 'Liste des sources de données',
             paragraph: `
                 Les sources de données sont les différents supports desquels les données nécessaires au monitoring du
@@ -34,12 +34,12 @@ module.exports = {
                 utilisés sur le terrain.
             `
         },
-        datasource_edition: {
+        'project.structure.collection_form_edition': {
             title: `Édition d'une source de données`,
             paragraph: `
             `
         },
-        logframe_list: {
+        'project.structure.logical_frame_list': {
             title: 'Liste des cadres logiques',
             paragraph: `
                 Un cadre logique est un document qui décrit les objectifs, les résultats attendus, et les activités misent
@@ -48,18 +48,18 @@ module.exports = {
                 décrites dans les sources de données
             `
         },
-        logframe_edit: {
+        'project.structure.logical_frame_edition': {
             title: `Édition d'un cadre logique`,
             paragraph: ``
         },
-        extra_indicators: {
+        'project.structure.extra': {
             title: `Indicateurs annexés`,
             paragraph: `
                 Les indicateurs annexés sont des indicateurs complémentaires qui ne figurent dans aucun cadre logique.<br/>
                 Ils permettent de suivre des éléments spécifiques du projet (données médicales, logistiques, ...)
             `
         },
-        user_list: {
+        'project.structure.user_list': {
             title: `Liste des utilisateurs`,
             paragraph: `
                 Plusieurs types d'utilisateurs interviennent dans la mise en place et dans le suivi d'un projet:
@@ -67,26 +67,30 @@ module.exports = {
                 Listez ici tous les utilisateurs qui doivent avoir accès au monitoring de ce projet.
             `
         },
-        history: {
+        'project.structure.history': {
             title: `Historique`,
             paragraph: `
                 L'historique des modifications vous permet de consulter la liste des modifications faites sur la
                 structure de votre projet.
             `
         },
-        input_list: {
+        'project.input.home': {
+            title: `Accueil projet`,
+            paragraph: ``
+        },
+        'project.input.list': {
             title: `Liste des saisies`,
             paragraph: ``
         },
-        input_edition: {
+        'project.input.edit': {
             title: `Édition d'une saisie`,
             paragraph: ``
         },
-        general_reporting: {
+        'project.input.general': {
             title: `Rapport général`,
             paragraph: `Cette page vous permet d'explorer vos données hierarchiquement en partant d'une vision général de votre projet.`
         },
-        olap_reporting: {
+        'project.input.olap': {
             title: `Tableau croisé dynamique`,
             paragraph: `Cette page vous permet de construire des tableaux qui prendront la forme que vous désirez, et de les télécharger
             en format Excel, afin de les inclure dans des rapports ou de créer des visualisation en dehors de Monitool.`
@@ -95,21 +99,21 @@ module.exports = {
     qas: [
         // Structure
         {
-            pages: ['basics'],
+            pages: ['project.basics'],
             question: `Comment choisir des noms adaptés pour les lieux de collecte, sources de données, variables et indicateurs`,
             answer: `Utilisez des noms courts pour nommer les différents composants de votre projet.<br/>
             En évitant les acronymes vous améliorez la lisibilité de vos graphiques et tableaux et permettez une meilleur
             compréhension de votre projet par tous les acteurs concernés.`
         },
         {
-            pages: ['basics'],
+            pages: ['project.basics'],
             question: `Je viens de supprimer quelque chose de mon projet par erreur, mais je n'ai pas encore sauvegardé. Comment revenir en arrière?`,
             answer: `
                 En cas d'erreur, cliquez sur <a class="btn btn-default btn-xs"><i class="fa fa-undo"></i> Annuler les modifications</a> pour revenir à la
                 dernière version sauvegardée de votre projet`
         },
         {
-            pages: ['basics'],
+            pages: ['project.basics'],
             question: `J'ai supprimé quelque chose de mon projet par erreur, et j'ai sauvegardé ma modification. Comment revenir en arrière?`,
             answer: `
                 Rendez-vous sur la page <a class="btn btn-default btn-xs"><i class="fa fa-history"></i> Historique</a> la structure de votre projet.<br/>
@@ -118,12 +122,12 @@ module.exports = {
         },
 
         {
-            pages: ['history'],
+            pages: ['project.structure.history'],
             question: `Certaines modifications à la structure du projet sont réalisées par un utilisateur qui ne devrait pas avoir y avoir accès`,
             answer: `Vous pouvez gérer les droits des differents intervenants au projet dans la section "<i class="fa fa-share-alt"> Partage"`
         },
         {
-            pages: ['history'],
+            pages: ['project.structure.history'],
             question: `Je veux annuler une modification que j'ai réalisé il y a plusieurs semaines, sans perdre toutes les autres modifications que j'ai réalisé depuis.`,
             answer: `
                 Cette interface ne vous permet que de revenir à n'importe quel point en arrière,
@@ -135,14 +139,14 @@ module.exports = {
 
         // Data entry
         {
-            pages: ['input_list'],
+            pages: ['project.input.list'],
             question: `Pourquoi puis-je saisir les données du mois en cours, alors qu'il n'est pas terminé?`,
             answer: `
                 Car sur certains projets, des prédictions ou des objectifs sont utilisées comme variables et peuvent être saisies à l'avance!
             `
         },
         {
-            pages: ['input_edition'],
+            pages: ['project.input.edit'],
             question: `Comment passer rapidement d'une case à l'autre?`,
             answer: `
                 Lors de la saisie de données, la touch Tab de votre clavier vous permet de naviguer entre les cases.<br/>
@@ -150,7 +154,7 @@ module.exports = {
             `
         },
         {
-            pages: ['input_edition'],
+            pages: ['project.input.edit'],
             question: `Je saisie à partir de fiches papier remontées par plusieurs intervenants par lieu de collecte. Comment saisir plus rapidement?`,
             answer: `
                 Si vous disposez de plusieurs formulaires papier à saisir par lieu (par exemple, un par travailleur social),
@@ -170,26 +174,26 @@ module.exports = {
 
         // Reporting
         {
-            pages: ['general_reporting'],
+            pages: ['project.input.general'],
             question: `Comment afficher un graphique?`,
             answer: `
                     À gauche de chaque ligne, le symbole <i class="fa fa-line-chart"></i> vous permet d'afficher un graphique
                     contenant les données de la ligne en cours.`
         },
         {
-            pages: ['general_reporting'],
+            pages: ['project.input.general'],
             question: `Comment vérifier les données utilisées pour calculer un indicateur?`,
             answer: `Sur chaque indicateur le symbole <i class="fa fa-plus"></i> vous permet d'accéder aux différentes composantes utilisées pour
                 calculer chaque indicateur: choisissez "Calcul".<br/>
                 Cette option n'est accessible que pour les indicateurs calculés à partir des sources de données`
         },
         {
-            pages: ['general_reporting'],
+            pages: ['project.input.general'],
             question: `Comment désagréger mes données par lieu de collecte?`,
             answer: `Sur chaque ligne le symbole <i class="fa fa-plus"></i> vous permet de désagréger votre résultat par lieu de collecte.`
         },
         {
-            pages: ['general_reporting'],
+            pages: ['project.input.general'],
             question: `Comment désagréger mes données par tranche d'age, sexe, pathologie, contenu de formation, ...?`,
             answer: `
                     Si vous avez utilisé des désagrégations lors de la collecte de vos données celles-ci apparaitront dans le
@@ -198,12 +202,12 @@ module.exports = {
                     les resultats que par lieu de collecte et par unité de temps.`
         },
         {
-            pages: ['general_reporting', 'olap_reporting'],
+            pages: ['project.input.general', 'project.input.olap'],
             question: `Que signifie le symbole <i class="fa fa-question-circle-o"></i> qui s'affiche à la place de mes données?`,
             answer: `Ce symbole signifie que la saisie des données que vous essayez de consulter n'a pas encore été réalisée.`
         },
         {
-            pages: ['general_reporting', 'olap_reporting'],
+            pages: ['project.input.general', 'project.input.olap'],
             question: `Pourquoi certaines données sont précédées par le symbole ≈?`,
             answer:
                 `Vous consultez ces données à un niveau d'aggrégation qui est inférieur à celui auquel vous les avez collecté!<br/>
@@ -221,7 +225,7 @@ module.exports = {
                 `
         },
         {
-            pages: ['general_reporting', 'olap_reporting'],
+            pages: ['project.input.general', 'project.input.olap'],
             question: `Pourquoi certaines données sont affichées en <i>italique</i>?`,
             answer: `
                 Les données affichées en <i>italique</i> n'ont été que partiellement saisies. Le plus souvent, cela signifie que

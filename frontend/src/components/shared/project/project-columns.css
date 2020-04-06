@@ -1,6 +1,12 @@
 
 @media (min-width: 768px) {
-    .project-menu {
+    .project-columns {
+        height: 100%;
+    }
+
+    .project-columns .project-menu {
+        display: flex;
+        flex-direction: column;
         position: fixed;
         width: 200px;
         top: 0;
@@ -9,17 +15,20 @@
         border-right: 1px solid #c0c0c0;
     }
     
-    .project-menu .back {
+    .project-columns .project-menu .back {
         margin-bottom: 0;
     }
-
-    .project-menu .panel-group {
+    
+    .project-columns .project-menu .panel-group {
         padding: 10px;
-        height: 100%;
         overflow-y: auto;
+        margin-bottom: 0;
     }
   
-    .project-content {
-        margin: 10px 10px 10px 220px;
+    .project-columns .project-content {
+        background-color: white;
+        height: 100%;
+        padding: 10px 50px 10px 220px;
+        margin: 0
     }
 }

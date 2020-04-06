@@ -8,21 +8,39 @@ require(__cssPath);
 const module = angular.module(__moduleName, []);
 
 module.component(__componentName, {
-    bindings: {
-        'page': '@'
-    },
+    bindings: {},
     transclude: true,
     template: require(__templatePath),
     controller: class {
 
-        constructor($rootScope, $sce) {
+        constructor($rootScope, $sce, $transitions, $state) {
             this.language = $rootScope.language;
+            this.$transitions = $transitions;
             this.$sce = $sce;
+            this.$state = $state;
         }
 
-        $onChanges(changes) {
-            const help = { fr: helpFr, en: helpEn, es: helpEs }[this.language];
+        $onInit() {
+            this.page = this.$state.$current.name;
+            this.updateDisplay();
 
+            this._cancelTransitionListener = this.$transitions.onStart(
+                {},
+                this._onTransition.bind(this)
+            );
+        }
+
+        $onDestroy() {
+            this._cancelTransitionListener();
+        }
+
+        _onTransition(transition) {
+            this.page = transition.to().name;
+            this.updateDisplay();
+        }
+
+        updateDisplay() {
+            const help = { fr: helpFr, en: helpEn, es: helpEs }[this.language];
             this.title = this.$sce.trustAsHtml(help.pages[this.page].title);
             this.paragraph = this.$sce.trustAsHtml(help.pages[this.page].paragraph);
             this.qas = help.qas

@@ -8,7 +8,8 @@ help-panel {
     background-color: white;
     z-index: 10;
     
-    transition-duration: 0.3s;
+    transition-property: right;
+    transition-duration: 0.5s;
 
     display: flex;
 }
@@ -37,4 +38,14 @@ help-panel .toolbar-body {
     width: 60vw;
     overflow: auto;
     padding: 20px;
+}
+
+.project-columns {
+    transition-property: filter;
+    transition-duration: 0.5s;
+    filter: none;
+}
+
+help-panel:hover + .project-columns {
+    filter: blur(5px) brightness(80%);
 }

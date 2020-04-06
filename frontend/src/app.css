@@ -306,11 +306,10 @@ ul[ng-sortable] li *, i.fa.fa-bars {
 
 general-reporting, olap-reporting {
   display: flex;
-  height: 100vh;
+  height: calc(100vh - 10px);
   flex-direction: column;
-  margin-top: -50px;
-  padding-top: 50px;
-  padding-bottom: 10px
+  padding-bottom: 10px;
+  overflow: hidden;
 }
 
 .table {
@@ -335,7 +334,4 @@ general-reporting, olap-reporting {
 
 dd {
   margin-bottom: 5px;
-}
-body {
-  padding-right: 40px;
 }
