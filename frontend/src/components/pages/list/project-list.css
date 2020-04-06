@@ -11,3 +11,33 @@ project-list .filter-toggles {
 project-list .create-button {
     float: right;
 }
+
+
+.panel-dashed {
+    color: #666;
+    border-color: #999;
+    border-style: dashed;
+  }
+  
+  .panel-dashed > .panel-heading {
+    background-color: #f5f5f5;
+    border-color: #999;
+    border-bottom-style: dashed;
+  }
+  
+  
+  
+  .panel-deleted {
+    border-color: #b33;
+    border-style: dashed;
+  }
+  
+  .panel-deleted > .panel-heading {
+    color: #b33;
+    background-color: #f5dddd;
+    border-color: #b33;
+    border-bottom-style: dashed;
+  }
+  
+  
+  
