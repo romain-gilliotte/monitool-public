@@ -32,6 +32,11 @@ module.component(__componentName, {
 				this._updateRows();
 				this._updatePlots();
 			}
+
+			// If the page just loaded, open the first section.
+			if (changes.project.isFirstChange() && this.rows.length) {
+				this.onSectionToggle(this.rows[0].id);
+			}
 		}
 
 		$onInit() {
