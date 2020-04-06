@@ -41,15 +41,22 @@ module.component(__componentName, {
 
         updateDisplay() {
             const help = { fr: helpFr, en: helpEn, es: helpEs }[this.language];
-            this.title = this.$sce.trustAsHtml(help.pages[this.page].title);
-            this.paragraph = this.$sce.trustAsHtml(help.pages[this.page].paragraph);
-            this.qas = help.qas
-                .filter(qa => qa.pages.includes(this.page))
-                .map(qa => ({
-                    question: this.$sce.trustAsHtml(qa.question),
-                    answer: this.$sce.trustAsHtml(qa.answer),
-                    selected: false
-                }));
+            try {
+                this.title = this.$sce.trustAsHtml(help.pages[this.page].title);
+                this.paragraph = this.$sce.trustAsHtml(help.pages[this.page].paragraph);
+                this.qas = help.qas
+                    .filter(qa => qa.pages.includes(this.page))
+                    .map(qa => ({
+                        question: this.$sce.trustAsHtml(qa.question),
+                        answer: this.$sce.trustAsHtml(qa.answer),
+                        selected: false
+                    }));
+            }
+            catch (e) {
+                console.log(`Missing help section: ${this.page}`);
+                this.title = this.paragraph = '';
+                this.qas = [];
+            }
         }
 
         onQaClick(qa) {

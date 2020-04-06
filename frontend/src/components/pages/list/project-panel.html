@@ -15,7 +15,10 @@
             <strong translate="shared.date"></strong>
             {{$ctrl.project.start|date}} - {{$ctrl.project.end|date}}
         </div>
-
+        <div>
+            <strong translate="project.owner"></strong>
+            {{$ctrl.project.owner}}
+        </div>
         <div>
             <strong translate="project.last_entry"></strong>
             <span ng-if="$ctrl.lastInputDate[$ctrl.project._id]">{{$ctrl.lastInputDate[$ctrl.project._id]|date}}</span>
