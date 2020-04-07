@@ -1,6 +1,5 @@
 import angular from 'angular';
 import axios from 'axios';
-import TimeSlot from 'timeslot-dag';
 
 export default class Input {
 
@@ -23,21 +22,21 @@ export default class Input {
 			.reduce((m, i) => { m[project.forms[i].id] = result[i]; return m; }, {})
 	}
 
+	/** fixme The computed percentage is no precise enough: it is by variable, we need by cell */
 	static async fetchFormStatus(project, dataSourceId) {
 		const dataSource = project.forms.find(ds => ds.id === dataSourceId);
 
+		const sum = dataSource.elements.map((v, i) => `!isNaN(variable_${i})`).join('+');
+		const formula = `(${sum})/${dataSource.elements.length}`;
 		const query = {
 			projectId: project._id,
-			formula: dataSource.elements.map((v, i, a) => '!isNaN(variable_' + i + ')/' + a.length).join('+'),
+			formula: formula,
 			parameters: {},
 			dice: [
 				{
 					id: 'time',
 					attribute: 'day',
-					range: [
-						null,
-						new Date().toISOString().substring(0, 10)
-					]
+					range: [null, new Date().toISOString().substring(0, 10)]
 				}
 			],
 			aggregate: [
@@ -62,70 +61,49 @@ export default class Input {
 		return sortedResult;
 	}
 
-	static async fetchLasts(project, siteId, dataSourceId, period) {
+	/** Fetch specific data entry by calling the reporting service. */
+	static async fetchInput(project, siteId, dataSourceId, period) {
 		const dataSource = project.forms.find(ds => ds.id === dataSourceId);
-		const previousPeriod = new TimeSlot(period).previous().value;
-		const data = await Promise.all(dataSource.elements.map(async (v) => {
-			const response = await axios.post(`/rpc/build-report`, {
-				projectId: project._id,
-				formula: 'cst',
-				parameters: {
-					cst: {
-						variableId: v.id,
-						dice: []
-					}
-				},
-				dice: [
-					{ id: 'time', attribute: dataSource.periodicity, range: [previousPeriod, period], },
-					{ id: 'location', attribute: 'entity', items: [siteId], },
-					...v.partitions.map(p => ({ id: p.id, attribute: 'element', items: p.elements.map(pe => pe.id) }))
-				],
-				aggregate: [
-					{ id: 'time', attribute: dataSource.periodicity },
-					...v.partitions.map(p => ({ id: p.id, attribute: 'element' }))
-				],
-				output: 'flatArray'
-			});
 
-			return response.data;
-		}));
-
-
-		const previous = new Input({
+		return new Input({
 			projectId: project._id,
-			content: dataSource.elements.map((v, i) => ({
-				variableId: v.id,
-				data: data[i].slice(0, data[i].length / 2),
-				dimensions: [
-					{ id: 'time', attribute: dataSource.periodicity, items: [period] },
-					{ id: 'location', attribute: 'entity', items: [siteId] },
-					...v.partitions.map(p => ({
-						id: p.id,
-						attribute: 'element',
-						items: p.elements.map(pe => pe.id)
-					}))
-				]
+			content: await Promise.all(dataSource.elements.map(async variable => {
+				// Query server
+				const response = await axios.post(`/rpc/build-report`, {
+					output: 'flatArray',
+					projectId: project._id,
+					formula: 'cst',
+					parameters: { cst: { variableId: variable.id, dice: [] } },
+					dice: [
+						{ id: 'time', attribute: dataSource.periodicity, range: [period], },
+						{ id: 'location', attribute: 'entity', items: [siteId], },
+						...variable.partitions.map(p => ({ id: p.id, attribute: 'element', items: p.elements.map(pe => pe.id) }))
+					],
+					aggregate: variable.partitions.map(p => ({ id: p.id, attribute: 'element' })),
+				});
+
+				// Check that query result have the expected format.
+				// If not, it means that we're making a query outside of the bounds of the project,
+				// in that case, we can just return empty data, it should happen only when filling the first
+				// data entry (because we're trying to load the previous one as well for "fill with previous data" action).
+				const expectedLength = variable.partitions.reduce((m, p) => m * p.elements.length, 1);
+				const data = response.data;
+				if (data.length !== expectedLength) {
+					data.length = expectedLength;
+					result.fill(null);
+				}
+
+				return {
+					variableId: variable.id,
+					data: data,
+					dimensions: [
+						{ id: 'time', attribute: dataSource.periodicity, items: [period] },
+						{ id: 'location', attribute: 'entity', items: [siteId] },
+						...variable.partitions.map(p => ({ id: p.id, attribute: 'element', items: p.elements.map(pe => pe.id) }))
+					]
+				}
 			}))
 		});
-
-		const current = new Input({
-			projectId: project._id,
-			content: dataSource.elements.map((v, i) => ({
-				variableId: v.id,
-				data: data[i].slice(data[i].length / 2),
-				dimensions: [
-					{ id: 'time', attribute: dataSource.periodicity, items: [period] },
-					{ id: 'location', attribute: 'entity', items: [siteId] },
-					...v.partitions.map(p => ({
-						id: p.id,
-						attribute: 'element',
-						items: p.elements.map(pe => pe.id)
-					}))
-				]
-			}))
-		});
-
-		return { previous, current };
 	}
 
 	constructor(data = null) {
@@ -144,6 +122,4 @@ export default class Input {
 
 		Object.assign(this, response.data);
 	}
-
 }
-

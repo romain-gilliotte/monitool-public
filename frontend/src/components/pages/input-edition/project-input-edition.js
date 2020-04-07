@@ -1,10 +1,11 @@
-import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
-import Input from '../../../models/input';
+import angular from 'angular';
+import TimeSlot from 'timeslot-dag';
 import mtTimeSlot from '../../../filters/time-slot';
-import mtInputGrid from './input-grid';
-import mtSaveBlock from '../../shared/project/save-block';
+import Input from '../../../models/input';
 import mtHelpPanel from '../../shared/misc/help-panel';
+import mtSaveBlock from '../../shared/project/save-block';
+import mtInputGrid from './input-grid';
 
 const module = angular.module(__moduleName, [uiRouter, mtTimeSlot, mtInputGrid, mtSaveBlock, mtHelpPanel]);
 
@@ -14,12 +15,16 @@ module.config($stateProvider => {
 		url: '/input/:dataSourceId/edit/:period/:entityId',
 		component: __componentName,
 		resolve: {
-			inputs: (loadedProject, $stateParams) => Input.fetchLasts(loadedProject, $stateParams.entityId, $stateParams.dataSourceId, $stateParams.period),
-			input: inputs => inputs.current,
-			previousInput: inputs => inputs.previous,
 			dsId: $stateParams => $stateParams.dataSourceId,
 			period: $stateParams => $stateParams.period,
-			siteId: $stateParams => $stateParams.entityId
+			siteId: $stateParams => $stateParams.entityId,
+			input: (loadedProject, $stateParams) => {
+				return Input.fetchInput(loadedProject, $stateParams.entityId, $stateParams.dataSourceId, $stateParams.period);
+			},
+			previousInput: (loadedProject, $stateParams) => {
+				const previousPeriod = new TimeSlot($stateParams.period).previous().value;
+				return Input.fetchInput(loadedProject, $stateParams.entityId, $stateParams.dataSourceId, previousPeriod);
+			},
 		}
 	});
 });
