@@ -75,7 +75,7 @@ export default class Input {
 					formula: 'cst',
 					parameters: { cst: { variableId: variable.id, dice: [] } },
 					dice: [
-						{ id: 'time', attribute: dataSource.periodicity, range: [period], },
+						{ id: 'time', attribute: dataSource.periodicity, items: [period], },
 						{ id: 'location', attribute: 'entity', items: [siteId], },
 						...variable.partitions.map(p => ({ id: p.id, attribute: 'element', items: p.elements.map(pe => pe.id) }))
 					],
