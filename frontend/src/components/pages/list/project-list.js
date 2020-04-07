@@ -120,7 +120,7 @@ module.component(__componentName, {
 		}
 
 		createProject() {
-			this.$state.go('main.project.structure.home', { projectId: 'new' });
+			this.$state.go('project.config.home', { projectId: 'new' });
 		}
 
 		async onCloneClicked(project, withInputs) {
