@@ -60,15 +60,19 @@ async function getVariableCube(projectId, variableId, aggregate, dice) {
             let inputCube = new Cube(inputDimensions);
             inputCube.createStoredMeasure('main', {}); // fixme: aggregation rules are missing
             inputCube.setData('main', content.data);
-            inputCube = inputCube.reshape(neededDims);
+            try {
+                // on doit reshape ce cube en suivant les regles suivantes:
+                // - On garde la meme periodicité ce celle qui venait
+                // - On rajoute les dimensions manquantes JUSTE AVEC LES DONNÉES du projet.
+                // (SANS PRENDRE EN COMPTE ce qu'on a fait sur nos deux cubes, ca sera fait après).
+                inputCube = inputCube.reshape(neededDims);
 
-            // on doit reshape ce cube en suivant les regles suivantes:
-            // - On garde la meme periodicité ce celle qui venait
-            // - On rajoute les dimensions manquantes JUSTE AVEC LES DONNÉES du projet.
-            // (SANS PRENDRE EN COMPTE ce qu'on a fait sur nos deux cubes, ca sera fait après).
-
-            overviewCube.hydrateFromCube(inputCube);
-            detailedCube.hydrateFromCube(inputCube);
+                overviewCube.hydrateFromCube(inputCube);
+                detailedCube.hydrateFromCube(inputCube);
+            }
+            catch (e) {
+                // les dates du projet ont changé => pas de cette saisie est en dehors des bornes.
+            }
         }));
 
     // Remove dimensions which were only there to allow dicing.
