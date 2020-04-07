@@ -1,6 +1,10 @@
 <help-panel></help-panel>
 
-<div class="project-columns">
+<!-- 
+    The project-container div is there to allow the blur filter to blur
+    the whole thing, instead of the menu and content separately
+ -->
+<div class="project-container">
     <div class="project-menu">
         <div class="list-group back" ng-if="$ctrl.back">
             <a ui-sref="{{$ctrl.back}}" ui-sref-active="active" class="list-group-item">

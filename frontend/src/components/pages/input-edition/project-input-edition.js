@@ -6,6 +6,7 @@ import Input from '../../../models/input';
 import mtHelpPanel from '../../shared/misc/help-panel';
 import mtSaveBlock from '../../shared/project/save-block';
 import mtInputGrid from './input-grid';
+require(__cssPath);
 
 const module = angular.module(__moduleName, [uiRouter, mtTimeSlot, mtInputGrid, mtSaveBlock, mtHelpPanel]);
 

@@ -75,20 +75,15 @@
 		</div>
 	</menus>
 	<content>
-		<div>
-			<div id="formblock">
-				<!--
-					<ui-view /> will be replaced by any of the project-structure-* components
-					which all take the same input/output bindings.
-				-->
+		<!--
+			<ui-view /> will be replaced by any of the project-structure-* components
+			which all take the same input/output bindings.
+		-->
 
-				<ui-view project="$ctrl.project" on-project-update="$ctrl.onProjectUpdate(newProject, isValid)">
-				</ui-view>
-			</div>
+		<ui-view project="$ctrl.project" on-project-update="$ctrl.onProjectUpdate(newProject, isValid)"></ui-view>
 
-			<save-block is-valid="$ctrl.projectIsValid" is-changed="$ctrl.projectChanged"
-				is-persisted="$ctrl.project._id" is-saving="$ctrl.projectSaveRunning"
-				on-save-clicked="$ctrl.onSaveClicked()" on-reset-clicked="$ctrl.onResetClicked()"></save-block>
-		</div>
+		<save-block is-valid="$ctrl.projectIsValid" is-changed="$ctrl.projectChanged" is-persisted="$ctrl.project._id"
+			is-saving="$ctrl.projectSaveRunning" on-save-clicked="$ctrl.onSaveClicked()"
+			on-reset-clicked="$ctrl.onResetClicked()"></save-block>
 	</content>
 </project-columns>

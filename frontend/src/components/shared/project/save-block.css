@@ -1,12 +1,10 @@
 save-block {
-    position: fixed;
-    bottom: 0;
-    right: 30px;
-    width: 83%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     height: 45px;
     border-top: 1px solid #ccc;
-    border-left: 1px solid #ccc;
     padding: 10px 20px;
     background-color: #f6f6f6;
-    z-index: 5;
 }
+

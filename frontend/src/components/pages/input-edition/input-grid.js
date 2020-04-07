@@ -2,6 +2,7 @@ import angular from 'angular';
 import exprEval from 'expr-eval';
 import Handsontable from 'handsontable/dist/handsontable.js';
 import 'handsontable/dist/handsontable.css';
+require(__cssPath);
 
 const module = angular.module(__moduleName, []);
 
@@ -10,6 +11,10 @@ const onScreenGrids = [];
 /**
  * Warning: do not rebind variable after the component has initialized.
  * It is not watching the value.
+ * 
+ * 
+ * Todo: we just need to drop this whole handsontable module.
+ * It is way overkill for our need.
  */
 module.component(__componentName, {
 	bindings: {
@@ -61,14 +66,14 @@ module.component(__componentName, {
 			this._height = rowPartitions.reduce((m, p) => m * p.elements.length, 1) + colPartitions.length + (this.withSumY ? 1 : 0);
 
 			this.handsOnTable = new Handsontable(this.$element[0].firstElementChild, {
-				// Use all width with columns all the same size
-				stretchH: "all",
-				colWidths: 'xxx',
-				className: "htLeft",
+				licenceKey: '00000-00000-00000-00000-00000',
+				stretchH: "all", // use all of container width
+				preventOverflow: true, // to not go over container width
+				className: "htLeft", // content in cells is left aligned
 
 				// Lock grid size so that user can't expand it.
-				maxCols: this._width,
-				maxRows: this._height,
+				minCols: this._width, maxCols: this._width,
+				minRows: this._height, maxRows: this._height,
 
 				// processing to do when the UI table is updated.
 				afterChange: this._onHandsOnTableChange.bind(this),

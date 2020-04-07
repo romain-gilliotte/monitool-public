@@ -1,6 +1,7 @@
 import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
 import mtProjectColumns from '../../shared/project/project-columns';
+require(__cssPath);
 
 const module = angular.module(__moduleName, [uiRouter, mtProjectColumns]);
 

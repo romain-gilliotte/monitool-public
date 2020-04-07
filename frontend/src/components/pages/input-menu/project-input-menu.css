@@ -1,0 +1,8 @@
+
+project-input-menu content {
+    display: block;
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 10px 20px;
+}

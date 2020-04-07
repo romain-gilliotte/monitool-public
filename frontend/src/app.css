@@ -1,6 +1,8 @@
 
 html, body {
     height: 100%;
+    width: 100%;
+    overflow: hidden;
 }
 
 /* make bootstrap smaller */
@@ -270,13 +272,6 @@ ul[ng-sortable] li *, i.fa.fa-bars {
   }
 
 
-  #formblock {
-    margin-bottom: 60px;
-  }
-
-
-
-
   .dragging .drag-destination {
     min-height: 25px;
   }
@@ -306,10 +301,9 @@ ul[ng-sortable] li *, i.fa.fa-bars {
 
 general-reporting, olap-reporting {
   display: flex;
-  height: calc(100vh - 10px);
   flex-direction: column;
-  padding-bottom: 10px;
-  overflow: hidden;
+  height: 100%;
+  width: 100%;
 }
 
 .table {

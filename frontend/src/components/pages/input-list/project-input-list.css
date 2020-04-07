@@ -38,11 +38,8 @@
 
 project-input-list {
     display: flex;
-    height: 100vh;
+    height: 100%;
     flex-direction: column;
-    margin-top: -50px;
-    padding-top: 50px;
-    padding-bottom: 10px
 }
   
 project-input-list .headerField {

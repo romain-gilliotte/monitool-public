@@ -1,13 +1,13 @@
-<ol class="breadcrumb noprint">
-	<li><a ui-sref="projects" translate="shared.projects"></a></li>
-	<li class="active" title="{{$ctrl.project.country}}" ng-bind="$ctrl.project.country|maxLength:20"></li>
-	<li class="active" title="{{$ctrl.project.name}}" ng-bind="$ctrl.project.name|maxLength:50"></li>
-	<li><a ui-sref="project.usage.list({dataSourceId: $ctrl.form.id})">{{$ctrl.form.name|maxLength:50}}</a></li>
-	<li class="active">{{$ctrl.entity.name|maxLength:50}}</li>
-	<li class="active">{{$ctrl.period|formatSlot}}</li>
-</ol>
+<div>
+	<ol class="breadcrumb noprint">
+		<li><a ui-sref="projects" translate="shared.projects"></a></li>
+		<li class="active" title="{{$ctrl.project.country}}" ng-bind="$ctrl.project.country|maxLength:20"></li>
+		<li class="active" title="{{$ctrl.project.name}}" ng-bind="$ctrl.project.name|maxLength:50"></li>
+		<li><a ui-sref="project.usage.list({dataSourceId: $ctrl.form.id})">{{$ctrl.form.name|maxLength:50}}</a></li>
+		<li class="active">{{$ctrl.entity.name|maxLength:50}}</li>
+		<li class="active">{{$ctrl.period|formatSlot}}</li>
+	</ol>
 
-<div id="formblock">
 	<form class="form-horizontal" name="$ctrl.inputForm">
 		<legend translate="project.general_informations"></legend>
 

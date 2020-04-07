@@ -1,6 +1,5 @@
 
 olap-grid {
-    flex: 1;
     display: block;
     overflow: auto;
     border: 0 solid #ccc;

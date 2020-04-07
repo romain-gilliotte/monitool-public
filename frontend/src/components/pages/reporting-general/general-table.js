@@ -34,7 +34,7 @@ module.component(__componentName, {
 			}
 
 			// If the page just loaded, open the first section.
-			if (changes.project.isFirstChange() && this.rows.length) {
+			if (changes.project && changes.project.isFirstChange() && this.rows.length) {
 				this.onSectionToggle(this.rows[0].id);
 			}
 		}

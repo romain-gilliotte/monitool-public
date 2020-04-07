@@ -2,7 +2,6 @@
 general-table {
     display: block;
     overflow: auto;
-    flex: 1;
     border: 0 solid #ccc;
     border-top-width: 1px;
 }
