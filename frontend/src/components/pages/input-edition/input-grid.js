@@ -47,6 +47,10 @@ module.component(__componentName, {
 		$onDestroy() {
 			onScreenGrids.splice(onScreenGrids.indexOf(this), 1);
 			document.body.removeEventListener('keydown', this._keyDownHandler);
+
+			if (this.handsOnTable) {
+				this.handsOnTable.destroy();
+			}
 		}
 
 		$postLink() {
