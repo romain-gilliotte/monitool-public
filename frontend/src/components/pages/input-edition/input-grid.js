@@ -194,10 +194,9 @@ module.component(__componentName, {
 					catch (e) {
 					}
 				}
-				// If the user entered a number, update the totals on last columns and last row.
-				else {
-					this._updateSums(y, x)
-				}
+
+				// Update the totals on last columns and last row.
+				this._updateSums(y, x)
 			});
 
 			// tell this.ngModelCtrl that the data was changed from HandsOnTable.
