@@ -1,9 +1,13 @@
-<project-columns back="projects">
+<project-columns back="main.projects">
 	<menus>
 		<div class="list-group">
 			<a ui-sref="project.usage.home" ui-sref-active="active" class="list-group-item">
 				<i class="fa fa-home fa-fw"></i>
 				<span translate="shared.home"></span>
+			</a>
+			<a ui-sref="project.usage.downloads" ui-sref-active="active" class="list-group-item">
+				<i class="fa fa-download fa-fw"></i>
+				<span translate="project.downloads"></span>
 			</a>
 		</div>
 
@@ -50,22 +54,6 @@
 						<span translate="project.pivot_table"></span>
 					</a>
 				</div>
-			</div>
-		</div>
-
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h4 class="panel-title" translate="shared.misc"></h4>
-			</div>
-
-			<div class="panel-collapse">
-				<div class="list-group">
-					<a ui-sref="project.usage.downloads" ui-sref-active="active" class="list-group-item">
-						<i class="fa fa-download fa-fw"></i>
-						<span translate="project.downloads"></span>
-					</a>
-				</div>
-
 			</div>
 		</div>
 	</menus>

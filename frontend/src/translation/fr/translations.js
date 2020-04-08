@@ -95,6 +95,7 @@ export default {
 	},
 
 	project: {
+		invitations: "Invitations",
 		downloads: "Téléchargements",
 		paper_forms: "Formulaires papier",
 		excel_export: "Exports Excel",

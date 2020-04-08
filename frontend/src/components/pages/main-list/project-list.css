@@ -1,4 +1,11 @@
 
+project-list {
+  display: block;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 10px 20px;
+}
 
 project-list .filter-text {
     margin-bottom: 10px;
@@ -12,13 +19,6 @@ project-list .create-button {
     float: right;
 }
 
-project-list content {
-  display: block;
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding: 10px 20px;
-}
 
 project-list pane-title i.fa {
   margin-top: 3px;

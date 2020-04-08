@@ -1,6 +1,6 @@
 module.exports = {
     pages: {
-        'projects': {
+        'main.projects': {
             title: 'Liste de projets',
             paragraph: `
                 La liste des projets est votre point d'entrée pour toutes les tâches que vous pourrez réaliser
@@ -105,7 +105,7 @@ module.exports = {
     },
     qas: [
         {
-            prefixes: ['projects', 'project.config.home', 'project.config.basics'],
+            prefixes: ['main.projects', 'project.config.home', 'project.config.basics'],
             question: `Un projet dans monitool c'est quoi?`,
             answer: `
                 Sur Monitool, on ne parle pas de base de données, de requêtes, de dimensions, de jointures...<br/>
@@ -113,7 +113,7 @@ module.exports = {
                 vous rédigez un proposal à votre bailleur de fonds.
             `
         }, {
-            prefixes: ['projects'],
+            prefixes: ['main.projects'],
             question: `Pourquoi peut-on créer plusieurs projets par compte, alors qu'un seul suffit?`,
             answer: `
                 Ça n'a pas d'utilité d'un point de vue terrain, mais certains utilisateurs doivent pouvoir accéder 
@@ -125,7 +125,7 @@ module.exports = {
                 </ul>
             `
         }, {
-            prefixes: ['projects'],
+            prefixes: ['main.projects'],
             question: `Comment retourner sur les pages de configuration sur un projet que j'ai déjà créé?`,
             answer: `
                 Sur votre projet, à droite du bouton ouvrir, clickez sur
@@ -133,7 +133,7 @@ module.exports = {
                 pour les voir toutes les actions possibles.
             `
         }, {
-            prefixes: ['projects'],
+            prefixes: ['main.projects'],
             question: `Quelle est l'utilité de pouvoir "Cloner la structure" d'un projet?`,
             answer: `
                     La fonctionalité "Cloner la structure uniquement" est pensée pour les ONGs qui réalisent des 
@@ -146,7 +146,7 @@ module.exports = {
                     l'adaptation du projet au contexte viendra dans une phase ultérieur du projet.
             `
         }, {
-            prefixes: ['projects'],
+            prefixes: ['main.projects'],
             question: `Quelle est l'utilité de pouvoir "Cloner structure et données" d'un projet?`,
             answer: `
                 La fonctionalité "Cloner structure et données" intervient géneralement au moment d'un changement
@@ -155,29 +155,29 @@ module.exports = {
                 et à la conserver dans le long terme.
             `
         }, {
-            prefixes: ['projects'],
+            prefixes: ['main.projects'],
             question: `J'ai supprimé mon projet par erreur, comment le récuperer?`,
             answer: `
                 Cliquez sur <span class="btn btn-default btn-xs">Afficher les projets supprimés</span>,
                 puis sur <span class="btn btn-default btn-xs">Restaurer</span>
             `
         }, {
-            prefixes: ['projects'],
+            prefixes: ['main.projects'],
             question: `À quoi sert les symboles <i class="fa fa-user"></i> et <i class="fa fa-share-alt"></i> en haut à gauche de chaque projet?`,
             answer: `
                 À différencier les projets que vous avez créé de ceux qui ont été crées par d'autres utilisateurs, et qui sont
                 partagés avec vous.
             `
         }, {
-            prefixes: ['projects'],
-            question: `À quoi sert le symbole <i class="fa fa-star-o"></i> en haut à droite de chaque projet?`,
+            prefixes: ['main.projects'],
+            question: `À quoi sert le symbole <i class="fa fa-star"></i> en haut à droite de chaque projet?`,
             answer: `
                 Pour les utilisateurs qui accèdent à de nombreux projets, elle permet de choisir ceux qui
                 vont toujours apparaître en premier dans leur liste.<br/>
                 Pour ceux qui n'ont encore qu'un seul projet, elle a un rôle ... décoratif. Créez en un deuxième!
             `
         }, {
-            prefixes: ['projects'],
+            prefixes: ['main.projects'],
             question: `Mon projet a disparu! Où est-il?`,
             answer: `
                 Pas de panique!<br/><br/>
@@ -198,7 +198,7 @@ module.exports = {
                 Si vous le désirez, vous pourrez transférer le projet sur votre nouveau compte.
             `
         }, {
-            prefixes: ['projects'],
+            prefixes: ['main.projects'],
             question: `Combien de temps mon projet va-t'il resté stocké sur Monitool?`,
             answer: `
                 Pendant toute la durée de vie de l'outil: les coûts de stockage des projets sont faibles par rapport
@@ -302,11 +302,12 @@ module.exports = {
             prefixes: ['project.config.collection_form_edition'],
             question: `Je veux supprimer une variable mais j'ai déjà réalisé des saisies.`,
             answer: `
-                Elle disparaitra alors des formulaires de saisie, et rétroactivement de tous vos rapports.<br/>
-                Tous les indicateurs qui en dépendent seront marqués comme "Impossible à calculer" jusqu'à que vous corrigiez leur formule<br/>
-
-                Vos données ne seront pas perdues, mais la seule manière de les récupérer consistera  à vous rendre sur la page
-                <span class="btn btn-default btn-xs"><i class="fa fa-history"></i> Historique</a> pour annuler la modification.
+                <p>Elle disparaitra alors des formulaires de saisie, et rétroactivement de tous vos rapports.</p>
+                <p>Tous les indicateurs qui en dépendent seront marqués comme "Impossible à calculer" jusqu'à que vous corrigiez leur formule</p>
+                <p>
+                    Vos données ne seront pas perdues, mais la seule manière de les récupérer consistera  à vous rendre sur la page
+                    <span class="btn btn-default btn-xs"><i class="fa fa-history"></i> Historique</span> pour annuler la modification.
+                </p>
             `
         }, {
             prefixes: ['project.config.collection_form_edition'],
@@ -334,14 +335,6 @@ module.exports = {
                 Vous ne pourrez plus voir cette désagrégation dans les rapports, même sur les données saisies avant la modification.<br/>
                 Une alternative consiste à désactiver cette désagrégation.
             `
-        }, {
-            prefixes: ['project.config.collection_form_edition'],
-            question: ``,
-            answer: ``
-        }, {
-            prefixes: ['project.config.collection_form_edition'],
-            question: ``,
-            answer: ``
         }, {
             prefixes: ['project.config.history'],
             question: `Certaines modifications à la structure du projet sont réalisées par un utilisateur qui ne devrait pas avoir y avoir accès`,

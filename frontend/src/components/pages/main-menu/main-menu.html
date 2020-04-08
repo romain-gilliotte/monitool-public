@@ -1,0 +1,44 @@
+<project-columns>
+    <menus>
+        <div class="list-group">
+            <a ui-sref="main.projects" ui-sref-active="active" class="list-group-item">
+                <i class="fa fa-home fa-fw"></i>
+                <span translate="shared.project_list"></span>
+            </a>
+
+            <a ui-sref="main.invitations" ui-sref-active="active" class="list-group-item">
+                <i class="fa fa-share-alt fa-fw"></i>
+                <span translate="project.invitations"></span>
+            </a>
+        </div>
+
+        <div class="list-group">
+            <a href="#" class="list-group-item">
+                <img ng-src="{{$root.profile.picture}}" class="profile-img" />
+                {{$root.profile.name}}
+            </a>
+
+            <uib-dropdown>
+                <a href="#" uib-dropdown-toggle class="list-group-item">
+                    <i class="fa fa-fw fa-language"></i>
+                    {{'menu.language' | translate}}
+                </a>
+
+                <ul class="dropdown-menu">
+                    <li><a ng-click="$root.changeLanguage('fr')" ng-if="$root.language != 'fr'"
+                            translate="menu.french"></a></li>
+                    <li><a ng-click="$root.changeLanguage('en')" ng-if="$root.language != 'en'"
+                            translate="menu.english"></a></li>
+                    <li><a ng-click="$root.changeLanguage('es')" ng-if="$root.language != 'es'"
+                            translate="menu.spanish"></a></li>
+                </ul>
+            </uib-dropdown>
+
+            <a ng-click="$ctrl.logout()" class="list-group-item">
+                <i class="fa fa-fw fa-power-off"></i>
+                <span translate="shared.logout"></span>
+            </a>
+        </div>
+    </menus>
+    <content ui-view></content>
+</project-columns>

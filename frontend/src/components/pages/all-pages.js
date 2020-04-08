@@ -1,6 +1,8 @@
 import angular from 'angular';
 
-import list from "./list/project-list";
+import mainMenu from './main-menu/main-menu';
+import mainProjectList from "./main-list/project-list";
+import mainInvitations from './main-invitations/main-invitations';
 
 import menu from "./menu/project-menu";
 
@@ -29,7 +31,9 @@ import miscDownloads from './misc-downloads/downloads';
 const module = angular.module(
 	__moduleName,
 	[
-		list,
+		mainMenu,
+		mainProjectList,
+		mainInvitations,
 		menu,
 		structMenu,
 		structHome,

@@ -12,7 +12,7 @@ require(__cssPath);
 const module = angular.module(__moduleName, [uiDropdown, uiRouter, mtAclProjectRole, mtColumnsPanel]);
 
 module.config($stateProvider => {
-	$stateProvider.state('projects', {
+	$stateProvider.state('main.projects', {
 		url: '/projects',
 		component: __componentName,
 		resolve: {
@@ -23,7 +23,6 @@ module.config($stateProvider => {
 			}
 		}
 	});
-
 });
 
 module.component(__componentName, {

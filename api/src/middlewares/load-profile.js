@@ -15,13 +15,19 @@ module.exports = async (ctx, next) => {
         await redis.set(ctx.state.user.sub, JSON.stringify(ctx.state.profile))
     }
 
-    ctx.state.profile.canViewProject = async (projectId) => {
+    ctx.state.profile.canViewProject = async projectId => {
         return 1 === await database.collection('project').countDocuments({
             _id: new ObjectId(projectId),
             $or: [
                 { owner: ctx.state.profile.email },
                 { 'users.email': ctx.state.profile.email },
             ]
+        });
+    };
+
+    ctx.state.profile.ownsProject = async projectId => {
+        return 1 === await database.collection('project').countDocuments({
+            _id: new ObjectId(projectId),
         });
     };
 

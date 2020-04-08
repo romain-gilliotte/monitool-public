@@ -1,5 +1,5 @@
 <ol class="breadcrumb">
-	<li><a ui-sref="projects" translate="shared.projects"></a></li>
+	<li><a ui-sref="main.projects" translate="shared.projects"></a></li>
 	<li class="active" title="{{$ctrl.project.country}}" ng-bind="$ctrl.project.country|maxLength:20"></li>
 	<li class="active" title="{{$ctrl.project.name}}" ng-bind="$ctrl.project.name|maxLength:50"></li>
 	<li><a ui-sref="project.config.collection_form_list" translate="project.collection_form_list"></a></li>
@@ -72,7 +72,8 @@
 	<div ng-if="$ctrl.editableDataSource.elements.length === 0" translate="project.no_variable"></div>
 
 	<div ng-sortable="$ctrl.sortableOptions">
-		<div class="panel panel-info" ng-repeat="(index, variable) in $ctrl.editableDataSource.elements">
+		<div class="panel panel-default"
+			ng-repeat="(index, variable) in $ctrl.editableDataSource.elements track by variable.id">
 			<div class="panel-heading" ng-click="$ctrl.onToggleVariableClicked(variable.id)" style="cursor: pointer">
 				<div class="pull-right">
 					<a class="btn btn-xxs btn-default variable-handle">

@@ -11,7 +11,13 @@ module.config($stateProvider => {
 
 	$stateProvider.state('project.config.user_list', {
 		url: '/users',
-		component: __componentName
+		component: __componentName,
+		resolve: {
+			invitations: (project) => {
+				const response = axios.get(`/resources/invitations?projectId=${project._id}`);
+				return response.data;
+			}
+		}
 	});
 });
 

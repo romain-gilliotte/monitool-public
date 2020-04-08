@@ -27,7 +27,7 @@ router.get('/resources/project/:id/data-source/:dataSourceId.pdf', async ctx => 
 	if (result) {
 		ctx.response.type = 'application/pdf';
 		ctx.response.body = result.stream;
-		ctx.response.attachment(result.title + '.pdf', { type: 'inline' });
+		ctx.response.attachment(`${result.title.substr(0, 16)}.png`, { type: 'inline' });
 	}
 });
 

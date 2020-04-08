@@ -1,0 +1,112 @@
+<ol class="breadcrumb noprint">
+	<li class="active" translate="shared.project_list"></li>
+</ol>
+
+<div style="margin-bottom: 10px">
+	<input type="text" ng-change="$ctrl.filter()" ng-model="$ctrl.filterValue" class="form-control"
+		placeholder="{{'project.filter_placeholder'|translate}}">
+</div>
+<div style="margin-bottom: 10px">
+	<div class="pull-right">
+		<a class="btn btn-primary" ng-click="$ctrl.createProject()">
+			<i class="fa fa-plus"></i>
+			<span translate="project.create"></span>
+		</a>
+	</div>
+
+	<div class="btn-group">
+		<a ng-click="$ctrl.toggleOngoing()" class="btn btn-default" ng-class="{active: $ctrl.displayOngoing}"
+			translate="project.show_ongoing_projects"></a>
+		<a ng-click="$ctrl.toggleFinished()" class="btn btn-default" ng-class="{active: $ctrl.displayFinished}"
+			translate="project.show_finished_projects"></a>
+		<a ng-click="$ctrl.toggleDeleted()" class="btn btn-default" ng-class="{active: $ctrl.displayDeleted}"
+			translate="project.show_deleted_projects"></a>
+	</div>
+</div>
+
+<div ng-if="!$ctrl.displayedProjects.length" translate="project.no_matches"></div>
+
+<div>
+	<columns-panel ng-repeat="p in $ctrl.displayedProjects track by p._id" sortable="false" variant="p.variant">
+		<pane-title>
+			<i class="fa pull-right fa-star" ng-if="p.favorite" ng-click="$ctrl.toggleFavorite(p)"></i>
+			<i class="fa pull-right fa-star-o" ng-if="!p.favorite" ng-click="$ctrl.toggleFavorite(p)"></i>
+
+			<i class="fa fa-fw fa-user" ng-if="$root.profile.email == p.owner"></i>
+			<i class="fa fa-fw fa-share-alt" ng-if="$root.profile.email != p.owner"></i>
+
+			{{p.country}}
+		</pane-title>
+		<pane-body>
+			<div>
+				<strong translate="shared.name"></strong>
+				{{p.name}}
+			</div>
+			<div>
+				<strong translate="shared.date"></strong>
+				{{p.start|date}} - {{p.end|date}}
+			</div>
+			<div ng-if="$root.profile.email != p.owner">
+				<strong translate="project.owner"></strong>
+				{{p.owner}}
+			</div>
+
+			<div>
+				<strong translate="project.last_entry"></strong>
+				<span ng-if="$ctrl.lastInputDate[p._id]">{{$ctrl.lastInputDate[p._id]|date}}</span>
+				<span ng-if="!$ctrl.lastInputDate[p._id]" translate="shared.none"></span>
+			</div>
+
+			<div class="panel-buttons btn-group">
+				<a ng-if="p.active" class="btn btn-default btn-xxs" ui-sref="project.usage.home({projectId: p._id})"
+					translate="shared.open"></a>
+
+				<a acl-has-project-role="owner" acl-project="p" ng-if="!p.active" class="btn btn-default btn-xxs"
+					ng-click="$ctrl.onRestoreClicked(p)" translate="shared.restore"></a>
+
+				<div class="btn-group" uib-dropdown ng-if="p.active">
+					<a class="btn btn-default btn-xxs" uib-dropdown-toggle>
+						<span class="caret"></span>
+					</a>
+
+					<ul class="dropdown-menu">
+						<li>
+							<a ui-sref="project.config.home({projectId: p._id})">
+								<i class="fa fa-cogs"></i>
+								<span translate="shared.configure"></span>
+							</a>
+						</li>
+						<li>
+							<a ng-click="$ctrl.onCloneClicked(p, false)">
+								<i class="fa fa-clone"></i>
+								<span translate="shared.clone_structure"></span>
+							</a>
+						</li>
+						<li>
+							<a ng-click="$ctrl.onCloneClicked(p, true)">
+								<i class="fa fa-clone"></i>
+								<span translate="shared.clone_all"></span>
+							</a>
+						</li>
+						<li acl-has-project-role="owner" acl-project="p">
+							<a ng-click="$ctrl.onDeleteClicked(p)">
+								<i class="fa fa-trash text-danger"></i>
+								<span class="text-danger" translate="shared.delete"></span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</pane-body>
+		<pane-bottom-line>
+			<div ng-if="!p.active" class="text-danger">
+				<i class="fa fa-trash"></i>
+				<span translate="project.was_deleted"></span>
+			</div>
+			<div ng-if="p.active && !p.running" class="text-warning">
+				<i class="fa fa-warning"></i>
+				<span translate="project.is_finished"></span>
+			</div>
+		</pane-bottom-line>
+	</columns-panel>
+</div>
