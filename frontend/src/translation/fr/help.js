@@ -163,7 +163,14 @@ module.exports = {
             `
         }, {
             prefixes: ['projects'],
-            question: `À quoi sert la petite étoile en haut à droite de chaque projet?`,
+            question: `À quoi sert les symboles <i class="fa fa-user"></i> et <i class="fa fa-share-alt"></i> en haut à gauche de chaque projet?`,
+            answer: `
+                À différencier les projets que vous avez créé de ceux qui ont été crées par d'autres utilisateurs, et qui sont
+                partagés avec vous.
+            `
+        }, {
+            prefixes: ['projects'],
+            question: `À quoi sert le symbole <i class="fa fa-star-o"></i> en haut à droite de chaque projet?`,
             answer: `
                 Pour les utilisateurs qui accèdent à de nombreux projets, elle permet de choisir ceux qui
                 vont toujours apparaître en premier dans leur liste.<br/>
