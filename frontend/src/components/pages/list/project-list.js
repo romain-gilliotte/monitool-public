@@ -44,7 +44,7 @@ module.component(__componentName, {
 			this.translate = $filter('translate');
 
 			this.displayOngoing = true;
-			this.displayFinished = false;
+			this.displayFinished = true;
 			this.displayDeleted = false;
 		}
 

@@ -20,6 +20,14 @@ project-list content {
   padding: 10px 20px;
 }
 
+project-list pane-title i.fa {
+  margin-top: 3px;
+}
+
+project-list pane-title i.fa.fa-star, project-list pane-title i.fa.fa-star-o {
+  cursor: pointer
+}
+
 .panel-dashed {
     color: #666;
     border-color: #999;
@@ -47,4 +55,5 @@ project-list content {
   }
   
   
-  
+  .profile-img { width: 16px; height: 16px; border-radius: 8px; }
+

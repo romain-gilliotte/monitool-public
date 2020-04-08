@@ -9,7 +9,7 @@
 
 		<div class="list-group">
 			<a href="#" class="list-group-item">
-				<img ng-src="{{$root.profile.picture}}" style="width: 16px; height: 16px; border-radius: 8px; " />
+				<img ng-src="{{$root.profile.picture}}" class="profile-img" />
 				{{$root.profile.name}}
 			</a>
 
@@ -67,10 +67,12 @@
 		<div>
 			<columns-panel ng-repeat="p in $ctrl.displayedProjects track by p._id" sortable="false" variant="p.variant">
 				<pane-title>
-					<i class="fa pull-right fa-star" ng-if="p.favorite" style="margin-top: 3px; cursor: pointer"
-						ng-click="$ctrl.toggleFavorite(p)"></i>
-					<i class="fa pull-right fa-star-o" ng-if="!p.favorite" style="margin-top: 3px; cursor: pointer"
-						ng-click="$ctrl.toggleFavorite(p)"></i>
+					<i class="fa pull-right fa-star" ng-if="p.favorite" ng-click="$ctrl.toggleFavorite(p)"></i>
+					<i class="fa pull-right fa-star-o" ng-if="!p.favorite" ng-click="$ctrl.toggleFavorite(p)"></i>
+
+					<i class="fa fa-fw fa-user" ng-if="$root.profile.email == p.owner"></i>
+					<i class="fa fa-fw fa-share-alt" ng-if="$root.profile.email != p.owner"></i>
+
 					{{p.country}}
 				</pane-title>
 				<pane-body>
@@ -82,7 +84,7 @@
 						<strong translate="shared.date"></strong>
 						{{p.start|date}} - {{p.end|date}}
 					</div>
-					<div>
+					<div ng-if="$root.profile.email != p.owner">
 						<strong translate="project.owner"></strong>
 						{{p.owner}}
 					</div>
