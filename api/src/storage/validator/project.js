@@ -48,11 +48,7 @@ function validate(project) {
 
 		// Validate against dead references: sites
 		&& project.groups.every(g => g.members.every(siteId => project.entities.find(s => s.id === siteId)))
-		&& project.forms.every(f => f.entities.every(siteId => project.entities.find(s => s.id === siteId)))
-		&& project.users.every(u => !u.entities || u.entities.every(siteId => project.entities.find(s => s.id === siteId)))
-
-		// Validate against dead references: data sources
-		&& project.users.every(u => !u.forms || u.forms.every(formId => project.forms.find(f => f.id === formId)));
+		&& project.forms.every(f => f.entities.every(siteId => project.entities.find(s => s.id === siteId)));
 
 	if (!isValid)
 		errors.push({ code: 'references', message: 'no dead references' });

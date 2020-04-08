@@ -22,29 +22,12 @@ export default class Project {
 		return this.forms.some(f => f.elements.length && f.entities.length);
 	}
 
+	// FIXME this needs to be removed and taken directly from the TimeSlot package.
 	get compatiblePeriodicities() {
-		const timePeriodicities = [
+		return [
 			'day', 'month_week_sat', 'month_week_sun', 'month_week_mon', 'week_sat', 'week_sun',
 			'week_mon', 'month', 'quarter', 'semester', 'year'
 		];
-
-		return timePeriodicities
-		// .filter(periodicity => {
-		// 	for (var i = 0; i < this.forms.length; ++i) {
-		// 		var dataSource = this.forms[i];
-
-		// 		if (dataSource.periodicity === periodicity)
-		// 			return true;
-
-		// 		try {
-		// 			let t = TimeSlot.fromDate(new Date(), dataSource.periodicity);
-		// 			t.toParentPeriodicity(periodicity);
-		// 			return true;
-		// 		}
-		// 		catch (e) {
-		// 		}
-		// 	}
-		// });
 	}
 
 	constructor(data) {
@@ -62,31 +45,9 @@ export default class Project {
 		this.entities = [];
 		this.groups = [];
 		this.forms = [];
-		this.users = [];
 
 		if (data)
 			Object.assign(this, data);
-	}
-
-	canInputForm(projectUser, formId) {
-		if (!projectUser)
-			return false;
-
-		if (projectUser.role === 'owner')
-			return true;
-
-		if (projectUser.role === 'input') {
-			// Check if user is explicitly forbidden
-			if (!projectUser.dataSources.includes(formId))
-				return false;
-
-			// Check if entities where user is allowed intersect with the data source.
-			var form = this.forms.find(f => f.id === formId);
-
-			return !!projectUser.entities.filter(e => form.entities.includes(e)).length;
-		}
-
-		return false;
 	}
 
 	/** Get the disagregation dimensions available for any given query */
@@ -195,7 +156,6 @@ export default class Project {
 			group.members = group.members.filter(e => entityIds.includes(e))
 		});
 
-		this.users.forEach(this._sanitizeUser, this);
 		this.forms.forEach(this._sanitizeForm, this);
 
 		/////////////
@@ -299,32 +259,6 @@ export default class Project {
 		}
 	}
 
-	/**
-	 * Scan references to entities and remove broken links
-	 * If no valid links remain, change the user to read only mode
-	 */
-	_sanitizeUser(user) {
-		if (user.role === 'input') {
-			user.entities = user.entities.filter(entityId => {
-				return !!this.entities.find(entity => entity.id === entityId);
-			});
-
-			user.dataSources = user.dataSources.filter(dataSourceId => {
-				return !!this.forms.find(form => form.id === dataSourceId);
-			});
-
-			if (user.entities.length == 0 || user.dataSources.length == 0) {
-				delete user.entities;
-				delete user.dataSources;
-				user.role = 'read';
-			}
-		}
-		else {
-			delete user.entities;
-			delete user.dataSources;
-		}
-	}
-
 	_sanitizeForm(form) {
 		var entityIds = this.entities.map(e => e.id);
 
@@ -340,6 +274,7 @@ export default class Project {
 
 	async save() {
 		const payload = JSON.parse(angular.toJson(this));
+		delete payload._id;
 
 		let response;
 		if (this._id)

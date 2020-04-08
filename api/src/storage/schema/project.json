@@ -13,7 +13,6 @@
 		"groups",
 		"forms",
 		"logicalFrames",
-		"users",
 		"extraIndicators"
 	],
 	"properties": {
@@ -103,68 +102,6 @@
 			"type": "array",
 			"items": {
 				"type": "object"
-			}
-		},
-		"users": {
-			"type": "array",
-			"items": {
-				"oneOf": [
-					{
-						"type": "object",
-						"additionalProperties": false,
-						"required": [
-							"email",
-							"role"
-						],
-						"properties": {
-							"email": {
-								"type": "string"
-							},
-							"role": {
-								"type": "string",
-								"enum": [
-									"owner",
-									"read"
-								]
-							}
-						}
-					},
-					{
-						"type": "object",
-						"additionalProperties": false,
-						"required": [
-							"email",
-							"role",
-							"entities",
-							"dataSources"
-						],
-						"properties": {
-							"email": {
-								"type": "string"
-							},
-							"role": {
-								"type": "string",
-								"enum": [
-									"input"
-								]
-							},
-							"entities": {
-								"type": "array",
-								"uniqueItems": true,
-								"items": {
-									"$ref": "#/definitions/uuid"
-								}
-							},
-							"dataSources": {
-								"type": "array",
-								"uniqueItems": true,
-								"items": {
-									"$ref": "#/definitions/uuid"
-								}
-							}
-						}
-					}
-				]
 			}
 		},
 		"logicalFrames": {

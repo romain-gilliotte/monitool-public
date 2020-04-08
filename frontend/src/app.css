@@ -3,14 +3,11 @@ html, body {
     height: 100%;
     width: 100%;
     overflow: hidden;
+    background-color: #ccc;
+    font-size: 12px;
 }
 
 /* make bootstrap smaller */
-
-body {
-  background-color: #fbfbfb;
-  font-size: 12px;
-}
 
 td.ng-invalid {
   background-color: #faa;

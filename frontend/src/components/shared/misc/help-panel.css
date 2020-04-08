@@ -46,5 +46,5 @@ help-panel ~ div {
 }
 
 help-panel:hover ~ div {
-    filter: blur(3px) brightness(75%);
+    filter: blur(4px) brightness(75%);
 }

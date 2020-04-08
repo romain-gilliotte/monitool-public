@@ -163,7 +163,7 @@ module.exports = {
             `
         }, {
             prefixes: ['main.projects'],
-            question: `À quoi sert les symboles <i class="fa fa-user"></i> et <i class="fa fa-share-alt"></i> en haut à gauche de chaque projet?`,
+            question: `À quoi servent les symboles <i class="fa fa-user"></i> et <i class="fa fa-share-alt"></i> en haut à gauche de chaque projet?`,
             answer: `
                 À différencier les projets que vous avez créé de ceux qui ont été crées par d'autres utilisateurs, et qui sont
                 partagés avec vous.

@@ -1,7 +1,7 @@
 const Router = require('koa-router');
 const PdfPrinter = require('pdfmake');
 const gm = require('gm');
-const { ObjectId } = require('mongodb');
+const { getProject } = require('../storage/queries');
 
 const router = new Router();
 
@@ -91,18 +91,10 @@ router.get('/resources/project/:id/logical-frame/:logicalFrameId.png', async ctx
 
 
 async function getPdfStream(userEmail, projectId, logicalFrameworkId, language, orientation = 'portrait') {
-    const project = await database.collection('project').findOne(
-        {
-            _id: new ObjectId(projectId),
-            $or: [{ owner: userEmail }, { 'users.email': userEmail }],
-        },
-        {
-            projection: {
-                'logicalFrames': { $elemMatch: { id: logicalFrameworkId } },
-                'forms': true
-            }
-        }
-    );
+    const project = await getProject(userEmail, projectId, {
+        'logicalFrames': { $elemMatch: { id: logicalFrameworkId } },
+        'forms': true
+    });
 
     if (project && project.logicalFrames.length) {
         const logicalFramework = project.logicalFrames[0];

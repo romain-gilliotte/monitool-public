@@ -48,6 +48,7 @@ async function start(web = true, worker = true) {
 			app.use(require('./middlewares/authentication'));
 			app.use(require('./middlewares/load-profile'));
 		}
+		app.use(require('./routers/invitations').routes());
 		app.use(require('./routers/input').routes());
 		app.use(require('./routers/pdf-datasource').routes());
 		app.use(require('./routers/pdf-logframe').routes());
@@ -79,9 +80,9 @@ async function stop() {
 		global.server.close();
 }
 
-// Start application if this file is executed.
-if (require.main === module) {
+// Start application only if this file is executed.
+// Otherwise just export the start/stop functions
+if (require.main === module)
 	start();
-}
-
-module.exports = { start, stop };
+else
+	module.exports = { start, stop };

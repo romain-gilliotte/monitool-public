@@ -1,3 +1,50 @@
 <ol class="breadcrumb noprint">
     <li class="active" translate="project.invitations"></li>
 </ol>
+
+<div class="centered" ng-if="!$ctrl.invitations.length">
+    <span translate="shared.no_invitations"></span>
+    <a ui-sref="main.projects" translate="shared.no_invitations_back"></a>
+</div>
+
+<div>
+    <columns-panel ng-repeat="invitation in $ctrl.invitations track by invitation._id">
+        <pane-title>{{invitation.project.country}}</pane-title>
+        <pane-body>
+            <div>
+                <strong translate="shared.name"></strong>
+                {{invitation.project.name}}
+            </div>
+            <div>
+                <strong translate="shared.date"></strong>
+                {{invitation.project.start|date}} - {{invitation.project.end|date}}
+            </div>
+            <div>
+                <strong translate="project.owner"></strong>
+                {{invitation.project.owner}}
+            </div>
+
+            <div class="panel-buttons btn-group">
+                <a class="btn btn-default btn-xxs" ng-click="$ctrl.acceptInvitation(invitation)">
+                    <i class="fa fa-check"></i>
+                    {{"shared.accept_invitation"|translate}}
+                </a>
+
+                <div class="btn-group" uib-dropdown>
+                    <a class="btn btn-default btn-xxs" uib-dropdown-toggle>
+                        <span class="caret"></span>
+                    </a>
+
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a ng-click="$ctrl.refuseInvitation(invitation)">
+                                <i class="fa fa-trash text-danger"></i>
+                                <span class="text-danger" translate="shared.refuse_invitation"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </pane-body>
+    </columns-panel>
+</div>

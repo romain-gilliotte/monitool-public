@@ -122,6 +122,19 @@ module.component(__componentName, {
 			this.$state.go('project.config.home', { projectId: 'new' });
 		}
 
+		async unInvite(project) {
+			var question = this.translate('project.are_you_sure_to_uninvite');
+
+			if (window.confirm(question)) {
+				this.projects.splice(this.projects.indexOf(project), 1);
+				this.$onChanges();
+
+				const response = await axios.get(`/resources/project/${project._id}/invitation`);
+				const invitationId = response.data[0]._id;
+				await axios.delete(`/resources/invitation/${invitationId}`);
+			}
+		}
+
 		async onCloneClicked(project, withInputs) {
 			const response = await axios.post('/rpc/clone-project', { projectId: project._id, withInputs });
 			const newProject = response.data;

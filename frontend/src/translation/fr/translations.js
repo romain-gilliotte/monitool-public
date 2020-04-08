@@ -2,6 +2,12 @@
 
 export default {
 	shared: {
+		accept_invitation: "Accepter",
+		refuse_invitation: "Refuser",
+		uninvite: "Retirer de mes projets",
+		no_invitations: "Vous n'avez aucune invitation en attente d'acceptation!",
+		no_invitations_back: "Retournez à la liste de vos projet",
+
 		configure: "Configuration",
 		back: "Retour",
 		project_list: "Liste des projets",
@@ -95,6 +101,7 @@ export default {
 	},
 
 	project: {
+		owner: "Propriétaire",
 		invitations: "Invitations",
 		downloads: "Téléchargements",
 		paper_forms: "Formulaires papier",
@@ -396,6 +403,7 @@ export default {
 		field_distribution: "Distribution",
 		cant_create: "Vous n'êtes pas autorisé à créer de nouveaux projets",
 		my_projects: "Mes projets",
+		are_you_sure_to_uninvite: "Êtes-vous sûr de vouloir retirer ce projet? Le propriétaire devra vous inviter à nouveau pour y avoir accès. Confirmez pour retirer.",
 		are_you_sure_to_clone: "Cette action va cloner ce projet et toutes ses saisies. Confimez pour cloner.",
 		are_you_sure_to_delete: "Êtes-vous sûr de vouloir supprimer ce projet? Confirmez pour supprimer.",
 		data_selection: "Selection des données",
