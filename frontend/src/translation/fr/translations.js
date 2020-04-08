@@ -450,6 +450,7 @@ export default {
 
 		collection_site: "Lieu de collecte",
 		collection_form: "Source de données",
+		collection_form2: "Fiche de saisie",
 
 		collection_form_planning: "Calendrier",
 		collection_form_structure: "Structure",

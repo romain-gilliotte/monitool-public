@@ -24,6 +24,7 @@ import inputEdition from "./input-edition/project-input-edition";
 import reportingGeneral from "./reporting-general/general-reporting";
 import reportingOlap from "./reporting-olap/olap-reporting";
 
+import downloadsPrintable from './downloads-printable/printable';
 
 const module = angular.module(
 	__moduleName,
@@ -46,7 +47,9 @@ const module = angular.module(
 		inputList,
 		inputEdition,
 		reportingGeneral,
-		reportingOlap
+		reportingOlap,
+
+		downloadsPrintable
 	]
 );
 

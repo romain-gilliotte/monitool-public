@@ -69,7 +69,7 @@ function validate(project) {
 				...p.outputs.reduce((m, o) => [
 					...m,
 					...o.indicators,
-					...o.activities.reduce((m, a) => [...m, a.indicators])
+					...o.activities.reduce((m, a) => [...m, ...a.indicators], [])
 				], [])
 			], [])
 		], [])

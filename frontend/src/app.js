@@ -49,6 +49,13 @@ function startApp(accessToken, profile) {
 		$urlRouterProvider.otherwise('/projects');
 	});
 
+	module.config(function ($sceDelegateProvider) {
+		$sceDelegateProvider.resourceUrlWhitelist([
+			'self',
+			SERVICE_URL + '/**'
+		]);
+	});
+
 	// Hook angular-ui-router transitions.
 	module.run(function ($window, $transitions) {
 

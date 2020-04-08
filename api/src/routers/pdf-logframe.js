@@ -1,5 +1,6 @@
 const Router = require('koa-router');
 const PdfPrinter = require('pdfmake');
+const gm = require('gm');
 const { ObjectId } = require('mongodb');
 
 const router = new Router();
@@ -55,38 +56,66 @@ const strings = Object.freeze({
  * Render a PDF file describing the given logical frame.
  */
 router.get('/resources/project/:id/logical-frame/:logicalFrameId.pdf', async ctx => {
+    const result = await getPdfStream(
+        ctx.state.profile.email,
+        ctx.params.id,
+        ctx.params.logicalFrameId,
+        ctx.request.query.language,
+        ctx.request.query.orientation
+    );
+
+    if (result) {
+        ctx.response.type = 'application/pdf';
+        ctx.response.body = result.stream;
+        ctx.response.attachment(result.title + 'pdf', { type: 'inline' });
+    }
+});
+
+
+router.get('/resources/project/:id/logical-frame/:logicalFrameId.png', async ctx => {
+    const result = await getPdfStream(
+        ctx.state.profile.email,
+        ctx.params.id,
+        ctx.params.logicalFrameId,
+        ctx.request.query.language,
+    );
+
+    if (result) {
+        const img = gm(result.stream);
+
+        ctx.response.type = 'image/png';
+        ctx.response.body = img.crop(595, 400).stream('PNG');
+        ctx.response.attachment(result.title + '.png', { type: 'inline' });
+    }
+});
+
+
+async function getPdfStream(userEmail, projectId, logicalFrameworkId, language, orientation = 'portrait') {
     const project = await database.collection('project').findOne(
         {
-            _id: new ObjectId(ctx.params.id),
-            $or: [{ owner: ctx.state.profile.email }, { 'users.email': ctx.state.profile.email }],
+            _id: new ObjectId(projectId),
+            $or: [{ owner: userEmail }, { 'users.email': userEmail }],
         },
         {
             projection: {
-                'logicalFrames': { $elemMatch: { id: ctx.params.logicalFrameId } },
+                'logicalFrames': { $elemMatch: { id: logicalFrameworkId } },
                 'forms': true
             }
         }
     );
 
-    if (project && project.forms.length) {
+    if (project && project.logicalFrames.length) {
         const logicalFramework = project.logicalFrames[0];
 
         // Create document definition.
         const title = logicalFramework.name || 'logical-framework';
-        const docDef = computeLogFrameDocDef(logicalFramework, ctx.request.query.orientation, project.forms, ctx.request.query.language);
-        docDef.styles = styles;
+        const docDef = computeLogFrameDocDef(logicalFramework, orientation, project.forms, language);
 
-        // Send to user.
-        ctx.response.type = 'application/pdf';
-        ctx.response.body = printer.createPdfKitDocument(docDef);
-        ctx.response.attachment(title + '.pdf');
-        ctx.response.body.end();
+        const stream = printer.createPdfKitDocument(docDef);
+        stream.end();
+        return { title, stream };
     }
-    else {
-        ctx.response.status = 404;
-    }
-});
-
+}
 
 function computeLogFrameDocDef(logFrame, pageOrientation, dataSources, language = 'en') {
     var doc = {};
@@ -108,7 +137,7 @@ function computeLogFrameDocDef(logFrame, pageOrientation, dataSources, language 
 
     var table = {
         headersRows: 1,
-        width: ['auto', 'auto', 'auto', 'auto'],
+        widths: ['*', '*', '*', '*'],
         body: [
             [
                 { text: strings[language].intervention_logic, style: "bold" },

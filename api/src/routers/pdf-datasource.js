@@ -1,5 +1,6 @@
 const Router = require('koa-router');
 const PdfPrinter = require('pdfmake');
+const gm = require('gm');
 const { ObjectId } = require('mongodb');
 
 const router = new Router();
@@ -15,33 +16,39 @@ const printer = new PdfPrinter({
  * Render a PDF file containing a sample paper form (for a datasource).
  */
 router.get('/resources/project/:id/data-source/:dataSourceId.pdf', async ctx => {
-	const project = await database.collection('project').findOne(
-		{
-			_id: new ObjectId(ctx.params.id),
-			$or: [{ owner: ctx.state.profile.email }, { 'users.email': ctx.state.profile.email }],
-		},
-		{
-			projection: { 'forms': { $elemMatch: { id: ctx.params.dataSourceId } } }
-		}
+	const result = await getPdfStream(
+		ctx.state.profile.email,
+		ctx.params.id,
+		ctx.params.dataSourceId,
+		ctx.request.query.language,
+		ctx.request.query.orientation
 	);
 
-	if (project && project.forms.length) {
-		const dataSource = project.forms[0];;
-
-		// Create document definition.
-		const title = dataSource.name || 'data-source';
-		const docDef = createDataSourceDocDef(dataSource, ctx.request.query.orientation, ctx.request.query.language);
-
-		// Send to user.
+	if (result) {
 		ctx.response.type = 'application/pdf';
-		ctx.response.body = printer.createPdfKitDocument(docDef);
-		ctx.response.attachment(title + '.pdf');
-		ctx.response.body.end();
-	}
-	else {
-		ctx.response.status = 404;
+		ctx.response.body = result.stream;
+		ctx.response.attachment(result.title + '.pdf', { type: 'inline' });
 	}
 });
+
+router.get('/resources/project/:id/data-source/:dataSourceId.png', async ctx => {
+	const result = await getPdfStream(
+		ctx.state.profile.email,
+		ctx.params.id,
+		ctx.params.dataSourceId,
+		ctx.request.query.language,
+	);
+
+	if (result) {
+		const img = gm(result.stream);
+
+		ctx.response.type = 'image/png';
+		ctx.response.body = img.crop(595, 400).stream('PNG');
+		ctx.response.attachment(result.title + '.png', { type: 'inline' });
+	}
+});
+
+
 
 module.exports = router;
 
@@ -64,6 +71,29 @@ const strings = Object.freeze({
 	})
 });
 
+
+async function getPdfStream(userEmail, projectId, dataSourceId, language, orientation = 'portrait') {
+	const project = await database.collection('project').findOne(
+		{
+			_id: new ObjectId(projectId),
+			$or: [{ owner: userEmail }, { 'users.email': userEmail }],
+		},
+		{
+			projection: { 'forms': { $elemMatch: { id: dataSourceId } } }
+		}
+	);
+
+	if (project && project.forms.length) {
+		const dataSource = project.forms[0];
+
+		// Create document definition.
+		const title = dataSource.name || 'data-source';
+		const docDef = createDataSourceDocDef(dataSource, orientation, language);
+		const stream = printer.createPdfKitDocument(docDef);
+		stream.end();
+		return { title, stream };
+	}
+}
 
 function createDataSourceDocDef(dataSource, pageOrientation, language = 'en') {
 	return {
