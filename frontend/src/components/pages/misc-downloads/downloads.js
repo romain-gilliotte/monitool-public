@@ -5,7 +5,7 @@ const module = angular.module(__moduleName, [uiRouter]);
 
 module.config($stateProvider => {
 
-    $stateProvider.state('project.usage.printable', {
+    $stateProvider.state('project.usage.downloads', {
         url: '/downloads',
         component: __componentName,
     });

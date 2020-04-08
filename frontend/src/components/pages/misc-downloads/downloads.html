@@ -1,0 +1,40 @@
+<ol class="breadcrumb">
+    <li><a ui-sref="projects" translate="shared.projects"></a></li>
+    <li class="active" title="{{::$ctrl.project.country}}" ng-bind="::$ctrl.project.country|maxLength:20"></li>
+    <li class="active" title="{{::$ctrl.project.name}}" ng-bind="::$ctrl.project.name|maxLength:50"></li>
+    <li class="active" translate="project.downloads"></li>
+</ol>
+
+<div class="row">
+    <div class="col-sm-6 col-md-4 col-lg-3" ng-repeat="file in $ctrl.files">
+        <div class="thumbnail">
+            <img ng-src="{{file.thumbnail}}" class="img-thumbnail" style="width: 100%" width="595" height="400">
+            <div class="caption">
+                <h3 style="margin-top: 5px;">{{file.category|translate}}</h3>
+                <p>{{file.name}}</p>
+                <div class="btn-group pull-right">
+                    <a href="{{file.portrait}}" target="_blank" class="btn btn-default btn-xs" uib-dropdown-toggle>
+                        <i class="fa fa-file-pdf-o"></i>
+                        Version Portrait
+                    </a>
+
+                    <div class="btn-group" uib-dropdown>
+                        <a class="btn btn-default btn-xs" uib-dropdown-toggle>
+                            <span class="caret"></span>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{{file.landscape}}" target="_blank">
+                                    <i class="fa fa-file-pdf-o"></i>
+                                    Version Paysage
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="clear: both"></div>
+            </div>
+        </div>
+    </div>
+</div>
