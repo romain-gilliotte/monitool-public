@@ -50,6 +50,7 @@ async function start(web = true, worker = true) {
 			app.use(require('./middlewares/authentication'));
 			app.use(require('./middlewares/load-profile'));
 		}
+		app.use(require('./middlewares/last-seen'));
 		app.use(require('./routers/invitations').routes());
 		app.use(require('./routers/input').routes());
 		app.use(require('./routers/pdf-datasource').routes());

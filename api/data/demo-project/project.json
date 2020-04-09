@@ -1,0 +1,1485 @@
+{
+    "country": "[Demo Project] Gondwana",
+    "name": "Access to quality care for people affected by the crisis in Gondwana",
+    "active": true,
+    "start": "2015-02-01",
+    "end": "2016-12-31",
+    "extraIndicators": [],
+    "entities": [
+        {
+            "id": "efd44382-687e-43b3-9280-ab244828db80",
+            "name": "Regional Office",
+            "start": "2015-05-01",
+            "end": null
+        },
+        {
+            "id": "1a9cab71-e007-411a-865c-10df86ceeb86",
+            "name": "Primary health center Lapataganj 1",
+            "start": null,
+            "end": null
+        },
+        {
+            "id": "6b3db2d4-99cb-4a48-8e44-c56122f3a0a4",
+            "name": "Primary health center Lapataganj 2",
+            "start": null,
+            "end": null
+        },
+        {
+            "id": "485bcb7a-4e07-451a-818f-71cc923650d6",
+            "name": "Primary health center Lapataganj 3",
+            "start": null,
+            "end": null
+        },
+        {
+            "id": "536dec89-53d9-4aec-8a5c-d450dd99889f",
+            "name": "Referral hospital Lapataganj",
+            "start": null,
+            "end": null
+        },
+        {
+            "id": "77f91a4d-69df-48c5-8698-1315e86a7a27",
+            "name": "GBV mobile unit Lapataganj",
+            "start": null,
+            "end": null
+        },
+        {
+            "id": "82fa8899-5c44-4c40-ae28-7bcac2a66f2e",
+            "name": "Primary health center Pawnee 1",
+            "start": null,
+            "end": null
+        },
+        {
+            "id": "630755ff-a55e-4bff-976f-d30666cc8a21",
+            "name": "Primary health center Pawnee 2",
+            "start": null,
+            "end": null
+        },
+        {
+            "id": "5e43976c-8a4e-4193-b1c5-32cbc72c8781",
+            "name": "Primary health center Pawnee 3",
+            "start": null,
+            "end": null
+        },
+        {
+            "id": "ce39f247-2e9f-4ddf-b359-6075a79d7ae6",
+            "name": "Primary health center Pawnee 4",
+            "start": null,
+            "end": null
+        },
+        {
+            "id": "fc8fffb6-91e5-4c86-8078-c9748adc489d",
+            "name": "Referral hospital Pawnee",
+            "start": null,
+            "end": null
+        }
+    ],
+    "groups": [
+        {
+            "id": "9e19776f-9008-4f35-bb1f-497eb84b937e",
+            "name": "Lapataganj district",
+            "members": [
+                "1a9cab71-e007-411a-865c-10df86ceeb86",
+                "6b3db2d4-99cb-4a48-8e44-c56122f3a0a4",
+                "485bcb7a-4e07-451a-818f-71cc923650d6",
+                "536dec89-53d9-4aec-8a5c-d450dd99889f",
+                "77f91a4d-69df-48c5-8698-1315e86a7a27"
+            ]
+        },
+        {
+            "id": "16c82bea-4ab5-4bdd-970a-63efc9832d5a",
+            "name": "Pawnee district",
+            "members": [
+                "82fa8899-5c44-4c40-ae28-7bcac2a66f2e",
+                "630755ff-a55e-4bff-976f-d30666cc8a21",
+                "5e43976c-8a4e-4193-b1c5-32cbc72c8781",
+                "ce39f247-2e9f-4ddf-b359-6075a79d7ae6",
+                "fc8fffb6-91e5-4c86-8078-c9748adc489d"
+            ]
+        },
+        {
+            "id": "abbf0c1a-ba8b-4831-bc5c-7d62dd4451ca",
+            "name": "Primary health centers",
+            "members": [
+                "1a9cab71-e007-411a-865c-10df86ceeb86",
+                "6b3db2d4-99cb-4a48-8e44-c56122f3a0a4",
+                "485bcb7a-4e07-451a-818f-71cc923650d6",
+                "82fa8899-5c44-4c40-ae28-7bcac2a66f2e",
+                "630755ff-a55e-4bff-976f-d30666cc8a21",
+                "5e43976c-8a4e-4193-b1c5-32cbc72c8781",
+                "ce39f247-2e9f-4ddf-b359-6075a79d7ae6"
+            ]
+        },
+        {
+            "id": "bd16e879-94a7-4e18-87c6-e07429249a1a",
+            "name": "Referral hospital",
+            "members": [
+                "536dec89-53d9-4aec-8a5c-d450dd99889f",
+                "fc8fffb6-91e5-4c86-8078-c9748adc489d"
+            ]
+        },
+        {
+            "id": "dfe19987-0d25-4a04-81c7-ee671571d3b6",
+            "name": "Mobile clinic",
+            "members": [
+                "77f91a4d-69df-48c5-8698-1315e86a7a27"
+            ]
+        }
+    ],
+    "logicalFrames": [
+        {
+            "id": "7f7a81b8-1421-42ed-8c7a-551cf729e6d9",
+            "start": "2015-02-01",
+            "end": "2016-04-30",
+            "entities": [
+                "efd44382-687e-43b3-9280-ab244828db80",
+                "1a9cab71-e007-411a-865c-10df86ceeb86",
+                "6b3db2d4-99cb-4a48-8e44-c56122f3a0a4",
+                "485bcb7a-4e07-451a-818f-71cc923650d6",
+                "536dec89-53d9-4aec-8a5c-d450dd99889f",
+                "77f91a4d-69df-48c5-8698-1315e86a7a27",
+                "82fa8899-5c44-4c40-ae28-7bcac2a66f2e",
+                "630755ff-a55e-4bff-976f-d30666cc8a21",
+                "5e43976c-8a4e-4193-b1c5-32cbc72c8781",
+                "ce39f247-2e9f-4ddf-b359-6075a79d7ae6",
+                "fc8fffb6-91e5-4c86-8078-c9748adc489d"
+            ],
+            "name": "Project of DFID donor",
+            "goal": "To reduce the mortality and morbidity of people affected by the crisis in Gondwana",
+            "indicators": [],
+            "purposes": [
+                {
+                    "description": "To improve the access to quality care for people affected by the crisis in the districts of Lapataganj and Pawnee",
+                    "assumptions": "",
+                    "indicators": [
+                        {
+                            "display": "Number of consultations",
+                            "colorize": true,
+                            "baseline": null,
+                            "target": null,
+                            "computation": {
+                                "formula": "a+b+c+d",
+                                "parameters": {
+                                    "a": {
+                                        "elementId": "9a8d7e9a-7a3d-438b-a6f0-5f80e5d425d6",
+                                        "filter": {}
+                                    },
+                                    "b": {
+                                        "elementId": "94343565-5008-4cc4-82e4-b4a4ea096053",
+                                        "filter": {}
+                                    },
+                                    "c": {
+                                        "elementId": "13023986-2bdf-4f7e-929c-62a4d7e00f8c",
+                                        "filter": {}
+                                    },
+                                    "d": {
+                                        "elementId": "343dab31-72a7-407e-a4fd-05c90bc6dcde",
+                                        "filter": {}
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "display": "Number of centers with a quality score above 60/100",
+                            "colorize": true,
+                            "baseline": 0,
+                            "target": 7,
+                            "computation": {
+                                "formula": "copied_value",
+                                "parameters": {
+                                    "copied_value": {
+                                        "elementId": "318a4c13-4416-42ef-8dc0-3b88b5a44f2d",
+                                        "filter": {}
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "description": "The access to quality primary health care is improved",
+                            "assumptions": "",
+                            "indicators": [
+                                {
+                                    "display": "Proportion of patients treated in accordance with national guidelines for malaria, diarrhea, and ARI",
+                                    "colorize": true,
+                                    "baseline": 15,
+                                    "target": 100,
+                                    "computation": {
+                                        "formula": "100 * numerator / denominator",
+                                        "parameters": {
+                                            "numerator": {
+                                                "elementId": "668ea223-d90a-4b1a-a28a-64bc3ffeaf0d",
+                                                "filter": {}
+                                            },
+                                            "denominator": {
+                                                "elementId": "11e7e24b-8a74-43ea-a9b0-8e6a7b0307cd",
+                                                "filter": {}
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "display": "Number of days with at least one out of 10 essencial medicines are out of stock",
+                                    "colorize": true,
+                                    "baseline": 20,
+                                    "target": 0,
+                                    "computation": {
+                                        "formula": "copied_value",
+                                        "parameters": {
+                                            "copied_value": {
+                                                "elementId": "bc3ac75c-543b-4fe1-89ee-0684105bcfb1",
+                                                "filter": {}
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "display": "Number of staff trained on case management",
+                                    "colorize": true,
+                                    "baseline": null,
+                                    "target": null,
+                                    "computation": {
+                                        "formula": "copied_value",
+                                        "parameters": {
+                                            "copied_value": {
+                                                "elementId": "76a13b4a-a0c6-4a0f-8a34-fdd6ce7e8cd3",
+                                                "filter": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            ],
+                            "activities": []
+                        },
+                        {
+                            "description": "The access to quality sexual and reproductive health services is improved",
+                            "assumptions": "",
+                            "indicators": [
+                                {
+                                    "display": "ANC1 rate",
+                                    "colorize": true,
+                                    "baseline": 25,
+                                    "target": 70,
+                                    "computation": {
+                                        "formula": "a*100/(b)",
+                                        "parameters": {
+                                            "a": {
+                                                "elementId": "94343565-5008-4cc4-82e4-b4a4ea096053",
+                                                "filter": {
+                                                    "ce5ec106-ffa5-4534-998c-6a6439926e95": [
+                                                        "ffca09b9-16d1-48a5-9d26-20877c5b90de"
+                                                    ]
+                                                }
+                                            },
+                                            "b": {
+                                                "elementId": "c3baf694-ef8b-4423-8aba-ebfac03af4a2",
+                                                "filter": {}
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "display": "Assisted delivery rate (PHC + hospitals)",
+                                    "colorize": true,
+                                    "baseline": 15,
+                                    "target": 40,
+                                    "computation": {
+                                        "formula": "(a+b+c)*100/d",
+                                        "parameters": {
+                                            "a": {
+                                                "elementId": "294c0d6b-2693-40bd-8c86-5c68815b0b8f",
+                                                "filter": {}
+                                            },
+                                            "b": {
+                                                "elementId": "6fbf542d-d73b-44b1-937d-500b029a7160",
+                                                "filter": {}
+                                            },
+                                            "c": {
+                                                "elementId": "347fdf8f-8177-461a-ab73-b3b3ef079420",
+                                                "filter": {}
+                                            },
+                                            "d": {
+                                                "elementId": "c3baf694-ef8b-4423-8aba-ebfac03af4a2",
+                                                "filter": {}
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "display": "Assisted delivery rate (PHC)",
+                                    "colorize": true,
+                                    "baseline": 15,
+                                    "target": 40,
+                                    "computation": {
+                                        "formula": "100 * numerator / denominator",
+                                        "parameters": {
+                                            "numerator": {
+                                                "elementId": "294c0d6b-2693-40bd-8c86-5c68815b0b8f",
+                                                "filter": {}
+                                            },
+                                            "denominator": {
+                                                "elementId": "c3baf694-ef8b-4423-8aba-ebfac03af4a2",
+                                                "filter": {}
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "display": "Proportion of GBV cases with medical and legal management",
+                                    "colorize": true,
+                                    "baseline": 0,
+                                    "target": 25,
+                                    "computation": {
+                                        "formula": "100 * numerator / denominator",
+                                        "parameters": {
+                                            "numerator": {
+                                                "elementId": "83c2c815-c027-4d74-a4d3-3abf6e73dd28",
+                                                "filter": {}
+                                            },
+                                            "denominator": {
+                                                "elementId": "82099d87-352a-4bcd-b6ac-a92d1a17be59",
+                                                "filter": {}
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "display": "Number of GBV cases identified",
+                                    "colorize": true,
+                                    "baseline": null,
+                                    "target": null,
+                                    "computation": {
+                                        "formula": "copied_value",
+                                        "parameters": {
+                                            "copied_value": {
+                                                "elementId": "82099d87-352a-4bcd-b6ac-a92d1a17be59",
+                                                "filter": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            ],
+                            "activities": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "ECHO",
+            "goal": "To reduce the mortality and morbidity of people affected by the crisis in Gondwana",
+            "indicators": [],
+            "purposes": [
+                {
+                    "description": "To improve the access to quality care for people affected by the crisis in the districts of Lapataganj and Pawnee",
+                    "assumptions": "",
+                    "indicators": [
+                        {
+                            "display": "Number of centers with a quality score above 60/100",
+                            "colorize": true,
+                            "baseline": 0,
+                            "target": 7,
+                            "computation": {
+                                "formula": "copied_value",
+                                "parameters": {
+                                    "copied_value": {
+                                        "elementId": "318a4c13-4416-42ef-8dc0-3b88b5a44f2d",
+                                        "filter": {}
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "description": "The access to quality primary health care is improved",
+                            "assumptions": "",
+                            "indicators": [
+                                {
+                                    "display": "Proportion of patients treated in accordance with national guidelines for malaria, diarrhea, and ARI",
+                                    "colorize": true,
+                                    "baseline": 15,
+                                    "target": 100,
+                                    "computation": {
+                                        "formula": "100 * numerator / denominator",
+                                        "parameters": {
+                                            "numerator": {
+                                                "elementId": "668ea223-d90a-4b1a-a28a-64bc3ffeaf0d",
+                                                "filter": {}
+                                            },
+                                            "denominator": {
+                                                "elementId": "11e7e24b-8a74-43ea-a9b0-8e6a7b0307cd",
+                                                "filter": {}
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "display": "Number of days with at least one out of 10 essencial medicines are out of stock",
+                                    "colorize": true,
+                                    "baseline": 20,
+                                    "target": 0,
+                                    "computation": {
+                                        "formula": "copied_value",
+                                        "parameters": {
+                                            "copied_value": {
+                                                "elementId": "bc3ac75c-543b-4fe1-89ee-0684105bcfb1",
+                                                "filter": {}
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "display": "Number of staff trained on case management",
+                                    "colorize": true,
+                                    "baseline": null,
+                                    "target": null,
+                                    "computation": {
+                                        "formula": "copied_value",
+                                        "parameters": {
+                                            "copied_value": {
+                                                "elementId": "76a13b4a-a0c6-4a0f-8a34-fdd6ce7e8cd3",
+                                                "filter": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            ],
+                            "activities": []
+                        },
+                        {
+                            "description": "The access to quality sexual and reproductive health services is improved",
+                            "assumptions": "",
+                            "indicators": [
+                                {
+                                    "display": "ANC1 rate",
+                                    "colorize": true,
+                                    "baseline": 25,
+                                    "target": 70,
+                                    "computation": {
+                                        "formula": "a*100/(b)",
+                                        "parameters": {
+                                            "a": {
+                                                "elementId": "94343565-5008-4cc4-82e4-b4a4ea096053",
+                                                "filter": {
+                                                    "ce5ec106-ffa5-4534-998c-6a6439926e95": [
+                                                        "ffca09b9-16d1-48a5-9d26-20877c5b90de"
+                                                    ]
+                                                }
+                                            },
+                                            "b": {
+                                                "elementId": "c3baf694-ef8b-4423-8aba-ebfac03af4a2",
+                                                "filter": {}
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "display": "Assisted delivery rate (PHC + hospitals)",
+                                    "colorize": true,
+                                    "baseline": 15,
+                                    "target": 40,
+                                    "computation": {
+                                        "formula": "(a+b+c)*100/d",
+                                        "parameters": {
+                                            "a": {
+                                                "elementId": "294c0d6b-2693-40bd-8c86-5c68815b0b8f",
+                                                "filter": {}
+                                            },
+                                            "b": {
+                                                "elementId": "6fbf542d-d73b-44b1-937d-500b029a7160",
+                                                "filter": {}
+                                            },
+                                            "c": {
+                                                "elementId": "347fdf8f-8177-461a-ab73-b3b3ef079420",
+                                                "filter": {}
+                                            },
+                                            "d": {
+                                                "elementId": "c3baf694-ef8b-4423-8aba-ebfac03af4a2",
+                                                "filter": {}
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "display": "Assisted delivery rate (PHC)",
+                                    "colorize": true,
+                                    "baseline": 15,
+                                    "target": 40,
+                                    "computation": {
+                                        "formula": "100 * numerator / denominator",
+                                        "parameters": {
+                                            "numerator": {
+                                                "elementId": "294c0d6b-2693-40bd-8c86-5c68815b0b8f",
+                                                "filter": {}
+                                            },
+                                            "denominator": {
+                                                "elementId": "c3baf694-ef8b-4423-8aba-ebfac03af4a2",
+                                                "filter": {}
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "display": "Proportion of GBV cases with medical and legal management",
+                                    "colorize": true,
+                                    "baseline": 0,
+                                    "target": 25,
+                                    "computation": {
+                                        "formula": "100 * numerator / denominator",
+                                        "parameters": {
+                                            "numerator": {
+                                                "elementId": "83c2c815-c027-4d74-a4d3-3abf6e73dd28",
+                                                "filter": {}
+                                            },
+                                            "denominator": {
+                                                "elementId": "82099d87-352a-4bcd-b6ac-a92d1a17be59",
+                                                "filter": {}
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "display": "Number of GBV cases identified",
+                                    "colorize": true,
+                                    "baseline": null,
+                                    "target": null,
+                                    "computation": {
+                                        "formula": "copied_value",
+                                        "parameters": {
+                                            "copied_value": {
+                                                "elementId": "82099d87-352a-4bcd-b6ac-a92d1a17be59",
+                                                "filter": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            ],
+                            "activities": []
+                        }
+                    ]
+                }
+            ],
+            "id": "d4413f86-f2e9-40d4-8136-fc707d0036ba",
+            "end": null,
+            "start": null,
+            "entities": [
+                "efd44382-687e-43b3-9280-ab244828db80",
+                "1a9cab71-e007-411a-865c-10df86ceeb86",
+                "6b3db2d4-99cb-4a48-8e44-c56122f3a0a4",
+                "485bcb7a-4e07-451a-818f-71cc923650d6",
+                "536dec89-53d9-4aec-8a5c-d450dd99889f",
+                "77f91a4d-69df-48c5-8698-1315e86a7a27",
+                "82fa8899-5c44-4c40-ae28-7bcac2a66f2e",
+                "630755ff-a55e-4bff-976f-d30666cc8a21",
+                "5e43976c-8a4e-4193-b1c5-32cbc72c8781",
+                "ce39f247-2e9f-4ddf-b359-6075a79d7ae6",
+                "fc8fffb6-91e5-4c86-8078-c9748adc489d"
+            ]
+        }
+    ],
+    "forms": [
+        {
+            "id": "91712367-acf3-408a-9b5c-c534202f1c52",
+            "name": "HMIS extraction (PHC)",
+            "periodicity": "month",
+            "start": null,
+            "end": null,
+            "elements": [
+                {
+                    "id": "9a8d7e9a-7a3d-438b-a6f0-5f80e5d425d6",
+                    "name": "# of medical curative consultations",
+                    "partitions": [
+                        {
+                            "id": "43c36698-ffcc-4324-97b0-ea1800b57842",
+                            "name": "Reason",
+                            "elements": [
+                                {
+                                    "id": "a62b176f-b509-4d97-a8f1-80cf31b62fe5",
+                                    "name": "Malaria"
+                                },
+                                {
+                                    "id": "9d10541c-ac8c-4d07-94d6-2b71c01ce3d9",
+                                    "name": "Acute respiratoy infection"
+                                },
+                                {
+                                    "id": "2241dab6-d4fa-4e81-8738-33e9f4f1a9a7",
+                                    "name": "Diarrhea"
+                                },
+                                {
+                                    "id": "db614c68-f302-4ad4-b76f-e82785d6a49b",
+                                    "name": "Other general pathologies"
+                                },
+                                {
+                                    "id": "0549a22a-b9a4-4e17-9580-7bd0195581ee",
+                                    "name": "Wounds"
+                                },
+                                {
+                                    "id": "e033b772-5fdd-405d-a411-f06a42099615",
+                                    "name": "Psychological distress"
+                                }
+                            ],
+                            "groups": [
+                                {
+                                    "id": "dfa9be8c-303f-4032-91af-843b9591972d",
+                                    "name": "General pathologies",
+                                    "members": [
+                                        "a62b176f-b509-4d97-a8f1-80cf31b62fe5",
+                                        "9d10541c-ac8c-4d07-94d6-2b71c01ce3d9",
+                                        "2241dab6-d4fa-4e81-8738-33e9f4f1a9a7",
+                                        "db614c68-f302-4ad4-b76f-e82785d6a49b"
+                                    ]
+                                }
+                            ],
+                            "aggregation": "sum"
+                        },
+                        {
+                            "id": "a392b0c5-ac72-497d-aeb8-ef69bed4a80b",
+                            "name": "Age",
+                            "elements": [
+                                {
+                                    "id": "ff4bfd98-e175-4add-8159-441dd2ed0791",
+                                    "name": "Less than 5"
+                                },
+                                {
+                                    "id": "c6fe3337-0fdd-42e9-8641-15f4316d4155",
+                                    "name": "5 - 14"
+                                },
+                                {
+                                    "id": "19899581-d488-4abd-9a79-aac6be89ba3b",
+                                    "name": "15 and more"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        },
+                        {
+                            "id": "956c2c4e-708c-4ad4-aeed-5bf9e4bd948b",
+                            "name": "Sex",
+                            "elements": [
+                                {
+                                    "id": "8f7173ba-2693-404d-90aa-3199565b6acb",
+                                    "name": "Male"
+                                },
+                                {
+                                    "id": "41e33573-dd14-4e8a-bbc5-bb5ddacd3be4",
+                                    "name": "Female"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        }
+                    ],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 1
+                },
+                {
+                    "id": "94343565-5008-4cc4-82e4-b4a4ea096053",
+                    "name": "# of antenatal consultations",
+                    "partitions": [
+                        {
+                            "id": "ce5ec106-ffa5-4534-998c-6a6439926e95",
+                            "name": "ANC#",
+                            "elements": [
+                                {
+                                    "id": "ffca09b9-16d1-48a5-9d26-20877c5b90de",
+                                    "name": "ANC1"
+                                },
+                                {
+                                    "id": "b867ed02-0fb1-45ef-9b87-e2210f2399a7",
+                                    "name": "ANC2"
+                                },
+                                {
+                                    "id": "09928e34-1417-411a-8a4e-530a57f52107",
+                                    "name": "ANC3"
+                                },
+                                {
+                                    "id": "3f58fd5f-6a6e-441c-94aa-837389495f8c",
+                                    "name": "ANC4 or more"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        },
+                        {
+                            "id": "93ceb05e-5132-47ff-93bd-1126494ea569",
+                            "name": "Age",
+                            "elements": [
+                                {
+                                    "id": "c2db2da0-07b5-4a0e-a644-cfa204593fc0",
+                                    "name": "Less than 15"
+                                },
+                                {
+                                    "id": "3e9d2383-4eb9-4e5c-a4f2-238f97c83f0e",
+                                    "name": "15 and more"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        }
+                    ],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 1
+                },
+                {
+                    "id": "294c0d6b-2693-40bd-8c86-5c68815b0b8f",
+                    "name": "# of assisted deliveries",
+                    "partitions": [
+                        {
+                            "id": "63148185-954b-4457-a75a-da29b6db169d",
+                            "name": "Age",
+                            "elements": [
+                                {
+                                    "id": "1588e03b-13a5-4c4e-937a-bbba675dc083",
+                                    "name": "Less than 15"
+                                },
+                                {
+                                    "id": "9ee95d62-1308-4d73-8bef-a2377ce2c5cf",
+                                    "name": "15 or more"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        }
+                    ],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 1
+                },
+                {
+                    "id": "13023986-2bdf-4f7e-929c-62a4d7e00f8c",
+                    "name": "# of post natal consultations",
+                    "partitions": [
+                        {
+                            "id": "aa6ada72-bdd0-4021-9f59-73617a1726bf",
+                            "name": "Age",
+                            "elements": [
+                                {
+                                    "id": "76b94a9d-4aac-4745-a8fa-295765f39d70",
+                                    "name": "Less than 15"
+                                },
+                                {
+                                    "id": "7f553f28-efbf-4f43-9db6-cfb119ab1b4e",
+                                    "name": "15 or more"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        }
+                    ],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 1
+                },
+                {
+                    "id": "343dab31-72a7-407e-a4fd-05c90bc6dcde",
+                    "name": "# of family planning consultations",
+                    "partitions": [
+                        {
+                            "id": "ac69e4b8-a443-4f2a-aa6a-a75ca0bd450e",
+                            "name": "OLD/NEW",
+                            "elements": [
+                                {
+                                    "id": "2960cbcb-a684-447c-bbc3-aac556d0310c",
+                                    "name": "Continued users"
+                                },
+                                {
+                                    "id": "fc7c8cc9-a0df-4644-a2bc-60c9482fccb0",
+                                    "name": "New acceptors"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        },
+                        {
+                            "id": "d0c99067-7dd0-4a19-a51b-0f746d7da872",
+                            "name": "Age",
+                            "elements": [
+                                {
+                                    "id": "fe667759-f861-4f4a-b56f-5ed7d47e5b88",
+                                    "name": "Less than 15"
+                                },
+                                {
+                                    "id": "3f4032c1-7908-4869-ae3e-ce22a8f5bd6b",
+                                    "name": "More than 15"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        }
+                    ],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 1
+                },
+                {
+                    "id": "e7a66a53-b98d-408c-8144-15a7ae51838f",
+                    "name": "# of maternal death",
+                    "partitions": [
+                        {
+                            "id": "bd5a4b39-5ae0-4ad9-a5b0-c3cf51661f32",
+                            "name": "Age",
+                            "elements": [
+                                {
+                                    "id": "cb6956b1-fd35-47e4-8b2f-6deab7be92e3",
+                                    "name": "Less than 15"
+                                },
+                                {
+                                    "id": "f681510f-01d0-4fca-b8bb-054eae14c9ce",
+                                    "name": "15 or more"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        }
+                    ],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 1
+                },
+                {
+                    "id": "dabe53b5-76c9-40e7-a100-7fb420b945cc",
+                    "name": "# of neonatal death",
+                    "partitions": [],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 0
+                }
+            ],
+            "entities": [
+                "1a9cab71-e007-411a-865c-10df86ceeb86",
+                "6b3db2d4-99cb-4a48-8e44-c56122f3a0a4",
+                "485bcb7a-4e07-451a-818f-71cc923650d6",
+                "82fa8899-5c44-4c40-ae28-7bcac2a66f2e",
+                "630755ff-a55e-4bff-976f-d30666cc8a21",
+                "5e43976c-8a4e-4193-b1c5-32cbc72c8781",
+                "ce39f247-2e9f-4ddf-b359-6075a79d7ae6"
+            ]
+        },
+        {
+            "id": "f1df28ee-9095-425c-b3a0-35f7d91c8027",
+            "name": "Pharmacy register (PHC)",
+            "periodicity": "month",
+            "start": null,
+            "end": null,
+            "elements": [
+                {
+                    "id": "bc3ac75c-543b-4fe1-89ee-0684105bcfb1",
+                    "name": "# of days with at least one out of ten essencial medicine is out of stock",
+                    "partitions": [],
+                    "geoAgg": "average",
+                    "timeAgg": "average",
+                    "distribution": 0
+                }
+            ],
+            "entities": [
+                "1a9cab71-e007-411a-865c-10df86ceeb86",
+                "6b3db2d4-99cb-4a48-8e44-c56122f3a0a4",
+                "485bcb7a-4e07-451a-818f-71cc923650d6",
+                "82fa8899-5c44-4c40-ae28-7bcac2a66f2e",
+                "630755ff-a55e-4bff-976f-d30666cc8a21",
+                "5e43976c-8a4e-4193-b1c5-32cbc72c8781",
+                "ce39f247-2e9f-4ddf-b359-6075a79d7ae6"
+            ]
+        },
+        {
+            "id": "5ba9162e-187f-4c36-b2cf-c2e48630abc0",
+            "name": "Quaterly supervision report (PHC)",
+            "periodicity": "quarter",
+            "start": null,
+            "end": null,
+            "elements": [
+                {
+                    "id": "1e3a98c7-6970-418a-b8ab-a4b03746147a",
+                    "name": "Score of quality",
+                    "partitions": [],
+                    "geoAgg": "average",
+                    "timeAgg": "average",
+                    "distribution": 0
+                },
+                {
+                    "id": "318a4c13-4416-42ef-8dc0-3b88b5a44f2d",
+                    "name": "# of PHC with quality score ⩾ 60",
+                    "partitions": [],
+                    "geoAgg": "sum",
+                    "timeAgg": "average",
+                    "distribution": 0
+                },
+                {
+                    "id": "11e7e24b-8a74-43ea-a9b0-8e6a7b0307cd",
+                    "name": "# of files sampled for evaluation",
+                    "partitions": [
+                        {
+                            "id": "d2adc5b1-72c4-4e56-8a66-f7932c80fb93",
+                            "name": "Pathology",
+                            "elements": [
+                                {
+                                    "id": "8e025472-2697-490a-bd21-706b3bde3ff4",
+                                    "name": "Malaria"
+                                },
+                                {
+                                    "id": "93a4f86d-b0bd-402a-b9bd-45f24ba6d35e",
+                                    "name": "Diarrhea"
+                                },
+                                {
+                                    "id": "94a1e38d-ae68-47c7-96be-02a991016d96",
+                                    "name": "Acute respiratory infection"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        }
+                    ],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 1
+                },
+                {
+                    "id": "668ea223-d90a-4b1a-a28a-64bc3ffeaf0d",
+                    "name": "# of files managed in accordance with guidelines",
+                    "partitions": [
+                        {
+                            "id": "059f5b1a-6117-448d-ad2f-6441e359a998",
+                            "name": "Pathology",
+                            "elements": [
+                                {
+                                    "id": "0af977db-fe2a-45a5-bf2b-16bd3fece3d6",
+                                    "name": "Malaria"
+                                },
+                                {
+                                    "id": "800350b7-ed6c-46c8-b064-e71d47f5e7c8",
+                                    "name": "Diarrhea"
+                                },
+                                {
+                                    "id": "52f1760a-f8ba-4dea-8d85-fafd075c8812",
+                                    "name": "Acute respiratory infection"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        }
+                    ],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 1
+                },
+                {
+                    "id": "76a13b4a-a0c6-4a0f-8a34-fdd6ce7e8cd3",
+                    "name": "# of staff trained in case management",
+                    "partitions": [
+                        {
+                            "id": "f32b8b09-a0a3-4860-ab4a-a9e3e69514af",
+                            "name": "Pathology",
+                            "elements": [
+                                {
+                                    "id": "e0ec2a0b-971c-464d-b131-bf265a7300b2",
+                                    "name": "Malaria"
+                                },
+                                {
+                                    "id": "8b6df70d-06cb-4753-b003-2a548e31255f",
+                                    "name": "Diarrhea"
+                                },
+                                {
+                                    "id": "bfd1d619-ea89-46cb-b75e-1df0dc53ce6b",
+                                    "name": "Acute respiratory infection"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        }
+                    ],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 1
+                }
+            ],
+            "entities": [
+                "1a9cab71-e007-411a-865c-10df86ceeb86",
+                "6b3db2d4-99cb-4a48-8e44-c56122f3a0a4",
+                "485bcb7a-4e07-451a-818f-71cc923650d6",
+                "82fa8899-5c44-4c40-ae28-7bcac2a66f2e",
+                "630755ff-a55e-4bff-976f-d30666cc8a21",
+                "5e43976c-8a4e-4193-b1c5-32cbc72c8781",
+                "ce39f247-2e9f-4ddf-b359-6075a79d7ae6"
+            ]
+        },
+        {
+            "id": "3178f912-3e9e-4551-8a91-82f97b8dd54e",
+            "name": "GBV register (PHC &  Mobile)",
+            "periodicity": "month",
+            "start": null,
+            "end": null,
+            "elements": [
+                {
+                    "id": "82099d87-352a-4bcd-b6ac-a92d1a17be59",
+                    "name": "# of cases identified",
+                    "partitions": [
+                        {
+                            "id": "be064de1-85e9-4942-8d59-0aee15e7922f",
+                            "name": "Age",
+                            "elements": [
+                                {
+                                    "id": "478d784a-4f79-4e91-97a3-f05271594697",
+                                    "name": "Less than 5"
+                                },
+                                {
+                                    "id": "ce704194-bc22-4299-9726-07d6b05571e3",
+                                    "name": "5-14"
+                                },
+                                {
+                                    "id": "e147aaf6-77fd-4a4c-ae8f-1dee8179b316",
+                                    "name": "15 or more"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        },
+                        {
+                            "id": "acdf04ea-08e0-4b26-bbfa-a1960c3375a1",
+                            "name": "Gender",
+                            "elements": [
+                                {
+                                    "id": "04658a79-95db-4d06-ad2b-c4ada42b6a3a",
+                                    "name": "Male"
+                                },
+                                {
+                                    "id": "683743e3-913a-4fa5-a3d2-b57be8ddf7a1",
+                                    "name": "Female"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        },
+                        {
+                            "id": "dbac78e1-ff02-496a-b2ec-321b9a44d414",
+                            "name": "Type",
+                            "elements": [
+                                {
+                                    "id": "02683d38-a283-4dd4-b55b-f01d9c3cc13c",
+                                    "name": "Sexual assualt"
+                                },
+                                {
+                                    "id": "0871e4df-0d22-4f6b-afb0-90e141126ce7",
+                                    "name": "Physical assault"
+                                },
+                                {
+                                    "id": "209ccce7-5475-4da5-97d6-0f8c6068d5af",
+                                    "name": "Other"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        }
+                    ],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 2
+                }
+            ],
+            "entities": [
+                "1a9cab71-e007-411a-865c-10df86ceeb86",
+                "6b3db2d4-99cb-4a48-8e44-c56122f3a0a4",
+                "485bcb7a-4e07-451a-818f-71cc923650d6",
+                "82fa8899-5c44-4c40-ae28-7bcac2a66f2e",
+                "630755ff-a55e-4bff-976f-d30666cc8a21",
+                "5e43976c-8a4e-4193-b1c5-32cbc72c8781",
+                "ce39f247-2e9f-4ddf-b359-6075a79d7ae6",
+                "77f91a4d-69df-48c5-8698-1315e86a7a27"
+            ]
+        },
+        {
+            "id": "ed27c402-bcd8-4c90-b00f-f21c75fac272",
+            "name": "HMIS extraction (Referral hospitals)",
+            "periodicity": "month",
+            "start": null,
+            "end": null,
+            "elements": [
+                {
+                    "id": "6fbf542d-d73b-44b1-937d-500b029a7160",
+                    "name": "# of C-section",
+                    "partitions": [
+                        {
+                            "id": "92cfaa07-aacc-436a-a406-43e16a5d682a",
+                            "name": "Age",
+                            "elements": [
+                                {
+                                    "id": "78ef3687-5845-4f88-a031-fdfde76f2788",
+                                    "name": "Less than 15"
+                                },
+                                {
+                                    "id": "e64a3c75-9212-45ca-8bb3-6931b96388e9",
+                                    "name": "15 or more"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        }
+                    ],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 1
+                },
+                {
+                    "id": "347fdf8f-8177-461a-ab73-b3b3ef079420",
+                    "name": "# of vaginal deliveries",
+                    "partitions": [
+                        {
+                            "id": "cccef979-fdd5-4011-9617-d5a17539dc1f",
+                            "name": "Age",
+                            "elements": [
+                                {
+                                    "id": "30fedf09-b324-42c2-b0f8-30efbee15e10",
+                                    "name": "Less than 15"
+                                },
+                                {
+                                    "id": "c724b1db-b12a-4cdd-adee-d04ff834a4cb",
+                                    "name": "15 or more"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        }
+                    ],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 1
+                },
+                {
+                    "id": "3ae8d830-d251-49f4-8278-591db514ccd2",
+                    "name": "# of maternal death",
+                    "partitions": [
+                        {
+                            "id": "5aee29d0-8fba-4793-b796-94b4c5a65b1a",
+                            "name": "Age",
+                            "elements": [
+                                {
+                                    "id": "3de2352b-4d5e-4706-b32f-918dc986e082",
+                                    "name": "Less than 15"
+                                },
+                                {
+                                    "id": "d81b6d24-2ded-481b-995f-5d160a770286",
+                                    "name": "15 or more"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        }
+                    ],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 1
+                },
+                {
+                    "id": "2fe47859-3b0a-43e0-ab83-f15086bef70e",
+                    "name": "# of neonatal death",
+                    "partitions": [
+                        {
+                            "id": "2b85ab76-fc40-40af-b7db-8ae6da38d91e",
+                            "name": "Age",
+                            "elements": [
+                                {
+                                    "id": "a75cc622-da55-47a3-8115-3c7d02de63c9",
+                                    "name": "Less than 15"
+                                },
+                                {
+                                    "id": "5e9260ba-bab3-4981-938d-cc8a11fdc1ec",
+                                    "name": "More than 15"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        }
+                    ],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 1
+                }
+            ],
+            "entities": [
+                "536dec89-53d9-4aec-8a5c-d450dd99889f",
+                "fc8fffb6-91e5-4c86-8078-c9748adc489d"
+            ]
+        },
+        {
+            "id": "cb67357e-ac0c-4e98-af8e-2616c42c8cd2",
+            "name": "GBV register (Referral hospitals)",
+            "periodicity": "month",
+            "start": null,
+            "end": null,
+            "elements": [
+                {
+                    "id": "83c2c815-c027-4d74-a4d3-3abf6e73dd28",
+                    "name": "# of cases managed",
+                    "partitions": [
+                        {
+                            "id": "146f40f2-ca43-4c2e-8626-503d20944fac",
+                            "name": "Age",
+                            "elements": [
+                                {
+                                    "id": "ea7cde6d-e1fc-49ec-8140-f2dfe0bc5404",
+                                    "name": "Less than 15"
+                                },
+                                {
+                                    "id": "8fac03d8-f187-4d72-b2e4-5397e63364c6",
+                                    "name": "15 or more"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        },
+                        {
+                            "id": "1fa70d3f-cd24-4c2a-9aef-3df16baee1b4",
+                            "name": "Gender",
+                            "elements": [
+                                {
+                                    "id": "8124310f-a86b-4f30-a08d-5427519a2fd0",
+                                    "name": "Male"
+                                },
+                                {
+                                    "id": "21e803d6-5460-46b5-8ab7-b5cdf0154f71",
+                                    "name": "Female"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        },
+                        {
+                            "id": "5c81cc33-30e0-4676-b313-f8d04e1e115e",
+                            "name": "Type",
+                            "elements": [
+                                {
+                                    "id": "678d3b62-26d0-476a-acf3-a9e6e67cc6f7",
+                                    "name": "Sexual assault"
+                                },
+                                {
+                                    "id": "63a9419e-b469-42ab-9a21-6a2fcde03169",
+                                    "name": "Physical assault"
+                                },
+                                {
+                                    "id": "1a2eebda-25fd-402f-9f12-03b60c8a3e88",
+                                    "name": "Other"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        },
+                        {
+                            "id": "32388b44-5b73-4d7a-b3db-2e5b23b46b15",
+                            "name": "Referral",
+                            "elements": [
+                                {
+                                    "id": "3bc90734-acbf-41b8-9ac0-adb53e146de9",
+                                    "name": "By primary health centers"
+                                },
+                                {
+                                    "id": "e6efdce6-8968-451d-b3c5-3eeacac6576b",
+                                    "name": "By mobile uit"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        },
+                        {
+                            "id": "e7ac8100-85b8-4260-ab95-2608e0d46024",
+                            "name": "Management",
+                            "elements": [
+                                {
+                                    "id": "f0e260fd-7911-44de-815b-5235510bc5bd",
+                                    "name": "Medical"
+                                },
+                                {
+                                    "id": "f7c9bc9d-ef33-457e-8d93-3f48c2a4c899",
+                                    "name": "Legal"
+                                },
+                                {
+                                    "id": "93f40d1b-d144-4e14-aca0-e96071ca2678",
+                                    "name": "Both"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        }
+                    ],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 3
+                }
+            ],
+            "entities": [
+                "536dec89-53d9-4aec-8a5c-d450dd99889f",
+                "fc8fffb6-91e5-4c86-8078-c9748adc489d"
+            ]
+        },
+        {
+            "id": "d828515c-d0c6-4e67-81aa-1a287f2bc791",
+            "name": "Census",
+            "periodicity": "month",
+            "start": null,
+            "end": null,
+            "elements": [
+                {
+                    "id": "5377025f-d5b5-4f44-9bf7-cc6b34f35c71",
+                    "name": "# of women in reproductive age",
+                    "partitions": [
+                        {
+                            "id": "93453e13-d3a9-4d07-93c8-57d2263bae0c",
+                            "name": "Age",
+                            "elements": [
+                                {
+                                    "id": "4c4bbf1a-1c70-45cd-bb77-48f258a124d9",
+                                    "name": "Less than 15"
+                                },
+                                {
+                                    "id": "aeb3da19-1ec2-4b1d-9a79-b25c81cc8768",
+                                    "name": "15 or more"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        }
+                    ],
+                    "geoAgg": "sum",
+                    "timeAgg": "average",
+                    "distribution": 1
+                },
+                {
+                    "id": "cb26d54e-7543-4f31-b5f0-c5d233ebdc93",
+                    "name": "# of expected new pregnancies",
+                    "partitions": [
+                        {
+                            "id": "21758a7c-c83d-46cc-972e-1999a6396e64",
+                            "name": "Age",
+                            "elements": [
+                                {
+                                    "id": "a5d78796-b5e2-4aeb-98ef-9a951bc6bb90",
+                                    "name": "Less than 15"
+                                },
+                                {
+                                    "id": "d63089e2-02dd-4fb6-b4d5-2c42db3068bc",
+                                    "name": "15 or more"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        }
+                    ],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 1
+                },
+                {
+                    "id": "c3baf694-ef8b-4423-8aba-ebfac03af4a2",
+                    "name": "# of expected deliveries",
+                    "partitions": [
+                        {
+                            "id": "23eb9064-ad69-41c4-b155-6c63656e26f2",
+                            "name": "Age",
+                            "elements": [
+                                {
+                                    "id": "be7a0340-dd54-4a1d-bc46-3fb0577459b4",
+                                    "name": "Less than 15"
+                                },
+                                {
+                                    "id": "eeb30e5e-77cc-4aeb-aee8-fece0611a62f",
+                                    "name": "15 or more"
+                                }
+                            ],
+                            "groups": [],
+                            "aggregation": "sum"
+                        }
+                    ],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 1
+                }
+            ],
+            "entities": [
+                "1a9cab71-e007-411a-865c-10df86ceeb86",
+                "6b3db2d4-99cb-4a48-8e44-c56122f3a0a4",
+                "485bcb7a-4e07-451a-818f-71cc923650d6",
+                "82fa8899-5c44-4c40-ae28-7bcac2a66f2e",
+                "630755ff-a55e-4bff-976f-d30666cc8a21",
+                "5e43976c-8a4e-4193-b1c5-32cbc72c8781",
+                "ce39f247-2e9f-4ddf-b359-6075a79d7ae6"
+            ]
+        },
+        {
+            "id": "837ba520-a364-4f64-91ed-547427254250",
+            "name": "Coordination data",
+            "periodicity": "quarter",
+            "start": null,
+            "end": null,
+            "elements": [
+                {
+                    "id": "765b8331-5ef9-4ac7-9558-706d0de3cf49",
+                    "name": "# of training",
+                    "partitions": [],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 0
+                },
+                {
+                    "id": "cb4d4e3a-bedd-435e-84a8-43833a3a5d9d",
+                    "name": "# of health education tools developped",
+                    "partitions": [],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 0
+                },
+                {
+                    "id": "868abc98-3144-4bbb-be52-e8da785486e0",
+                    "name": "# of abstracts accepted for presentation in conferences",
+                    "partitions": [],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 0
+                },
+                {
+                    "id": "469dc5fc-86de-4bee-a2d0-122425461b4f",
+                    "name": "# of centers with SRH activity",
+                    "partitions": [],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 0
+                },
+                {
+                    "id": "a85a2b0d-ff76-4df8-803e-64ef9b6324f6",
+                    "name": "# of SRH centers level Emoc",
+                    "partitions": [],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 0
+                },
+                {
+                    "id": "4ab66a30-ab56-4996-8393-1685ad9e171b",
+                    "name": "# of SRH centers with staff trained on pre/post abortion care",
+                    "partitions": [],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 0
+                },
+                {
+                    "id": "ce9310fa-b69a-4758-a78b-c99e435201cd",
+                    "name": "# of SRH centers with staff trained on GBV",
+                    "partitions": [],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 0
+                },
+                {
+                    "id": "7d2306e6-7b00-4e57-84b5-0f228a1c67d3",
+                    "name": "# of SRH centers with  new modalities for strengthening financial accessibility",
+                    "partitions": [],
+                    "geoAgg": "sum",
+                    "timeAgg": "sum",
+                    "distribution": 0
+                }
+            ],
+            "entities": [
+                "efd44382-687e-43b3-9280-ab244828db80"
+            ]
+        }
+    ]
+}
