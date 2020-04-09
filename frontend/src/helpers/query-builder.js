@@ -13,7 +13,7 @@ export function buildQueryFromIndicator(indicator, logicalFramework = null, proj
         parameters[key] = { variableId: parameter.elementId, dice: [] };
 
         for (let partitionId in parameter.filter) {
-            dice.push({
+            parameters[key].dice.push({
                 id: partitionId,
                 attribute: 'element',
                 items: parameter.filter[partitionId]

@@ -40,7 +40,7 @@
 	{{$ctrl.errorMessage|translate}}
 </td>
 
-<td ng-repeat="cell in $ctrl.tableCells" td-reporting-field value="cell.value" baseline="$ctrl.baseline"
-	target="$ctrl.target" colorize="$ctrl.colorize" unit="$ctrl.query.formula|indicatorUnit"
-	interpolated="cell.interpolated" incomplete="cell.incomplete">
+<td ng-repeat="cell in $ctrl.tableCells track by $index" td-reporting-field value="cell.v" baseline="$ctrl.baseline"
+	target="$ctrl.target" colorize="$ctrl.colorize" unit="$ctrl.query.formula|indicatorUnit" interpolated="!cell.r"
+	incomplete="!cell.c">
 </td>
