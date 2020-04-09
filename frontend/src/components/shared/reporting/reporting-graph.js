@@ -91,7 +91,7 @@ module.component(__componentName, {
 			// Format series according to what c3 is expecting.
 			const result = [
 				['x', ...x],
-				...ys.map(({ label, data }) => [label, ...data])
+				...ys.map(({ label, data }) => [label, ...data.map(d => d ? d.v : null)])
 			];
 
 			// Remove duplicate names, c3 can't handle them.
