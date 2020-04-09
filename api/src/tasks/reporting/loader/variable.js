@@ -58,7 +58,7 @@ async function getVariableCube(projectId, variableId, aggregate, dice) {
                 });
 
             let inputCube = new Cube(inputDimensions);
-            inputCube.createStoredMeasure('main', {}); // fixme: aggregation rules are missing
+            inputCube.createStoredMeasure('main', rules); // fixme: aggregation rules for legacy partitions are missing.
             inputCube.setData('main', content.data);
             try {
                 // on doit reshape ce cube en suivant les regles suivantes:
