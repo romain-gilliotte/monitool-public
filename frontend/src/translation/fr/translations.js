@@ -5,7 +5,7 @@ export default {
 		accept_invitation: "Accepter",
 		refuse_invitation: "Refuser",
 		uninvite: "Retirer de mes projets",
-		no_invitations: "Vous n'avez aucune invitation en attente d'acceptation!",
+		no_invitations: "Vous n'avez aucune invitation en attente!",
 		no_invitations_back: "Retournez à la liste de vos projet",
 
 		configure: "Configuration",
