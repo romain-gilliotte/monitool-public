@@ -3,23 +3,18 @@ import axios from 'axios';
 
 export default class Input {
 
-	static async fetchDataSourceShortStatus(project) {
-		const result = await Promise.all(project.forms.map(async dataSource => {
-			const dsResult = Object
-				.values(await this.fetchFormStatus(project, dataSource.id))
-				.reduce((m, e) => [...m, ...Object.values(e)], []);
+	static async fetchFormShortStatus(project, dataSourceId) {
+		const dataSource = project.forms.find(ds => ds.id == dataSourceId)
+		const dsResult = Object
+			.values(await this.fetchFormStatus(project, dataSource.id))
+			.reduce((m, e) => [...m, ...Object.values(e)], []);
 
-			return {
-				missing: dsResult.length ? dsResult.filter(v => v === 0).length / dsResult.length : 0,
-				incomplete: dsResult.length ? dsResult.filter(v => v !== 0 && v < 1).length / dsResult.length : 0,
-				complete: dsResult.length ? dsResult.filter(v => v === 1).length / dsResult.length : 1,
-				total: dsResult.length
-			};
-		}));
-
-		return project.forms
-			.map((ds, i) => i)
-			.reduce((m, i) => { m[project.forms[i].id] = result[i]; return m; }, {})
+		return {
+			missing: dsResult.length ? dsResult.filter(v => v === 0).length / dsResult.length : 0,
+			incomplete: dsResult.length ? dsResult.filter(v => v !== 0 && v < 1).length / dsResult.length : 0,
+			complete: dsResult.length ? dsResult.filter(v => v === 1).length / dsResult.length : 1,
+			total: dsResult.length
+		};
 	}
 
 	/** fixme The computed percentage is no precise enough: it is by variable, we need by cell */

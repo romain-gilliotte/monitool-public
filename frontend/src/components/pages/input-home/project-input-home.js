@@ -23,8 +23,12 @@ module.component(__componentName, {
 		}
 
 		async $onChanges(changes) {
-			this.status = await Input.fetchDataSourceShortStatus(this.project);
-			this.$scope.$apply();
+			this.status = {};
+
+			this.project.forms.forEach(async form => {
+				this.status[form.id] = await Input.fetchFormShortStatus(this.project, form.id);
+				this.$scope.$apply();
+			});
 		}
 	}
 });
