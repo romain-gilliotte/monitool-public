@@ -27,6 +27,7 @@ const readEnv = function (key, defaultValue = undefined) {
 module.exports = {
 	debug: toBool(readEnv('MONITOOL_DEBUG', 'TRUE')),
 	port: parseInt(readEnv('MONITOOL_PORT', '8080')),
+	cluster: toBool(readEnv('MONITOOL_CLUSTER', 'FALSE')),
 
 	jwt: {
 		jwksHost: readEnv('MONITOOL_JWKS_HOST'),

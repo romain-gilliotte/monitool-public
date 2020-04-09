@@ -1,3 +1,5 @@
+const cluster = require('cluster');
+const numCPUs = require('os').cpus().length;
 const Bull = require('bull');
 const Redis = require("ioredis");
 const Koa = require('koa');
@@ -82,7 +84,12 @@ async function stop() {
 
 // Start application only if this file is executed.
 // Otherwise just export the start/stop functions
-if (require.main === module)
-	start();
+if (require.main === module) {
+	if (config.cluster && cluster.isMaster)
+		for (let i = 0; i < numCPUs; i++)
+			cluster.fork();
+	else
+		start();
+}
 else
 	module.exports = { start, stop };
