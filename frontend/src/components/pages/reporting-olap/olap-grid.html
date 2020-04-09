@@ -6,9 +6,9 @@
 				{{headerCol.name|formatSlot}}
 			</th>
 
-			<td ng-repeat="col in row.dataCols track by $index" td-reporting-field value="col.value"
-				interpolated="col.interpolated" incomplete="col.incomplete" baseline="$ctrl.baseline"
-				target="$ctrl.target" colorize="$ctrl.colorize" unit="$ctrl.query.formula|indicatorUnit"></td>
+			<td ng-repeat="col in row.dataCols track by $index" td-reporting-field value="col.v" interpolated="!col.r"
+				incomplete="!col.c" baseline="$ctrl.baseline" target="$ctrl.target" colorize="$ctrl.colorize"
+				unit="$ctrl.query.formula|indicatorUnit"></td>
 		</tr>
 	</tbody>
 	<thead ng-style="$ctrl.headerStyle">

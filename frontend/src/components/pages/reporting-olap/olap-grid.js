@@ -135,7 +135,7 @@ module.component(__componentName, {
 					for (var i = 0; i < numEls; ++i)
 						result = result[els[i].id];
 
-					return { value: result.v, interpolated: !result.r, incomplete: result.c };
+					return result;
 				});
 
 				body.push({ headerCols, dataCols });
