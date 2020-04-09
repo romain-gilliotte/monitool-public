@@ -347,13 +347,15 @@ module.component(__componentName, {
 
 			attributes.forEach(attribute => {
 				dimension.getEntries(attribute).forEach(([item, subLabel]) => {
-					const subQuery = Object.assign(
-						{},
-						query,
-						{ dice: [...query.dice, { id: disagregateBy.id, attribute, items: [item] }] },
-					);
+					if (item !== 'out') {
+						const subQuery = Object.assign(
+							{},
+							query,
+							{ dice: [...query.dice, { id: disagregateBy.id, attribute, items: [item] }] },
+						);
 
-					rows.push(...this._makeRowsFromQuery(queryId, subLabel, subQuery, indent + 1, baseline, target, colorize));
+						rows.push(...this._makeRowsFromQuery(queryId, subLabel, subQuery, indent + 1, baseline, target, colorize));
+					}
 				});
 			});
 
