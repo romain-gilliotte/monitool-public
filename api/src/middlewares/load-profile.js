@@ -1,6 +1,7 @@
 const config = require('../config');
 const AuthenticationClient = require('auth0').AuthenticationClient;
 const ObjectId = require('mongodb').ObjectID;
+const { getProject } = require('../storage/queries');
 
 const auth0Client = new AuthenticationClient({
     domain: config.jwt.jwksHost
@@ -16,18 +17,19 @@ module.exports = async (ctx, next) => {
     }
 
     ctx.state.profile.canViewProject = async projectId => {
-        return 1 === await database.collection('project').countDocuments({
-            _id: new ObjectId(projectId),
-            $or: [
-                { owner: ctx.state.profile.email },
-                { 'users.email': ctx.state.profile.email },
-            ]
-        });
+        try {
+            await getProject(ctx.state.profile.email, projectId, { _id: true })
+            return true;
+        }
+        catch (e) {
+            return false;
+        }
     };
 
     ctx.state.profile.ownsProject = async projectId => {
         return 1 === await database.collection('project').countDocuments({
             _id: new ObjectId(projectId),
+            owner: ctx.state.profile.email
         });
     };
 
