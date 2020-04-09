@@ -38,6 +38,7 @@ module.component(__componentName, {
                     const url = `${serviceUrl}/resources/project/${projectId}/logical-frame/${lf.id}`;
 
                     return {
+                        id: lf.id,
                         category: 'project.logical_frame',
                         name: lf.name,
                         portrait: `${url}.pdf?token=${token}&orientation=portrait`,
@@ -49,6 +50,7 @@ module.component(__componentName, {
                     const url = `${serviceUrl}/resources/project/${projectId}/data-source/${ds.id}`;
 
                     return {
+                        id: ds.id,
                         category: 'project.collection_form2',
                         name: ds.name,
                         portrait: `${url}.pdf?token=${token}&orientation=portrait`,

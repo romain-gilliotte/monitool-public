@@ -1,52 +1,44 @@
 const { ObjectId } = require('mongodb');
 
-/**
- * Why is this called twice every time?
- */
-function trimProject(userEmail, record) {
-    const { invitations, ...project } = record;
+function listProjects(userEmail, projection = null) {
+    const pipeline = [
+        { $lookup: { from: 'invitation', localField: '_id', foreignField: 'projectId', as: 'invitations' } },
+        {
+            $match: {
+                $or: [
+                    { owner: userEmail },
+                    { invitations: { $elemMatch: { email: userEmail, accepted: true } } }
+                ]
+            }
+        },
+        { $project: { invitations: false } },
+        ...(projection ? [{ $project: projection }] : [])
+    ];
 
-    console.log(project._id, project.owner, invitations)
-    return project;
+    return database.collection('project').aggregate(pipeline);
 }
 
-function listProjects(userEmail) {
-    return database.collection('project')
-        .aggregate([
-            { $lookup: { from: 'invitation', localField: '_id', foreignField: 'projectId', as: 'invitations' } },
-            {
-                $match: {
-                    $or: [
-                        { owner: userEmail },
-                        { invitations: { $elemMatch: { email: userEmail, accepted: true } } }
-                    ]
-                }
+async function getProject(userEmail, projectId, projection = null) {
+    const pipeline = [
+        { $match: { _id: new ObjectId(projectId) } },
+        { $lookup: { from: 'invitation', localField: '_id', foreignField: 'projectId', as: 'invitations' } },
+        {
+            $match: {
+                $or: [
+                    { owner: userEmail },
+                    { invitations: { $elemMatch: { email: userEmail, accepted: true } } }
+                ]
             }
-        ])
-        .map(project => trimProject(userEmail, project));
-}
+        },
+        { $project: { invitations: false } },
+        ...(projection ? [{ $project: projection }] : [])
+    ];
 
-async function getProject(userEmail, projectId) {
-    const project = await database
-        .collection('project')
-        .aggregate([
-            { $match: { _id: new ObjectId(projectId) } },
-            { $lookup: { from: 'invitation', localField: '_id', foreignField: 'projectId', as: 'invitations' } },
-            {
-                $match: {
-                    $or: [
-                        { owner: userEmail },
-                        { invitations: { $elemMatch: { email: userEmail, accepted: true } } }
-                    ]
-                }
-            }
-        ])
-        .next();
-
+    const project = await database.collection('project').aggregate(pipeline).next();
     if (!project)
         throw new Error('not found');
 
-    return trimProject(userEmail, project);
+    return project;
 }
 
 function listWaitingInvitations(userEmail) {

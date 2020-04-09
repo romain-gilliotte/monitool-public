@@ -6,7 +6,12 @@
 </ol>
 
 <div class="row">
-    <div class="col-sm-6 col-md-4 col-lg-3" ng-repeat="file in $ctrl.files">
+    <div class="clearfix visible-sm-block" ng-if="!$first && $index % 2 == 0"
+        ng-repeat-start="file in $ctrl.files track by file.id"></div>
+    <div class="clearfix visible-md-block" ng-if="!$first && $index % 3 == 0"></div>
+    <div class="clearfix visible-lg-block" ng-if="!$first && $index % 4 == 0"></div>
+
+    <div class="col-sm-6 col-md-4 col-lg-3" ng-repeat-end>
         <div class="thumbnail">
             <img ng-src="{{file.thumbnail}}" class="img-thumbnail" style="width: 100%" width="595" height="400">
             <div class="caption">

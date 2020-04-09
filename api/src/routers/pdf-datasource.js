@@ -27,7 +27,7 @@ router.get('/resources/project/:id/data-source/:dataSourceId.pdf', async ctx => 
 	if (result) {
 		ctx.response.type = 'application/pdf';
 		ctx.response.body = result.stream;
-		ctx.response.attachment(`${result.title.substr(0, 16)}.png`, { type: 'inline' });
+		ctx.response.attachment(`${result.title.substr(0, 16)}.pdf`, { type: 'inline' });
 	}
 });
 
@@ -73,19 +73,18 @@ const strings = Object.freeze({
 
 
 async function getPdfStream(userEmail, projectId, dataSourceId, language, orientation = 'portrait') {
-	const project = await getProject(userEmail, projectId, {
-		'forms': { $elemMatch: { id: dataSourceId } }
-	});
+	const project = await getProject(userEmail, projectId, { forms: true });
 
-	if (project && project.forms.length) {
-		const dataSource = project.forms[0];
-
-		// Create document definition.
-		const title = dataSource.name || 'data-source';
-		const docDef = createDataSourceDocDef(dataSource, orientation, language);
-		const stream = printer.createPdfKitDocument(docDef);
-		stream.end();
-		return { title, stream };
+	if (project) {
+		const dataSource = project.forms.find(ds => ds.id == dataSourceId);
+		if (dataSource) {
+			// Create document definition.
+			const title = dataSource.name || 'data-source';
+			const docDef = createDataSourceDocDef(dataSource, orientation, language);
+			const stream = printer.createPdfKitDocument(docDef);
+			stream.end();
+			return { title, stream };
+		}
 	}
 }
 

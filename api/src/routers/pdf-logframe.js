@@ -91,21 +91,20 @@ router.get('/resources/project/:id/logical-frame/:logicalFrameId.png', async ctx
 
 
 async function getPdfStream(userEmail, projectId, logicalFrameworkId, language, orientation = 'portrait') {
-    const project = await getProject(userEmail, projectId, {
-        'logicalFrames': { $elemMatch: { id: logicalFrameworkId } },
-        'forms': true
-    });
+    const project = await getProject(userEmail, projectId, { 'logicalFrames': true, 'forms': true });
 
-    if (project && project.logicalFrames.length) {
-        const logicalFramework = project.logicalFrames[0];
+    if (project) {
+        const logicalFramework = project.logicalFrames.find(lf => lf.id == logicalFrameworkId);
 
-        // Create document definition.
-        const title = logicalFramework.name || 'logical-framework';
-        const docDef = computeLogFrameDocDef(logicalFramework, orientation, project.forms, language);
+        if (logicalFramework) {
+            // Create document definition.
+            const title = logicalFramework.name || 'logical-framework';
+            const docDef = computeLogFrameDocDef(logicalFramework, orientation, project.forms, language);
 
-        const stream = printer.createPdfKitDocument(docDef);
-        stream.end();
-        return { title, stream };
+            const stream = printer.createPdfKitDocument(docDef);
+            stream.end();
+            return { title, stream };
+        }
     }
 }
 
