@@ -77,7 +77,12 @@ module.component(__componentName, {
 
 				// Or create a blank one.
 				if (!this.editableLogFrame)
-					this.editableLogFrame = { name: '', goal: '', start: null, end: null, indicators: [], purposes: [] };
+					this.editableLogFrame = {
+						name: '', goal: '', start: null, end: null,
+						entities: this.project.entities.map(s => s.id),
+						indicators: [],
+						purposes: []
+					};
 
 				// and make sure that the id is defined.
 				this.editableLogFrame.id = this.logicalFrameId;
