@@ -58,10 +58,11 @@ module.component(__componentName, {
 		 * tell parent component that we updated the project.
 		 */
 		onFieldChange() {
-			this.onProjectUpdate({
-				newProject: this.editableProject,
-				isValid: this.editableProject.forms.every(f => f.elements.length > 0)
-			});
+			// Remove empty forms.
+			if (this.editableProject.forms.some(ds => !ds.elements.length))
+				this.editableProject.forms = this.editableProject.forms.filter(ds => ds.elements.length);
+
+			this.onProjectUpdate({ newProject: this.editableProject, isValid: true });
 		}
 
 		onCreateFormClicked() {

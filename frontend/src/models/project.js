@@ -155,8 +155,10 @@ export default class Project {
 		this.groups.forEach(group => {
 			group.members = group.members.filter(e => entityIds.includes(e))
 		});
+		this.groups = this.groups.filter(group => group.members.length > 0);
 
 		this.forms.forEach(this._sanitizeForm, this);
+		this.forms = this.forms.filter(ds => ds.elements.length);
 
 		/////////////
 		// Sanitize links to variables from indicators
