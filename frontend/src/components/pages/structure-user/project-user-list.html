@@ -2,7 +2,7 @@
 	<li><a ui-sref="main.projects" translate="shared.projects"></a></li>
 	<li class="active" title="{{$ctrl.project.country}}" ng-bind="$ctrl.project.country|maxLength:20"></li>
 	<li class="active" title="{{$ctrl.project.name}}" ng-bind="$ctrl.project.name|maxLength:50"></li>
-	<li class="active" translate="project.share"></li>
+	<li class="active" translate="project.invitations"></li>
 </ol>
 
 <div class="centered" ng-if="!$ctrl.invitations.length">
@@ -10,7 +10,7 @@
 	<span>
 		<a class="btn btn-default" ng-click="$ctrl.onEditClicked()">
 			<i class="fa fa-plus"></i>
-			<span translate="project.invite_new_invitation"></span>
+			<span translate="project.add_invitation"></span>
 		</a>
 	</span>
 </div>

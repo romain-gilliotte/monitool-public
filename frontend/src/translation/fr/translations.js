@@ -37,6 +37,7 @@ export default {
 
 		country: "Pays",
 		apply: "Appliquer les modifications",
+		clone: "Cloner",
 		clone_structure: "Cloner structure",
 		clone_all: "Cloner structure et données",
 		home: "Accueil",
@@ -101,6 +102,12 @@ export default {
 	},
 
 	project: {
+		no_invitations_yet: "Vous n'avez pas encore invité d'autres utilisateurs à participer à votre projet",
+		add_invitation: "Inviter un utilisateur",
+		email: "Email",
+		user_help_email: "Quel est l'email de l'utilisateur que vous désirez inviter?",
+		total: "Total",
+		variables: "Variables",
 		owner: "Propriétaire",
 		invitations: "Invitations",
 		downloads: "Téléchargements",
@@ -183,6 +190,8 @@ export default {
 			forms_elements_add: "Ajoute la variable <code>{{item.name}}</code> dans <code>{{form.name}}</code>",
 			forms_elements_move: "Reordonne les variables de la source de données <code>{{form.name}}</code>",
 			forms_elements_remove: "Supprime la variable <code>{{item.name}}</code> dans <code>{{form.name}}</code>",
+			forms_elements_replace: "Remplace la variable <code>{{before.name}}</code> par <code>{{after.name}}</code>",
+
 			forms_elements_name_replace: "Renomme la variable <code>{{before}}</code> en <code>{{after}}</code>",
 			forms_elements_geoAgg_replace: "Change la règle d'aggrégation (lieux) de <code>{{variable.name}}</code> de <code>{{before}}</code> vers <code>{{after}}</code>",
 			forms_elements_timeAgg_replace: "Change la règle d'aggrégation (temps) de <code>{{variable.name}}</code> de <code>{{before}}</code> vers <code>{{after}}</code>",
