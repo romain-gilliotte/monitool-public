@@ -47,10 +47,20 @@ router.post('/rpc/clone-project', async ctx => {
 
 /** Get the data of the last data entry for all projects */
 router.get('/rpc/get-last-inputs', async ctx => {
+    const userEmail = ctx.state.profile.email;
+
     ctx.response.body = await database
         .collection('project')
         .aggregate([
-            { $match: { $or: [{ owner: ctx.state.profile.email }, { 'users.email': ctx.state.profile.email }] } },
+            { $lookup: { from: 'invitation', localField: '_id', foreignField: 'projectId', as: 'invitations' } },
+            {
+                $match: {
+                    $or: [
+                        { owner: userEmail },
+                        { invitations: { $elemMatch: { email: userEmail, accepted: true } } }
+                    ]
+                }
+            },
             { $project: { _id: 1 } },
             { $lookup: { from: 'input_seq', localField: '_id', foreignField: 'projectIds', as: 'sequences' } },
             { $project: { sequenceId: '$sequences._id' } },
@@ -59,6 +69,7 @@ router.get('/rpc/get-last-inputs', async ctx => {
             { $project: { inputId: '$inputs._id' } },
             { $unwind: '$inputId' },
             { $group: { _id: '$_id', lastEntry: { $last: '$inputId' } } },
+            // Those last 4 steps could be performed in the nodejs process.
             { $project: { value: [{ $toString: '$_id' }, { $toDate: '$lastEntry' }] } },
             { $group: { _id: null, value: { $push: '$value' } } },
             { $project: { value: { $arrayToObject: '$value' } } },
