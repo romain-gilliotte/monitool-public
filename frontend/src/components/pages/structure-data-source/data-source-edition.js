@@ -61,7 +61,15 @@ module.component(__componentName, {
 				// Are we creating a new data source?
 				this.editableDataSource = angular.copy(this.project.forms.find(ds => ds.id == this.dsId));
 				if (!this.editableDataSource) {
-					this.editableDataSource = { id: this.dsId, name: '', periodicity: 'month', entities: [], start: null, end: null, elements: [] };
+					this.editableDataSource = {
+						id: this.dsId,
+						name: '',
+						periodicity: 'month',
+						entities: this.project.entities.map(s => s.id),
+						start: null, end: null,
+						elements: []
+					};
+
 					this.onFieldChange();
 				}
 			}
