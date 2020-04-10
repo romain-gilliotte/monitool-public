@@ -32,9 +32,18 @@ module.component(__componentName, {
 		}
 
 		$onInit() {
-			this.ngSortableOptions = {
-				handle: '.handle',
+			this.dataSourceSortOptions = {
+				group: 'datasources',
+				handle: '.ds-handle',
 				onUpdate: this.onFieldChange.bind(this)
+			};
+
+			this.variableSortOptions = {
+				group: 'variables',
+				onStart: () => document.body.classList.add('dragging'),
+				onEnd: () => document.body.classList.remove('dragging'),
+				onUpdate: this.onFieldChange.bind(this), // triggered when moving in the same list.
+				onAdd: this.onFieldChange.bind(this), // triggered when moving from one list to another.
 			};
 		}
 
@@ -49,7 +58,10 @@ module.component(__componentName, {
 		 * tell parent component that we updated the project.
 		 */
 		onFieldChange() {
-			this.onProjectUpdate({ newProject: this.editableProject, isValid: true });
+			this.onProjectUpdate({
+				newProject: this.editableProject,
+				isValid: this.editableProject.forms.every(f => f.elements.length > 0)
+			});
 		}
 
 		onCreateFormClicked() {

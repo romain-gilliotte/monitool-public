@@ -5,8 +5,8 @@
 	<li class="active" translate="project.collection_form_list"></li>
 </ol>
 
-<div ng-sortable="$ctrl.ngSortableOptions">
-	<columns-panel sortable="true" ng-repeat="dataSource in $ctrl.editableProject.forms">
+<div ng-sortable="$ctrl.dataSourceSortOptions">
+	<columns-panel ng-repeat="dataSource in $ctrl.editableProject.forms" sortable="true" handle-class="ds-handle">
 		<pane-title>{{dataSource.name}}</pane-title>
 		<pane-body>
 			<div>
@@ -21,6 +21,15 @@
 				<strong translate="project.collection_site_list"></strong>
 				<element-groups ids="dataSource.entities" items="$ctrl.project.entities" groups="$ctrl.project.groups">
 				</element-groups>
+			</div>
+			<div>
+				<strong translate="project.variables"></strong>
+				<ul ng-sortable="$ctrl.variableSortOptions">
+					<li ng-repeat="variable in dataSource.elements track by variable.id" class="clickable">
+						<i class="fa fa-sort fa-fw"></i>
+						{{variable.name}}
+					</li>
+				</ul>
 			</div>
 
 			<div class="panel-buttons btn-group">
