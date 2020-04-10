@@ -2,7 +2,7 @@ const Router = require('koa-router');
 const ObjectId = require('mongodb').ObjectID;
 const JSONStream = require('JSONStream');
 const validateBody = require('../middlewares/validate-body');
-const { listProjectInvitations, listWaitingInvitations, getInvitation } = require('../storage/queries');
+const { listProjectInvitations, listWaitingInvitations, getInvitation, getProject } = require('../storage/queries');
 
 const validator = validateBody(require('../storage/validator/invitation'))
 
@@ -73,6 +73,21 @@ router.delete('/resources/invitation/:id', async ctx => {
     }
 });
 
+router.get('/resources/project/:id/user', async ctx => {
+    const project = await getProject(ctx.state.profile.email, ctx.params.id, { owner: 1 });
 
+    if (project) {
+        const invitations = await database.collection('invitation').find({
+            projectId: new ObjectId(ctx.params.id),
+            accepted: true,
+        }, { email: 1 }).toArray();
+
+        const emails = [project.owner, ...invitations.map(i => i.email)];
+        const users = database.collection('user').find({ _id: { $in: emails } });
+
+        ctx.response.type = 'application/json';
+        ctx.response.body = users.pipe(JSONStream.stringify());
+    }
+});
 
 module.exports = router;

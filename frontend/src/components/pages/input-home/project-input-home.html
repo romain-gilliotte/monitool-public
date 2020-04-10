@@ -7,13 +7,13 @@
 
 <legend>Participants</legend>
 
-<div ng-repeat="user in $ctrl.users track by user.email" class="thumbnail"
+<div ng-repeat="user in $ctrl.users track by user._id" class="thumbnail"
 	style="width: 160px; margin-right: 10px; display: inline-block;">
-	<img ng-src="{{user.avatar}}" style="width: 150px; height: 150px;" />
+	<img ng-src="{{user.picture}}" style="width: 150px; height: 150px;" />
 	<div class="caption">
-		<b>Nom:</b><br /> {{user.fullname}}<br />
-		<b>Email:</b><br /> <a href="mailto:{{ user.email }}">{{ user.email }}</a><br />
-		<b>Dernière connection:</b><br /> {{user.lastSeen|date}}
+		<b>Nom:</b><br /> {{user.name}}<br />
+		<b>Email:</b><br /> <a href="mailto:{{ user._id }}" target="_blank">{{ user._id }}</a><br />
+		<b>Dernière connexion:</b><br /> {{user.lastSeen|date}}
 	</div>
 </div>
 

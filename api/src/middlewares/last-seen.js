@@ -51,6 +51,7 @@ module.exports = async (ctx, next) => {
     const result = await database.collection('user').replaceOne(
         { _id: ctx.state.profile.email },
         {
+            name: ctx.state.profile.name,
             picture: ctx.state.profile.picture,
             lastSeen: new Date()
         },
