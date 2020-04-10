@@ -27,33 +27,6 @@ project-list pane-title i.fa {
 project-list pane-title i.fa.fa-star, project-list pane-title i.fa.fa-star-o {
   cursor: pointer
 }
-
-.panel-dashed {
-    color: #666;
-    border-color: #999;
-    border-style: dashed;
-  }
   
-  .panel-dashed > .panel-heading {
-    background-color: #f5f5f5;
-    border-color: #999;
-    border-bottom-style: dashed;
-  }
-  
-  
-  
-  .panel-deleted {
-    border-color: #b33;
-    border-style: dashed;
-  }
-  
-  .panel-deleted > .panel-heading {
-    color: #b33;
-    background-color: #f5dddd;
-    border-color: #b33;
-    border-bottom-style: dashed;
-  }
-  
-  
-  .profile-img { width: 16px; height: 16px; border-radius: 8px; }
+.profile-img { width: 16px; height: 16px; border-radius: 8px; }
 

@@ -6,6 +6,7 @@ import 'angular-legacy-sortablejs-maintained';
 import 'ui-select/dist/select.min.css';
 import mtOptionalDate from '../../shared/ng-models/optional-date';
 import mtHelpPanel from '../../shared/misc/help-panel';
+require(__cssPath);
 
 const module = angular.module(
 	__moduleName,
@@ -39,6 +40,10 @@ module.component(__componentName, {
 
 	controller: class ProjectSitesController {
 
+		constructor($filter) {
+			this.translate = $filter('translate');
+		}
+
 		$onInit() {
 			this.ngSortableOptions = {
 				handle: '.handle',
@@ -59,18 +64,29 @@ module.component(__componentName, {
 		onFieldChange() {
 			this.onProjectUpdate({
 				newProject: this.editableProject,
-				isValid: this.sitesForm.$valid
+				isValid: this.editableProject.entities.every(s => s.name.length > 0)
+					&& this.editableProject.groups.every(g => g.name.length > 0 && g.members.length > 0)
 			});
 		}
 
-		onCreateEntityClicked() {
-			this.editableProject.entities.push({ id: uuid(), name: '', start: null, end: null });
+		onCreateSiteClicked() {
+			this.editableProject.entities.push({ id: uuid(), name: '', active: true });
 			this.onFieldChange();
 		}
 
-		onDeleteEntityClicked(entityId) {
-			this.editableProject.entities = this.editableProject.entities.filter(e => e.id !== entityId);
+		onChangeSiteStatusClicked(site, newStatus) {
+			site.active = newStatus;
 			this.onFieldChange();
+		}
+
+		onDeleteSiteClicked(site) {
+			var question = this.translate('project.confirm_delete_site');
+
+			if (window.confirm(question)) {
+				this.editableProject.entities = this.editableProject.entities.filter(s => s !== site);
+				this.editableProject.sanitize();
+				this.onFieldChange();
+			}
 		}
 
 		onCreateGroupClicked() {

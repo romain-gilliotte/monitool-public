@@ -24,26 +24,24 @@
                 {{invitation.project.owner}}
             </div>
 
-            <div class="panel-buttons btn-group">
+            <div class="panel-buttons btn-group" uib-dropdown>
                 <a class="btn btn-default btn-xxs" ng-click="$ctrl.acceptInvitation(invitation)">
                     <i class="fa fa-check"></i>
                     {{"shared.accept_invitation"|translate}}
                 </a>
 
-                <div class="btn-group" uib-dropdown>
-                    <a class="btn btn-default btn-xxs" uib-dropdown-toggle>
-                        <span class="caret"></span>
-                    </a>
+                <a class="btn btn-default btn-xxs" uib-dropdown-toggle>
+                    <span class="caret"></span>
+                </a>
 
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a ng-click="$ctrl.refuseInvitation(invitation)">
-                                <i class="fa fa-trash text-danger"></i>
-                                <span class="text-danger" translate="shared.refuse_invitation"></span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                <ul class="dropdown-menu" uib-dropdown-menu>
+                    <li>
+                        <a ng-click="$ctrl.refuseInvitation(invitation)">
+                            <i class="fa fa-trash text-danger"></i>
+                            <span class="text-danger" translate="shared.refuse_invitation"></span>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </pane-body>
     </columns-panel>

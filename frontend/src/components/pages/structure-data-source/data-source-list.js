@@ -27,8 +27,9 @@ module.component(__componentName, {
 
 	controller: class ProjectDataSourcesController {
 
-		constructor($state) {
+		constructor($state, $filter) {
 			this.$state = $state;
+			this.translate = $filter('translate');
 		}
 
 		$onInit() {
@@ -65,17 +66,27 @@ module.component(__componentName, {
 			this.onProjectUpdate({ newProject: this.editableProject, isValid: true });
 		}
 
-		onCreateFormClicked() {
+		onCreateClicked() {
 			this.$state.go('project.config.collection_form_edition', { dataSourceId: uuid() });
 		}
 
-		onDeleteClicked(dataSource) {
-			this.editableProject.forms.splice(
-				this.editableProject.forms.indexOf(dataSource),
-				1
-			);
+		onChangeStatusClicked(dataSource, newStatus) {
+			dataSource.active = newStatus;
 
 			this.onFieldChange();
+		}
+
+		onDeleteClicked(dataSource) {
+			var question = this.translate('project.confirm_delete_datasource');
+
+			if (window.confirm(question)) {
+				this.editableProject.forms.splice(
+					this.editableProject.forms.indexOf(dataSource),
+					1
+				);
+
+				this.onFieldChange();
+			}
 		}
 
 	}

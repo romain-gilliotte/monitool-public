@@ -1,7 +1,6 @@
 import axios from 'axios';
 import exprEval from 'expr-eval';
-import TimeSlot from 'timeslot-dag';
-import { TimeDimension, GenericDimension } from 'olap-in-memory';
+import { GenericDimension, TimeDimension } from 'olap-in-memory';
 
 export default class Project {
 
@@ -86,15 +85,7 @@ export default class Project {
 
 		// Time dimension
 		const periodicity = strictTime ? form.periodicity : 'day';
-		const start = [this.start, form.start].filter(a => a).sort().pop();
-		const end = [this.end, form.end].sort().shift();
-		const time = new TimeDimension(
-			'time',
-			periodicity,
-			TimeSlot.fromDate(start, periodicity).value,
-			TimeSlot.fromDate(end, periodicity).value,
-			`project.dimensions.time`
-		);
+		const time = new TimeDimension('time', periodicity, this.start, this.end, `project.dimensions.time`);
 
 		// location dimension
 		const siteIdToName = siteId => this.entities.find(s => s.id == siteId).name;

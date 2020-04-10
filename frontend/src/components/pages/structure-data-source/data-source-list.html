@@ -6,13 +6,10 @@
 </ol>
 
 <div ng-sortable="$ctrl.dataSourceSortOptions">
-	<columns-panel ng-repeat="dataSource in $ctrl.editableProject.forms" sortable="true" handle-class="ds-handle">
+	<columns-panel ng-repeat="dataSource in $ctrl.editableProject.forms" sortable="true" handle-class="ds-handle"
+		variant="dataSource.active ? 'default' : 'dashed'">
 		<pane-title>{{dataSource.name}}</pane-title>
 		<pane-body>
-			<div>
-				<strong translate="shared.date"></strong>
-				{{dataSource.start|date}} - {{dataSource.end|date}}
-			</div>
 			<div>
 				<strong translate="project.periodicity"></strong>
 				{{'project.periodicities.' + dataSource.periodicity|translate}}
@@ -33,18 +30,24 @@
 			</div>
 
 			<div class="panel-buttons btn-group">
-				<a class="btn btn-default btn-xxs"
+				<a class="btn btn-default btn-xxs" ng-if="dataSource.active"
 					ui-sref="project.config.collection_form_edition({dataSourceId: dataSource.id})">
 					<i class="fa fa-pencil"></i>
 					<span translate="shared.edit"></span>
 				</a>
 
-				<div class="btn-group" uib-dropdown>
+				<a class="btn btn-default btn-xxs" ng-if="!dataSource.active"
+					ng-click="$ctrl.onChangeStatusClicked(dataSource, true)">
+					<i class="fa fa-play"></i>
+					<span translate="shared.enable"></span>
+				</a>
+
+				<div class="btn-group" ng-if="dataSource.active" uib-dropdown>
 					<a class="btn btn-default btn-xxs" uib-dropdown-toggle>
 						<span class="caret"></span>
 					</a>
 
-					<ul class="dropdown-menu">
+					<ul class="dropdown-menu" uib-dropdown-menu>
 						<li>
 							<a href="{{::$root.serviceUrl}}/resources/project/{{$ctrl.editableProject._id}}/data-source/{{dataSource.id}}.pdf?orientation=portrait&language={{$root.language}}&token={{$root.accessToken}}"
 								target="_blank">
@@ -60,6 +63,12 @@
 							</a>
 						</li>
 						<li>
+							<a ng-click="$ctrl.onChangeStatusClicked(dataSource, false)">
+								<i class="fa fa-stop"></i>
+								<span translate="shared.disable"></span>
+							</a>
+						</li>
+						<li>
 							<a ng-click="$ctrl.onDeleteClicked(dataSource)">
 								<i class="fa fa-trash text-danger"></i>
 								<span class="text-danger" translate="shared.delete"></span>
@@ -72,7 +81,7 @@
 	</columns-panel>
 </div>
 
-<a class="btn btn-default" ng-click="$ctrl.onCreateFormClicked()">
+<a class="btn btn-default" ng-click="$ctrl.onCreateClicked()">
 	<i class="fa fa-plus"></i>
 	<span translate="project.add_datasource"></span>
 </a>

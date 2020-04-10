@@ -2,6 +2,8 @@
 
 export default {
 	shared: {
+		enable: "Réactiver la saisie",
+		disable: "Désactiver la saisie",
 		accept_invitation: "Accepter",
 		refuse_invitation: "Refuser",
 		uninvite: "Retirer de mes projets",
@@ -102,6 +104,8 @@ export default {
 	},
 
 	project: {
+		confirm_delete_site: `Si vous supprimez ce site, vous ne pourrez plus accéder à ses données dans les rapports. Confirmez pour supprimer.`,
+		confirm_delete_datasource: `Si vous supprimez cette source de données, vous ne pourrez plus accéder à ses données dans les rapports, ni en indicateurs qui en dépendent. Confirmez pour supprimer.`,
 		no_invitations_yet: "Vous n'avez pas encore invité d'autres utilisateurs à participer à votre projet",
 		add_invitation: "Inviter un utilisateur",
 		email: "Email",
@@ -138,7 +142,7 @@ export default {
 		revision_show_more: "Voir plus de modifications",
 
 		history: {
-			active_replace: "Change le status de suppression de <code>{{!before}}</code> vers <code>{{!after}}</code>",
+			active_replace: "{{after ? 'Restaure' : 'Supprime'}} le projet",
 			name_replace: "Renomme le projet de <code>{{before}}</code> vers <code>{{after}}</code>",
 			start_replace: "Modifie la date de début du projet de <code>{{before|date}}</code> vers <code>{{after|date}}</code>",
 			end_replace: "Modifie la date de fin du projet de <code>{{before|date}}</code> vers <code>{{after|date}}</code>",
@@ -153,8 +157,7 @@ export default {
 			entities_move: "Reordonne les lieux du projet",
 			entities_remove: "Supprime le lieu <code>{{item.name}}</code>",
 			entities_name_replace: "Renomme le lieu <code>{{before}}</code> en <code>{{after}}</code>",
-			entities_start_replace: "Change la date de début du lieu <code>{{entity.name}}</code> de <code>{{before|date}}</code> vers <code>{{after|date}}</code>",
-			entities_end_replace: "Change la date de fin du lieu <code>{{entity.name}}</code> de <code>{{before|date}}</code> vers <code>{{after|date}}</code>",
+			entities_active_replace: "{{after ? 'Active' : 'Désactive'}} la saisie sur le site <code>{{entity.name}}</code>",
 
 			groups_add: "Ajoute le groupe <code>{{item.name}}</code>",
 			groups_move: "Reordonne les groupes du projet",
@@ -177,11 +180,11 @@ export default {
 
 			forms_add: "Ajoute la source de données <code>{{item.name}}</code>",
 			forms_move: "Reordonne les sources de données du projet",
+			forms_replace: "Remplace la source de données <code>{{before.name}}</code> par <code>{{after.name}}</code>",
 			forms_remove: "Supprime la source de données <code>{{item.name}}</code>",
 			forms_name_replace: "Renomme la source de données <code>{{before}}</code> en <code>{{after}}</code>",
 			forms_periodicity_replace: "Change la périodicité de <code>{{form.name}}</code> de <code>{{before}}</code> vers <code>{{after}}</code>",
-			forms_start_replace: "Change la date de début de <code>{{form.name}}</code> de <code>{{before|date}}</code> vers <code>{{after|date}}</code>",
-			forms_end_replace: "Change la date de fin de <code>{{form.name}}</code> de <code>{{before|date}}</code> vers <code>{{after|date}}</code>",
+			forms_active_replace: "{{after ? 'Active' : 'Désactive'}} la saisie sur la source de données <code>{{form.name}}</code>",
 
 			forms_entities_add: "Ajoute le lieu <code>{{item.name}}</code> à la source de données <code>{{form.name}}</code>",
 			forms_entities_move: "Reordonne les lieux de la source de données <code>{{form.name}}</code>",
@@ -286,7 +289,7 @@ export default {
 		show_more_inputs: "Voir les dates précedentes",
 		all_elements: "Tout",
 		no_extra_indicators: "Aucune indicateur annexé n'a été créé. Cliquez sur \"Ajouter un indicateur\" pour en créer un!",
-		no_data_source: "<span style=\"font-style: italic\">Créez des sources de données pour pouvoir saisir</span>",
+		no_data_source: "<span style=\"font-style: italic\">Aucune source de données n'est prête à la saisie</span>",
 		general_info: "Information génerales",
 		collected_by: "Information collectée par",
 		reporting_empty: "Aucun indicateur n'a été ajouté dans cette section.",

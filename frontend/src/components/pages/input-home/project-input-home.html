@@ -28,7 +28,10 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr ng-repeat="dataSource in $ctrl.project.forms track by dataSource.id">
+		<tr ng-if="$ctrl.activeDataSources.length == 0">
+			<td colspan="3" translate="project.no_data_source" style="text-align: center;"></td>
+		</tr>
+		<tr ng-repeat="dataSource in $ctrl.activeDataSources track by dataSource.id">
 			<td>
 				<a class="btn btn-default btn-xs" title="{{dataSource.name}}"
 					ui-sref="project.usage.list({dataSourceId: dataSource.id})">

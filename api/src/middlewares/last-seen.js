@@ -25,11 +25,6 @@ function offsetProject(project, offset) {
             start: offsetTimeSlot(lf.start, offset),
             end: offsetTimeSlot(lf.end, offset),
         })),
-        forms: project.forms.map(form => ({
-            ...form,
-            start: offsetTimeSlot(form.start, offset),
-            end: offsetTimeSlot(form.end, offset),
-        })),
     };
 }
 

@@ -61,7 +61,7 @@ module.component(__componentName, {
 			this.dataSource = this.project.forms.find(ds => ds.id === this.dataSourceId);
 
 			// Define sites (depending on user permissions)
-			this.sites = this.project.entities.filter(e => this.dataSource.entities.includes(e.id));
+			this.sites = this.project.entities.filter(e => e.active && this.dataSource.entities.includes(e.id));
 
 			this.loading = true;
 			this.load();

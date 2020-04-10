@@ -9,68 +9,57 @@
         {
             "id": "efd44382-687e-43b3-9280-ab244828db80",
             "name": "Regional Office",
-            "start": "2015-05-01",
-            "end": null
+            "active": true
         },
         {
             "id": "1a9cab71-e007-411a-865c-10df86ceeb86",
             "name": "Primary health center Lapataganj 1",
-            "start": null,
-            "end": null
+            "active": true
         },
         {
             "id": "6b3db2d4-99cb-4a48-8e44-c56122f3a0a4",
             "name": "Primary health center Lapataganj 2",
-            "start": null,
-            "end": null
+            "active": true
         },
         {
             "id": "485bcb7a-4e07-451a-818f-71cc923650d6",
             "name": "Primary health center Lapataganj 3",
-            "start": null,
-            "end": null
+            "active": true
         },
         {
             "id": "536dec89-53d9-4aec-8a5c-d450dd99889f",
             "name": "Referral hospital Lapataganj",
-            "start": null,
-            "end": null
+            "active": true
         },
         {
             "id": "77f91a4d-69df-48c5-8698-1315e86a7a27",
             "name": "GBV mobile unit Lapataganj",
-            "start": null,
-            "end": null
+            "active": true
         },
         {
             "id": "82fa8899-5c44-4c40-ae28-7bcac2a66f2e",
             "name": "Primary health center Pawnee 1",
-            "start": null,
-            "end": null
+            "active": true
         },
         {
             "id": "630755ff-a55e-4bff-976f-d30666cc8a21",
             "name": "Primary health center Pawnee 2",
-            "start": null,
-            "end": null
+            "active": true
         },
         {
             "id": "5e43976c-8a4e-4193-b1c5-32cbc72c8781",
             "name": "Primary health center Pawnee 3",
-            "start": null,
-            "end": null
+            "active": true
         },
         {
             "id": "ce39f247-2e9f-4ddf-b359-6075a79d7ae6",
             "name": "Primary health center Pawnee 4",
-            "start": null,
-            "end": null
+            "active": true
         },
         {
             "id": "fc8fffb6-91e5-4c86-8078-c9748adc489d",
             "name": "Referral hospital Pawnee",
-            "start": null,
-            "end": null
+            "active": true
         }
     ],
     "groups": [
@@ -583,8 +572,7 @@
             "id": "91712367-acf3-408a-9b5c-c534202f1c52",
             "name": "HMIS extraction (PHC)",
             "periodicity": "month",
-            "start": null,
-            "end": null,
+            "active": true,
             "elements": [
                 {
                     "id": "9a8d7e9a-7a3d-438b-a6f0-5f80e5d425d6",
@@ -862,8 +850,7 @@
             "id": "f1df28ee-9095-425c-b3a0-35f7d91c8027",
             "name": "Pharmacy register (PHC)",
             "periodicity": "month",
-            "start": null,
-            "end": null,
+            "active": true,
             "elements": [
                 {
                     "id": "bc3ac75c-543b-4fe1-89ee-0684105bcfb1",
@@ -888,8 +875,7 @@
             "id": "5ba9162e-187f-4c36-b2cf-c2e48630abc0",
             "name": "Quaterly supervision report (PHC)",
             "periodicity": "quarter",
-            "start": null,
-            "end": null,
+            "active": true,
             "elements": [
                 {
                     "id": "1e3a98c7-6970-418a-b8ab-a4b03746147a",
@@ -1009,8 +995,7 @@
             "id": "3178f912-3e9e-4551-8a91-82f97b8dd54e",
             "name": "GBV register (PHC &  Mobile)",
             "periodicity": "month",
-            "start": null,
-            "end": null,
+            "active": true,
             "elements": [
                 {
                     "id": "82099d87-352a-4bcd-b6ac-a92d1a17be59",
@@ -1093,8 +1078,7 @@
             "id": "ed27c402-bcd8-4c90-b00f-f21c75fac272",
             "name": "HMIS extraction (Referral hospitals)",
             "periodicity": "month",
-            "start": null,
-            "end": null,
+            "active": true,
             "elements": [
                 {
                     "id": "6fbf542d-d73b-44b1-937d-500b029a7160",
@@ -1206,8 +1190,7 @@
             "id": "cb67357e-ac0c-4e98-af8e-2616c42c8cd2",
             "name": "GBV register (Referral hospitals)",
             "periodicity": "month",
-            "start": null,
-            "end": null,
+            "active": true,
             "elements": [
                 {
                     "id": "83c2c815-c027-4d74-a4d3-3abf6e73dd28",
@@ -1316,8 +1299,7 @@
             "id": "d828515c-d0c6-4e67-81aa-1a287f2bc791",
             "name": "Census",
             "periodicity": "month",
-            "start": null,
-            "end": null,
+            "active": true,
             "elements": [
                 {
                     "id": "5377025f-d5b5-4f44-9bf7-cc6b34f35c71",
@@ -1409,8 +1391,7 @@
             "id": "837ba520-a364-4f64-91ed-547427254250",
             "name": "Coordination data",
             "periodicity": "quarter",
-            "start": null,
-            "end": null,
+            "active": true,
             "elements": [
                 {
                     "id": "765b8331-5ef9-4ac7-9558-706d0de3cf49",

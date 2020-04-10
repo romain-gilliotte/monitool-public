@@ -30,6 +30,7 @@
         padding: 10px;
         overflow-y: auto;
         margin-bottom: 0;
+        height: 100%;
     }
   
     project-columns .project-container .project-content {

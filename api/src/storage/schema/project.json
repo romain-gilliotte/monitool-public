@@ -43,6 +43,12 @@
 			"type": "array",
 			"items": {
 				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"id",
+					"name",
+					"active"
+				],
 				"properties": {
 					"id": {
 						"$ref": "#/definitions/uuid"
@@ -51,27 +57,8 @@
 						"type": "string",
 						"minLength": 1
 					},
-					"start": {
-						"oneOf": [
-							{
-								"type": "null"
-							},
-							{
-								"type": "string",
-								"format": "date"
-							}
-						]
-					},
-					"end": {
-						"oneOf": [
-							{
-								"type": "null"
-							},
-							{
-								"type": "string",
-								"format": "date"
-							}
-						]
+					"active": {
+						"type": "boolean"
 					}
 				}
 			}
@@ -80,6 +67,12 @@
 			"type": "array",
 			"items": {
 				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"id",
+					"name",
+					"members"
+				],
 				"properties": {
 					"id": {
 						"$ref": "#/definitions/uuid"

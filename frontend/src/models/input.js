@@ -32,6 +32,11 @@ export default class Input {
 					id: 'time',
 					attribute: 'day',
 					range: [null, new Date().toISOString().substring(0, 10)]
+				},
+				{
+					id: 'location',
+					attribute: 'entity',
+					items: project.entities.filter(s => s.active).map(s => s.id)
 				}
 			],
 			aggregate: [

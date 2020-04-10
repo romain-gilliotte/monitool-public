@@ -32,8 +32,17 @@ module.component(__componentName, {
 
 		async $onChanges(changes) {
 			this.status = {};
-			this.project.forms.forEach(async form => {
-				this.status[form.id] = await Input.fetchFormShortStatus(this.project, form.id);
+
+			// A datasource is active if we can perform data entry in at least one site.
+			this.activeDataSources = this.project.forms.filter(ds => {
+				return ds.active
+					&& ds.entities.some(
+						siteId => this.project.entities.find(site => site.id == siteId).active
+					)
+			});
+
+			this.activeDataSources.forEach(async ds => {
+				this.status[ds.id] = await Input.fetchFormShortStatus(this.project, ds.id);
 				this.$scope.$apply();
 			});
 		}

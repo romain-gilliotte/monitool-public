@@ -17,26 +17,22 @@
             <div class="caption">
                 <h3 style="margin-top: 5px;">{{file.category|translate}}</h3>
                 <p>{{file.name}}</p>
-                <div class="btn-group pull-right">
-                    <a href="{{file.portrait}}" target="_blank" class="btn btn-default btn-xs" uib-dropdown-toggle>
+                <div class="btn-group pull-right" uib-dropdown>
+                    <a href="{{file.portrait}}" target="_blank" class="btn btn-default btn-xs">
                         <i class="fa fa-file-pdf-o"></i>
                         Version Portrait
                     </a>
-
-                    <div class="btn-group" uib-dropdown>
-                        <a class="btn btn-default btn-xs" uib-dropdown-toggle>
-                            <span class="caret"></span>
-                        </a>
-
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="{{file.landscape}}" target="_blank">
-                                    <i class="fa fa-file-pdf-o"></i>
-                                    Version Paysage
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                    <a class="btn btn-default btn-xs" uib-dropdown-toggle>
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="{{file.landscape}}" target="_blank">
+                                <i class="fa fa-file-pdf-o"></i>
+                                Version Paysage
+                            </a>
+                        </li>
+                    </ul>
                 </div>
                 <div style="clear: both"></div>
             </div>

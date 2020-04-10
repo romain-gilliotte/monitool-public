@@ -5,8 +5,7 @@
 		"id",
 		"name",
 		"periodicity",
-		"start",
-		"end",
+		"active",
 		"elements"
 	],
 	"properties": {
@@ -40,27 +39,8 @@
 				"year"
 			]
 		},
-		"start": {
-			"oneOf": [
-				{
-					"type": "null"
-				},
-				{
-					"type": "string",
-					"format": "date"
-				}
-			]
-		},
-		"end": {
-			"oneOf": [
-				{
-					"type": "null"
-				},
-				{
-					"type": "string",
-					"format": "date"
-				}
-			]
+		"active": {
+			"type": "boolean"
 		},
 		"elements": {
 			"type": "array",

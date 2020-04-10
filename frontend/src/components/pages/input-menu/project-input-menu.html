@@ -18,7 +18,7 @@
 
 			<div class="panel-collapse">
 				<div class="list-group">
-					<a ng-repeat="dataSource in $ctrl.project.forms"
+					<a ng-repeat="dataSource in $ctrl.activeDataSources"
 						ui-sref="project.usage.list({dataSourceId: dataSource.id})"
 						ng-class="{active: ($ctrl.$state.is('project.usage.list') || $ctrl.$state.is('project.usage.edit')) && $ctrl.$stateParams.dataSourceId == dataSource.id}"
 						class="list-group-item" title="{{dataSource.name}}"
@@ -27,7 +27,7 @@
 						<span>{{dataSource.name}}</span>
 					</a>
 
-					<a class="list-group-item" ng-if="$ctrl.project.forms.length === 0" disable-if="1">
+					<a class="list-group-item" ng-if="$ctrl.activeDataSources.length === 0" disable-if="1">
 						<i class="fa fa-pencil fa-fw"></i>
 						<span translate="project.no_data_source"></span>
 					</a>

@@ -109,9 +109,7 @@ function createInputDimensions(content) {
 /** Create Cube dimensions for a given variable. This is needed to build a cube */
 function createVariableDimensions(project, form, variable, periodicity = null) {
     // Time dimension
-    const start = [project.start, form.start].filter(a => a).sort().pop();
-    const end = [project.end, form.end].sort().shift();
-    const time = new TimeDimension('time', periodicity || form.periodicity, start, end);
+    const time = new TimeDimension('time', periodicity || form.periodicity, project.start, project.end);
 
     // location dimension
     const entity = new GenericDimension('location', 'entity', form.entities);
@@ -153,15 +151,13 @@ function createVariableRules(variable) {
     return aggregation
 }
 
-function loadProject(projectId, variableId) {
+function loadProject(projectId) {
     const projection = {
         'start': true,
         'end': true,
         'entities.id': true,
         'groups.id': true,
         'groups.members': true,
-        'forms.start': true,
-        'forms.end': true,
         'forms.entities': true,
         'forms.periodicity': true,
         'forms.elements.id': true,

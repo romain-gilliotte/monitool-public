@@ -53,10 +53,6 @@ export function buildQueryFromVariable(variable, dataSource = null, project = nu
 
     if (dataSource) {
         dice.push({ id: 'location', attribute: 'entity', items: dataSource.entities });
-        if (dataSource.start)
-            dice.push({ id: 'time', attribute: 'day', range: [dataSource.start, null] });
-        if (dataSource.end)
-            dice.push({ id: 'time', attribute: 'day', range: [null, dataSource.end] });
     }
 
     return {
