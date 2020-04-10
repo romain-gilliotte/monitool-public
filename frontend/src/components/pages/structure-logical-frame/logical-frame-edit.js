@@ -93,20 +93,22 @@ module.component(__componentName, {
 			this.purposeSortOptions = {
 				group: 'purposes',
 				handle: '.purpose-handle',
-				onUpdate: this.onFieldChange.bind(this)
-
+				onUpdate: this.onFieldChange.bind(this),
+				onAdd: this.onFieldChange.bind(this)
 			};
 
 			this.outputSortOptions = {
 				group: 'outputs',
 				handle: '.output-handle',
-				onUpdate: this.onFieldChange.bind(this)
+				onUpdate: this.onFieldChange.bind(this),
+				onAdd: this.onFieldChange.bind(this)
 			};
 
 			this.activitySortOptions = {
 				group: 'activities',
 				handle: '.activity-handle',
-				onUpdate: this.onFieldChange.bind(this)
+				onUpdate: this.onFieldChange.bind(this),
+				onAdd: this.onFieldChange.bind(this)
 			};
 
 			this.indicatorsSortOptions = {
@@ -114,7 +116,8 @@ module.component(__componentName, {
 				handle: '.indicator-handle',
 				onStart: () => document.body.classList.add('dragging'),
 				onEnd: () => document.body.classList.remove('dragging'),
-				onUpdate: this.onFieldChange.bind(this)
+				onUpdate: this.onFieldChange.bind(this),
+				onAdd: this.onFieldChange.bind(this)
 			};
 		}
 
