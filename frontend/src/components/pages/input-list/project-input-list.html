@@ -21,12 +21,12 @@
 						<a class="btn btn-xs btn-default" ng-if="$ctrl.inputsStatus[date][site.id] !== 0"
 							ui-sref="project.usage.edit({dataSourceId: $ctrl.dataSource.id, period: date, entityId: site.id})"
 							translate="project.input_status.done"
-							translate-values="::{value: $ctrl.inputsStatus[date][site.id]}">
+							translate-values="::{value: $ctrl.inputsStatus[date][site.id]}"></a>
 
-							<a class="btn btn-xs btn-primary"
-								ui-sref="project.usage.edit({dataSourceId: $ctrl.dataSource.id, period: date, entityId: site.id})"
-								ng-if="$ctrl.inputsStatus[date][site.id] === 0"
-								translate="project.input_status.expected"></a>
+						<a class="btn btn-xs btn-primary"
+							ui-sref="project.usage.edit({dataSourceId: $ctrl.dataSource.id, period: date, entityId: site.id})"
+							ng-if="$ctrl.inputsStatus[date][site.id] === 0"
+							translate="project.input_status.expected"></a>
 					</div>
 				</td>
 			</tr>
@@ -51,10 +51,8 @@
 					<div class="bodyField">&nbsp;</div>
 				</td>
 				<td colspan="{{::$ctrl.sites.length}}" style="text-align: center">
-					<!-- <div class="bodyField"> -->
 					<a class="btn btn-default btn-xs" ng-click="$ctrl.showMore()"
 						translate="project.show_more_inputs"></a>
-					<!-- </div> -->
 				</td>
 			</tr>
 		</tbody>
