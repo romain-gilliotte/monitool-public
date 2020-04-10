@@ -544,6 +544,13 @@ export default {
 		output_assumptions_ph: '',
 		logframe_ph_name: "ex: ECHO",
 
+		specific_dates: 'Durée de validité',
+		specific_dates_yes: 'Utiliser des dates spécifiques à ce cadre logique',
+		specific_dates_use_project: 'Utiliser les mêmes dates que le projet',
+		logframe_edit_help_specificdates: `Si ce cadre logique n'est valable que pendant une partie de la durée de projet, vous pouvez l'indiquer ici`,
+		logframe_edit_help_start: "Date à partir de laquelle vous voulez calculer les indicateurs de ce cadre logique",
+		logframe_edit_help_end: "Date jusqu'à laquelle vous voulez calculer les indicateurs de ce cadre logique seront calculés",
+
 		logframe_help_sites: "Parmi les structures identifiées dans \"Lieux de collecte\", lesquelles considérer pour ce cadre logique?",
 		logframe_help_name: "Nommez ce cadre logique de façon à l'identifier facilement. Par exemple avec le nom du bailleur auquel il est destiné",
 		logframe_help_goal: "Description de la contribution du projet aux objectifs (impact) d\'une politique ou d\'un programme",
@@ -660,8 +667,6 @@ export default {
 		logframe_help_activity_desc: "Activité réalisée par l'ONG",
 		logframe_help_activity_indicators: "Rentrez ici les indicateurs permettant de mesurer l'avancement de l'activité",
 
-		logframe_edit_help_start: "Si ce cadre logique n'est pas valable à partir du début du projet indiquez le ici, sinon laisser 'Idem début du projet'",
-		logframe_edit_help_end: "Si ce cadre logique n'est pas valable jusqu'à la fin du projet indiquez le ici, sinon laisser 'Idem fin du projet'",
 		form_is_not_associated_with_site: "Cette source de données n'est associé à aucun lieu de collecte."
 	},
 

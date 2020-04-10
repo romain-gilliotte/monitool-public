@@ -4,7 +4,6 @@ import uiRouter from '@uirouter/angularjs';
 import uiSelect from 'ui-select';
 import 'angular-legacy-sortablejs-maintained';
 import 'ui-select/dist/select.min.css';
-import mtOptionalDate from '../../shared/ng-models/optional-date';
 import mtElementFilter from '../../shared/ng-models/element-filter';
 import mtPartitionList from './partition-list';
 import mtPartitionDistribution from './partition-distribution';
@@ -19,7 +18,6 @@ const module = angular.module(
 
 		uiSelect, // for partition group members
 
-		mtOptionalDate, // Datepicker start & end
 		mtElementFilter, // Sites & groups associated with form
 		mtPartitionList,
 		mtPartitionDistribution,

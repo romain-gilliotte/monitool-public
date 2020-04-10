@@ -4,7 +4,6 @@ import uiRouter from '@uirouter/angularjs';
 import uiSelect from 'ui-select';
 import 'angular-legacy-sortablejs-maintained';
 import 'ui-select/dist/select.min.css';
-import mtOptionalDate from '../../shared/ng-models/optional-date';
 import mtHelpPanel from '../../shared/misc/help-panel';
 require(__cssPath);
 
@@ -14,7 +13,6 @@ const module = angular.module(
 		uiRouter, // for $stateProvider
 		uiSelect, // for site groups
 		'ng-sortable', // order sites
-		mtOptionalDate, // Datepicker start & end
 		mtHelpPanel
 	]
 );

@@ -5,6 +5,7 @@ import 'angular-legacy-sortablejs-maintained';
 import mtIndicatorDisplay from '../../shared/indicator/indicator';
 import mtIndicatorModal from '../../shared/indicator/indicator-edition-modal';
 import mtDirectiveAutoresize from '../../../directives/helpers/autoresize';
+import mtDatePicker from '../../shared/ng-models/utc-datepicker';
 import mtHelpPanel from '../../shared/misc/help-panel';
 
 const module = angular.module(
@@ -17,6 +18,7 @@ const module = angular.module(
 		mtIndicatorDisplay,
 		mtIndicatorModal,
 		mtDirectiveAutoresize,
+		mtDatePicker,
 		mtHelpPanel
 	]
 );
@@ -84,10 +86,24 @@ module.component(__componentName, {
 						purposes: []
 					};
 
+				this.specificDates = this.editableLogFrame.start ? 'yes' : 'no';
+
 				// and make sure that the id is defined.
 				this.editableLogFrame.id = this.logicalFrameId;
 				this.onFieldChange();
 			}
+		}
+
+		toggleSpecificDates() {
+			if (this.specificDates === 'no') {
+				this.editableLogFrame.start = this.editableLogFrame.end = null;
+			}
+			else {
+				this.editableLogFrame.start = this.project.start;
+				this.editableLogFrame.end = this.project.end;
+			}
+
+			this.onFieldChange();
 		}
 
 		$onInit() {

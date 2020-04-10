@@ -36,21 +36,33 @@
 			</form-group>
 
 			<!-- [Specific dates] -->
-			<form-group input-id="logframe-startdate-input" label="project.specific_start"
-				help="project.logframe_edit_help_start">
+			<form-group input-id="logframe-specific-input" label="project.specific_dates"
+				help="project.logframe_edit_help_specificdates">
 
-				<optional-date id="logframe-startdate-input" ng-model="$ctrl.editableLogFrame.start"
-					ng-change="$ctrl.onFieldChange()" default="$ctrl.project.start" message="project.same_as_start">
-				</optional-date>
+				<select id="logframe-specific-input" ng-change="$ctrl.toggleSpecificDates()"
+					ng-model="$ctrl.specificDates" class="form-control">
+					<option translate="project.specific_dates_use_project" value="no"></option>
+					<option translate="project.specific_dates_yes" value="yes"></option>
+				</select>
 			</form-group>
 
-			<form-group input-id="logframe-enddate-input" label="project.specific_end"
-				help="project.logframe_edit_help_end">
+			<div ng-if="$ctrl.editableLogFrame.start || $ctrl.editableLogFrame.end">
+				<form-group input-id="logframe-startdate-input" label="project.start"
+					help="project.logframe_edit_help_start">
 
-				<optional-date ng-model="$ctrl.editableLogFrame.end" ng-change="$ctrl.onFieldChange()"
-					default="$ctrl.project.end" message="project.same_as_end"></optional-date>
+					<utc-datepicker id="logframe-startdate-input" ng-model="$ctrl.editableLogFrame.start"
+						ng-change="$ctrl.onFieldChange()">
+					</utc-datepicker>
+				</form-group>
 
-			</form-group>
+				<form-group input-id="logframe-enddate-input" label="project.specific_end"
+					help="project.logframe_edit_help_end">
+
+					<utc-datepicker ng-model="$ctrl.editableLogFrame.end" ng-change="$ctrl.onFieldChange()">
+					</utc-datepicker>
+
+				</form-group>
+			</div>
 			<!-- [/Specific dates] -->
 
 		</div>
