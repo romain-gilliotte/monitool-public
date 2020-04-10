@@ -2,29 +2,39 @@
 	<li><a ui-sref="main.projects" translate="shared.projects"></a></li>
 	<li class="active" title="{{$ctrl.project.country}}" ng-bind="$ctrl.project.country|maxLength:20"></li>
 	<li class="active" title="{{$ctrl.project.name}}" ng-bind="$ctrl.project.name|maxLength:50"></li>
-	<li class="active" translate="project.users"></li>
+	<li class="active" translate="project.share"></li>
 </ol>
 
-<div ng-sortable="$ctrl.sortableOptions">
-	<columns-panel sortable="true" ng-repeat="user in $ctrl.invitations">
-		<pane-title>{{user.email}}</pane-title>
+<div class="centered" ng-if="!$ctrl.invitations.length">
+	<span translate="project.no_invitations_yet"></span>
+	<span>
+		<a class="btn btn-default" ng-click="$ctrl.onEditClicked()">
+			<i class="fa fa-plus"></i>
+			<span translate="project.invite_new_invitation"></span>
+		</a>
+	</span>
+</div>
+
+<div ng-if="$ctrl.invitations.length">
+	<columns-panel ng-repeat="invitation in $ctrl.invitations">
+		<pane-title>{{invitation.email}}</pane-title>
 		<pane-body>
 			<div>
-				<strong translate="project.user_role"></strong>
-				{{('project.user_roles.' + user.role)|translate}}
+				<strong translate="project.invitation_role"></strong>
+				{{('project.invitation_roles.' + invitation.role)|translate}}
 			</div>
-			<div ng-if="user.role == 'input'">
+			<div ng-if="invitation.role == 'input'">
 				<strong translate="project.collection_site_list"></strong>
-				<element-groups ids="user.entities" items="$ctrl.project.entities" groups="$ctrl.project.groups">
+				<element-groups ids="invitation.entities" items="$ctrl.project.entities" groups="$ctrl.project.groups">
 				</element-groups>
 			</div>
-			<div ng-if="user.role == 'input'">
+			<div ng-if="invitation.role == 'input'">
 				<strong translate="project.collection_form_list"></strong>
-				<element-groups ids="user.dataSources" items="$ctrl.project.forms" groups="[]"></element-groups>
+				<element-groups ids="invitation.dataSources" items="$ctrl.project.forms" groups="[]"></element-groups>
 			</div>
 
 			<div class="panel-buttons btn-group">
-				<a ng-click="$ctrl.onEditUserClicked(user)" class="btn btn-default btn-xxs">
+				<a ng-click="$ctrl.onEditClicked(invitation)" class="btn btn-default btn-xxs">
 					<i class="fa fa-pencil"></i>
 					<span translate="shared.edit"></span>
 				</a>
@@ -36,7 +46,7 @@
 
 					<ul class="dropdown-menu">
 						<li>
-							<a ng-click="$ctrl.onDeleteClicked(user)">
+							<a ng-click="$ctrl.onDeleteClicked(invitation)">
 								<i class="fa fa-trash text-danger"></i>
 								<span class="text-danger" translate="shared.delete"></span>
 							</a>
@@ -46,9 +56,9 @@
 			</div>
 		</pane-body>
 	</columns-panel>
-</div>
 
-<a class="btn btn-default" ng-click="$ctrl.onEditUserClicked()">
-	<i class="fa fa-plus"></i>
-	<span translate="project.add_user"></span>
-</a>
+	<a class="btn btn-default" ng-click="$ctrl.onEditClicked()">
+		<i class="fa fa-plus"></i>
+		<span translate="project.add_invitation"></span>
+	</a>
+</div>

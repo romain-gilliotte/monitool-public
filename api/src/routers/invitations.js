@@ -16,18 +16,30 @@ router.get('/resources/invitation', async ctx => {
     ctx.response.body = invitations.pipe(JSONStream.stringify());
 });
 
+// liste les invitations du projet
+// si pas owner, ne contiendra que celle de l'utilisateur.
 router.get('/resources/project/:id/invitation', async ctx => {
     const invitations = listProjectInvitations(ctx.state.profile.email, ctx.params.id);
 
     ctx.response.type = 'application/json';
     ctx.response.body = invitations.pipe(JSONStream.stringify());
-})
+});
 
 // invite un nouvel utilisateur
 router.post('/resources/invitation', validator, async ctx => {
+    if (!await ctx.state.profile.ownsProject(ctx.request.body.projectId)) {
+        ctx.response.status = 403;
+        return;
+    }
 
+    const newIvt = {
+        ...ctx.request.body,
+        projectId: new ObjectId(ctx.request.body.projectId)
+    };
+
+    await database.collection('invitation').insertOne(newIvt);
+    ctx.response.body = newIvt;
 });
-
 
 // modifie / accepte une invitation
 router.put('/resources/invitation/:id', validator, async ctx => {
@@ -51,7 +63,6 @@ router.put('/resources/invitation/:id', validator, async ctx => {
     ctx.response.body = newIvt;
 });
 
-
 // refuse une invitation ou deinvite un utilisateur
 router.delete('/resources/invitation/:id', async ctx => {
     const oldIvt = await getInvitation(ctx.state.profile.email, ctx.params.id);
@@ -62,18 +73,6 @@ router.delete('/resources/invitation/:id', async ctx => {
     }
 });
 
-
-// liste les utilisateurs d'un projet
-router.get('/resources/project/:projectId/invitation', async ctx => {
-    if (this.state.profile.ownsProject(ctx.params.projectId)) {
-        const invitations = database.collection('invitation').find({
-            projectId: new ObjectId(ctx.params.projectId)
-        });
-
-        ctx.response.type = 'application/json';
-        ctx.response.body = invitations.pipe(JSONStream.stringify());
-    }
-});
 
 
 module.exports = router;

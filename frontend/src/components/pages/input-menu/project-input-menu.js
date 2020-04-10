@@ -18,7 +18,8 @@ module.config($stateProvider => {
 module.component(__componentName, {
 
 	bindings: {
-		project: '<'
+		project: '<',
+		invitations: '<'
 	},
 
 	template: require(__templatePath),

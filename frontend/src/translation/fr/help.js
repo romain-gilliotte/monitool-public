@@ -246,9 +246,8 @@ module.exports = {
                 Pour cela, il est nécessaire de savoir comment aggréger les données qui sont saisies dans l'outil, et ces règles dependent
                 de la nature des données que vous saisissez.<br/>
                 <br/>
-                Quelques exemples:
 
-                <table>
+                <table class="table table-bordered">
                     <tr>
                         <th>Variable</th>
                         <th>Comment grouper dans le temps</th>
@@ -266,8 +265,6 @@ module.exports = {
                         <td>10 structures étaient soutenues à Paris, et 10 à Lilles, cela fait 20 structures, donc "Somme"</td>
                     </tr>                    
                 </table>
-
-                Quelles seraient les règles pour aggréger la file active d'un projet (nombre de bénéficiaires), ou des score de qualité.
             `
         }, {
             prefixes: ['project.config.collection_form_edition'],

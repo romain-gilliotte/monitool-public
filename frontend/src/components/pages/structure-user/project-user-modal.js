@@ -1,7 +1,8 @@
 import angular from 'angular';
 import uiModal from 'angular-ui-bootstrap/src/modal';
+import mtForbidden from '../../../directives/validators/forbidden-values';
 
-const module = angular.module(__moduleName, [uiModal]);
+const module = angular.module(__moduleName, [uiModal, mtForbidden]);
 
 /**
  * Component used on a modal called from "project.config.user_list"
@@ -19,38 +20,33 @@ module.component(__componentName, {
 
 	controller: class ProjectUserModalController {
 
-		isUnchanged() {
-			return angular.equals(this.masterUser, this.user);
+		hasChanged() {
+			return !angular.equals(this.masterInvitation, this.invitation);
 		}
 
 		$onChanges(changes) {
-			this.entities = this.resolve.entities;
-			this.groups = this.resolve.groups;
-			this.dataSources = this.resolve.dataSources;
+			this.entities = this.resolve.project.entities;
+			this.groups = this.resolve.project.groups;
+			this.dataSources = this.resolve.project.forms;
 			this.takenEmails = this.resolve.takenEmails;
 
 			// isNew will be used by the view to disable inputs that can't be changed (email, etc), and show delete button.
-			this.isNew = !this.resolve.projectUser;
+			this.isNew = !this.resolve.invitation;
 
 			// The form updates a copy of the object, so that user can cancel the changes by just dismissing the modal.
-			this.user = angular.copy(this.resolve.projectUser) || { email: "", role: "owner", entities: [], dataSources: [] };
-			this.user.entities = this.user.entities || [];
-			this.user.dataSources = this.user.dataSources || [];
+			this.invitation = angular.copy(this.resolve.invitation) || { projectId: this.resolve.project._id, email: "", accepted: false };
+			// this.invitation.entities = this.invitation.entities || [];
+			// this.invitation.dataSources = this.invitation.dataSources || [];
 
-			this.masterUser = angular.copy(this.user);
+			this.masterInvitation = angular.copy(this.invitation);
 		}
 
 		reset() {
-			angular.copy(this.masterUser, this.user);
+			angular.copy(this.masterInvitation, this.invitation);
 		}
 
 		done() {
-			if (this.user.role != 'input') {
-				delete this.user.entities;
-				delete this.user.dataSources;
-			}
-
-			this.close({ $value: this.user });
+			this.close({ $value: this.invitation });
 		}
 
 	}

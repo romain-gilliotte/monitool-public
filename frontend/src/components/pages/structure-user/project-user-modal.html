@@ -13,9 +13,9 @@
 		<div class="form-group">
 			<label for="login-input" class="col-sm-3 control-label" translate="project.email"></label>
 			<div class="col-sm-9">
-				<input id="login-input" type="text" ng-model="$ctrl.user.email" class="form-control" ng-minlength="4"
-					ng-pattern="/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/" forbidden-values="$ctrl.takenEmails"
-					required>
+				<input id="login-input" type="text" ng-model="$ctrl.invitation.email" class="form-control"
+					ng-minlength="4" ng-pattern="/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/"
+					forbidden-values="$ctrl.takenEmails" required ng-disabled="!$ctrl.isNew">
 
 				<p class="help-block">
 					<i class="fa fa-info-circle"></i>
@@ -23,11 +23,11 @@
 				</p>
 			</div>
 		</div>
-
+		<!-- 
 		<div class="form-group">
 			<label for="role-input" class="col-sm-3 control-label" translate="project.user_role"></label>
 			<div class="col-sm-9">
-				<select id="role-input" class="form-control" ng-model="$ctrl.user.role" required>
+				<select id="role-input" class="form-control" ng-model="$ctrl.invitation.role" required>
 					<option value="owner" translate="project.user_roles.owner"></option>
 					<option value="input" translate="project.user_roles.input"></option>
 					<option value="read" translate="project.user_roles.read"></option>
@@ -43,7 +43,7 @@
 		<div class="form-group" ng-if="$ctrl.user.role == 'input'">
 			<label for="entities-input" class="col-sm-3 control-label" translate="project.collection_site_list"></label>
 			<div class="col-sm-9">
-				<element-filter ng-model="$ctrl.user.entities" elements="$ctrl.entities" groups="$ctrl.groups">
+				<element-filter ng-model="$ctrl.invitation.entities" elements="$ctrl.entities" groups="$ctrl.groups">
 				</element-filter>
 
 				<p class="help-block">
@@ -57,43 +57,44 @@
 			<label for="dataSources-input" class="col-sm-3 control-label"
 				translate="project.collection_form_list"></label>
 			<div class="col-sm-9">
-				<element-filter ng-model="$ctrl.user.dataSources" elements="$ctrl.dataSources"></element-filter>
+				<element-filter ng-model="$ctrl.invitation.dataSources" elements="$ctrl.dataSources"></element-filter>
 
 				<p class="help-block">
 					<i class="fa fa-info-circle"></i>
 					{{'project.user_help_datasources'|translate}}
 				</p>
 			</div>
-		</div>
+		</div> -->
 
 	</form>
 </div>
 
 <div class="modal-footer">
-
+	{{userForm.$invalid}}
+	{{$ctrl.hasChanged()}}
 	<div style="float: left">
 		<p class="text-danger" ng-if="userForm.$invalid">
 			<i class="fa fa-exclamation-triangle"></i>
 			<span translate="project.form_error_short"></span>
 		</p>
 
-		<p class="text-info" ng-if="$ctrl.isUnchanged() && !$ctrl.isNew">
+		<p class="text-info" ng-if="!$ctrl.hasChanged() && !$ctrl.isNew">
 			<i class="fa fa-info-circle"></i>
 			<span translate="project.form_persisted_short"></span>
 		</p>
 
-		<p class="text-warning" ng-if="!$ctrl.isUnchanged() && !userForm.$invalid">
+		<p class="text-warning" ng-if="$ctrl.hasChanged() && !userForm.$invalid">
 			<i class="fa fa-exclamation-triangle"></i>
 			<span translate="project.form_changed_short"></span>
 		</p>
 	</div>
 
-	<button ng-click="$ctrl.done()" ng-disabled="userForm.$invalid || $ctrl.isUnchanged()" class="btn btn-primary">
+	<button ng-click="$ctrl.done()" ng-disabled="userForm.$invalid || !$ctrl.hasChanged()" class="btn btn-primary">
 		<i class="fa fa-object-group"></i>
 		<span translate="project.update_user"></span>
 	</button>
 
-	<button ng-click="$ctrl.reset()" ng-disabled="$ctrl.isUnchanged()" class="btn btn-default">
+	<button ng-click="$ctrl.reset()" ng-disabled="!$ctrl.hasChanged()" class="btn btn-default">
 		<i class="fa fa-undo"></i>
 		<span translate="shared.remove_changes"></span>
 	</button>

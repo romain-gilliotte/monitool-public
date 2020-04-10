@@ -33,6 +33,15 @@ async function start(web = true, worker = true) {
 	);
 
 	global.database = global.mongo.db(config.mongo.database);
+	global.database.collection('invitation').createIndex(
+		{ projectId: 1, email: 1 },
+		{ unique: true }
+	);
+	global.database.collection('input').createIndex(
+		{ sequenceId: 1, 'content.variableId': 1 }
+	);
+	// move this somewhere else
+
 	global.redis = new Redis(config.redis.uri);
 	global.queue = new Bull('workers', config.redis.uri);
 

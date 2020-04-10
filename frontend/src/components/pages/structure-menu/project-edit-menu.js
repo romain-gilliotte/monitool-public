@@ -18,6 +18,7 @@ module.component(__componentName, {
 
 	bindings: {
 		project: '<',
+		invitations: '<',
 		onProjectSaveSuccess: '&'
 	},
 

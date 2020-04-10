@@ -1,5 +1,6 @@
 import uiRouter from '@uirouter/angularjs';
 import angular from 'angular';
+import axios from 'axios';
 import mtAclProjectInput from '../../../directives/acl/project-input';
 import mtAclProjectRole from '../../../directives/acl/project-role';
 import mtDisableIf from '../../../directives/helpers/disableif';
@@ -15,12 +16,18 @@ module.config($stateProvider => {
 		component: __componentName,
 
 		resolve: {
-			loadedProject: function ($rootScope, $stateParams, $q) {
+			loadedProject: ($rootScope, $stateParams, $q) => {
 				const projectId = $stateParams.projectId;
 
 				return projectId === 'new' ?
 					$q.when(new Project({ owner: $rootScope.profile.email })) :
 					Project.get(projectId);
+			},
+			invitations: ($stateParams) => {
+				const projectId = $stateParams.projectId;
+				return projectId === 'new' ?
+					[] :
+					axios.get(`/resources/project/${projectId}/invitation`).then(r => r.data);
 			}
 		}
 	});
@@ -29,7 +36,8 @@ module.config($stateProvider => {
 
 module.component(__componentName, {
 	bindings: {
-		loadedProject: '<'
+		loadedProject: '<',
+		invitations: '<'
 	},
 	transclude: true,
 	template: require(__templatePath),
@@ -37,6 +45,8 @@ module.component(__componentName, {
 	controller: class ProjectMenuController {
 
 		$onChanges(changes) {
+			// fixme why rename?
+			// do we need the pointer to the original project for something?
 			this.project = this.loadedProject;
 		}
 
