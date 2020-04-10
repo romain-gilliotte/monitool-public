@@ -2,63 +2,49 @@
 	<li><a ui-sref="main.projects" translate="shared.projects"></a></li>
 	<li class="active" title="{{$ctrl.project.country}}" ng-bind="$ctrl.project.country|maxLength:20"></li>
 	<li class="active" title="{{$ctrl.project.name}}" ng-bind="$ctrl.project.name|maxLength:50"></li>
-	<li class="active" translate="project.input"></li>
+	<li class="active" translate="shared.home"></li>
 </ol>
 
+<legend>Participants</legend>
 
-<div class="project-content-inner">
-	coucou
-</div>
-
-<div class="row">
-	<div class="col-md-6">
-		<legend>Résumé du projet</legend>
-		<div class="project-content-inner">
-
-			<dl>
-				<dt>Nombre de cadres logiques</dt>
-				<dd>344</dd>
-				<dt>Nombre de saisies</dt>
-				<dd>344</dd>
-				<dt>Nombre de saisies</dt>
-				<dd>344</dd>
-				<dt>Nombre de saisies</dt>
-				<dd>344</dd>
-			</dl>
-		</div>
-	</div>
-
-	<div class="col-md-6">
-		<legend>Progression des saisies</legend>
-
-		<table class="table table-bordered table-striped">
-			<thead>
-				<tr>
-					<th style="width: 50%" translate="shared.task"></th>
-					<th translate="shared.state"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="dataSource in $ctrl.project.forms track by dataSource.id"
-					acl-has-input-form="dataSource.id" acl-project="$ctrl.project">
-					<td>
-						<span translate="project.input_fill_forms"
-							translate-values="{numInputs: $ctrl.status[dataSource.id].total}"></span>
-						<a class="btn btn-default btn-xs" title="{{dataSource.name}}"
-							ui-sref="project.usage.list({dataSourceId: dataSource.id})">
-							<i class="fa fa-pencil"></i>
-							{{dataSource.name|maxLength:30}}
-						</a>
-					</td>
-					<td translate="shared.loading" ng-if="!$ctrl.status"></td>
-
-					<td ng-if="$ctrl.status">
-						<progress-bar done="$ctrl.status[dataSource.id].complete"
-							incomplete="$ctrl.status[dataSource.id].incomplete"></progress-bar>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-
+<div ng-repeat="user in $ctrl.users track by user.email" class="thumbnail"
+	style="width: 160px; margin-right: 10px; display: inline-block;">
+	<img ng-src="{{user.avatar}}" style="width: 150px; height: 150px;" />
+	<div class="caption">
+		<b>Nom:</b><br /> {{user.fullname}}<br />
+		<b>Email:</b><br /> <a href="mailto:{{ user.email }}">{{ user.email }}</a><br />
+		<b>Dernière connection:</b><br /> {{user.lastSeen|date}}
 	</div>
 </div>
+
+<legend>Avancement des saisies</legend>
+
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr>
+			<th style="width: 25%">Formulaire</th>
+			<th style="width: 10%; text-align: center;">#</th>
+			<th translate="shared.state"></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="dataSource in $ctrl.project.forms track by dataSource.id" acl-has-input-form="dataSource.id"
+			acl-project="$ctrl.project">
+			<td>
+				<a class="btn btn-default btn-xs" title="{{dataSource.name}}"
+					ui-sref="project.usage.list({dataSourceId: dataSource.id})">
+					<i class="fa fa-pencil"></i>
+					{{dataSource.name|maxLength:30}}
+				</a>
+			</td>
+			<td style="text-align: center;">
+				<i class="fa fa-circle-o-notch fa-spin" ng-if="!$ctrl.status[dataSource.id]"></i>
+				{{$ctrl.status[dataSource.id].total}}
+			</td>
+			<td ng-if="$ctrl.status">
+				<progress-bar done="$ctrl.status[dataSource.id].complete"
+					incomplete="$ctrl.status[dataSource.id].incomplete"></progress-bar>
+			</td>
+		</tr>
+	</tbody>
+</table>
