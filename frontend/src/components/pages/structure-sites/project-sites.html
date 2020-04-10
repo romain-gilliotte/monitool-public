@@ -40,12 +40,12 @@
 					<div class="btn-group" uib-dropdown>
 						<a ng-if="site.active" class="btn btn-default btn-sm"
 							ng-click="$ctrl.onChangeSiteStatusClicked(site, false)">
-							<i class="fa fa-fw fa-stop"></i>
+							<i class="fa fa-fw fa-pause-circle-o"></i>
 							<span translate="shared.disable"></span>
 						</a>
 						<a ng-if="!site.active" class="btn btn-default btn-sm"
 							ng-click="$ctrl.onChangeSiteStatusClicked(site, true)">
-							<i class="fa fa-fw fa-play"></i>
+							<i class="fa fa-fw fa-play-circle-o"></i>
 							<span translate="shared.enable"></span>
 						</a>
 						<a class="btn btn-default btn-sm" uib-dropdown-toggle>
