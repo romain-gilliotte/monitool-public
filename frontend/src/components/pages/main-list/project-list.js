@@ -3,13 +3,12 @@ import angular from 'angular';
 import uiDropdown from 'angular-ui-bootstrap/src/dropdown';
 import axios from 'axios';
 import diacritics from 'diacritics';
-import mtAclProjectRole from '../../../directives/acl/project-role';
 import Project from '../../../models/project';
 import mtColumnsPanel from '../../shared/misc/columns-panel';
 
 require(__cssPath);
 
-const module = angular.module(__moduleName, [uiDropdown, uiRouter, mtAclProjectRole, mtColumnsPanel]);
+const module = angular.module(__moduleName, [uiDropdown, uiRouter, mtColumnsPanel]);
 
 module.config($stateProvider => {
 	$stateProvider.state('main.projects', {

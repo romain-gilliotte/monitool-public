@@ -28,8 +28,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr ng-repeat="dataSource in $ctrl.project.forms track by dataSource.id" acl-has-input-form="dataSource.id"
-			acl-project="$ctrl.project">
+		<tr ng-repeat="dataSource in $ctrl.project.forms track by dataSource.id">
 			<td>
 				<a class="btn btn-default btn-xs" title="{{dataSource.name}}"
 					ui-sref="project.usage.list({dataSourceId: dataSource.id})">

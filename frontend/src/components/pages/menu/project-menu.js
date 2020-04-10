@@ -1,12 +1,10 @@
 import uiRouter from '@uirouter/angularjs';
 import angular from 'angular';
 import axios from 'axios';
-import mtAclProjectInput from '../../../directives/acl/project-input';
-import mtAclProjectRole from '../../../directives/acl/project-role';
 import mtDisableIf from '../../../directives/helpers/disableif';
 import Project from '../../../models/project';
 
-const module = angular.module(__moduleName, [uiRouter, mtAclProjectRole, mtAclProjectInput, mtDisableIf]);
+const module = angular.module(__moduleName, [uiRouter, mtDisableIf]);
 
 module.config($stateProvider => {
 

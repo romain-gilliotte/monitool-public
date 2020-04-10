@@ -63,13 +63,6 @@ module.component(__componentName, {
 			// Define sites (depending on user permissions)
 			this.sites = this.project.entities.filter(e => this.dataSource.entities.includes(e.id));
 
-			// This will happen regardless of unexpected entries.
-			if (this.project.owner !== this.userEmail) {
-				const projectUser = this.project.users.find(u => u.email == this.userEmail);
-				if (projectUser.role === 'input')
-					this.sites = this.sites.filter(e => projectUser.entities.includes(e.id));
-			}
-
 			this.loading = true;
 			this.load();
 		}
