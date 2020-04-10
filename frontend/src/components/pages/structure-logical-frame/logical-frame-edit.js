@@ -133,7 +133,7 @@ module.component(__componentName, {
 
 			this.onProjectUpdate({
 				newProject: newProject,
-				isValid: !!this.editableLogFrame.name && this.lfForm.$valid
+				isValid: !!this.editableLogFrame.name && (!this.lfForm || this.lfForm.$valid)
 			});
 		}
 
