@@ -1,0 +1,17 @@
+
+.dragging logical-frame-edit form-group,
+.dragging logical-frame-edit columns-panel .panel-body,
+.dragging logical-frame-edit .btn,
+.dragging logical-frame-edit .help-block,
+.dragging logical-frame-edit .control-label,
+.dragging logical-frame-edit .hide-on-drag {
+    display: none;
+}
+
+.dragging logical-frame-edit .col-sm-10 {
+    width: 100% !important;
+}
+
+.dragging logical-frame-edit form-group[label="shared.indicators"] {
+    display: block;
+}

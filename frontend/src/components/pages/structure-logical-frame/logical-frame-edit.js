@@ -7,6 +7,7 @@ import mtIndicatorModal from '../../shared/indicator/indicator-edition-modal';
 import mtDirectiveAutoresize from '../../../directives/helpers/autoresize';
 import mtDatePicker from '../../shared/ng-models/utc-datepicker';
 import mtHelpPanel from '../../shared/misc/help-panel';
+require(__cssPath);
 
 const module = angular.module(
 	__moduleName,
