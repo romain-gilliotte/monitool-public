@@ -8,6 +8,7 @@ help-panel {
     z-index: 10;
     
     transition-property: right;
+    transition-delay: 0.2s;
     transition-duration: 0.5s;
 
     display: flex;
@@ -41,6 +42,7 @@ help-panel .toolbar-body {
 
 help-panel ~ div {
     transition-property: filter;
+    transition-delay: 0.2s;
     transition-duration: 0.5s;
     filter: none;
 }
