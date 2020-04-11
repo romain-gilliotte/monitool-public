@@ -9,6 +9,7 @@ import mtPartitionList from './partition-list';
 import mtPartitionDistribution from './partition-distribution';
 import mtPartitionOrder from './partition-order';
 import mtHelpPanel from '../../shared/misc/help-panel';
+require(__cssPath);
 
 const module = angular.module(
 	__moduleName,
@@ -77,8 +78,10 @@ module.component(__componentName, {
 			this.visibleVariableId = null;
 
 			this.sortableOptions = {
-				handle: '.variable-handle',
-				onUpdate: this.onFieldChange.bind(this)
+				onUpdate: this.onFieldChange.bind(this),
+				onStart: () => {
+					this.visibleVariableId = null;
+				}
 			};
 		}
 
@@ -128,6 +131,11 @@ module.component(__componentName, {
 			this.onFieldChange();
 		}
 
+		onChangeVariableStatus(variable, newStatus) {
+			variable.active = newStatus;
+			this.onFieldChange();
+		}
+
 		onRemoveVariableClicked(item) {
 			const index = this.editableDataSource.elements.findIndex(arrItem => item.id === arrItem.id);
 
@@ -136,7 +144,13 @@ module.component(__componentName, {
 		}
 
 		onToggleVariableClicked(variableId) {
-			this.visibleVariableId = this.visibleVariableId !== variableId ? variableId : null;
+			const variable = this.editableDataSource.elements.find(v => v.id == variableId);
+			if (variable.active) {
+				this.visibleVariableId = this.visibleVariableId !== variableId ? variableId : null;
+			}
+			else {
+				this.visibleVariableId = null;
+			}
 		}
 
 		onPartitionUpdate(variable, newPartitions) {

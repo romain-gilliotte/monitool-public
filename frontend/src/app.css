@@ -321,8 +321,10 @@ general-reporting, olap-reporting {
   margin-bottom: 10px;
 }
 
-
-
 dd {
   margin-bottom: 5px;
+}
+
+.btn-group > .btn.btn-xxs + .dropdown-toggle {
+  padding: 1px 5px
 }

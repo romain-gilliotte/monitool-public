@@ -22,14 +22,15 @@
 			<div>
 				<strong translate="project.variables"></strong>
 				<ul ng-sortable="$ctrl.variableSortOptions">
-					<li ng-repeat="variable in dataSource.elements track by variable.id" class="clickable">
+					<li ng-repeat="variable in dataSource.elements track by variable.id" class="clickable"
+						ng-class="{disabled: !variable.active}">
 						<i class="fa fa-sort fa-fw"></i>
-						{{variable.name}}
+						<span ng-bind="variable.name"></span>
 					</li>
 				</ul>
 			</div>
 
-			<div class="panel-buttons btn-group">
+			<div class="panel-buttons btn-group" uib-dropdown>
 				<a class="btn btn-default btn-xxs" ng-if="dataSource.active"
 					ui-sref="project.config.collection_form_edition({dataSourceId: dataSource.id})">
 					<i class="fa fa-pencil"></i>
@@ -42,40 +43,46 @@
 					<span translate="shared.enable"></span>
 				</a>
 
-				<div class="btn-group" ng-if="dataSource.active" uib-dropdown>
-					<a class="btn btn-default btn-xxs" uib-dropdown-toggle>
-						<span class="caret"></span>
-					</a>
+				<a class="btn btn-default btn-xxs" uib-dropdown-toggle>
+					<span class="caret"></span>
+				</a>
 
-					<ul class="dropdown-menu" uib-dropdown-menu>
-						<li>
-							<a href="{{::$root.serviceUrl}}/resources/project/{{$ctrl.editableProject._id}}/data-source/{{dataSource.id}}.pdf?orientation=portrait&language={{$root.language}}&token={{$root.accessToken}}"
-								target="_blank">
-								<i class="fa fa-file-pdf-o"></i>
-								<span translate="project.download_portrait"></span>
-							</a>
-						</li>
-						<li>
-							<a href="{{::$root.serviceUrl}}/resources/project/{{$ctrl.editableProject._id}}/data-source/{{dataSource.id}}.pdf?orientation=landscape&language={{$root.language}}&token={{$root.accessToken}}"
-								target="_blank">
-								<i class="fa fa-file-pdf-o fa-rotate-270"></i>
-								<span translate="project.download_landscape"></span>
-							</a>
-						</li>
-						<li>
-							<a ng-click="$ctrl.onChangeStatusClicked(dataSource, false)">
-								<i class="fa fa-pause-circle-o"></i>
-								<span translate="shared.disable"></span>
-							</a>
-						</li>
-						<li>
-							<a ng-click="$ctrl.onDeleteClicked(dataSource)">
-								<i class="fa fa-trash text-danger"></i>
-								<span class="text-danger" translate="shared.delete"></span>
-							</a>
-						</li>
-					</ul>
-				</div>
+				<ul class="dropdown-menu" uib-dropdown-menu>
+
+					<li>
+						<a ng-if="!dataSource.active"
+							ui-sref="project.config.collection_form_edition({dataSourceId: dataSource.id})">
+							<i class="fa fa-fw fa-pencil"></i>
+							<span translate="shared.edit"></span>
+						</a>
+					</li>
+					<li>
+						<a ng-click="$ctrl.onChangeStatusClicked(dataSource, false)" ng-if="dataSource.active">
+							<i class="fa fa-fw fa-pause-circle-o"></i>
+							<span translate="shared.disable"></span>
+						</a>
+					</li>
+					<li>
+						<a href="{{::$root.serviceUrl}}/resources/project/{{$ctrl.editableProject._id}}/data-source/{{dataSource.id}}.pdf?orientation=portrait&language={{$root.language}}&token={{$root.accessToken}}"
+							target="_blank">
+							<i class="fa fa-fw fa-file-pdf-o"></i>
+							<span translate="project.download_portrait"></span>
+						</a>
+					</li>
+					<li>
+						<a href="{{::$root.serviceUrl}}/resources/project/{{$ctrl.editableProject._id}}/data-source/{{dataSource.id}}.pdf?orientation=landscape&language={{$root.language}}&token={{$root.accessToken}}"
+							target="_blank">
+							<i class="fa fa-fw fa-file-pdf-o fa-rotate-270"></i>
+							<span translate="project.download_landscape"></span>
+						</a>
+					</li>
+					<li>
+						<a ng-click="$ctrl.onDeleteClicked(dataSource)">
+							<i class="fa fa-fw fa-trash text-danger"></i>
+							<span class="text-danger" translate="shared.delete"></span>
+						</a>
+					</li>
+				</ul>
 			</div>
 		</pane-body>
 	</columns-panel>

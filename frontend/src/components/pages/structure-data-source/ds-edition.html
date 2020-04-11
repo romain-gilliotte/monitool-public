@@ -60,18 +60,36 @@
 
 	<div ng-sortable="$ctrl.sortableOptions">
 		<div class="panel panel-default"
-			ng-repeat="(index, variable) in $ctrl.editableDataSource.elements track by variable.id">
+			ng-repeat="(index, variable) in $ctrl.editableDataSource.elements track by variable.id"
+			ng-class="{'disabled': !variable.active}">
 			<div class="panel-heading" ng-click="$ctrl.onToggleVariableClicked(variable.id)" style="cursor: pointer">
-				<div class="pull-right">
-					<a class="btn btn-xxs btn-default variable-handle">
-						<i class="fa fa-sort fa-fw"></i>
-						{{'project.press_to_drag'|translate}}
-					</a>
+				<div class="pull-right" ng-click="$event.stopPropagation()">
+					<div class="btn-group" uib-dropdown>
+						<a class="btn btn-default btn-xs" ng-if="variable.active"
+							ng-click="$ctrl.onChangeVariableStatus(variable, false)">
+							<i class="fa fa-fw fa-pause-circle-o"></i>
+							<span translate="shared.disable"></span>
+						</a>
 
-					<a class="btn btn-xxs btn-danger" ng-click="$ctrl.onRemoveVariableClicked(variable)">
-						<i class="fa fa-trash"></i>
-						{{'project.remove_variable'|translate}}
-					</a>
+						<a class="btn btn-default btn-xs" ng-if="!variable.active"
+							ng-click="$ctrl.onChangeVariableStatus(variable, true)">
+							<i class="fa fa-fw fa-play-circle-o"></i>
+							<span translate="shared.enable"></span>
+						</a>
+
+						<a class="btn btn-default btn-xs" uib-dropdown-toggle>
+							<span class="caret"></span>
+						</a>
+
+						<ul class="dropdown-menu" uib-dropdown-menu>
+							<li>
+								<a ng-click="$ctrl.onRemoveVariableClicked(variable)">
+									<i class="fa fa-trash text-danger"></i>
+									<span class="text-danger" translate="project.remove_variable"></span>
+								</a>
+							</li>
+						</ul>
+					</div>
 				</div>
 
 				<div class="panel-title">

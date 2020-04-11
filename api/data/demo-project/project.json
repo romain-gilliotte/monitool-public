@@ -577,6 +577,7 @@
                 {
                     "id": "9a8d7e9a-7a3d-438b-a6f0-5f80e5d425d6",
                     "name": "# of medical curative consultations",
+                    "active": true,
                     "partitions": [
                         {
                             "id": "43c36698-ffcc-4324-97b0-ea1800b57842",
@@ -665,6 +666,7 @@
                 {
                     "id": "94343565-5008-4cc4-82e4-b4a4ea096053",
                     "name": "# of antenatal consultations",
+                    "active": true,
                     "partitions": [
                         {
                             "id": "ce5ec106-ffa5-4534-998c-6a6439926e95",
@@ -714,6 +716,7 @@
                 {
                     "id": "294c0d6b-2693-40bd-8c86-5c68815b0b8f",
                     "name": "# of assisted deliveries",
+                    "active": true,
                     "partitions": [
                         {
                             "id": "63148185-954b-4457-a75a-da29b6db169d",
@@ -739,6 +742,7 @@
                 {
                     "id": "13023986-2bdf-4f7e-929c-62a4d7e00f8c",
                     "name": "# of post natal consultations",
+                    "active": true,
                     "partitions": [
                         {
                             "id": "aa6ada72-bdd0-4021-9f59-73617a1726bf",
@@ -764,6 +768,7 @@
                 {
                     "id": "343dab31-72a7-407e-a4fd-05c90bc6dcde",
                     "name": "# of family planning consultations",
+                    "active": true,
                     "partitions": [
                         {
                             "id": "ac69e4b8-a443-4f2a-aa6a-a75ca0bd450e",
@@ -805,6 +810,7 @@
                 {
                     "id": "e7a66a53-b98d-408c-8144-15a7ae51838f",
                     "name": "# of maternal death",
+                    "active": true,
                     "partitions": [
                         {
                             "id": "bd5a4b39-5ae0-4ad9-a5b0-c3cf51661f32",
@@ -830,6 +836,7 @@
                 {
                     "id": "dabe53b5-76c9-40e7-a100-7fb420b945cc",
                     "name": "# of neonatal death",
+                    "active": true,
                     "partitions": [],
                     "geoAgg": "sum",
                     "timeAgg": "sum",
@@ -855,6 +862,7 @@
                 {
                     "id": "bc3ac75c-543b-4fe1-89ee-0684105bcfb1",
                     "name": "# of days with at least one out of ten essencial medicine is out of stock",
+                    "active": true,
                     "partitions": [],
                     "geoAgg": "average",
                     "timeAgg": "average",
@@ -880,6 +888,7 @@
                 {
                     "id": "1e3a98c7-6970-418a-b8ab-a4b03746147a",
                     "name": "Score of quality",
+                    "active": true,
                     "partitions": [],
                     "geoAgg": "average",
                     "timeAgg": "average",
@@ -888,6 +897,7 @@
                 {
                     "id": "318a4c13-4416-42ef-8dc0-3b88b5a44f2d",
                     "name": "# of PHC with quality score ⩾ 60",
+                    "active": true,
                     "partitions": [],
                     "geoAgg": "sum",
                     "timeAgg": "average",
@@ -896,6 +906,7 @@
                 {
                     "id": "11e7e24b-8a74-43ea-a9b0-8e6a7b0307cd",
                     "name": "# of files sampled for evaluation",
+                    "active": true,
                     "partitions": [
                         {
                             "id": "d2adc5b1-72c4-4e56-8a66-f7932c80fb93",
@@ -925,6 +936,7 @@
                 {
                     "id": "668ea223-d90a-4b1a-a28a-64bc3ffeaf0d",
                     "name": "# of files managed in accordance with guidelines",
+                    "active": true,
                     "partitions": [
                         {
                             "id": "059f5b1a-6117-448d-ad2f-6441e359a998",
@@ -954,6 +966,7 @@
                 {
                     "id": "76a13b4a-a0c6-4a0f-8a34-fdd6ce7e8cd3",
                     "name": "# of staff trained in case management",
+                    "active": true,
                     "partitions": [
                         {
                             "id": "f32b8b09-a0a3-4860-ab4a-a9e3e69514af",
@@ -1000,6 +1013,7 @@
                 {
                     "id": "82099d87-352a-4bcd-b6ac-a92d1a17be59",
                     "name": "# of cases identified",
+                    "active": true,
                     "partitions": [
                         {
                             "id": "be064de1-85e9-4942-8d59-0aee15e7922f",
@@ -1083,6 +1097,7 @@
                 {
                     "id": "6fbf542d-d73b-44b1-937d-500b029a7160",
                     "name": "# of C-section",
+                    "active": true,
                     "partitions": [
                         {
                             "id": "92cfaa07-aacc-436a-a406-43e16a5d682a",
@@ -1108,6 +1123,7 @@
                 {
                     "id": "347fdf8f-8177-461a-ab73-b3b3ef079420",
                     "name": "# of vaginal deliveries",
+                    "active": true,
                     "partitions": [
                         {
                             "id": "cccef979-fdd5-4011-9617-d5a17539dc1f",
@@ -1133,6 +1149,7 @@
                 {
                     "id": "3ae8d830-d251-49f4-8278-591db514ccd2",
                     "name": "# of maternal death",
+                    "active": true,
                     "partitions": [
                         {
                             "id": "5aee29d0-8fba-4793-b796-94b4c5a65b1a",
@@ -1158,6 +1175,7 @@
                 {
                     "id": "2fe47859-3b0a-43e0-ab83-f15086bef70e",
                     "name": "# of neonatal death",
+                    "active": true,
                     "partitions": [
                         {
                             "id": "2b85ab76-fc40-40af-b7db-8ae6da38d91e",
@@ -1195,6 +1213,7 @@
                 {
                     "id": "83c2c815-c027-4d74-a4d3-3abf6e73dd28",
                     "name": "# of cases managed",
+                    "active": true,
                     "partitions": [
                         {
                             "id": "146f40f2-ca43-4c2e-8626-503d20944fac",
@@ -1304,6 +1323,7 @@
                 {
                     "id": "5377025f-d5b5-4f44-9bf7-cc6b34f35c71",
                     "name": "# of women in reproductive age",
+                    "active": true,
                     "partitions": [
                         {
                             "id": "93453e13-d3a9-4d07-93c8-57d2263bae0c",
@@ -1329,6 +1349,7 @@
                 {
                     "id": "cb26d54e-7543-4f31-b5f0-c5d233ebdc93",
                     "name": "# of expected new pregnancies",
+                    "active": true,
                     "partitions": [
                         {
                             "id": "21758a7c-c83d-46cc-972e-1999a6396e64",
@@ -1354,6 +1375,7 @@
                 {
                     "id": "c3baf694-ef8b-4423-8aba-ebfac03af4a2",
                     "name": "# of expected deliveries",
+                    "active": true,
                     "partitions": [
                         {
                             "id": "23eb9064-ad69-41c4-b155-6c63656e26f2",
@@ -1396,6 +1418,7 @@
                 {
                     "id": "765b8331-5ef9-4ac7-9558-706d0de3cf49",
                     "name": "# of training",
+                    "active": true,
                     "partitions": [],
                     "geoAgg": "sum",
                     "timeAgg": "sum",
@@ -1404,6 +1427,7 @@
                 {
                     "id": "cb4d4e3a-bedd-435e-84a8-43833a3a5d9d",
                     "name": "# of health education tools developped",
+                    "active": true,
                     "partitions": [],
                     "geoAgg": "sum",
                     "timeAgg": "sum",
@@ -1412,6 +1436,7 @@
                 {
                     "id": "868abc98-3144-4bbb-be52-e8da785486e0",
                     "name": "# of abstracts accepted for presentation in conferences",
+                    "active": true,
                     "partitions": [],
                     "geoAgg": "sum",
                     "timeAgg": "sum",
@@ -1420,6 +1445,7 @@
                 {
                     "id": "469dc5fc-86de-4bee-a2d0-122425461b4f",
                     "name": "# of centers with SRH activity",
+                    "active": true,
                     "partitions": [],
                     "geoAgg": "sum",
                     "timeAgg": "sum",
@@ -1428,6 +1454,7 @@
                 {
                     "id": "a85a2b0d-ff76-4df8-803e-64ef9b6324f6",
                     "name": "# of SRH centers level Emoc",
+                    "active": true,
                     "partitions": [],
                     "geoAgg": "sum",
                     "timeAgg": "sum",
@@ -1436,6 +1463,7 @@
                 {
                     "id": "4ab66a30-ab56-4996-8393-1685ad9e171b",
                     "name": "# of SRH centers with staff trained on pre/post abortion care",
+                    "active": true,
                     "partitions": [],
                     "geoAgg": "sum",
                     "timeAgg": "sum",
@@ -1444,6 +1472,7 @@
                 {
                     "id": "ce9310fa-b69a-4758-a78b-c99e435201cd",
                     "name": "# of SRH centers with staff trained on GBV",
+                    "active": true,
                     "partitions": [],
                     "geoAgg": "sum",
                     "timeAgg": "sum",
@@ -1452,6 +1481,7 @@
                 {
                     "id": "7d2306e6-7b00-4e57-84b5-0f228a1c67d3",
                     "name": "# of SRH centers with  new modalities for strengthening financial accessibility",
+                    "active": true,
                     "partitions": [],
                     "geoAgg": "sum",
                     "timeAgg": "sum",

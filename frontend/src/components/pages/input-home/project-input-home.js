@@ -36,9 +36,8 @@ module.component(__componentName, {
 			// A datasource is active if we can perform data entry in at least one site.
 			this.activeDataSources = this.project.forms.filter(ds => {
 				return ds.active
-					&& ds.entities.some(
-						siteId => this.project.entities.find(site => site.id == siteId).active
-					)
+					&& ds.elements.some(variable => variable.active)
+					&& ds.entities.some(siteId => this.project.entities.find(site => site.id == siteId).active)
 			});
 
 			this.activeDataSources.forEach(async ds => {

@@ -20,9 +20,10 @@ export default class Input {
 	/** fixme The computed percentage is no precise enough: it is by variable, we need by cell */
 	static async fetchFormStatus(project, dataSourceId) {
 		const dataSource = project.forms.find(ds => ds.id === dataSourceId);
+		const variables = dataSource.elements.filter(variable => variable.active);
 
-		const sum = dataSource.elements.map((v, i) => `!isNaN(variable_${i})`).join('+');
-		const formula = `(${sum})/${dataSource.elements.length}`;
+		const sum = variables.map((v, i) => `!isNaN(variable_${i})`).join('+');
+		const formula = `(${sum})/${variables.length}`;
 		const query = {
 			projectId: project._id,
 			formula: formula,
@@ -45,7 +46,7 @@ export default class Input {
 			]
 		}
 
-		dataSource.elements.forEach((v, i) => {
+		variables.forEach((v, i) => {
 			query.parameters['variable_' + i] = {
 				variableId: v.id,
 				dice: []
@@ -64,10 +65,11 @@ export default class Input {
 	/** Fetch specific data entry by calling the reporting service. */
 	static async fetchInput(project, siteId, dataSourceId, period) {
 		const dataSource = project.forms.find(ds => ds.id === dataSourceId);
+		const variables = dataSource.elements.filter(variable => variable.active);
 
 		return new Input({
 			projectId: project._id,
-			content: await Promise.all(dataSource.elements.map(async variable => {
+			content: await Promise.all(variables.map(async variable => {
 				// Query server
 				const response = await axios.post(`/rpc/build-report`, {
 					output: 'flatArray',

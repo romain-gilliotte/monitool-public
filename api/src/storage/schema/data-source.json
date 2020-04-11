@@ -50,6 +50,7 @@
 				"required": [
 					"id",
 					"name",
+					"active",
 					"timeAgg",
 					"geoAgg",
 					"partitions",
@@ -62,6 +63,9 @@
 					"name": {
 						"type": "string",
 						"minLength": 1
+					},
+					"active": {
+						"type": "boolean"
 					},
 					"timeAgg": {
 						"type": "string",
