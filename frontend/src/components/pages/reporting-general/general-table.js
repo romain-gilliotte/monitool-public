@@ -344,10 +344,9 @@ module.component(__componentName, {
 			}
 
 			const attributes = disagregateBy.attribute ? [disagregateBy.attribute] : dimension.attributes;
-
 			attributes.forEach(attribute => {
 				dimension.getEntries(attribute).forEach(([item, subLabel]) => {
-					if (item !== 'out') {
+					if (item !== 'out' && item !== 'all') {
 						const subQuery = Object.assign(
 							{},
 							query,
