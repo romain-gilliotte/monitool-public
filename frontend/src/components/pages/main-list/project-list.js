@@ -15,7 +15,6 @@ module.config($stateProvider => {
 		url: '/projects',
 		component: __componentName,
 		resolve: {
-			projects: () => Project.fetchAll(),
 			lastInputDate: async () => {
 				const response = await axios.get('/rpc/get-last-inputs');
 				return response.data;

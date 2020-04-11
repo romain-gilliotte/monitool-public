@@ -2,11 +2,13 @@
     <menus>
         <div class="list-group">
             <a ui-sref="main.projects" ui-sref-active="active" class="list-group-item">
+                <span class="label label-default pull-right">{{$ctrl.projects.length}}</span>
                 <i class="fa fa-home fa-fw"></i>
                 <span translate="shared.project_list"></span>
             </a>
 
             <a ui-sref="main.invitations" ui-sref-active="active" class="list-group-item">
+                <span class="label label-default pull-right">{{$ctrl.invitations.length}}</span>
                 <i class="fa fa-share-alt fa-fw"></i>
                 <span translate="project.invitations"></span>
             </a>
@@ -40,5 +42,5 @@
             </a>
         </div>
     </menus>
-    <content ui-view></content>
+    <content ui-view projects="$ctrl.projects" invitations="$ctrl.invitations"></content>
 </project-columns>
