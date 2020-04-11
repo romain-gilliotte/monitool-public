@@ -13,13 +13,16 @@ module.exports = {
         port: 8080,
         disableHostCheck: true,
         host: '0.0.0.0',
+        proxy: {
+            '/api': {
+                target: 'http://localhost:8000',
+                pathRewrite: { '^/api': '' }
+            }
+        }
     },
 
     plugins: [
         ...config.plugins,
-
-        new webpack.DefinePlugin({
-            SERVICE_URL: '"http://localhost:8000"'
-        }),
+        new webpack.DefinePlugin({ SERVICE_URL: '"/api"' }),
     ]
 };
