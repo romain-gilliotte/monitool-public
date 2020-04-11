@@ -64,7 +64,7 @@ module.component(__componentName, {
 						name: '',
 						periodicity: 'month',
 						entities: this.project.entities.map(s => s.id),
-						start: null, end: null,
+						active: true,
 						elements: []
 					};
 
