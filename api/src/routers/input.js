@@ -1,4 +1,4 @@
-const Router = require('koa-router');
+const Router = require('@koa/router');
 const ObjectId = require('mongodb').ObjectID;
 
 const router = new Router();

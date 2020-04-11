@@ -1,4 +1,4 @@
-const Router = require('koa-router');
+const Router = require('@koa/router');
 const PdfPrinter = require('pdfmake');
 const gm = require('gm');
 const { getProject } = require('../storage/queries');

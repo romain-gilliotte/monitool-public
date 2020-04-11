@@ -1,5 +1,5 @@
 const jiff = require('jiff');
-const Router = require('koa-router');
+const Router = require('@koa/router');
 const ObjectId = require('mongodb').ObjectID;
 const JSONStream = require('JSONStream');
 const { listProjects, getProject } = require('../storage/queries');

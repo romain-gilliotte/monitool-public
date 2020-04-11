@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const Router = require('koa-router');
+const Router = require('@koa/router');
 const { ObjectId } = require('mongodb');
 
 const router = new Router();
