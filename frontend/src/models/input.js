@@ -22,7 +22,7 @@ export default class Input {
 		const dataSource = project.forms.find(ds => ds.id === dataSourceId);
 		const variables = dataSource.elements.filter(variable => variable.active);
 
-		const sum = variables.map((v, i) => `!isNaN(variable_${i})`).join('+');
+		const sum = variables.map((v, i) => `not isNaN(variable_${i})`).join('+');
 		const formula = `(${sum})/${variables.length}`;
 		const query = {
 			projectId: project._id,
