@@ -129,7 +129,7 @@ module.exports = {
             question: `Comment retourner sur les pages de configuration sur un projet que j'ai déjà créé?`,
             answer: `
                 Sur votre projet, à droite du bouton ouvrir, clickez sur
-                <span class="btn btn-default btn-xs"><span class="caret"></span>
+                <span class="btn btn-default btn-xs"><span class="caret"></span></span>
                 pour les voir toutes les actions possibles.
             `
         }, {
