@@ -19,20 +19,6 @@
 	<columns-panel ng-repeat="invitation in $ctrl.invitations">
 		<pane-title>{{invitation.email}}</pane-title>
 		<pane-body>
-			<div>
-				<strong translate="project.invitation_role"></strong>
-				{{('project.invitation_roles.' + invitation.role)|translate}}
-			</div>
-			<div ng-if="invitation.role == 'input'">
-				<strong translate="project.collection_site_list"></strong>
-				<element-groups ids="invitation.entities" items="$ctrl.project.entities" groups="$ctrl.project.groups">
-				</element-groups>
-			</div>
-			<div ng-if="invitation.role == 'input'">
-				<strong translate="project.collection_form_list"></strong>
-				<element-groups ids="invitation.dataSources" items="$ctrl.project.forms" groups="[]"></element-groups>
-			</div>
-
 			<div class="panel-buttons btn-group">
 				<a ng-click="$ctrl.onEditClicked(invitation)" class="btn btn-default btn-xxs">
 					<i class="fa fa-pencil"></i>

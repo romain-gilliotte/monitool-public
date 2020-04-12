@@ -111,8 +111,7 @@ module.component(__componentName, {
 				angular.copy(this.input, this.master);
 			}
 			catch (error) {
-				let errorMessage = 'project.saving_failed_other';
-				alert(this.translate(errorMessage));
+				alert(this.translate('project.saving_failed'));
 			}
 			finally {
 				this.inputSaving = false;

@@ -110,10 +110,8 @@ module.component(__componentName, {
 					this.onProjectSaveSuccess({ newProject: this.childProject });
 				}
 				catch (error) {
-					let errorMessage = 'project.saving_failed_other';
-
 					// Display message to tell user that it's not possible to save.
-					alert(this.translate(errorMessage));
+					alert(this.translate('project.saving_failed'));
 				}
 				finally {
 					this.$scope.$apply(() => {

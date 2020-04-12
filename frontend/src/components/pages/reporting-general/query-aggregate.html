@@ -3,7 +3,7 @@
 
 	<select id="group-by-input" class="form-control" ng-model="$ctrl.groupBy" ng-change="$ctrl.onValueChange()">
 		<option value="{{periodicity}}" ng-repeat="periodicity in $ctrl.periodicities">
-			{{('shared.' + periodicity)|translate}}
+			{{('project.dimensions.' + periodicity)|translate}}
 		</option>
 		<option value="entity" translate="project.collection_site_list"></option>
 	</select>

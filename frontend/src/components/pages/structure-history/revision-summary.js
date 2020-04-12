@@ -66,7 +66,6 @@ module.component(__componentName, {
 		 * For instance:
 		 *     '/start', 'replace' => 'start_replace'
 		 *     '/logicalFrames/0/purposes/0/ouputs/4/activities/2/indicators', 'add' => 'logicalFrames_indicators_add'
-		 *     '/crossCutting/indicator:9fa37bfc-309d-455c-9b26-13506527e355', 'add' => 'crossCutting_add'
 		 */
 		_getTranslationKey(operation) {
 			// Start by removing indexes, and replacing / by _
@@ -76,15 +75,11 @@ module.component(__componentName, {
 
 				// Remove indexes and ids that are in the middle
 				// i.e. "logicalFrames/0/purposes" to "logicalFrames_purposes"
-				// i.e. "crossCutting/indicator:85555adc-285e-494a-bfc7-69debd9a6a6e/target" to "crossCutting_target"
 				.replace(/\/\d+\//g, '_')
-				.replace(/\/[a-z]+:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\//, '_')
 
 				// Remove trailing numbers and trailing uuids
-				// i.e. "themes/4" to "themes"
-				// i.e. "crossCutting/indicator:85555adc-285e-494a-bfc7-69debd9a6a6e" to "crossCutting"
+				// i.e. "forms_entities/4" to "forms_entities"
 				.replace(/\/\d+$/, '')
-				.replace(/\/[a-z]+:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/, '')
 
 			// Special case for indicators: we do as if all logframe indicators were on the general objective.
 			var indicatorMatch = editedField.match(/^logicalFrames.*indicators(.*)$/);

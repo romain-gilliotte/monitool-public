@@ -135,7 +135,7 @@ export default class Project {
 	 * Scan all internal references to entities, variables, partitions, and partitions elements
 	 * inside the project to ensure that there are no broken links and repair them if needed.
 	 */
-	sanitize(indicators) {
+	sanitize() {
 		//////////////////
 		// Sanitize links to input entities
 		//////////////////
@@ -167,24 +167,6 @@ export default class Project {
 				});
 			});
 		});
-
-		// Sanitize indicators only if the list is provided.
-		if (indicators) {
-			for (var indicatorId in this.crossCutting) {
-				var indicator = indicators.find(i => i._id == indicatorId);
-				if (!indicator) {
-					delete this.crossCutting[indicatorId];
-					continue;
-				}
-
-				var commonThemes = indicator.themes.filter(t => this.themes.includes(t));
-				if (commonThemes.length === 0)
-					delete this.crossCutting[indicatorId];
-			}
-		}
-
-		for (var indicatorId in this.crossCutting)
-			this._sanitizeIndicator(this.crossCutting[indicatorId]);
 
 		this.extraIndicators.forEach(this._sanitizeIndicator, this);
 	}
