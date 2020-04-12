@@ -6,12 +6,10 @@
  -->
 <div class="project-container">
     <div class="project-menu">
-        <div class="list-group back" ng-if="$ctrl.back">
-            <a ui-sref="{{$ctrl.back}}" ui-sref-active="active" class="list-group-item">
-                <i class="fa fa-arrow-left fa-fw"></i>
-                <span translate="shared.back"></span>
-            </a>
-        </div>
+        <a ui-sref="{{$ctrl.back}}" ui-sref-active="active" class="back-button" ng-if="$ctrl.back">
+            <i class="fa fa-arrow-left fa-fw"></i>
+            <span translate="shared.back"></span>
+        </a>
 
         <div class="panel-group" ng-transclude="menus"></div>
     </div>
