@@ -20,6 +20,10 @@
 				</element-groups>
 			</div>
 			<div>
+				<strong translate="project.time_to_fill"></strong>
+				≈ {{$ctrl.timeToFill[dataSource.id]}} min
+			</div>
+			<div>
 				<strong translate="project.variables"></strong>
 				<ul ng-sortable="$ctrl.variableSortOptions">
 					<li ng-repeat="variable in dataSource.elements track by variable.id" class="clickable"

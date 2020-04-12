@@ -51,8 +51,19 @@ module.component(__componentName, {
 
 		$onChanges(changes) {
 			// Project is a single way data bindings: we must not change it.
-			if (changes.project)
+			if (changes.project) {
 				this.editableProject = angular.copy(this.project);
+				this.timeToFill = {};
+				this.editableProject.forms.forEach(ds => {
+					const cells = ds.elements.reduce((m, v) => {
+						if (!v.active) return 0;
+						else return m + v.partitions.reduce((m, p) => m * p.elements.length, 1);
+					}, 0)
+
+					// Assume 10 seconds / cell
+					this.timeToFill[ds.id] = Math.max(1, Math.round(cells * 10 / 60));
+				})
+			}
 		}
 
 		/**

@@ -104,6 +104,7 @@ export default {
 	},
 
 	project: {
+		time_to_fill: "Durée estimée saisie",
 		confirm_delete_site: `Si vous supprimez ce site, vous ne pourrez plus accéder à ses données dans les rapports. Confirmez pour supprimer.`,
 		confirm_delete_datasource: `Si vous supprimez cette source de données, vous ne pourrez plus accéder à ses données dans les rapports, ni en indicateurs qui en dépendent. Confirmez pour supprimer.`,
 		no_invitations_yet: "Vous n'avez pas encore invité d'autres utilisateurs à participer à votre projet",
