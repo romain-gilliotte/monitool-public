@@ -1,13 +1,16 @@
-
 <div class="well" style="padding: 5px; margin-bottom: 0">
 	<ul style="list-style-type: none; padding-left: 5px">
 		<li ng-if="$ctrl.partitions.length == 0" translate="project.no_partitions"></li>
 
 		<li ng-repeat="partition in $ctrl.partitions">
-			<a ng-click="$ctrl.editPartition(partition)">
+			<a ng-click="$ctrl.editPartition(partition)" ng-class="{disabled: !partition.active}">
 				<i class="fa fa-pencil"></i>
-				<strong>{{partition.name}}</strong>
-				({{partition.elements|pluck:"name"|join:", "}})
+				<strong>{{partition.name}}:</strong>
+				{{partition.elements|pluck:"name"|join:", "}}
+
+				<span ng-if="!partition.active">
+					(<span translate="shared.disabled"></span>)
+				</span>
 			</a>
 		</li>
 	</ul>

@@ -70,6 +70,8 @@ export default class Input {
 		return new Input({
 			projectId: project._id,
 			content: await Promise.all(variables.map(async variable => {
+				const activePartitions = variable.partitions.filter(p => p.active);
+
 				// Query server
 				const response = await axios.post(`/rpc/build-report`, {
 					output: 'flatArray',
@@ -79,16 +81,16 @@ export default class Input {
 					dice: [
 						{ id: 'time', attribute: dataSource.periodicity, items: [period], },
 						{ id: 'location', attribute: 'entity', items: [siteId], },
-						...variable.partitions.map(p => ({ id: p.id, attribute: 'element', items: p.elements.map(pe => pe.id) }))
+						...activePartitions.map(p => ({ id: p.id, attribute: 'element', items: p.elements.map(pe => pe.id) }))
 					],
-					aggregate: variable.partitions.map(p => ({ id: p.id, attribute: 'element' })),
+					aggregate: activePartitions.map(p => ({ id: p.id, attribute: 'element' })),
 				});
 
 				// Check that query result have the expected format.
 				// If not, it means that we're making a query outside of the bounds of the project,
 				// in that case, we can just return empty data, it should happen only when filling the first
 				// data entry (because we're trying to load the previous one as well for "fill with previous data" action).
-				const expectedLength = variable.partitions.reduce((m, p) => m * p.elements.length, 1);
+				const expectedLength = activePartitions.reduce((m, p) => m * p.elements.length, 1);
 				const data = response.data;
 				if (data.length !== expectedLength) {
 					data.length = expectedLength;
@@ -101,7 +103,7 @@ export default class Input {
 					dimensions: [
 						{ id: 'time', attribute: dataSource.periodicity, items: [period] },
 						{ id: 'location', attribute: 'entity', items: [siteId] },
-						...variable.partitions.map(p => ({ id: p.id, attribute: 'element', items: p.elements.map(pe => pe.id) }))
+						...activePartitions.map(p => ({ id: p.id, attribute: 'element', items: p.elements.map(pe => pe.id) }))
 					]
 				}
 			}))

@@ -39,7 +39,9 @@ module.config($stateProvider => {
 	});
 });
 
-
+/**
+ * fixme: splitting this to have a variable component would be great.
+ */
 module.component(__componentName, {
 
 	bindings: {
@@ -69,8 +71,8 @@ module.component(__componentName, {
 						elements: []
 					};
 
-					this.onFieldChange();
 				}
+				this.onFieldChange();
 			}
 		}
 
@@ -78,6 +80,7 @@ module.component(__componentName, {
 			this.visibleVariableId = null;
 
 			this.sortableOptions = {
+				handle: '.panel-heading',
 				onUpdate: this.onFieldChange.bind(this),
 				onStart: () => {
 					this.visibleVariableId = null;
@@ -98,6 +101,11 @@ module.component(__componentName, {
 			else
 				newProject.forms.push(this.editableDataSource);
 
+			this.numActivePartitions = {};
+			this.editableDataSource.elements.forEach(variable => {
+				this.numActivePartitions[variable.id] = variable.partitions.reduce((m, p) => m + (p.active ? 1 : 0), 0);
+			});
+
 			this.onProjectUpdate({
 				newProject: newProject,
 				isValid:
@@ -107,6 +115,9 @@ module.component(__componentName, {
 
 					// Don't allow to save data sources with no variables.
 					this.editableDataSource.elements.length > 0 &&
+
+					// Don't allow disabling all variables
+					this.editableDataSource.elements.some(v => v.active) &&
 
 					// Check that the variable have a name for validity.
 					// There is a 'required' directive on the form, however, some inputs are not there
@@ -133,6 +144,8 @@ module.component(__componentName, {
 
 		onChangeVariableStatus(variable, newStatus) {
 			variable.active = newStatus;
+			if (this.visibleVariableId === variable.id && !newStatus)
+				this.visibleVariableId = null;
 			this.onFieldChange();
 		}
 

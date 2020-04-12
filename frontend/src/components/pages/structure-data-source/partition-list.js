@@ -1,7 +1,7 @@
 import angular from 'angular';
 import uiModal from 'angular-ui-bootstrap/src/modal';
-
 import mtPartitionEdition from './partition-edition-modal';
+require(__cssPath);
 
 const module = angular.module(__moduleName, [uiModal, mtPartitionEdition]);
 
@@ -11,52 +11,48 @@ module.component(__componentName, {
 		'onUpdate': '&'
 	},
 	template: require(__templatePath),
-	controller: class PartitionListController {
+	controller: class {
 
 		constructor($uibModal) {
 			this.$uibModal = $uibModal;
 		}
 
-		$onChanges(changes) {
+		$onChanges() {
 			this.partitions = angular.copy(this.readOnlyPartitions)
 		}
 
-		editPartition(partition) {
-			this.$uibModal
-				.open({
-					component: 'partitionEditionModal',
-					size: 'lg',
-					resolve: {
-						partition: () => partition
-					}
-				})
-				.result
-				.then(newPartition => {
-					if (newPartition)
-						angular.copy(newPartition, partition);
-					else
-						this.partitions.splice(this.partitions.indexOf(partition), 1);
+		async addPartition() {
+			const modalOpt = { component: 'partitionEditionModal', size: 'lg' };
 
-					this.onUpdate({ partitions: this.partitions });
-				})
-				.catch(e => { });
-		};
+			try {
+				const newPartition = await this.$uibModal.open(modalOpt).result;
+				this.partitions.push(newPartition);
 
-		addPartition() {
-			this.$uibModal
-				.open({
-					component: 'partitionEditionModal',
-					size: 'lg'
-				})
-				.result
-				.then(newPartition => {
-					this.partitions.push(newPartition);
+				this.onUpdate({ partitions: this.partitions });
+			}
+			catch (e) {
+			}
+		}
 
-					console.log('added')
-					this.onUpdate({ partitions: this.partitions });
-				})
-				.catch(e => { });
-		};
+		async editPartition(partition) {
+			const modalOpt = {
+				component: 'partitionEditionModal',
+				size: 'lg',
+				resolve: { partition: () => partition }
+			}
+
+			try {
+				const newPartition = await this.$uibModal.open(modalOpt).result;
+				if (newPartition)
+					angular.copy(newPartition, partition);
+				else
+					this.partitions.splice(this.partitions.indexOf(partition), 1);
+
+				this.onUpdate({ partitions: this.partitions });
+			}
+			catch (e) {
+			}
+		}
 	}
 });
 

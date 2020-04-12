@@ -1,5 +1,4 @@
 import angular from 'angular';
-import { range } from '../../../helpers/array';
 require(__cssPath);
 
 const module = angular.module(__moduleName, []);
@@ -17,12 +16,14 @@ module.component(__componentName, {
 		$onChanges(changes) {
 			// Make an editable version of the partitions (one way data bindings).
 			this.editablePartitions = angular.copy(this.partitions);
+			this.availablePartitions = this.editablePartitions.filter(p => p.active);
 
 			// Tell the template about the table layout
+			const indexes = this.partitions.map((p, i) => p.active ? i : -1).filter(i => i !== -1);
 			this.table = {
 				// rows and cols for this table.
-				leftCols: range(0, this.distribution),
-				headerRows: range(this.distribution, this.partitions.length)
+				leftCols: indexes.slice(0, this.distribution),
+				headerRows: indexes.slice(this.distribution)
 			};
 
 			// Update size in the table cell

@@ -145,14 +145,14 @@
 
 				</form-group>
 
-				<form-group ng-if="variable.partitions.length > 0" label="project.distribution_label"
+				<form-group ng-if="$ctrl.numActivePartitions[variable.id] > 0" label="project.distribution_label"
 					help="project.collection_edit_help_distribution">
 
 					<partition-distribution ng-model="variable.distribution" ng-change="$ctrl.onFieldChange()"
-						num-partitions="variable.partitions.length"></partition-distribution>
+						num-partitions="$ctrl.numActivePartitions[variable.id]"></partition-distribution>
 				</form-group>
 
-				<form-group ng-if="variable.partitions.length > 1" label="project.order_label"
+				<form-group ng-if="$ctrl.numActivePartitions[variable.id] > 1" label="project.order_label"
 					help="project.collection_edit_help_order">
 
 					<partition-order partitions="variable.partitions" distribution="variable.distribution"

@@ -1,0 +1,6 @@
+partition-list a {
+    cursor: pointer;
+}
+partition-list .disabled {
+    color: #aaa;
+}

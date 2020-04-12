@@ -92,6 +92,10 @@ module.component(__componentName, {
 			this.partition.groups = this.partition.groups.filter(g => g.id !== pgId);
 		}
 
+		onChangeStatusClicked(newStatus) {
+			this.partition.active = newStatus;
+		}
+
 		delete() {
 			this.closedOnPurpose = true;
 			this.close();

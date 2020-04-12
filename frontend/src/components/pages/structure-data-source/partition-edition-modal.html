@@ -14,13 +14,9 @@
 		<div class="form-group">
 			<label for="input-partition-name" class="col-sm-2 control-label" translate="shared.name"></label>
 			<div class="col-sm-10">
-				<input id="input-partition-name"
-					   type="text"
-					   class="form-control"
-					   name="name"
-					   ng-model="$ctrl.partition.name"
-					   placeholder="{{'project.partition_general_placeholder'|translate}}"
-					   required />
+				<input id="input-partition-name" type="text" class="form-control" name="name"
+					ng-model="$ctrl.partition.name" placeholder="{{'project.partition_general_placeholder'|translate}}"
+					required />
 
 
 				<p class="help-block">
@@ -47,24 +43,21 @@
 						</tr>
 					</tbody>
 					<tbody ng-sortable="{handle: '.handle'}">
-						<tr ng-repeat="partitionElement in $ctrl.partition.elements track by partitionElement.id">
+						<tr ng-repeat="element in $ctrl.partition.elements track by element.id">
 							<td class="handle"><i class="fa fa-sort fa-fw"></i></td>
 
 							<td>
 								<ng-form name="center">
 									<div class="form-group" style="margin: 0">
-										<input type="text"
-											   name="name"
-											   ng-model="partitionElement.name"
-											   class="form-control input-sm"
-											   placeholder="{{'project.partition_name_placeholder'|translate}}"
-											   required />
+										<input type="text" name="name" ng-model="element.name"
+											class="form-control input-sm"
+											placeholder="{{'project.partition_name_placeholder'|translate}}" required />
 									</div>
 								</ng-form>
 							</td>
 
 							<td style="text-align: right">
-								<a class="btn btn-danger btn-sm" ng-click="$ctrl.deletePartitionElement(partitionElement.id)">
+								<a class="btn btn-danger btn-sm" ng-click="$ctrl.deletePartitionElement(element.id)">
 									<i class="fa fa-remove"></i>
 								</a>
 							</td>
@@ -90,9 +83,7 @@
 		</div>
 
 		<div class="form-group">
-			<label
-				for="input-partition-aggregation"
-				class="col-sm-2 control-label"
+			<label for="input-partition-aggregation" class="col-sm-2 control-label"
 				translate="project.aggregation_lab"></label>
 
 			<div class="col-sm-10">
@@ -113,15 +104,9 @@
 		<div class="form-group">
 			<label for="input-partition-use-groups" class="col-sm-2 control-label" translate="project.groups"></label>
 			<div class="col-sm-10">
-				<input
-					id="input-partition-use-groups"
-					type="checkbox"
-					name="groups"
-					ng-model="$ctrl.useGroups" />
+				<input id="input-partition-use-groups" type="checkbox" name="groups" ng-model="$ctrl.useGroups" />
 
-				<label
-					for="input-partition-use-groups"
-					translate="project.use_groups"
+				<label for="input-partition-use-groups" translate="project.use_groups"
 					style="font-weight: normal"></label>
 
 				<table class="table table-bordered table-stripped table-condensed" ng-if="$ctrl.useGroups">
@@ -139,33 +124,30 @@
 						</tr>
 					</tbody>
 					<tbody ng-sortable="{handle: '.handle'}">
-						<tr ng-repeat="partitionGroup in $ctrl.partition.groups track by partitionGroup.id">
+						<tr ng-repeat="group in $ctrl.partition.groups track by group.id">
 							<td class="handle"><i class="fa fa-sort fa-fw"></i></td>
 
 							<td>
 								<ng-form name="center">
 									<div class="form-group" style="margin: 0">
-										<input type="text"
-											   name="name"
-											   placeholder="{{'project.partition_group_name_placeholder'|translate}}"
-											   ng-model="partitionGroup.name"
-											   class="form-control error input-sm"
-											   required />
+										<input type="text" name="name"
+											placeholder="{{'project.partition_group_name_placeholder'|translate}}"
+											ng-model="group.name" class="form-control error input-sm" required />
 									</div>
 								</ng-form>
 							</td>
 
 							<td>
-								<ui-select multiple ng-model="partitionGroup.members" theme="bootstrap">
+								<ui-select multiple ng-model="group.members" theme="bootstrap">
 									<ui-select-match placeholder="">{{$item.name}}</ui-select-match>
-									<ui-select-choices repeat="partitionElement.id as partitionElement in $ctrl.partition.elements">
-										{{partitionElement.name}}
+									<ui-select-choices repeat="element.id as element in $ctrl.partition.elements">
+										{{element.name}}
 									</ui-select-choices>
 								</ui-select>
 							</td>
 
 							<td style="text-align: right">
-								<a class="btn btn-danger btn-sm" ng-click="$ctrl.deleteGroup(partitionGroup.id)">
+								<a class="btn btn-danger btn-sm" ng-click="$ctrl.deleteGroup(group.id)">
 									<i class="fa fa-remove"></i>
 								</a>
 							</td>
@@ -212,7 +194,8 @@
 		</p>
 	</div>
 
-	<button ng-disabled="$ctrl.partitionForm.$invalid || $ctrl.isUnchanged()" class="btn btn-primary" ng-click="$ctrl.save()">
+	<button ng-disabled="$ctrl.partitionForm.$invalid || $ctrl.isUnchanged()" class="btn btn-primary"
+		ng-click="$ctrl.save()">
 		<i class="fa fa-table"></i>
 		<span translate="shared.apply"></span>
 	</button>
@@ -222,8 +205,25 @@
 		<span translate="shared.remove_changes"></span>
 	</button>
 
-	<button ng-click="$ctrl.delete()" ng-if="!$ctrl.isNew" class="btn btn-danger">
-		<i class="fa fa-trash"></i>
-		<span translate="shared.delete"></span>
-	</button>
+	<div class="btn-group" ng-if="!$ctrl.isNew" uib-dropdown>
+		<a ng-if="$ctrl.partition.active" class="btn btn-default" ng-click="$ctrl.onChangeStatusClicked(false)">
+			<i class="fa fa-fw fa-pause-circle-o"></i>
+			<span translate="shared.disable"></span>
+		</a>
+		<a ng-if="!$ctrl.partition.active" class="btn btn-default" ng-click="$ctrl.onChangeStatusClicked(true)">
+			<i class="fa fa-fw fa-play-circle-o"></i>
+			<span translate="shared.enable"></span>
+		</a>
+		<a class="btn btn-default" uib-dropdown-toggle>
+			<span class="caret"></span>
+		</a>
+		<ul class="dropdown-menu" uib-dropdown-menu>
+			<li>
+				<a ng-click="$ctrl.delete()">
+					<i class="fa fa-trash text-danger"></i>
+					<span class="text-danger" translate="shared.delete"></span>
+				</a>
+			</li>
+		</ul>
+	</div>
 </div>

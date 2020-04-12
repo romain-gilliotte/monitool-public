@@ -4,6 +4,7 @@ export default {
 	shared: {
 		enable: "Réactiver la saisie",
 		disable: "Désactiver la saisie",
+		disabled: "Saisie désactivée",
 		accept_invitation: "Accepter",
 		refuse_invitation: "Refuser",
 		uninvite: "Retirer de mes projets",
@@ -185,18 +186,18 @@ export default {
 			forms_remove: "Supprime la source de données <code>{{item.name}}</code>",
 			forms_name_replace: "Renomme la source de données <code>{{before}}</code> en <code>{{after}}</code>",
 			forms_periodicity_replace: "Change la périodicité de <code>{{form.name}}</code> de <code>{{before}}</code> vers <code>{{after}}</code>",
-			forms_active_replace: "{{after ? 'Active' : 'Désactive'}} la saisie sur la source de données <code>{{form.name}}</code>",
+			forms_active_replace: "{{after ? 'Active' : 'Désactive'}} la saisie de la source de données <code>{{form.name}}</code>",
 
 			forms_entities_add: "Ajoute le lieu <code>{{item.name}}</code> à la source de données <code>{{form.name}}</code>",
 			forms_entities_move: "Reordonne les lieux de la source de données <code>{{form.name}}</code>",
 			forms_entities_remove: "Retire le lieu <code>{{item.name}}</code> de la source de données <code>{{form.name}}</code>",
-
 			forms_elements_add: "Ajoute la variable <code>{{item.name}}</code> dans <code>{{form.name}}</code>",
 			forms_elements_move: "Reordonne les variables de la source de données <code>{{form.name}}</code>",
 			forms_elements_remove: "Supprime la variable <code>{{item.name}}</code> dans <code>{{form.name}}</code>",
 			forms_elements_replace: "Remplace la variable <code>{{before.name}}</code> par <code>{{after.name}}</code>",
 
 			forms_elements_name_replace: "Renomme la variable <code>{{before}}</code> en <code>{{after}}</code>",
+			forms_elements_active_replace: "{{after ? 'Active' : 'Désactive'}} la saisie de la variable <code>{{variable.name}}</code>",
 			forms_elements_geoAgg_replace: "Change la règle d'aggrégation (lieux) de <code>{{variable.name}}</code> de <code>{{before}}</code> vers <code>{{after}}</code>",
 			forms_elements_timeAgg_replace: "Change la règle d'aggrégation (temps) de <code>{{variable.name}}</code> de <code>{{before}}</code> vers <code>{{after}}</code>",
 			forms_elements_order_replace: "Change la présentation de la saisie de la variable <code>{{variable.name}}</code>",
@@ -206,6 +207,7 @@ export default {
 			forms_elements_partitions_move: "Reordonne les désagrégations de <code>{{variable.name}}</code>",
 			forms_elements_partitions_remove: "Supprime la désagrégation <code>{{item.name}}</code> de <code>{{variable.name}}</code>",
 			forms_elements_partitions_name_replace: "Renomme la désagrégation <code>{{before}}</code> en <code>{{after}}</code> dans la variable <code>{{variable.name}}</code>",
+			forms_elements_partitions_active_replace: "{{after ? 'Active' : 'Désactive'}} la saisie de la désagrégation <code>{{partition.name}}</code> de la variable <code>{{variable.name}}</code>",
 			forms_elements_partitions_aggregation_replace: "Change la règle d'aggrégation de <code>{{before}}</code> vers <code>{{after}}</code> pour la variable <code>{{variable.name}}</code>",
 
 			forms_elements_partitions_elements_add: "Ajoute l'élément <code>{{item.name}}</code> dans la désagrégation <code>{{partition.name}}</code> de la variable <code>{{variable.name}}</code>",

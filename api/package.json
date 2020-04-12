@@ -25,7 +25,7 @@
     "mongodb": "^3.5.5",
     "nodemailer": "^6.4.6",
     "object-hash": "^2.0.3",
-    "olap-in-memory": "^6.0.3",
+    "olap-in-memory": "^6.0.4",
     "pdfmake": "^0.1.65",
     "roboto-fontface": "^0.10.0",
     "timeslot-dag": "^2.1.1",

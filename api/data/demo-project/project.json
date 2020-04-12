@@ -582,6 +582,7 @@
                         {
                             "id": "43c36698-ffcc-4324-97b0-ea1800b57842",
                             "name": "Reason",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "a62b176f-b509-4d97-a8f1-80cf31b62fe5",
@@ -625,6 +626,7 @@
                         {
                             "id": "a392b0c5-ac72-497d-aeb8-ef69bed4a80b",
                             "name": "Age",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "ff4bfd98-e175-4add-8159-441dd2ed0791",
@@ -645,6 +647,7 @@
                         {
                             "id": "956c2c4e-708c-4ad4-aeed-5bf9e4bd948b",
                             "name": "Sex",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "8f7173ba-2693-404d-90aa-3199565b6acb",
@@ -671,6 +674,7 @@
                         {
                             "id": "ce5ec106-ffa5-4534-998c-6a6439926e95",
                             "name": "ANC#",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "ffca09b9-16d1-48a5-9d26-20877c5b90de",
@@ -695,6 +699,7 @@
                         {
                             "id": "93ceb05e-5132-47ff-93bd-1126494ea569",
                             "name": "Age",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "c2db2da0-07b5-4a0e-a644-cfa204593fc0",
@@ -721,6 +726,7 @@
                         {
                             "id": "63148185-954b-4457-a75a-da29b6db169d",
                             "name": "Age",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "1588e03b-13a5-4c4e-937a-bbba675dc083",
@@ -747,6 +753,7 @@
                         {
                             "id": "aa6ada72-bdd0-4021-9f59-73617a1726bf",
                             "name": "Age",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "76b94a9d-4aac-4745-a8fa-295765f39d70",
@@ -773,6 +780,7 @@
                         {
                             "id": "ac69e4b8-a443-4f2a-aa6a-a75ca0bd450e",
                             "name": "OLD/NEW",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "2960cbcb-a684-447c-bbc3-aac556d0310c",
@@ -789,6 +797,7 @@
                         {
                             "id": "d0c99067-7dd0-4a19-a51b-0f746d7da872",
                             "name": "Age",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "fe667759-f861-4f4a-b56f-5ed7d47e5b88",
@@ -815,6 +824,7 @@
                         {
                             "id": "bd5a4b39-5ae0-4ad9-a5b0-c3cf51661f32",
                             "name": "Age",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "cb6956b1-fd35-47e4-8b2f-6deab7be92e3",
@@ -911,6 +921,7 @@
                         {
                             "id": "d2adc5b1-72c4-4e56-8a66-f7932c80fb93",
                             "name": "Pathology",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "8e025472-2697-490a-bd21-706b3bde3ff4",
@@ -941,6 +952,7 @@
                         {
                             "id": "059f5b1a-6117-448d-ad2f-6441e359a998",
                             "name": "Pathology",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "0af977db-fe2a-45a5-bf2b-16bd3fece3d6",
@@ -971,6 +983,7 @@
                         {
                             "id": "f32b8b09-a0a3-4860-ab4a-a9e3e69514af",
                             "name": "Pathology",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "e0ec2a0b-971c-464d-b131-bf265a7300b2",
@@ -1018,6 +1031,7 @@
                         {
                             "id": "be064de1-85e9-4942-8d59-0aee15e7922f",
                             "name": "Age",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "478d784a-4f79-4e91-97a3-f05271594697",
@@ -1038,6 +1052,7 @@
                         {
                             "id": "acdf04ea-08e0-4b26-bbfa-a1960c3375a1",
                             "name": "Gender",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "04658a79-95db-4d06-ad2b-c4ada42b6a3a",
@@ -1054,6 +1069,7 @@
                         {
                             "id": "dbac78e1-ff02-496a-b2ec-321b9a44d414",
                             "name": "Type",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "02683d38-a283-4dd4-b55b-f01d9c3cc13c",
@@ -1102,6 +1118,7 @@
                         {
                             "id": "92cfaa07-aacc-436a-a406-43e16a5d682a",
                             "name": "Age",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "78ef3687-5845-4f88-a031-fdfde76f2788",
@@ -1128,6 +1145,7 @@
                         {
                             "id": "cccef979-fdd5-4011-9617-d5a17539dc1f",
                             "name": "Age",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "30fedf09-b324-42c2-b0f8-30efbee15e10",
@@ -1154,6 +1172,7 @@
                         {
                             "id": "5aee29d0-8fba-4793-b796-94b4c5a65b1a",
                             "name": "Age",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "3de2352b-4d5e-4706-b32f-918dc986e082",
@@ -1180,6 +1199,7 @@
                         {
                             "id": "2b85ab76-fc40-40af-b7db-8ae6da38d91e",
                             "name": "Age",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "a75cc622-da55-47a3-8115-3c7d02de63c9",
@@ -1218,6 +1238,7 @@
                         {
                             "id": "146f40f2-ca43-4c2e-8626-503d20944fac",
                             "name": "Age",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "ea7cde6d-e1fc-49ec-8140-f2dfe0bc5404",
@@ -1234,6 +1255,7 @@
                         {
                             "id": "1fa70d3f-cd24-4c2a-9aef-3df16baee1b4",
                             "name": "Gender",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "8124310f-a86b-4f30-a08d-5427519a2fd0",
@@ -1250,6 +1272,7 @@
                         {
                             "id": "5c81cc33-30e0-4676-b313-f8d04e1e115e",
                             "name": "Type",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "678d3b62-26d0-476a-acf3-a9e6e67cc6f7",
@@ -1270,6 +1293,7 @@
                         {
                             "id": "32388b44-5b73-4d7a-b3db-2e5b23b46b15",
                             "name": "Referral",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "3bc90734-acbf-41b8-9ac0-adb53e146de9",
@@ -1286,6 +1310,7 @@
                         {
                             "id": "e7ac8100-85b8-4260-ab95-2608e0d46024",
                             "name": "Management",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "f0e260fd-7911-44de-815b-5235510bc5bd",
@@ -1328,6 +1353,7 @@
                         {
                             "id": "93453e13-d3a9-4d07-93c8-57d2263bae0c",
                             "name": "Age",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "4c4bbf1a-1c70-45cd-bb77-48f258a124d9",
@@ -1354,6 +1380,7 @@
                         {
                             "id": "21758a7c-c83d-46cc-972e-1999a6396e64",
                             "name": "Age",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "a5d78796-b5e2-4aeb-98ef-9a951bc6bb90",
@@ -1380,6 +1407,7 @@
                         {
                             "id": "23eb9064-ad69-41c4-b155-6c63656e26f2",
                             "name": "Age",
+                            "active": true,
                             "elements": [
                                 {
                                     "id": "be7a0340-dd54-4a1d-bc46-3fb0577459b4",

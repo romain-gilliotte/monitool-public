@@ -260,8 +260,9 @@ export default class Project {
 
 		// Sanitize order and distribution
 		form.elements.forEach(element => {
-			if (element.distribution < 0 || element.distribution > element.partitions.length)
-				element.distribution = Math.floor(element.partitions.length / 2);
+			const numActivePartitions = element.partitions.filter(p => p.active).length;
+			if (element.distribution < 0 || element.distribution > numActivePartitions)
+				element.distribution = Math.floor(numActivePartitions / 2);
 		});
 	}
 

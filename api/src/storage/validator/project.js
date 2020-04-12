@@ -33,6 +33,9 @@ function validate(project) {
 	const partitions = variables.reduce((m, v) => [...m, ...v.partitions], []);
 	const pElements = partitions.reduce((m, p) => [...m, ...p.elements], []);
 
+	if (project.forms.some(ds => ds.elements.every(variable => !variable.active)))
+		errors.push({ code: 'all vars inactive', message: 'At least one variable must be active by form' });
+
 	if (!variables.every(v => v.distribution >= 0 && v.distribution <= v.partitions.length))
 		errors.push({ code: 'invalid distribution', message: 'must be between 0 and partition.length included' });
 

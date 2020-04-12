@@ -53,17 +53,22 @@ module.component(__componentName, {
 			}
 		}
 
+		$onChanges() {
+			this.partitions = this.variable.partitions.filter(p => p.active);
+			this.distribution = this.variable.distribution;
+		}
+
 		$postLink() {
 			const withSum =
-				this.variable.partitions.length > 0
-				&& this.variable.partitions.every(p => p.aggregation === 'sum');
+				this.partitions.length > 0
+				&& this.partitions.every(p => p.aggregation === 'sum');
 
-			this.withSumX = withSum && this.variable.distribution !== this.variable.partitions.length;
-			this.withSumY = withSum && this.variable.distribution !== 0;
+			this.withSumX = withSum && this.distribution !== this.partitions.length;
+			this.withSumY = withSum && this.distribution !== 0;
 
 			const [colPartitions, rowPartitions] = [
-				this.variable.partitions.slice(this.variable.distribution),
-				this.variable.partitions.slice(0, this.variable.distribution)
+				this.partitions.slice(this.distribution),
+				this.partitions.slice(0, this.distribution)
 			];
 
 			this._width = colPartitions.reduce((m, p) => m * p.elements.length, 1) + rowPartitions.length + (this.withSumX ? 1 : 0);
@@ -100,10 +105,10 @@ module.component(__componentName, {
 		selectFirstCell() {
 			this.handsOnTable.selectCells([
 				[
-					this.variable.partitions.length - this.variable.distribution,
-					this.variable.distribution,
-					this.variable.partitions.length - this.variable.distribution,
-					this.variable.distribution,
+					this.partitions.length - this.distribution,
+					this.distribution,
+					this.partitions.length - this.distribution,
+					this.distribution,
 				]
 			]);
 		}
@@ -133,8 +138,8 @@ module.component(__componentName, {
 				e.stopImmediatePropagation() // do no let other instances of number-table to get the event.
 				e.preventDefault(); // do not let the browser use this event (ie: to select the address bar or something else).
 
-				const [minX, maxX] = [this.variable.distribution, this.withSumX ? this._width - 1 : this._width];
-				const [minY, maxY] = [this.variable.partitions.length - this.variable.distribution, this.withSumY ? this._height - 1 : this._height];
+				const [minX, maxX] = [this.distribution, this.withSumX ? this._width - 1 : this._width];
+				const [minY, maxY] = [this.partitions.length - this.distribution, this.withSumY ? this._height - 1 : this._height];
 
 				// Select only one zone in the table
 				selection.length = 1;
@@ -216,10 +221,10 @@ module.component(__componentName, {
 		 * Render header and content with different styles.
 		 */
 		_handsOnTableCellRenderer(row, col, prop) {
-			const numPartitions = this.variable.partitions.length;
+			const numPartitions = this.partitions.length;
 
 			// header
-			if (col < this.variable.distribution || row < numPartitions - this.variable.distribution)
+			if (col < this.distribution || row < numPartitions - this.distribution)
 				return {
 					readOnly: true,
 					renderer: function (instance, td, row, col, prop, value, cellProperties) {
@@ -239,7 +244,7 @@ module.component(__componentName, {
 		}
 
 		_updateSums(editedY, editedX) {
-			const numPartitions = this.variable.partitions.length;
+			const numPartitions = this.partitions.length;
 			let sum;
 
 			const isSumX = this.withSumX && editedX === this._width - 1;
@@ -248,7 +253,7 @@ module.component(__componentName, {
 			// guard against infinite loop (the total update trigering another update etc...)
 			if (this.withSumX && !isSumX) {
 				sum = 0;
-				for (let x = this.variable.distribution; x < this._width - 1; ++x) {
+				for (let x = this.distribution; x < this._width - 1; ++x) {
 					const val = this.handsOnTable.getDataAtCell(editedY, x);
 					if (typeof val === 'number')
 						sum += val;
@@ -258,7 +263,7 @@ module.component(__componentName, {
 
 			if (this.withSumY && !isSumY) {
 				sum = 0;
-				for (let y = numPartitions - this.variable.distribution; y < this._height - 1; ++y) {
+				for (let y = numPartitions - this.distribution; y < this._height - 1; ++y) {
 					const val = this.handsOnTable.getDataAtCell(y, editedX);
 					if (typeof val === 'number')
 						sum += val;
@@ -268,7 +273,7 @@ module.component(__componentName, {
 
 			if (this.withSumX && this.withSumY && !isSumX && isSumY) {
 				sum = 0;
-				for (let x = this.variable.distribution; x < this._width - 1; ++x) {
+				for (let x = this.distribution; x < this._width - 1; ++x) {
 					const val = this.handsOnTable.getDataAtCell(this._height - 1, x);
 					if (typeof val === 'number')
 						sum += val;
@@ -282,7 +287,7 @@ module.component(__componentName, {
 		 */
 		_modelToView(modelValue) {
 			// Special case! Having no partition does not cause having zero data fields
-			if (this.variable.partitions.length === 0)
+			if (this.partitions.length === 0)
 				return [modelValue];
 
 			// Clone modelValue to avoid detroying the original model
@@ -291,8 +296,8 @@ module.component(__componentName, {
 			var viewValue = [];
 
 			// Start by creating the headers.
-			var colPartitions = this.variable.partitions.slice(this.variable.distribution),
-				rowPartitions = this.variable.partitions.slice(0, this.variable.distribution);
+			var colPartitions = this.partitions.slice(this.distribution),
+				rowPartitions = this.partitions.slice(0, this.distribution);
 
 			var topRows = this._makeHeaderRows(colPartitions);
 			// super ugly hack so that _makeHeaderCols add the sum row only if relevant
@@ -352,12 +357,12 @@ module.component(__componentName, {
 		 */
 		_viewToModel(viewValue) {
 			// Special case! Having no partition does not cause having zero data fields
-			if (this.variable.partitions.length === 0)
+			if (this.partitions.length === 0)
 				return viewValue[0];
 
 			const [minX, minY, maxX, maxY] = [
-				this.variable.distribution,
-				this.variable.partitions.length - this.variable.distribution,
+				this.distribution,
+				this.partitions.length - this.distribution,
 				viewValue[0].length - (this.withSumX ? 1 : 0),
 				viewValue.length - (this.withSumY ? 1 : 0),
 			];
