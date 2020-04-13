@@ -10,7 +10,8 @@
 			<form-group input-id="start-date" label="shared.start">
 				<div class="input-group">
 					<span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
-					<utc-datepicker id="start-date" ng-model="$ctrl.start" ng-change="$ctrl.onFilterChange()">
+					<utc-datepicker id="start-date" ng-model="$ctrl.start" min-date="$ctrl.project.start"
+						max-date="$ctrl.end" ng-change="$ctrl.onFilterChange()">
 					</utc-datepicker>
 				</div>
 			</form-group>
@@ -18,7 +19,8 @@
 			<form-group input-id="end-date" label="shared.end">
 				<div class="input-group">
 					<span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
-					<utc-datepicker id="end-date" ng-model="$ctrl.end" ng-change="$ctrl.onFilterChange()">
+					<utc-datepicker id="end-date" ng-model="$ctrl.end" min-date="$ctrl.start"
+						max-date="$ctrl.project.end" ng-change="$ctrl.onFilterChange()">
 					</utc-datepicker>
 				</div>
 			</form-group>

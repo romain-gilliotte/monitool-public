@@ -50,7 +50,8 @@
 				<form-group input-id="logframe-startdate-input" label="project.specific_start"
 					help="project.logframe_edit_help_start">
 
-					<utc-datepicker id="logframe-startdate-input" ng-model="$ctrl.editableLogFrame.start"
+					<utc-datepicker input-id="logframe-startdate-input" ng-model="$ctrl.editableLogFrame.start"
+						min-date="$ctrl.project.start" max-date="$ctrl.editableLogFrame.end"
 						ng-change="$ctrl.onFieldChange()">
 					</utc-datepicker>
 				</form-group>
@@ -58,7 +59,9 @@
 				<form-group input-id="logframe-enddate-input" label="project.specific_end"
 					help="project.logframe_edit_help_end">
 
-					<utc-datepicker ng-model="$ctrl.editableLogFrame.end" ng-change="$ctrl.onFieldChange()">
+					<utc-datepicker input-id="logframe-enddate-input" ng-model="$ctrl.editableLogFrame.end"
+						min-date="$ctrl.editableLogFrame.start" max-date="$ctrl.project.end"
+						ng-change="$ctrl.onFieldChange()">
 					</utc-datepicker>
 
 				</form-group>

@@ -28,14 +28,16 @@
 
 			<form-group input-id="input-start" label="project.start_date" help="project.basics_help_begin">
 
-				<utc-datepicker ng-model="$ctrl.editableProject.start" ng-change="$ctrl.onFieldChange()">
+				<utc-datepicker ng-model="$ctrl.editableProject.start" max-date="$ctrl.editableProject.end"
+					ng-change="$ctrl.onFieldChange()">
 				</utc-datepicker>
 
 			</form-group>
 
 			<form-group input-id="input-end" label="project.end_date" help="project.basics_help_end">
 
-				<utc-datepicker ng-model="$ctrl.editableProject.end" ng-change="$ctrl.onFieldChange()"></utc-datepicker>
+				<utc-datepicker ng-model="$ctrl.editableProject.end" min-date="$ctrl.editableProject.start"
+					ng-change="$ctrl.onFieldChange()"></utc-datepicker>
 			</form-group>
 
 		</fieldset>

@@ -16,27 +16,32 @@ module.config(function (uibDatepickerConfig, uibDatepickerPopupConfig) {
 // Work around bug in angular ui datepicker
 // https://github.com/angular-ui/bootstrap/issues/6140
 module.component(__componentName, {
+	bindings: {
+		minMode: '<',
+		minDate: "<",
+		maxDate: "<",
+	},
 	require: {
 		ngModelCtrl: 'ngModel'
 	},
-
 	template: require(__templatePath),
 
 	controller: class UtcDatepickerController {
 
+		$onChanges() {
+			this.datePickerOptions = {};
+
+			if (this.minMode)
+				this.datePickerOptions.minMode = this.minMode;
+			if (this.minDate)
+				this.datePickerOptions.minDate = this._modelToView(this.minDate);
+			if (this.maxDate)
+				this.datePickerOptions.maxDate = this._modelToView(this.maxDate);
+		}
+
 		$onInit() {
-			this.ngModelCtrl.$formatters.push(modelValue => {
-				modelValue = new Date(modelValue + 'T00:00:00Z');
-				modelValue = new Date(modelValue.getTime() + modelValue.getTimezoneOffset() * 60 * 1000);
-				return modelValue;
-			});
-
-			this.ngModelCtrl.$parsers.push(viewValue => {
-				viewValue = new Date(viewValue.getTime() - viewValue.getTimezoneOffset() * 60 * 1000);
-				viewValue = viewValue.toISOString().substring(0, 10);
-				return viewValue;
-			});
-
+			this.ngModelCtrl.$formatters.push(modelValue => this._modelToView(modelValue));
+			this.ngModelCtrl.$parsers.push(viewValue => this._viewToModel(viewValue));
 			this.ngModelCtrl.$render = () => {
 				this.localDate = this.ngModelCtrl.$viewValue;
 			};
@@ -44,6 +49,18 @@ module.component(__componentName, {
 
 		onValueChange() {
 			this.ngModelCtrl.$setViewValue(this.localDate);
+		}
+
+		_modelToView(modelValue) {
+			modelValue = new Date(modelValue + 'T00:00:00Z');
+			modelValue = new Date(modelValue.getTime() + modelValue.getTimezoneOffset() * 60 * 1000);
+			return modelValue;
+		}
+
+		_viewToModel(viewValue) {
+			viewValue = new Date(viewValue.getTime() - viewValue.getTimezoneOffset() * 60 * 1000);
+			viewValue = viewValue.toISOString().substring(0, 10);
+			return viewValue;
 		}
 	}
 });

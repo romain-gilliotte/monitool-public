@@ -30,10 +30,9 @@ export function buildQueryFromIndicator(indicator, logicalFramework = null, proj
 
     if (logicalFramework) {
         dice.push({ id: 'location', attribute: 'entity', items: logicalFramework.entities });
-        if (logicalFramework.start)
-            dice.push({ id: 'time', attribute: 'day', range: [logicalFramework.start, null] });
-        if (logicalFramework.end)
-            dice.push({ id: 'time', attribute: 'day', range: [null, logicalFramework.end] });
+
+        if (logicalFramework.start || logicalFramework.end)
+            dice.push({ id: 'time', attribute: 'day', range: [logicalFramework.start, logicalFramework.end] });
     }
 
     return {

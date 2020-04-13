@@ -143,6 +143,13 @@ export default class Project {
 		this.forms.forEach(this._sanitizeForm, this);
 		this.forms = this.forms.filter(ds => ds.elements.length);
 
+		// make sure that logical frame dates do not go out of the project.
+		// This can happend when editing the project dates.
+		this.logicalFrames.forEach(lf => {
+			if (lf.start < this.start) lf.start = this.start;
+			if (lf.end > this.end) lf.end = this.end;
+		});
+
 		/////////////
 		// Sanitize links to variables from indicators
 		/////////////

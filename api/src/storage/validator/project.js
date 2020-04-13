@@ -29,6 +29,12 @@ function validate(project) {
 
 	const errors = [];
 
+	const lfDatesValid = project.logicalFrames.some(lf => {
+		return (!lf.start || lf.start >= project.start) && (!lf.end || lf.end <= project.end);
+	});
+	if (!lfDatesValid)
+		errors.push({ code: 'lfdates', message: 'Logframe dates out of project bounds.' });
+
 	const variables = project.forms.reduce((m, f) => [...m, ...f.elements], []);
 	const partitions = variables.reduce((m, v) => [...m, ...v.partitions], []);
 	const pElements = partitions.reduce((m, p) => [...m, ...p.elements], []);
