@@ -21,14 +21,6 @@ export default class Project {
 		return this.forms.some(f => f.elements.length && f.entities.length);
 	}
 
-	// FIXME this needs to be removed and taken directly from the TimeSlot package.
-	get compatiblePeriodicities() {
-		return [
-			'day', 'month_week_sat', 'month_week_sun', 'month_week_mon', 'week_sat', 'week_sun',
-			'week_mon', 'month', 'quarter', 'semester', 'year'
-		];
-	}
-
 	constructor(data) {
 		var now = new Date().toISOString().substring(0, 10);
 		var oneYear = new Date();

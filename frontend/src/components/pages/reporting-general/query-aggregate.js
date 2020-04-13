@@ -14,9 +14,10 @@ module.component(__componentName, {
 	controller: class GeneralGroupBy {
 
 		$onChanges(changes) {
-			this.periodicities = this.project.compatiblePeriodicities;
-			this.groupBy = this._chooseDefaultGroupBy();
+			const dimension = new TimeDimension('time', 'day', this.project.start, this.project.end);
 
+			this.periodicities = dimension.attributes.filter(attr => attr !== 'all');
+			this.groupBy = this._chooseDefaultGroupBy();
 			this.onValueChange();
 		}
 
