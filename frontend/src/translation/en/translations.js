@@ -4,7 +4,6 @@ export default {
 	shared: {
 		enable: "Enable data entry",
 		disable: "Disable data entry",
-		disabled: "Data entry disabled",
 		accept_invitation: "Accept",
 		refuse_invitation: "Refuse",
 		uninvite: "Remove from my projects",

@@ -2,9 +2,8 @@
 
 export default {
 	shared: {
-		enable: "Activar entrada de datos",
-		disable: "Deactivar entrada de datos",
-		disabled: "Entrada de datos desactivada",
+		enable: "Activar",
+		disable: "Deactivar",
 		accept_invitation: "Acceptar",
 		refuse_invitation: "Declinar",
 		uninvite: "Eliminar de mis proyectos",

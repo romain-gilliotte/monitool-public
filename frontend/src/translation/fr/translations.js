@@ -4,7 +4,6 @@ export default {
 	shared: {
 		enable: "Réactiver la saisie",
 		disable: "Désactiver la saisie",
-		disabled: "Saisie désactivée",
 		accept_invitation: "Accepter",
 		refuse_invitation: "Refuser",
 		uninvite: "Retirer de mes projets",
