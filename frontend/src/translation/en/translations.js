@@ -351,7 +351,7 @@ export default {
 
 		collection_site: "Collection site",
 		collection_form: "Data source",
-		collection_form: "Data entry sheet",
+		collection_form2: "Data entry sheet",
 
 		collection_form_planning: "Calendar",
 		collection_form_structure: "Structure",
