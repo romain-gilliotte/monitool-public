@@ -6,6 +6,10 @@ import { buildQueryFromIndicator, buildQueryFromVariable } from '../../../helper
 import { updateArrayInPlace } from '../../../helpers/array';
 require(__cssPath);
 
+/**
+ * Note for future self: this component is performing too many digest cycles.
+ * We should try to optimize this.
+ */
 const module = angular.module(__moduleName, [mtTrData, mtFaOpen]);
 
 module.component(__componentName, {
@@ -40,15 +44,22 @@ module.component(__componentName, {
 		}
 
 		$onInit() {
-			this._element.addEventListener('scroll', this._onScroll);
+			this._scrollHandler = () => this._translateHeaders();
+			this._element.addEventListener('scroll', this._scrollHandler);
 		}
 
 		$onDestroy() {
-			this._element.removeEventListener('scroll', this._onScroll);
+			if (this._scrollHandler)
+				this._element.removeEventListener('scroll', this._scrollHandler);
 		}
 
-		_onScroll(e) {
-			const target = e.currentTarget;
+		$doCheck() {
+			// this is a bit overkill, should we debounce?
+			this._translateHeaders();
+		}
+
+		_translateHeaders() {
+			const target = this._element;
 			const topHeader = target.querySelector('thead');
 			const leftHeaders = target.querySelectorAll('.section-header-row,.row-graph,.row-title,.row-dimension')
 
@@ -64,6 +75,7 @@ module.component(__componentName, {
 			// Regen all rows
 			this._updateRows();
 			this._updatePlots();
+			this._translateHeaders();
 		}
 
 		/**
@@ -99,7 +111,6 @@ module.component(__componentName, {
 		}
 
 		onRowPlotData(rowId, data) {
-			console.log(rowId, data)
 			if (!this.plots[rowId])
 				this.plots[rowId] = { active: false, data: null };
 
