@@ -1,0 +1,28 @@
+
+table.partition-elements tr.disabled {
+    background-color: #eaeaea;
+}
+
+table.partition-elements th:nth-child(1),
+table.partition-groups th:nth-child(1) {
+    width: 30px;
+}
+
+table.partition-elements th:nth-child(3),
+table.partition-groups th:nth-child(4) {
+    width: 180px;
+}
+
+table.partition-groups td:nth-child(4) a.btn {
+    width: 100%;
+}
+
+table.partition-elements td[colspan="3"],
+table.partition-groups td[colspan="4"] {
+    text-align: center;
+}
+
+table.partition-elements .form-group,
+table.partition-groups .form-group {
+    margin: 0;
+}

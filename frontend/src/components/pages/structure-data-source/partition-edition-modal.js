@@ -1,5 +1,6 @@
 import angular from 'angular';
 import { v4 as uuid } from 'uuid';
+require(__cssPath);
 
 const module = angular.module(__moduleName, []);
 
@@ -39,7 +40,8 @@ module.component(__componentName, {
 				this.master = {
 					id: uuid(),
 					name: "",
-					elements: [{ id: uuid(), name: "" }, { id: uuid(), name: "" }],
+					active: true,
+					elements: [{ id: uuid(), active: true, name: "" }, { id: uuid(), active: true, name: "" }],
 					groups: [],
 					aggregation: "sum"
 				};
@@ -68,21 +70,38 @@ module.component(__componentName, {
 		}
 
 		createPartitionElement() {
-			this.partition.elements.push({ id: uuid(), name: '' });
-			this.partitionForm.$setValidity('elementLength', this.partition.elements.length >= 2);
+			this.partition.elements.push({ id: uuid(), active: true, name: '' });
+
+			this.partitionForm.$setValidity(
+				'elementLength',
+				this.partition.elements.length >= 2 && this.partition.elements.length <= 10
+			);
 		}
 
-		deletePartitionElement(peId) {
+		onChangeElementStatusClicked(element, newStatus) {
+			element.active = newStatus;
+
+			this.partitionForm.$setValidity(
+				'activeElementLength',
+				this.partition.elements.filter(e => e.active).length > 0
+			);
+		}
+
+		onDeleteElementClicked(element) {
 			// Remove from element list
-			this.partition.elements = this.partition.elements.filter(e => e.id !== peId);
+			this.partition.elements = this.partition.elements.filter(e => e !== element);
 
 			// Remove from all groups
 			this.partition.groups.forEach(group => {
-				group.members = group.members.filter(id => id !== peId);
+				group.members = group.members.filter(id => id !== element.id);
 			});
 
-			this.partitionForm.$setValidity('elementLength', this.partition.elements.length >= 2);
+			this.partitionForm.$setValidity(
+				'elementLength',
+				this.partition.elements.length >= 2 && this.partition.elements.length <= 10
+			);
 		}
+
 
 		createGroup() {
 			this.partition.groups.push({ id: uuid(), name: '', members: [] });

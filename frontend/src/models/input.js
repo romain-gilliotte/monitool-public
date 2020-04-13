@@ -46,12 +46,16 @@ export default class Input {
 			]
 		}
 
-		variables.forEach((v, i) => {
-			query.parameters['variable_' + i] = {
-				variableId: v.id,
-				dice: []
+		variables.forEach((variable, index) => {
+			query.parameters['variable_' + index] = {
+				variableId: variable.id,
+				dice: variable.partitions.map(partition => ({
+					id: partition.id,
+					attribute: 'element',
+					items: partition.elements.filter(e => e.active).map(e => e.id)
+				}))
 			}
-		})
+		});
 
 		const response = await axios.post(`/rpc/build-report`, query);
 		const result = response.data;
@@ -71,6 +75,15 @@ export default class Input {
 			projectId: project._id,
 			content: await Promise.all(variables.map(async variable => {
 				const activePartitions = variable.partitions.filter(p => p.active);
+				const dimensions = [
+					{ id: 'time', attribute: dataSource.periodicity, items: [period] },
+					{ id: 'location', attribute: 'entity', items: [siteId] },
+					...activePartitions.map(p => ({
+						id: p.id,
+						attribute: 'element',
+						items: p.elements.filter(pe => pe.active).map(pe => pe.id)
+					}))
+				];
 
 				// Query server
 				const response = await axios.post(`/rpc/build-report`, {
@@ -78,11 +91,7 @@ export default class Input {
 					projectId: project._id,
 					formula: 'cst',
 					parameters: { cst: { variableId: variable.id, dice: [] } },
-					dice: [
-						{ id: 'time', attribute: dataSource.periodicity, items: [period], },
-						{ id: 'location', attribute: 'entity', items: [siteId], },
-						...activePartitions.map(p => ({ id: p.id, attribute: 'element', items: p.elements.map(pe => pe.id) }))
-					],
+					dice: dimensions,
 					aggregate: activePartitions.map(p => ({ id: p.id, attribute: 'element' })),
 				});
 
@@ -90,22 +99,14 @@ export default class Input {
 				// If not, it means that we're making a query outside of the bounds of the project,
 				// in that case, we can just return empty data, it should happen only when filling the first
 				// data entry (because we're trying to load the previous one as well for "fill with previous data" action).
-				const expectedLength = activePartitions.reduce((m, p) => m * p.elements.length, 1);
+				const expectedLength = dimensions.reduce((m, dim) => m * dim.items.length, 1);
 				const data = response.data;
 				if (data.length !== expectedLength) {
 					data.length = expectedLength;
 					result.fill(null);
 				}
 
-				return {
-					variableId: variable.id,
-					data: data,
-					dimensions: [
-						{ id: 'time', attribute: dataSource.periodicity, items: [period] },
-						{ id: 'location', attribute: 'entity', items: [siteId] },
-						...activePartitions.map(p => ({ id: p.id, attribute: 'element', items: p.elements.map(pe => pe.id) }))
-					]
-				}
+				return { variableId: variable.id, data: data, dimensions: dimensions }
 			}))
 		});
 	}

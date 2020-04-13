@@ -4,7 +4,7 @@
 			<td ng-repeat="leftCol in $ctrl.table.leftCols"></td>
 			<td>
 				<select ng-model="$ctrl.editablePartitions[headerRow]"
-					ng-options="p as (p.name + ' (' + p.elements.length + ')') for p in $ctrl.availablePartitions"
+					ng-options="p as (p.name + ' (' + $ctrl.numActiveElements[p.id] + ')') for p in $ctrl.availablePartitions"
 					ng-change="$ctrl.onValueChange(headerRow)"></select>
 			</td>
 		</tr>
@@ -12,7 +12,7 @@
 	<tr>
 		<td ng-repeat="leftCol in $ctrl.table.leftCols">
 			<select ng-model="$ctrl.editablePartitions[leftCol]"
-				ng-options="p as (p.name + ' (' + p.elements.length + ')') for p in $ctrl.availablePartitions"
+				ng-options="p as (p.name + ' (' + $ctrl.numActiveElements[p.id] + ')') for p in $ctrl.availablePartitions"
 				ng-change="$ctrl.onValueChange(leftCol)"></select>
 		</td>
 		<td class="data-field">{{'project.data'|translate}} ({{$ctrl.size}})</td>

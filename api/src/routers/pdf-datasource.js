@@ -125,7 +125,7 @@ function createDataSourceDocDef(dataSource, pageOrientation, language = 'en') {
 				]
 			},
 
-			...dataSource.elements.map(createVariableDocDef)
+			...dataSource.elements.filter(variable => variable.active).map(createVariableDocDef)
 		]
 	};
 }
@@ -134,8 +134,14 @@ function createDataSourceDocDef(dataSource, pageOrientation, language = 'en') {
 function createVariableDocDef(variable) {
 	var body, widths;
 
-	var colPartitions = variable.partitions.slice(variable.distribution),
-		rowPartitions = variable.partitions.slice(0, variable.distribution);
+	// remove inactive partitions and elements before generating layout
+	var activePartitions = variable.partitions.filter(p => p.active).map(p => ({
+		...p,
+		elements: p.elements.filter(pe => pe.active)
+	}));
+
+	var colPartitions = activePartitions.slice(variable.distribution),
+		rowPartitions = activePartitions.slice(0, variable.distribution);
 
 	var topRows = makeTopRows(colPartitions),
 		bodyRows = makeLeftCols(rowPartitions);

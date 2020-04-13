@@ -54,7 +54,15 @@ module.component(__componentName, {
 		}
 
 		$onChanges() {
-			this.partitions = this.variable.partitions.filter(p => p.active);
+			// hack: we just remove inactive partitions & partition elements
+			// this whole component needs to be rewritten.
+			// ideally we should be based on the structure of the input we are updating so that
+			// it is possible to review / correct legacy data which was entered with a different structure.
+			this.partitions = this.variable.partitions.filter(p => p.active).map(p => ({
+				...p,
+				elements: p.elements.filter(e => e.active)
+			}));
+
 			this.distribution = this.variable.distribution;
 		}
 

@@ -129,16 +129,22 @@
 								},
 								"elements": {
 									"type": "array",
+									"minItems": 2,
+									"maxItems": 255,
 									"items": {
 										"type": "object",
 										"additionalProperties": false,
 										"required": [
 											"id",
+											"active",
 											"name"
 										],
 										"properties": {
 											"id": {
 												"$ref": "#/definitions/uuid"
+											},
+											"active": {
+												"type": "boolean"
 											},
 											"name": {
 												"type": "string",

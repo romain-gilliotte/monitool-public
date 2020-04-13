@@ -159,6 +159,7 @@ export default {
 			forms_elements_partitions_elements_move: "Reorder elements of disaggregation <code>{{partition.name}}</code> of variable <code>{{variable.name}}</code>",
 			forms_elements_partitions_elements_remove: "Delete element <code>{{item.name}}</code> in disaggregation <code>{{partition.name}}</code> of variable <code>{{variable.name}}</code>",
 			forms_elements_partitions_elements_name_replace: "Rename element <code>{{before}}</code> to <code>{{after}}</code> in disaggregation <code>{{partition.name}}</code> of variable <code>{{variable.name}}</code>",
+			forms_elements_partitions_elements_active_replace: "{{after ? 'Enable' : 'Disable'}} data entry on disaggregation element <code>{{element.name}}</code> in disaggregation <code>{{partition.name}}</code> of variable <code>{{variable.name}}</code>",
 
 			forms_elements_partitions_groups_add: "Add group <code>{{item.name}}</code> in disaggregation <code>{{partition.name}}</code> of variable <code>{{variable.name}}</code>",
 			forms_elements_partitions_groups_move: "Reorder groups in <code>{{partition.name}}</code> of variable <code>{{variable.name}}</code>",

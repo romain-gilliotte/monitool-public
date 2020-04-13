@@ -90,8 +90,7 @@ module.component(__componentName, {
 			var computationMatch = editedField.match('^(.*)_computation');
 			if (computationMatch) {
 				// truncate everything after computation
-				editedField = computationMatch[1] + '_computation';
-				editedField = editedField + '_replace';
+				editedField = computationMatch[1] + '_computation_replace';
 			}
 			else {
 				editedField = editedField + '_' + operation.op;
@@ -167,7 +166,7 @@ module.component(__componentName, {
 				if (editedField === 'users_dataSources')
 					translationData.item = before.forms.find(e => e.id === translationData.item);
 
-				if (['groups_members', 'forms_entities', 'users_entities', 'logicalFrames_entities'].includes(editedField))
+				if (['groups_members', 'forms_entities', 'logicalFrames_entities'].includes(editedField))
 					translationData.item = before.entities.find(e => e.id === translationData.item);
 
 				if (editedField === 'forms_elements_partitions_groups_members')

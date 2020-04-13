@@ -159,6 +159,7 @@ export default {
 			forms_elements_partitions_elements_move: "Reordonne les éléments de la désagrégation <code>{{partition.name}}</code> de la variable <code>{{variable.name}}</code>",
 			forms_elements_partitions_elements_remove: "Supprime l'élément <code>{{item.name}}</code> dans la désagrégation <code>{{partition.name}}</code> de la variable <code>{{variable.name}}</code>",
 			forms_elements_partitions_elements_name_replace: "Renomme <code>{{before}}</code> en <code>{{after}}</code> dans la désagrégation <code>{{partition.name}}</code> de la variable <code>{{variable.name}}</code>",
+			forms_elements_partitions_elements_active_replace: "{{after ? 'Active' : 'Désactive'}} la saisie de l'élément <code>{{element.name}}</code> de la désagrégation <code>{{partition.name}}</code> de la variable <code>{{variable.name}}</code>",
 
 			forms_elements_partitions_groups_add: "Ajoute le groupe <code>{{item.name}}</code> dans la désagrégation <code>{{partition.name}}</code> de la variable <code>{{variable.name}}</code>",
 			forms_elements_partitions_groups_move: "Reordonne les groupes de la désagrégation <code>{{partition.name}}</code> de la variable <code>{{variable.name}}</code>",

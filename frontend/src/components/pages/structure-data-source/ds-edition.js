@@ -111,7 +111,8 @@ module.component(__componentName, {
 				isValid:
 					// if the form is not loaded yet (calling from $onChanges), we can consider
 					// than the data source is not valid (because we know it's blank).
-					this.dsForm && this.dsForm.$valid &&
+					this.editableDataSource.name &&
+					this.editableDataSource.name.length > 0 &&
 
 					// Don't allow to save data sources with no variables.
 					this.editableDataSource.elements.length > 0 &&
@@ -120,10 +121,7 @@ module.component(__componentName, {
 					this.editableDataSource.elements.some(v => v.active) &&
 
 					// Check that the variable have a name for validity.
-					// There is a 'required' directive on the form, however, some inputs are not there
-					// because of a 'ng-if' directive => they are not considered for validation.
-					// (Using ng-show to hide the panels content is too slow: 300ms to render the page).
-					this.editableDataSource.elements.reduce((m, v) => m && v.name.length > 0, true)
+					this.editableDataSource.elements.every(v => v.name && v.name.length > 0)
 			});
 		}
 

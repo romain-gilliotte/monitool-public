@@ -586,26 +586,32 @@
                             "elements": [
                                 {
                                     "id": "a62b176f-b509-4d97-a8f1-80cf31b62fe5",
+                                    "active": true,
                                     "name": "Malaria"
                                 },
                                 {
                                     "id": "9d10541c-ac8c-4d07-94d6-2b71c01ce3d9",
+                                    "active": true,
                                     "name": "Acute respiratoy infection"
                                 },
                                 {
                                     "id": "2241dab6-d4fa-4e81-8738-33e9f4f1a9a7",
+                                    "active": true,
                                     "name": "Diarrhea"
                                 },
                                 {
                                     "id": "db614c68-f302-4ad4-b76f-e82785d6a49b",
+                                    "active": true,
                                     "name": "Other general pathologies"
                                 },
                                 {
                                     "id": "0549a22a-b9a4-4e17-9580-7bd0195581ee",
+                                    "active": true,
                                     "name": "Wounds"
                                 },
                                 {
                                     "id": "e033b772-5fdd-405d-a411-f06a42099615",
+                                    "active": true,
                                     "name": "Psychological distress"
                                 }
                             ],
@@ -630,14 +636,17 @@
                             "elements": [
                                 {
                                     "id": "ff4bfd98-e175-4add-8159-441dd2ed0791",
+                                    "active": true,
                                     "name": "Less than 5"
                                 },
                                 {
                                     "id": "c6fe3337-0fdd-42e9-8641-15f4316d4155",
+                                    "active": true,
                                     "name": "5 - 14"
                                 },
                                 {
                                     "id": "19899581-d488-4abd-9a79-aac6be89ba3b",
+                                    "active": true,
                                     "name": "15 and more"
                                 }
                             ],
@@ -651,10 +660,12 @@
                             "elements": [
                                 {
                                     "id": "8f7173ba-2693-404d-90aa-3199565b6acb",
+                                    "active": true,
                                     "name": "Male"
                                 },
                                 {
                                     "id": "41e33573-dd14-4e8a-bbc5-bb5ddacd3be4",
+                                    "active": true,
                                     "name": "Female"
                                 }
                             ],
@@ -678,18 +689,22 @@
                             "elements": [
                                 {
                                     "id": "ffca09b9-16d1-48a5-9d26-20877c5b90de",
+                                    "active": true,
                                     "name": "ANC1"
                                 },
                                 {
                                     "id": "b867ed02-0fb1-45ef-9b87-e2210f2399a7",
+                                    "active": true,
                                     "name": "ANC2"
                                 },
                                 {
                                     "id": "09928e34-1417-411a-8a4e-530a57f52107",
+                                    "active": true,
                                     "name": "ANC3"
                                 },
                                 {
                                     "id": "3f58fd5f-6a6e-441c-94aa-837389495f8c",
+                                    "active": true,
                                     "name": "ANC4 or more"
                                 }
                             ],
@@ -703,10 +718,12 @@
                             "elements": [
                                 {
                                     "id": "c2db2da0-07b5-4a0e-a644-cfa204593fc0",
+                                    "active": true,
                                     "name": "Less than 15"
                                 },
                                 {
                                     "id": "3e9d2383-4eb9-4e5c-a4f2-238f97c83f0e",
+                                    "active": true,
                                     "name": "15 and more"
                                 }
                             ],
@@ -730,10 +747,12 @@
                             "elements": [
                                 {
                                     "id": "1588e03b-13a5-4c4e-937a-bbba675dc083",
+                                    "active": true,
                                     "name": "Less than 15"
                                 },
                                 {
                                     "id": "9ee95d62-1308-4d73-8bef-a2377ce2c5cf",
+                                    "active": true,
                                     "name": "15 or more"
                                 }
                             ],
@@ -757,10 +776,12 @@
                             "elements": [
                                 {
                                     "id": "76b94a9d-4aac-4745-a8fa-295765f39d70",
+                                    "active": true,
                                     "name": "Less than 15"
                                 },
                                 {
                                     "id": "7f553f28-efbf-4f43-9db6-cfb119ab1b4e",
+                                    "active": true,
                                     "name": "15 or more"
                                 }
                             ],
@@ -784,10 +805,12 @@
                             "elements": [
                                 {
                                     "id": "2960cbcb-a684-447c-bbc3-aac556d0310c",
+                                    "active": true,
                                     "name": "Continued users"
                                 },
                                 {
                                     "id": "fc7c8cc9-a0df-4644-a2bc-60c9482fccb0",
+                                    "active": true,
                                     "name": "New acceptors"
                                 }
                             ],
@@ -801,10 +824,12 @@
                             "elements": [
                                 {
                                     "id": "fe667759-f861-4f4a-b56f-5ed7d47e5b88",
+                                    "active": true,
                                     "name": "Less than 15"
                                 },
                                 {
                                     "id": "3f4032c1-7908-4869-ae3e-ce22a8f5bd6b",
+                                    "active": true,
                                     "name": "More than 15"
                                 }
                             ],
@@ -828,10 +853,12 @@
                             "elements": [
                                 {
                                     "id": "cb6956b1-fd35-47e4-8b2f-6deab7be92e3",
+                                    "active": true,
                                     "name": "Less than 15"
                                 },
                                 {
                                     "id": "f681510f-01d0-4fca-b8bb-054eae14c9ce",
+                                    "active": true,
                                     "name": "15 or more"
                                 }
                             ],
@@ -925,14 +952,17 @@
                             "elements": [
                                 {
                                     "id": "8e025472-2697-490a-bd21-706b3bde3ff4",
+                                    "active": true,
                                     "name": "Malaria"
                                 },
                                 {
                                     "id": "93a4f86d-b0bd-402a-b9bd-45f24ba6d35e",
+                                    "active": true,
                                     "name": "Diarrhea"
                                 },
                                 {
                                     "id": "94a1e38d-ae68-47c7-96be-02a991016d96",
+                                    "active": true,
                                     "name": "Acute respiratory infection"
                                 }
                             ],
@@ -956,14 +986,17 @@
                             "elements": [
                                 {
                                     "id": "0af977db-fe2a-45a5-bf2b-16bd3fece3d6",
+                                    "active": true,
                                     "name": "Malaria"
                                 },
                                 {
                                     "id": "800350b7-ed6c-46c8-b064-e71d47f5e7c8",
+                                    "active": true,
                                     "name": "Diarrhea"
                                 },
                                 {
                                     "id": "52f1760a-f8ba-4dea-8d85-fafd075c8812",
+                                    "active": true,
                                     "name": "Acute respiratory infection"
                                 }
                             ],
@@ -987,14 +1020,17 @@
                             "elements": [
                                 {
                                     "id": "e0ec2a0b-971c-464d-b131-bf265a7300b2",
+                                    "active": true,
                                     "name": "Malaria"
                                 },
                                 {
                                     "id": "8b6df70d-06cb-4753-b003-2a548e31255f",
+                                    "active": true,
                                     "name": "Diarrhea"
                                 },
                                 {
                                     "id": "bfd1d619-ea89-46cb-b75e-1df0dc53ce6b",
+                                    "active": true,
                                     "name": "Acute respiratory infection"
                                 }
                             ],
@@ -1035,14 +1071,17 @@
                             "elements": [
                                 {
                                     "id": "478d784a-4f79-4e91-97a3-f05271594697",
+                                    "active": true,
                                     "name": "Less than 5"
                                 },
                                 {
                                     "id": "ce704194-bc22-4299-9726-07d6b05571e3",
+                                    "active": true,
                                     "name": "5-14"
                                 },
                                 {
                                     "id": "e147aaf6-77fd-4a4c-ae8f-1dee8179b316",
+                                    "active": true,
                                     "name": "15 or more"
                                 }
                             ],
@@ -1056,10 +1095,12 @@
                             "elements": [
                                 {
                                     "id": "04658a79-95db-4d06-ad2b-c4ada42b6a3a",
+                                    "active": true,
                                     "name": "Male"
                                 },
                                 {
                                     "id": "683743e3-913a-4fa5-a3d2-b57be8ddf7a1",
+                                    "active": true,
                                     "name": "Female"
                                 }
                             ],
@@ -1073,14 +1114,17 @@
                             "elements": [
                                 {
                                     "id": "02683d38-a283-4dd4-b55b-f01d9c3cc13c",
+                                    "active": true,
                                     "name": "Sexual assualt"
                                 },
                                 {
                                     "id": "0871e4df-0d22-4f6b-afb0-90e141126ce7",
+                                    "active": true,
                                     "name": "Physical assault"
                                 },
                                 {
                                     "id": "209ccce7-5475-4da5-97d6-0f8c6068d5af",
+                                    "active": true,
                                     "name": "Other"
                                 }
                             ],
@@ -1122,10 +1166,12 @@
                             "elements": [
                                 {
                                     "id": "78ef3687-5845-4f88-a031-fdfde76f2788",
+                                    "active": true,
                                     "name": "Less than 15"
                                 },
                                 {
                                     "id": "e64a3c75-9212-45ca-8bb3-6931b96388e9",
+                                    "active": true,
                                     "name": "15 or more"
                                 }
                             ],
@@ -1149,10 +1195,12 @@
                             "elements": [
                                 {
                                     "id": "30fedf09-b324-42c2-b0f8-30efbee15e10",
+                                    "active": true,
                                     "name": "Less than 15"
                                 },
                                 {
                                     "id": "c724b1db-b12a-4cdd-adee-d04ff834a4cb",
+                                    "active": true,
                                     "name": "15 or more"
                                 }
                             ],
@@ -1176,10 +1224,12 @@
                             "elements": [
                                 {
                                     "id": "3de2352b-4d5e-4706-b32f-918dc986e082",
+                                    "active": true,
                                     "name": "Less than 15"
                                 },
                                 {
                                     "id": "d81b6d24-2ded-481b-995f-5d160a770286",
+                                    "active": true,
                                     "name": "15 or more"
                                 }
                             ],
@@ -1203,10 +1253,12 @@
                             "elements": [
                                 {
                                     "id": "a75cc622-da55-47a3-8115-3c7d02de63c9",
+                                    "active": true,
                                     "name": "Less than 15"
                                 },
                                 {
                                     "id": "5e9260ba-bab3-4981-938d-cc8a11fdc1ec",
+                                    "active": true,
                                     "name": "More than 15"
                                 }
                             ],
@@ -1242,10 +1294,12 @@
                             "elements": [
                                 {
                                     "id": "ea7cde6d-e1fc-49ec-8140-f2dfe0bc5404",
+                                    "active": true,
                                     "name": "Less than 15"
                                 },
                                 {
                                     "id": "8fac03d8-f187-4d72-b2e4-5397e63364c6",
+                                    "active": true,
                                     "name": "15 or more"
                                 }
                             ],
@@ -1259,10 +1313,12 @@
                             "elements": [
                                 {
                                     "id": "8124310f-a86b-4f30-a08d-5427519a2fd0",
+                                    "active": true,
                                     "name": "Male"
                                 },
                                 {
                                     "id": "21e803d6-5460-46b5-8ab7-b5cdf0154f71",
+                                    "active": true,
                                     "name": "Female"
                                 }
                             ],
@@ -1276,14 +1332,17 @@
                             "elements": [
                                 {
                                     "id": "678d3b62-26d0-476a-acf3-a9e6e67cc6f7",
+                                    "active": true,
                                     "name": "Sexual assault"
                                 },
                                 {
                                     "id": "63a9419e-b469-42ab-9a21-6a2fcde03169",
+                                    "active": true,
                                     "name": "Physical assault"
                                 },
                                 {
                                     "id": "1a2eebda-25fd-402f-9f12-03b60c8a3e88",
+                                    "active": true,
                                     "name": "Other"
                                 }
                             ],
@@ -1297,10 +1356,12 @@
                             "elements": [
                                 {
                                     "id": "3bc90734-acbf-41b8-9ac0-adb53e146de9",
+                                    "active": true,
                                     "name": "By primary health centers"
                                 },
                                 {
                                     "id": "e6efdce6-8968-451d-b3c5-3eeacac6576b",
+                                    "active": true,
                                     "name": "By mobile uit"
                                 }
                             ],
@@ -1314,14 +1375,17 @@
                             "elements": [
                                 {
                                     "id": "f0e260fd-7911-44de-815b-5235510bc5bd",
+                                    "active": true,
                                     "name": "Medical"
                                 },
                                 {
                                     "id": "f7c9bc9d-ef33-457e-8d93-3f48c2a4c899",
+                                    "active": true,
                                     "name": "Legal"
                                 },
                                 {
                                     "id": "93f40d1b-d144-4e14-aca0-e96071ca2678",
+                                    "active": true,
                                     "name": "Both"
                                 }
                             ],
@@ -1357,10 +1421,12 @@
                             "elements": [
                                 {
                                     "id": "4c4bbf1a-1c70-45cd-bb77-48f258a124d9",
+                                    "active": true,
                                     "name": "Less than 15"
                                 },
                                 {
                                     "id": "aeb3da19-1ec2-4b1d-9a79-b25c81cc8768",
+                                    "active": true,
                                     "name": "15 or more"
                                 }
                             ],
@@ -1384,10 +1450,12 @@
                             "elements": [
                                 {
                                     "id": "a5d78796-b5e2-4aeb-98ef-9a951bc6bb90",
+                                    "active": true,
                                     "name": "Less than 15"
                                 },
                                 {
                                     "id": "d63089e2-02dd-4fb6-b4d5-2c42db3068bc",
+                                    "active": true,
                                     "name": "15 or more"
                                 }
                             ],
@@ -1411,10 +1479,12 @@
                             "elements": [
                                 {
                                     "id": "be7a0340-dd54-4a1d-bc46-3fb0577459b4",
+                                    "active": true,
                                     "name": "Less than 15"
                                 },
                                 {
                                     "id": "eeb30e5e-77cc-4aeb-aee8-fece0611a62f",
+                                    "active": true,
                                     "name": "15 or more"
                                 }
                             ],

@@ -21,7 +21,7 @@ function validate(project) {
 		return schemaValidate.errors.map(error => {
 			let path = error.dataPath;
 			if (error.keyword === 'additionalProperties')
-				path = error.params.additionalProperty;
+				path += `.${error.params.additionalProperty}`;
 
 			return { path: path, code: error.keyword, message: error.message };
 		});
@@ -35,6 +35,16 @@ function validate(project) {
 
 	if (project.forms.some(ds => ds.elements.every(variable => !variable.active)))
 		errors.push({ code: 'all vars inactive', message: 'At least one variable must be active by form' });
+
+	const peInactive = project.forms.some(
+		ds => ds.elements.some(
+			variable => variable.partitions.some(
+				p => p.elements.every(pe => !pe.active)
+			)
+		)
+	);
+	if (peInactive)
+		errors.push({ code: 'all partitions elements inactive', message: 'At least one pe must be active by partition' });
 
 	if (!variables.every(v => v.distribution >= 0 && v.distribution <= v.partitions.length))
 		errors.push({ code: 'invalid distribution', message: 'must be between 0 and partition.length included' });

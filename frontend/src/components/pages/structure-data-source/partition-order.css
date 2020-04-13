@@ -9,7 +9,11 @@
     border: 1px solid #ccc;
     padding: 4px 8px;
   }
-  
+
+  .partition-order td select {
+    width: 100%;
+  }
+
   .partition-order td.data-field {
     border: 1px solid #ccc;
     padding: 4px 8px;

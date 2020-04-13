@@ -24,7 +24,7 @@ router.get('/resources/project/:id', async ctx => {
 		ctx.response.body = await getProject(ctx.state.profile.email, ctx.params.id);
 	}
 	catch (e) {
-		if (e.message === 'Not found' || /must be .* 24 hex characters/.test(e.message))
+		if (e.message === 'not found' || /must be .* 24 hex characters/.test(e.message))
 			ctx.response.status = 404;
 		else
 			throw e;

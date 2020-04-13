@@ -16,6 +16,9 @@ module.component(__componentName, {
 		$onChanges(changes) {
 			// Make an editable version of the partitions (one way data bindings).
 			this.editablePartitions = angular.copy(this.partitions);
+			this.numActiveElements = {};
+			this.editablePartitions.forEach(p => this.numActiveElements[p.id] = p.elements.filter(e => e.active).length);
+
 			this.availablePartitions = this.editablePartitions.filter(p => p.active);
 
 			// Tell the template about the table layout
@@ -27,8 +30,8 @@ module.component(__componentName, {
 			};
 
 			// Update size in the table cell
-			const width = this.table.headerRows.reduce((m, i) => m * this.partitions[i].elements.length, 1);
-			const height = this.table.leftCols.reduce((m, i) => m * this.partitions[i].elements.length, 1);
+			const width = this.table.headerRows.reduce((m, i) => m * this.numActiveElements[this.partitions[i].id], 1);
+			const height = this.table.leftCols.reduce((m, i) => m * this.numActiveElements[this.partitions[i].id], 1);
 			this.size = width + 'x' + height;
 		}
 

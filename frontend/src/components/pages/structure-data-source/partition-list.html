@@ -6,10 +6,9 @@
 			<a ng-click="$ctrl.editPartition(partition)" ng-class="{disabled: !partition.active}">
 				<i class="fa fa-pencil"></i>
 				<strong>{{partition.name}}:</strong>
-				{{partition.elements|pluck:"name"|join:", "}}
-
-				<span ng-if="!partition.active">
-					(<span translate="shared.disabled"></span>)
+				<span ng-repeat="element in partition.elements track by element.id">
+					<span ng-bind="element.name" ng-class="{disabled: !element.active}"></span><span ng-if="!$last">,
+					</span>
 				</span>
 			</a>
 		</li>
