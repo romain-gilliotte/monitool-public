@@ -240,7 +240,7 @@ export default class Project {
 		// Remove deleted entities
 		form.entities = form.entities.filter(e => entityIds.includes(e));
 
-		// Sanitize order and distribution
+		// Sanitize distribution
 		form.elements.forEach(element => {
 			const numActivePartitions = element.partitions.filter(p => p.active).length;
 			if (element.distribution < 0 || element.distribution > numActivePartitions)

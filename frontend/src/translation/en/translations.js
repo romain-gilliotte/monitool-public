@@ -146,7 +146,6 @@ export default {
 			forms_elements_active_replace: "{{after ? 'Enable' : 'Disable'}} data entry on variable <code>{{variable.name}}</code>",
 			forms_elements_geoAgg_replace: "Change the aggregation rule (location) of <code>{{variable.name}}</code> from <code>{{before}}</code> to <code>{{after}}</code>",
 			forms_elements_timeAgg_replace: "Change the aggregation rule (time) of <code>{{variable.name}}</code> from <code>{{before}}</code> to <code>{{after}}</code>",
-			forms_elements_order_replace: "Change the format of the input table of <code>{{variable.name}}</code>",
 			forms_elements_distribution_replace: "Change the format of the input table of <code>{{variable.name}}</code>",
 
 			forms_elements_partitions_add: "Create the disaggregation <code>{{item.name}}</code> in <code>{{variable.name}}</code>",

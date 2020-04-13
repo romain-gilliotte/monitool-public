@@ -146,7 +146,6 @@ export default {
 			forms_elements_active_replace: "{{after ? 'Active' : 'Désactive'}} la saisie de la variable <code>{{variable.name}}</code>",
 			forms_elements_geoAgg_replace: "Change la règle d'aggrégation (lieux) de <code>{{variable.name}}</code> de <code>{{before}}</code> vers <code>{{after}}</code>",
 			forms_elements_timeAgg_replace: "Change la règle d'aggrégation (temps) de <code>{{variable.name}}</code> de <code>{{before}}</code> vers <code>{{after}}</code>",
-			forms_elements_order_replace: "Change la présentation de la saisie de la variable <code>{{variable.name}}</code>",
 			forms_elements_distribution_replace: "Change la présentation de la saisie de la variable <code>{{variable.name}}</code>",
 
 			forms_elements_partitions_add: "Ajoute la désagrégation <code>{{item.name}}</code> dans <code>{{variable.name}}</code>",
@@ -316,8 +315,8 @@ export default {
 		data_selection: "Selection des données",
 		filters: "Filtres",
 		input_status: {
-			'done': "Modifier ({{100*value|number:0}}%)",
-			'expected': "Saisir",
+			done: "Modifier ({{100*value|number:0}}%)",
+			expected: "Saisir",
 		},
 		cols: "Colonnes",
 		rows: "Lignes",
