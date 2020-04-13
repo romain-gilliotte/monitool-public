@@ -64,10 +64,10 @@ module.component(__componentName, {
 				if (!this.editableDataSource) {
 					this.editableDataSource = {
 						id: this.dsId,
+						active: true,
 						name: '',
 						periodicity: 'month',
 						entities: this.project.entities.map(s => s.id),
-						active: true,
 						elements: []
 					};
 
@@ -128,6 +128,7 @@ module.component(__componentName, {
 		onAddVariableClicked() {
 			const newVariable = {
 				id: uuid(),
+				active: true,
 				name: "",
 				partitions: [],
 				distribution: 0,
