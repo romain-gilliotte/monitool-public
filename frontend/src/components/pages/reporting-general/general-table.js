@@ -22,7 +22,7 @@ module.component(__componentName, {
 
 			this.sectionOpen = {}; // { rowId: <boolean> }
 			this.activeDisagregations = {}; // { rowId: { id: <dimId>|'computation' [, attribute: <dimattr>] }}
-			this.activePlots = {}; // { rowId: [45, 43, 23, 45, 56, ...], ...}
+			this.plots = {}; // { rowId: { active: false, data: [45, 43, 23, 45, 56, ...] }, ... }
 			this.rows = [];
 		}
 
@@ -88,15 +88,24 @@ module.component(__componentName, {
 			this._updatePlots();
 		}
 
-		onRowPlot(rowId, values) {
-			if (!this.activePlots[rowId]) {
-				this.activePlots[rowId] = values;
-			}
-			else {
-				delete this.activePlots[rowId];
-			}
+		onRowPlotClicked(rowId) {
+			if (!this.plots[rowId])
+				this.plots[rowId] = { active: false, data: null };
 
-			this._updatePlots();
+			if (this.plots[rowId].data) {
+				this.plots[rowId].active = !this.plots[rowId].active;
+				this._updatePlots();
+			}
+		}
+
+		onRowPlotData(rowId, data) {
+			console.log(rowId, data)
+			if (!this.plots[rowId])
+				this.plots[rowId] = { active: false, data: null };
+
+			this.plots[rowId].data = data;
+			if (this.plots[rowId].active)
+				this._updatePlots();
 		}
 
 		_updatePlots() {
@@ -106,10 +115,12 @@ module.component(__componentName, {
 				presentation: this.query.aggregate[0].id === 'time' ? 'line' : 'bar'
 			};
 
-			for (let rowId in this.activePlots) {
-				const row = this.rows.find(row => row.id === rowId);
-				if (row) {
-					plotData.ys.push({ label: row.label, data: this.activePlots[rowId] })
+			for (let rowId in this.plots) {
+				if (this.plots[rowId].active) {
+					const row = this.rows.find(row => row.id === rowId);
+					if (row) {
+						plotData.ys.push({ label: row.label, data: this.plots[rowId].data })
+					}
 				}
 			}
 

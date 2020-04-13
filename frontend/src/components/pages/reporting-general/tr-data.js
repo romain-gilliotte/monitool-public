@@ -27,7 +27,8 @@ module.directive(__componentName, () => {
 			plotted: '<', // boolean to indicate if graph is toggled
 
 			onDisagregateClicked: '&',
-			onPlotClicked: '&'
+			onPlotClicked: '&',
+			onPlotData: '&'
 		},
 
 		template: require(__templatePath),
@@ -98,11 +99,13 @@ module.directive(__componentName, () => {
 						{ output: 'report', projectId: this.project._id, ...query }
 					);
 
-					this.plotValues = this.columns.map(col => response.data[col.id]);
 					this.tableCells = [
 						...this.columns.map(col => response.data[col.id]),
 						response.data['all']
 					];
+
+					// Send graph data to parent.
+					this.onPlotData({ data: this.columns.map(col => response.data[col.id]) });
 				}
 				catch (e) {
 					this.errorMessage = e.message;

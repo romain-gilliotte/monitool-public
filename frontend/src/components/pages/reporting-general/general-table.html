@@ -28,7 +28,8 @@
 			label="row.label" query="row.query" indent="row.indent" baseline="row.baseline" target="row.target"
 			colorize="row.colorize" columns="$ctrl.columns" disagregated="!!$ctrl.activeDisagregations[row.id]"
 			on-disagregate-clicked="$ctrl.onRowDisagregate(row.id, dimensionId, attribute)"
-			plotted="!!$ctrl.activePlots[row.id]" on-plot-clicked="$ctrl.onRowPlot(row.id, values)">
+			plotted="$ctrl.plots[row.id].active" on-plot-clicked="$ctrl.onRowPlotClicked(row.id)"
+			on-plot-data="$ctrl.onRowPlotData(row.id, data)">
 		</tr>
 	</tbody>
 	<thead>
