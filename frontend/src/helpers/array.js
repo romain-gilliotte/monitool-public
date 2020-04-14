@@ -34,24 +34,6 @@ export function product(list) {
 	return memo;
 };
 
-
-
-/**
- * Compute a range. End value is not included.
- *
- * @example
- * > range(10, 20)
- * [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
- */
-export function range(start, end) {
-	var integerRange = [];
-	for (var i = start; i < end; ++i)
-		integerRange.push(i);
-	return integerRange;
-};
-
-
-
 export function updateArrayInPlace(array, newValues) {
 	for (let i = 0; i < newValues.length; ++i) {
 		const newRow = newValues[i];

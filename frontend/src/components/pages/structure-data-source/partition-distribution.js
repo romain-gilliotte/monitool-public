@@ -1,5 +1,5 @@
 import angular from 'angular';
-import { range } from '../../../helpers/array';
+import range from 'lodash.range';
 require(__cssPath);
 
 const module = angular.module(__moduleName, []);
