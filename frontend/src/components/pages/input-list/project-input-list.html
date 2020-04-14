@@ -6,7 +6,8 @@
 	<table class="table table-bordered table-condensed">
 		<tbody>
 			<tr ng-repeat="date in $ctrl.visibleStatus">
-				<td title="{{::date|formatSlotRange}}" ng-style="$ctrl.firstColStyle">
+				<td title="{{::date|formatSlotRange:$ctrl.project.start:$ctrl.project.end}}"
+					ng-style="$ctrl.firstColStyle">
 					<div class="bodyField">{{::date|formatSlot}}</div>
 				</td>
 				<td ng-repeat="site in ::$ctrl.sites">
