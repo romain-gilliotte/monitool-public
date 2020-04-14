@@ -114,7 +114,7 @@ function createVariableDimensions(project, form, variable, periodicity = null) {
     // location dimension
     const entity = new GenericDimension('location', 'entity', form.entities);
     project.groups.forEach(group => {
-        entity.addChildAttribute(
+        entity.addAttribute(
             'entity',
             group.id,
             entityId => group.members.includes(entityId) ? 'in' : 'out'
@@ -126,7 +126,7 @@ function createVariableDimensions(project, form, variable, periodicity = null) {
         const dim = new GenericDimension(partition.id, 'element', partition.elements.map(e => e.id));
 
         partition.groups.forEach(group => {
-            dim.addChildAttribute(
+            dim.addAttribute(
                 'element',
                 group.id,
                 elementId => group.members.includes(elementId) ? 'in' : 'out'

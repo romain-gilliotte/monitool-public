@@ -1,5 +1,5 @@
 import angular from 'angular';
-import exprEval from 'expr-eval';
+import { getParser } from 'olap-in-memory';
 import mtPartitionFilter from './partition-filter';
 
 const module = angular.module(__moduleName, [mtPartitionFilter]);
@@ -22,8 +22,7 @@ module.component(__componentName, {
 	controller: class IndicatorComputationController {
 
 		constructor() {
-			this.parser = new exprEval.Parser();
-			this.parser.consts = {};
+			this.parser = getParser();
 		}
 
 		$onInit() {

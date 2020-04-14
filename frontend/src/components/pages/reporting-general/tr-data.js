@@ -1,7 +1,8 @@
 import angular from 'angular';
 import axios from 'axios';
-import mtReportingField from '../../shared/reporting/td-reporting-field';
 import mtIndicatorUnit from '../../../filters/indicator';
+import { getQueryDimensions } from '../../../helpers/query-builder';
+import mtReportingField from '../../shared/reporting/td-reporting-field';
 require(__cssPath);
 
 const module = angular.module(__moduleName, [mtReportingField, mtIndicatorUnit]);
@@ -56,8 +57,9 @@ module.directive(__componentName, () => {
 			_getDisagregations(query) {
 				const numParameters = Object.values(query.parameters).length;
 				const computationDisagregations = numParameters > 1 ? [{ id: 'computation', label: 'project.computation' }] : [];
+				const dimensions = getQueryDimensions(this.project, query, true, false);
 
-				const partitionDisagregations = this.project.getQueryDimensions(query).reduce((aggregations, dimension) => {
+				const partitionDisagregations = dimensions.reduce((aggregations, dimension) => {
 					// Split up time by attribute, leave the rest unchanged.
 					let newAggregations;
 					if (dimension.id === 'time') {

@@ -1,5 +1,6 @@
 import angular from 'angular';
 import mtMselectWithGroups from '../../shared/ng-models/element-filter';
+import { getQueryDimensions } from '../../../helpers/query-builder';
 
 const module = angular.module(__moduleName, [mtMselectWithGroups]);
 
@@ -62,7 +63,8 @@ module.component(__componentName, {
 
 		_createChoices() {
 			this.dimensions = [];
-			this.project.getQueryDimensions(this.query, false).forEach(dimension => {
+
+			getQueryDimensions(this.project, this.query, false, false).forEach(dimension => {
 				if (dimension.id === 'time') {
 					const items = dimension.getItems();
 					this.start = items[0];

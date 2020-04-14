@@ -1,5 +1,5 @@
 import angular from 'angular';
-import exprEval from 'expr-eval';
+import { getParser } from 'olap-in-memory';
 
 const module = angular.module(__moduleName, []);
 
@@ -13,7 +13,7 @@ module.directive('expression', function () {
 
 			controller.$validators.expression = function (value) {
 				try {
-					exprEval.Parser.parse(value);
+					getParser().parse(value);
 					return true
 				}
 				catch (e) {

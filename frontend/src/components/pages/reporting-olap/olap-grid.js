@@ -1,6 +1,7 @@
 import angular from 'angular';
 import { product } from '../../../helpers/array';
 import mtTdReportingField from '../../shared/reporting/td-reporting-field';
+import { getQueryDimensions } from '../../../helpers/query-builder';
 require(__cssPath);
 
 const module = angular.module(__moduleName, [mtTdReportingField]);
@@ -48,11 +49,7 @@ module.component(__componentName, {
 		}
 
 		$onChanges(changes) {
-			const queryDimensions = this.project.getQueryDimensions(
-				{ ...this.query, aggregate: [] },
-				false
-			);
-
+			const queryDimensions = getQueryDimensions(this.project, this.query, false, true);
 			const dimensions = this.query.aggregate.map(aggregate => {
 				const dim = queryDimensions.find(d => d.id === aggregate.id);
 				return dim.getEntries(aggregate.attribute).map(entry => ({

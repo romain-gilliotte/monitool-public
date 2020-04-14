@@ -33,7 +33,7 @@ async function getIndicatorCube(projectId, formula, parameters, aggregate, dice)
         return cube;
     }));
 
-    const cube = cubes.reduce((m, c) => m.compose(c));
+    const cube = cubes.reduce((m, c) => m.compose(c, true));
     cube.createComputedMeasure('main', formula);
     return cube;
 }

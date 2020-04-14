@@ -2,7 +2,7 @@ import angular from 'angular';
 import { TimeDimension } from 'olap-in-memory';
 import mtTrData from './tr-data';
 import mtFaOpen from '../../shared/misc/fa-open';
-import { buildQueryFromIndicator, buildQueryFromVariable } from '../../../helpers/query-builder';
+import { buildQueryFromIndicator, buildQueryFromVariable, getQueryDimensions } from '../../../helpers/query-builder';
 import { updateArrayInPlace } from '../../../helpers/array';
 require(__cssPath);
 
@@ -358,7 +358,7 @@ module.component(__componentName, {
 			}
 
 			// Generic split
-			const dimension = this.project.getQueryDimensions(query).find(d => d.id == disagregateBy.id);
+			const dimension = getQueryDimensions(this.project, query).find(d => d.id == disagregateBy.id);
 			if (!dimension) {
 				// The requested disagregation is no longer valid because the this.query changed.
 				delete this.activeDisagregations[id];

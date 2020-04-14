@@ -1,6 +1,6 @@
 
-
 import angular from 'angular';
+import { getQueryDimensions } from '../../../helpers/query-builder';
 
 const module = angular.module(__moduleName, []);
 
@@ -45,7 +45,7 @@ module.component(__componentName, {
 
 		/** Build the list of possibles rows and columns for the table (from the dimension attributes). */
 		_makeChoices() {
-			const dimensions = this.project.getQueryDimensions(this.query, false);
+			const dimensions = getQueryDimensions(this.project, this.query, false, false);
 
 			return dimensions.reduce((m, dimension) => [
 				...m,

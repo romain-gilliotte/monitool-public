@@ -1,6 +1,5 @@
 import axios from 'axios';
-import exprEval from 'expr-eval';
-import { GenericDimension, TimeDimension } from 'olap-in-memory';
+import { getParser } from 'olap-in-memory';
 
 export default class Project {
 
@@ -39,88 +38,6 @@ export default class Project {
 
 		if (data)
 			Object.assign(this, data);
-	}
-
-	/** Get the disagregation dimensions available for any given query */
-	getQueryDimensions(query, strictTime = true) {
-		const varDimsGroups = [];
-		for (let key in query.parameters) {
-			const variableId = query.parameters[key].variableId;
-			const dices = [...query.dice, ...query.parameters[key].dice]
-			const varDims = this
-				.getVariableDimensions(variableId, dices, strictTime)
-				// If filtered in the formula, we don't want to manipulate it.
-				.filter(dim => !query.parameters[key].dice.find(dice => dice.id == dim.id))
-				// Do not allow manipulating the dimension used in the columns.
-				.filter(dim => !query.aggregate.find(agg => agg.id === dim.id));
-
-			varDimsGroups.push(varDims);
-		}
-
-		if (varDimsGroups.length == 0) {
-			return [];
-		}
-
-		return varDimsGroups.reduce((dimensions1, dimensions2) =>
-			dimensions1
-				.map(dimension => {
-					const otherDimension = dimensions2.find(dim => dim.id == dimension.id);
-					return otherDimension ? dimension.intersect(otherDimension) : null
-				})
-				.filter(dimension => dimension !== null)
-		);
-	}
-
-	getVariableDimensions(variableId, dices = [], strictTime = true) {
-		const form = this.forms.find(f => f.elements.find(v => v.id === variableId));
-		const variable = form.elements.find(v => v.id === variableId);
-
-		// Time dimension
-		const periodicity = strictTime ? form.periodicity : 'day';
-		const time = new TimeDimension('time', periodicity, this.start, this.end, `project.dimensions.time`);
-
-		// location dimension
-		const siteIdToName = siteId => this.entities.find(s => s.id == siteId).name;
-		const location = new GenericDimension('location', 'entity', form.entities, `project.dimensions.entity`, siteIdToName);
-		this.groups.forEach(group => {
-			location.addChildAttribute(
-				'entity',
-				group.id,
-				entityId => group.members.includes(entityId) ? 'in' : 'out',
-				item => `${item == 'in' ? '∈' : '∉'} ${group.name}`
-			);
-		});
-
-		// partitions
-		const partitions = variable.partitions.map(partition => {
-			const elementIdToName = elementId => partition.elements.find(el => el.id == elementId).name;
-			const dim = new GenericDimension(partition.id, 'element', partition.elements.map(e => e.id), partition.name, elementIdToName);
-
-			partition.groups.forEach(group => {
-				dim.addChildAttribute(
-					'element',
-					group.id,
-					elementId => group.members.includes(elementId) ? 'in' : 'out',
-					item => `${item == 'in' ? '∈' : '∉'} ${group.name}`
-				);
-			})
-
-			return dim;
-		});
-
-		const dimensions = [time, location, ...partitions];
-		dices.forEach(dice => {
-			let dimIndex = dimensions.findIndex(dim => dim.id === dice.id);
-			if (dice.range) {
-				dimensions[dimIndex] = dimensions[dimIndex].diceRange(dice.attribute, dice.range[0], dice.range[1]);
-			}
-			else if (dice.items) {
-				dimensions[dimIndex] = dimensions[dimIndex].dice(dice.attribute, dice.items);
-			}
-			else throw new Error('unexpected dice');
-		})
-
-		return dimensions;
 	}
 
 	/**
@@ -182,9 +99,7 @@ export default class Project {
 		// try to retrive the symbols from the formula.
 		var symbols = null;
 		try {
-			const parser = new exprEval.Parser();
-			parser.consts = {};
-			symbols = parser.parse(indicator.computation.formula).variables();
+			symbols = getParser().parse(indicator.computation.formula).variables();
 		}
 		catch (e) {
 			// if we fail to retrieve symbols => computation is invalid.
