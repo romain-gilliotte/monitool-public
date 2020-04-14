@@ -38,7 +38,7 @@ export default {
 		project: 'Proyecto',
 		indicator: 'Indicador',
 		indicators: 'Indicadores',
-		help: 'Ayuda',
+		help: 'Preguntas frecuentes',
 		name: 'Nombre',
 		start: 'Principio',
 		end: 'Fin',
