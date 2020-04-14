@@ -22,6 +22,9 @@ module.component(__componentName, {
 		}
 
 		async addPartition() {
+			if (this.partitions.length >= 5)
+				return;
+
 			const modalOpt = { component: 'partitionEditionModal', size: 'lg' };
 
 			try {

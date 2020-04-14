@@ -14,7 +14,8 @@
 		</li>
 	</ul>
 
-	<a ng-click="$ctrl.addPartition()" class="btn btn-xxs btn-default">
+	<a ng-click="$ctrl.addPartition()" class="btn btn-xxs btn-default"
+		ng-class="{disabled: $ctrl.partitions.length >= 5}">
 		<i class="fa fa-plus"></i>
 		<span translate="project.add_partition"></span>
 	</a>
