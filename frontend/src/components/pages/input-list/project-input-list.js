@@ -71,8 +71,8 @@ module.component(__componentName, {
 			this.inputsStatus = await Input.fetchFormStatus(this.project, this.dataSourceId);
 
 			// Those list tell which rows should be displayed.
-			this.visibleStatus = Object.keys(this.inputsStatus).slice(0, 10);
-			this.hiddenStatus = Object.keys(this.inputsStatus).slice(10);
+			this.visibleStatus = Object.keys(this.inputsStatus).slice(0, 20);
+			this.hiddenStatus = Object.keys(this.inputsStatus).slice(20);
 
 			this.loading = false;
 			this.$scope.$apply();
@@ -80,7 +80,7 @@ module.component(__componentName, {
 			// if there are results, bind a scroll event to the div around the table.
 			// this is extremely hacky and will break when the template is changed. There must be a better way
 			if (this.visibleStatus.length) {
-				this._container = angular.element(this._element.children()[2]);
+				this._container = angular.element(this._element.children()[0]);
 				this._container.bind('scroll', this._binded);
 			}
 		}

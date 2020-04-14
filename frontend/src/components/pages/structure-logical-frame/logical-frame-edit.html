@@ -1,14 +1,3 @@
-<ol class="breadcrumb noprint">
-	<li><a ui-sref="main.projects" translate="shared.projects"></a></li>
-	<li class="active" title="{{$ctrl.project.country}}" ng-bind="$ctrl.project.country|maxLength:20"></li>
-	<li class="active" title="{{$ctrl.project.name}}" ng-bind="$ctrl.project.name|maxLength:50"></li>
-	<li><a ui-sref="project.config.logical_frame_list" translate="shared.logical_frames"></a></li>
-	<li class="active">
-		<span ng-if="$ctrl.editableLogFrame.name">{{$ctrl.editableLogFrame.name|maxLength:50}}</span>
-		<span ng-if="!$ctrl.editableLogFrame.name" translate="project.unnamed_logframe"></span>
-	</li>
-</ol>
-
 <form class="form-horizontal noprint" role="form" name="$ctrl.lfForm" novalidate>
 
 	<!-- [General information] -->

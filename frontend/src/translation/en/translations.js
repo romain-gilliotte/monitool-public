@@ -34,7 +34,6 @@ export default {
 
 		date: "Date",
 
-		projects: 'Projects',
 		project: 'Project',
 		indicator: 'Indicator',
 		indicators: 'Indicators',
