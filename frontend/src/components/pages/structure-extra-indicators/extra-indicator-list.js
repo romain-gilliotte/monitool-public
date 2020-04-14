@@ -59,24 +59,22 @@ module.component(__componentName, {
 			this.onProjectUpdate({ newProject: this.editableProject, isValid: true });
 		}
 
-		onAddIndicatorClick() {
-			this.$uibModal
-				.open({
-					component: 'indicatorEditionModal',
-					size: 'lg',
-					resolve: {
-						planning: () => null,
-						indicator: () => null,
-						dataSources: () => this.editableProject.forms
-					}
-				})
-				.result
-				.then(newIndicator => {
-					if (newIndicator) {
-						this.editableProject.extraIndicators.push(newIndicator);
-						this.onProjectUpdate({ newProject: this.editableProject, isValid: true });
-					}
-				});
+		async onAddIndicatorClick() {
+			const modalOpts = {
+				component: 'indicatorEditionModal',
+				size: 'lg',
+				resolve: {
+					planning: () => null,
+					indicator: () => null,
+					dataSources: () => this.editableProject.forms
+				}
+			}
+
+			const newIndicator = this.$uibModal.open(modalOpts).result;
+			if (newIndicator) {
+				this.editableProject.extraIndicators.push(newIndicator);
+				this.onProjectUpdate({ newProject: this.editableProject, isValid: true });
+			}
 		}
 	}
 })

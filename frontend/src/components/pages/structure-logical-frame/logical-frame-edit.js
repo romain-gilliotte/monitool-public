@@ -215,24 +215,22 @@ module.component(__componentName, {
 		}
 
 		// handle indicator add, edit and remove are handled in a modal window.
-		onAddIndicatorClicked(parent) {
-			this.$uibModal
-				.open({
-					component: 'indicatorEditionModal',
-					size: 'lg',
-					resolve: {
-						planning: () => null,
-						indicator: () => null,
-						dataSources: () => this.project.forms
-					}
-				})
-				.result
-				.then(newPlanning => {
-					if (newPlanning) {
-						parent.push(newPlanning);
-						this.onFieldChange();
-					}
-				});
+		async onAddIndicatorClicked(parent) {
+			const modalOpts = {
+				component: 'indicatorEditionModal',
+				size: 'lg',
+				resolve: {
+					planning: () => null,
+					indicator: () => null,
+					dataSources: () => this.project.forms
+				}
+			};
+
+			const newPlanning = await this.$uibModal.open(modalOpts).result;
+			if (newPlanning) {
+				parent.push(newPlanning);
+				this.onFieldChange();
+			}
 		}
 	}
 });

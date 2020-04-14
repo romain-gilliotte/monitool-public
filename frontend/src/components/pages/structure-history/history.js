@@ -58,22 +58,19 @@ module.component(__componentName, {
 			});
 		}
 
-		onShowMoreClicked() {
+		async onShowMoreClicked() {
 			if (this.loading)
 				return;
 
-			const promise = Revision.fetch(this.project._id, this._currentOffset, this._pageSize)
-			this._currentOffset += this._pageSize;
 			this.loading = true;
 
-			promise.then(newRevisions => {
-				this.$scope.$apply(() => {
-					this.loading = false;
-					this.finished = newRevisions.length < this._pageSize;
-					this.revisions = [...this.revisions, ...newRevisions];
-					Revision.enrich(this.project, this.revisions);
-				});
-			});
+			const newRevisions = await Revision.fetch(this.project._id, this._currentOffset, this._pageSize);
+			this._currentOffset += this._pageSize;
+			this.loading = false;
+			this.finished = newRevisions.length < this._pageSize;
+			this.revisions = [...this.revisions, ...newRevisions];
+			Revision.enrich(this.project, this.revisions);
+			this.$scope.$apply();
 		}
 	}
 });

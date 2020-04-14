@@ -25,24 +25,22 @@ module.component(__componentName, {
 			this.$uibModal = $uibModal;
 		}
 
-		onEditClicked() {
-			this.$uibModal
-				.open({
-					component: 'indicatorEditionModal',
-					size: 'lg',
-					resolve: {
-						planning: () => this.indicator,
-						indicator: () => null,
-						dataSources: () => this.project.forms
-					}
-				})
-				.result
-				.then(newIndicator => {
-					if (newIndicator)
-						this.onUpdated({ newIndicator: newIndicator, previousValue: this.indicator });
-					else
-						this.onDeleted({ indicator: this.indicator });
-				});
+		async onEditClicked() {
+			const modalOpts = {
+				component: 'indicatorEditionModal',
+				size: 'lg',
+				resolve: {
+					planning: () => this.indicator,
+					indicator: () => null,
+					dataSources: () => this.project.forms
+				}
+			}
+
+			const newIndicator = await this.$uibModal.open(modalOpts).result;
+			if (newIndicator)
+				this.onUpdated({ newIndicator: newIndicator, previousValue: this.indicator });
+			else
+				this.onDeleted({ indicator: this.indicator });
 		}
 
 		onDeleteClicked() {
