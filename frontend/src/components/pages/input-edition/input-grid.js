@@ -1,5 +1,4 @@
 import angular from 'angular';
-import exprEval from 'expr-eval';
 import Handsontable from 'handsontable/dist/handsontable.js';
 import 'handsontable/dist/handsontable.css';
 require(__cssPath);
@@ -206,12 +205,12 @@ module.component(__componentName, {
 			changes.forEach(change => {
 				const [y, x, _, val] = change;
 
-				// If user entered something that is not a number, try to evaluate it with
-				// the parser to see if it works.
+				// If user entered something that is not a number, maybe its a sum.
 				if (typeof val !== 'number') {
 					try {
-						const newValue = exprEval.Parser.evaluate(val, {});
-						this.handsOnTable.setDataAtCell(y, x, newValue);
+						const newValue = val.split('+').reduce((m, v) => m + Number(v.trim()), 0);
+						if (typeof newValue === 'number' && !Number.isNaN(newValue))
+							this.handsOnTable.setDataAtCell(y, x, newValue);
 					}
 					catch (e) {
 					}
