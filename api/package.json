@@ -25,10 +25,11 @@
     "mongodb": "^3.5.6",
     "nodemailer": "^6.4.6",
     "object-hash": "^2.0.3",
-    "olap-in-memory": "^7.0.1",
+    "olap-in-memory": "^7.0.2",
     "pdfmake": "^0.1.65",
+    "redlock": "^4.1.0",
     "roboto-fontface": "^0.10.0",
-    "timeslot-dag": "^2.1.1",
+    "timeslot-dag": "^2.1.2",
     "winston": "^3.2.1"
   },
   "devDependencies": {

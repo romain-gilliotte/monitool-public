@@ -9,6 +9,7 @@ const responseTime = require('koa-response-time');
 const winston = require('winston');
 const config = require('./config');
 const MongoClient = require('mongodb').MongoClient;
+const Redlock = require('redlock');
 
 winston.add(new winston.transports.Console())
 
@@ -23,6 +24,7 @@ process.on('uncaughtException', e => {
 global.mongo = null;
 global.database = null;
 global.redis = null;
+global.redisLock = null;
 global.queue = null;
 global.server = null;
 
@@ -43,6 +45,7 @@ async function start(web = true, worker = true) {
 	// move this somewhere else
 
 	global.redis = new Redis(config.redis.uri);
+	global.redisLock = new Redlock([redis]);
 	global.queue = new Bull('workers', config.redis.uri);
 
 	if (web) {
