@@ -77,7 +77,7 @@ async function getPngStream(userEmail, projectId, dataSourceId, language) {
 
 		if (dataSource) {
 			const title = dataSource.name || 'data-source';
-			const cacheId = `${project._id}:ds:${dataSource.id}.png`;
+			const cacheId = `${projectId}:ds:${dataSource.id}.png`;
 			const cacheHash = hash(dataSource);
 
 			const stream = await cacheFile(cacheId, cacheHash, `${title}.png`, async () => {
@@ -98,7 +98,7 @@ async function getPdfStream(userEmail, projectId, dataSourceId, language, orient
 
 		if (dataSource) {
 			const title = dataSource.name || 'data-source';
-			const cacheId = `${project._id}:ds:${dataSource.id}.pdf`;
+			const cacheId = `${projectId}:ds:${dataSource.id}.pdf`;
 			const cacheHash = hash(dataSource);
 
 			const stream = await cacheFile(cacheId, cacheHash, `${title}.pdf`, async () => {

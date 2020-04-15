@@ -97,7 +97,7 @@ async function getPngStream(userEmail, projectId, logicalFrameworkId, language) 
 
         if (logicalFramework) {
             const title = logicalFramework.name || 'logical-framework';
-            const cacheId = `${project._id}:lf:${logicalFramework.id}.png`;
+            const cacheId = `${projectId}:lf:${logicalFramework.id}.png`;
             const cacheHash = hash({ lf: logicalFramework, ds: project.forms });
 
             const stream = await cacheFile(cacheId, cacheHash, `${title}.pdf`, async () => {
@@ -118,7 +118,7 @@ async function getPdfStream(userEmail, projectId, logicalFrameworkId, language, 
 
         if (logicalFramework) {
             const title = logicalFramework.name || 'logical-framework';
-            const cacheId = `${project._id}:lf:${logicalFramework.id}.pdf`;
+            const cacheId = `${projectId}:lf:${logicalFramework.id}.pdf`;
             const cacheHash = hash({ lf: logicalFramework, ds: project.forms });
 
             const stream = await cacheFile(cacheId, cacheHash, `${title}.pdf`, async () => {
