@@ -37,7 +37,7 @@
     "nodemon": "^2.0.3"
   },
   "scripts": {
-    "start": "nodemon src/main.js --inspect=0.0.0.0:9229",
+    "start": "nodemon --inspect src/main.js",
     "serve": "node src/main.js",
     "test": "NODE_ENV=test mocha"
   }
