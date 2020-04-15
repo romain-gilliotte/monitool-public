@@ -1,6 +1,8 @@
 const Router = require('@koa/router');
 const PdfPrinter = require('pdfmake');
 const gm = require('gm');
+const hash = require('object-hash');
+const cacheFile = require('../storage/gridfs');
 const { getProject } = require('../storage/queries');
 
 const router = new Router();
@@ -73,7 +75,7 @@ router.get('/resources/project/:id/logical-frame/:logicalFrameId.pdf', async ctx
 
 
 router.get('/resources/project/:id/logical-frame/:logicalFrameId.png', async ctx => {
-    const result = await getPdfStream(
+    const result = await getPngStream(
         ctx.state.profile.email,
         ctx.params.id,
         ctx.params.logicalFrameId,
@@ -81,28 +83,53 @@ router.get('/resources/project/:id/logical-frame/:logicalFrameId.png', async ctx
     );
 
     if (result) {
-        const img = gm(result.stream);
-
         ctx.response.type = 'image/png';
-        ctx.response.body = img.crop(595, 400).stream('PNG');
+        ctx.response.body = result.stream;
         ctx.response.attachment(result.title + '.png', { type: 'inline' });
     }
 });
 
-
-async function getPdfStream(userEmail, projectId, logicalFrameworkId, language, orientation = 'portrait') {
-    const project = await getProject(userEmail, projectId, { 'logicalFrames': true, 'forms': true });
+async function getPngStream(userEmail, projectId, logicalFrameworkId, language) {
+    const project = await getProject(userEmail, projectId, { _id: 0, logicalFrames: 1, forms: 1 });
 
     if (project) {
         const logicalFramework = project.logicalFrames.find(lf => lf.id == logicalFrameworkId);
 
         if (logicalFramework) {
-            // Create document definition.
             const title = logicalFramework.name || 'logical-framework';
-            const docDef = computeLogFrameDocDef(logicalFramework, orientation, project.forms, language);
+            const cacheId = `${project._id}:lf:${logicalFramework.id}.png`;
+            const cacheHash = hash({ lf: logicalFramework, ds: project.forms });
 
-            const stream = printer.createPdfKitDocument(docDef);
-            stream.end();
+            const stream = await cacheFile(cacheId, cacheHash, `${title}.pdf`, async () => {
+                const result = await getPdfStream(userEmail, projectId, logicalFrameworkId, language);
+                return gm(result.stream).crop(595, 400).stream('PNG');
+            });
+
+            return { title, stream };
+        }
+    }
+}
+
+async function getPdfStream(userEmail, projectId, logicalFrameworkId, language, orientation = 'portrait') {
+    const project = await getProject(userEmail, projectId, { _id: 0, logicalFrames: 1, forms: 1 });
+
+    if (project) {
+        const logicalFramework = project.logicalFrames.find(lf => lf.id == logicalFrameworkId);
+
+        if (logicalFramework) {
+            const title = logicalFramework.name || 'logical-framework';
+            const cacheId = `${project._id}:lf:${logicalFramework.id}.pdf`;
+            const cacheHash = hash({ lf: logicalFramework, ds: project.forms });
+
+            const stream = await cacheFile(cacheId, cacheHash, `${title}.pdf`, async () => {
+                // Create document definition.
+                const docDef = computeLogFrameDocDef(logicalFramework, orientation, project.forms, language);
+
+                const stream = printer.createPdfKitDocument(docDef);
+                stream.end();
+                return stream;
+            });
+
             return { title, stream };
         }
     }

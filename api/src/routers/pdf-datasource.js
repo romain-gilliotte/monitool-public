@@ -1,7 +1,9 @@
 const Router = require('@koa/router');
-const PdfPrinter = require('pdfmake');
 const gm = require('gm');
+const PdfPrinter = require('pdfmake');
+const hash = require('object-hash');
 const { getProject } = require('../storage/queries');
+const cacheFile = require('../storage/gridfs');
 
 const router = new Router();
 
@@ -32,7 +34,7 @@ router.get('/resources/project/:id/data-source/:dataSourceId.pdf', async ctx => 
 });
 
 router.get('/resources/project/:id/data-source/:dataSourceId.png', async ctx => {
-	const result = await getPdfStream(
+	const result = await getPngStream(
 		ctx.state.profile.email,
 		ctx.params.id,
 		ctx.params.dataSourceId,
@@ -40,14 +42,11 @@ router.get('/resources/project/:id/data-source/:dataSourceId.png', async ctx => 
 	);
 
 	if (result) {
-		const img = gm(result.stream);
-
 		ctx.response.type = 'image/png';
-		ctx.response.body = img.crop(595, 400).stream('PNG');
+		ctx.response.body = result.stream;
 		ctx.response.attachment(result.title + '.png', { type: 'inline' });
 	}
 });
-
 
 
 module.exports = router;
@@ -71,18 +70,45 @@ const strings = Object.freeze({
 	})
 });
 
+async function getPngStream(userEmail, projectId, dataSourceId, language) {
+	const project = await getProject(userEmail, projectId, { forms: true });
+	if (project) {
+		const dataSource = project.forms.find(ds => ds.id == dataSourceId);
+
+		if (dataSource) {
+			const title = dataSource.name || 'data-source';
+			const cacheId = `${project._id}:ds:${dataSource.id}.png`;
+			const cacheHash = hash(dataSource);
+
+			const stream = await cacheFile(cacheId, cacheHash, `${title}.png`, async () => {
+				const result = await getPdfStream(userEmail, projectId, dataSourceId, language);
+				return gm(result.stream).crop(595, 400).stream('PNG');
+			});
+
+			return { title, stream };
+		}
+	}
+}
 
 async function getPdfStream(userEmail, projectId, dataSourceId, language, orientation = 'portrait') {
 	const project = await getProject(userEmail, projectId, { forms: true });
 
 	if (project) {
 		const dataSource = project.forms.find(ds => ds.id == dataSourceId);
+
 		if (dataSource) {
-			// Create document definition.
 			const title = dataSource.name || 'data-source';
-			const docDef = createDataSourceDocDef(dataSource, orientation, language);
-			const stream = printer.createPdfKitDocument(docDef);
-			stream.end();
+			const cacheId = `${project._id}:ds:${dataSource.id}.pdf`;
+			const cacheHash = hash(dataSource);
+
+			const stream = await cacheFile(cacheId, cacheHash, `${title}.pdf`, async () => {
+				const docDef = createDataSourceDocDef(dataSource, orientation, language);
+				const stream = printer.createPdfKitDocument(docDef);
+				stream.end(); // work around bug in pdfkit never ending the stream.
+
+				return stream;
+			});
+
 			return { title, stream };
 		}
 	}
