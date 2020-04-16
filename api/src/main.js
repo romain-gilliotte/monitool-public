@@ -63,8 +63,7 @@ async function start(web = true, worker = true) {
 		app.use(require('./middlewares/last-seen'));
 		app.use(require('./routers/invitations').routes());
 		app.use(require('./routers/input').routes());
-		app.use(require('./routers/pdf-datasource').routes());
-		app.use(require('./routers/pdf-logframe').routes());
+		app.use(require('./routers/downloads').routes());
 		app.use(require('./routers/project').routes());
 		app.use(require('./routers/rpc').routes());
 
@@ -73,6 +72,7 @@ async function start(web = true, worker = true) {
 	}
 
 	if (worker) {
+		require('./tasks/downloads');
 		require('./tasks/mail');
 		require('./tasks/reporting');
 		winston.log('info', `All tasks registered.`);

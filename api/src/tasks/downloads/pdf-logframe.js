@@ -1,11 +1,33 @@
-const Router = require('@koa/router');
+const { ObjectId } = require('mongodb');
 const PdfPrinter = require('pdfmake');
-const gm = require('gm');
-const hash = require('object-hash');
-const cacheFile = require('../storage/gridfs');
-const { getProject } = require('../storage/queries');
+const { updateFile } = require('../../storage/gridfs');
 
-const router = new Router();
+queue.process('generate-logframe-pdf', async job => {
+    const { cacheId, cacheHash, prjId, lfId, language, orientation } = job.data;
+    const project = await database.collection('project').findOne(
+        { _id: new ObjectId(prjId) },
+        {
+            projection: {
+                logicalFrames: { $elemMatch: { id: lfId } },
+                forms: 1
+            }
+        }
+    );
+
+    if (!project && !project.logicalFrames.length)
+        throw new Error('Not found');
+
+    const logicalFramework = project.logicalFrames[0];
+    const title = logicalFramework.name || 'logical-framework';
+
+    await updateFile(cacheId, cacheHash, `${title}.pdf`, 'application/pdf', async () => {
+        const docDef = computeLogFrameDocDef(logicalFramework, orientation, project.forms, language);
+        const stream = printer.createPdfKitDocument(docDef);
+        stream.end(); // work around bug in pdfkit never ending the stream.
+
+        return stream;
+    });
+});
 
 /**
  * Create preconfigured printer
@@ -52,88 +74,6 @@ const strings = Object.freeze({
         activity: "Actividad"
     })
 });
-
-
-/**
- * Render a PDF file describing the given logical frame.
- */
-router.get('/resources/project/:id/logical-frame/:logicalFrameId.pdf', async ctx => {
-    const result = await getPdfStream(
-        ctx.state.profile.email,
-        ctx.params.id,
-        ctx.params.logicalFrameId,
-        ctx.request.query.language,
-        ctx.request.query.orientation
-    );
-
-    if (result) {
-        ctx.response.type = 'application/pdf';
-        ctx.response.body = result.stream;
-        ctx.response.attachment(`${result.title.substr(0, 16)}.pdf`, { type: 'inline' });
-    }
-});
-
-
-router.get('/resources/project/:id/logical-frame/:logicalFrameId.png', async ctx => {
-    const result = await getPngStream(
-        ctx.state.profile.email,
-        ctx.params.id,
-        ctx.params.logicalFrameId,
-        ctx.request.query.language,
-    );
-
-    if (result) {
-        ctx.response.type = 'image/png';
-        ctx.response.body = result.stream;
-        ctx.response.attachment(result.title + '.png', { type: 'inline' });
-    }
-});
-
-async function getPngStream(userEmail, projectId, logicalFrameworkId, language) {
-    const project = await getProject(userEmail, projectId, { _id: 0, logicalFrames: 1, forms: 1 });
-
-    if (project) {
-        const logicalFramework = project.logicalFrames.find(lf => lf.id == logicalFrameworkId);
-
-        if (logicalFramework) {
-            const title = logicalFramework.name || 'logical-framework';
-            const cacheId = `${projectId}:lf:${logicalFramework.id}.png`;
-            const cacheHash = hash({ lf: logicalFramework, ds: project.forms });
-
-            const stream = await cacheFile(cacheId, cacheHash, `${title}.pdf`, async () => {
-                const result = await getPdfStream(userEmail, projectId, logicalFrameworkId, language);
-                return gm(result.stream).crop(595, 400).stream('PNG');
-            });
-
-            return { title, stream };
-        }
-    }
-}
-
-async function getPdfStream(userEmail, projectId, logicalFrameworkId, language, orientation = 'portrait') {
-    const project = await getProject(userEmail, projectId, { _id: 0, logicalFrames: 1, forms: 1 });
-
-    if (project) {
-        const logicalFramework = project.logicalFrames.find(lf => lf.id == logicalFrameworkId);
-
-        if (logicalFramework) {
-            const title = logicalFramework.name || 'logical-framework';
-            const cacheId = `${projectId}:lf:${logicalFramework.id}.pdf`;
-            const cacheHash = hash({ lf: logicalFramework, ds: project.forms });
-
-            const stream = await cacheFile(cacheId, cacheHash, `${title}.pdf`, async () => {
-                // Create document definition.
-                const docDef = computeLogFrameDocDef(logicalFramework, orientation, project.forms, language);
-
-                const stream = printer.createPdfKitDocument(docDef);
-                stream.end();
-                return stream;
-            });
-
-            return { title, stream };
-        }
-    }
-}
 
 function computeLogFrameDocDef(logFrame, pageOrientation, dataSources, language = 'en') {
     var doc = {};
@@ -276,7 +216,3 @@ function computeIndicatorsSourcesDocDef(indicators, dataSources) {
         }
     ];
 }
-
-
-
-module.exports = router;
