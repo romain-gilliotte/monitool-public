@@ -29,8 +29,9 @@ module.component(__componentName, {
         }
 
         $onChanges() {
-            const serviceUrl = this.$rootScope.serviceUrl;
             const projectId = this.project._id;
+            const language = this.$rootScope.language;
+            const serviceUrl = this.$rootScope.serviceUrl;
             const token = this.$rootScope.accessToken;
 
             this.files = [
@@ -41,9 +42,9 @@ module.component(__componentName, {
                         id: lf.id,
                         category: 'project.logical_frame',
                         name: lf.name,
-                        portrait: `${url}.pdf?token=${token}&orientation=portrait`,
-                        landscape: `${url}.pdf?token=${token}&orientation=landscape`,
-                        thumbnail: `${url}.png?token=${token}`
+                        portrait: `${url}.pdf?token=${token}&language=${language}&orientation=portrait`,
+                        landscape: `${url}.pdf?token=${token}&language=${language}&orientation=landscape`,
+                        thumbnail: `${url}.png?token=${token}&language=${language}`
                     };
                 }),
                 ...this.project.forms.map(ds => {
@@ -53,9 +54,9 @@ module.component(__componentName, {
                         id: ds.id,
                         category: 'project.collection_form2',
                         name: ds.name,
-                        portrait: `${url}.pdf?token=${token}&orientation=portrait`,
-                        landscape: `${url}.pdf?token=${token}&orientation=landscape`,
-                        thumbnail: `${url}.png?token=${token}`,
+                        portrait: `${url}.pdf?token=${token}&language=${language}&orientation=portrait`,
+                        landscape: `${url}.pdf?token=${token}&language=${language}&orientation=landscape`,
+                        thumbnail: `${url}.png?token=${token}&language=${language}`,
                     };
                 })
             ];

@@ -69,6 +69,9 @@ export default {
 	},
 
 	project: {
+		portrait: 'Versión vertical',
+		landscape: 'Versión horizontal',
+
 		time_to_fill: "Tiempo de ingreso estimado",
 		confirm_delete_site: `Si elimina este sitio, ya no podrá acceder a sus datos en los informes. Confirme para eliminar.`,
 		confirm_delete_datasource: `Si elimina esta fuente de datos, ya no podrá acceder a sus datos en informes o a los indicadores que dependen de ella. Confirme para eliminar.`,

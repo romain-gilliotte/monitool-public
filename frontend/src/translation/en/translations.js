@@ -69,6 +69,9 @@ export default {
 	},
 
 	project: {
+		portrait: 'Portrait Version',
+		landscape: 'Landscape Version',
+
 		time_to_fill: "Estimated time to fill",
 		confirm_delete_site: `If you delete this collection site, you won't be able to access its data in reporting. Confirm to delete.`,
 		confirm_delete_datasource: `If you delete this data source, you won't be able to access its data in reporting anymore, nor any indicator which depended on it. Confirm to delete.`,
