@@ -55,13 +55,11 @@ async function start(web = true, worker = true) {
 		app.use(bodyParser({ jsonLimit: '1mb' }));
 		app.use(require('./middlewares/error-handler'));
 
-		if (process.env.NODE_ENV === 'test') {
+		if (process.env.NODE_ENV === 'test')
 			app.use(require('./middlewares/load-profile-test'));
-		}
-		else {
-			app.use(require('./middlewares/authentication'));
+		else
 			app.use(require('./middlewares/load-profile'));
-		}
+
 		app.use(require('./middlewares/last-seen'));
 		app.use(require('./routers/invitations').routes());
 		app.use(require('./routers/input').routes());
