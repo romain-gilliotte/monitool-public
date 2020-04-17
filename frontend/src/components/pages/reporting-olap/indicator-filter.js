@@ -67,8 +67,8 @@ module.component(__componentName, {
 			getQueryDimensions(this.project, this.query, false, false).forEach(dimension => {
 				if (dimension.id === 'time') {
 					const items = dimension.getItems();
-					this.start = items[0];
-					this.end = items[items.length - 1];
+					this.minStart = this.start = items[0];
+					this.maxEnd = this.end = items[items.length - 1];
 				}
 
 				else if (dimension.id === 'location') {
