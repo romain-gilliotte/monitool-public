@@ -15,7 +15,6 @@ queue.process('generate-reporting-xlsx', async job => {
         const filename = `${project.name || 'report'}.xlsx`;
 
         await updateFile(cacheId, cacheHash, filename, mime, async () => {
-
             const wb = await getWorkbook(project, periodicity);
             const buffer = await wb.writeToBuffer();
 
@@ -183,7 +182,7 @@ function createStyles(wb) {
         other: {
             text: wb.createStyle({
                 font: { color: '#666666', size: 10 },
-                alignment: { indent: 4 }
+                alignment: { indent: 1 }
             }),
             number: wb.createStyle({ font: { color: '#666666', size: 10 } }),
         },
