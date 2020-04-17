@@ -1,11 +1,15 @@
-const { executeQuery } = require('./query-runner');
+const { getIndicatorCube } = require('./loader/indicator');
 
-queue.process('compute-report', async job => {
+queue.process('compute-report-json', async job => {
     try {
-        const { projectId, output, ...query } = job.data;
-        const result = await executeQuery(projectId, output, query);
+        const { projectId, output, formula, parameters, aggregate, dice } = job.data;
+        const cube = await getIndicatorCube(projectId, formula, parameters, aggregate, dice);
 
-        return result;
+        // Format response.
+        if (output == 'report') return cube.getNestedObject('main', true, true);
+        else if (output == 'flatArray') return cube.getData('main');
+        else if (output == 'nestedArray') return cube.getNestedArray('main');
+        else return cube.getNestedObject('main');
     }
     catch (e) {
         console.log(e);

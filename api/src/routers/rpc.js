@@ -83,7 +83,7 @@ router.post('/rpc/build-report', async ctx => {
     const projectId = ctx.request.body.projectId;
 
     if (await ctx.state.profile.canViewProject(projectId)) {
-        const job = await queue.add('compute-report', ctx.request.body, {
+        const job = await queue.add('compute-report-json', ctx.request.body, {
             attempts: 1,
             removeOnComplete: true
         });
