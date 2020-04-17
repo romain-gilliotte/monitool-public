@@ -44,6 +44,10 @@ module.exports = {
 		uri: readEnv('MONITOOL_REDIS_URI')
 	},
 
+	unoconv: {
+		uri: readEnv('MONITOOL_UNOCONV_URI')
+	},
+
 	limits: {
 		dataEntryGracePeriod: parseInt(
 			readEnv('MONITOOL_DATA_ENTRY_GRACE_PERIOD', '15')

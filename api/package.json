@@ -13,6 +13,7 @@
     "auth0": "^2.24.0",
     "bull": "^3.13.0",
     "dotenv": "^8.2.0",
+    "form-data": "^3.0.0",
     "gm": "^1.23.1",
     "jiff": "github:romain-gilliotte/jiff",
     "jwks-rsa": "^1.8.0",

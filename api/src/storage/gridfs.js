@@ -1,7 +1,11 @@
+const axios = require('axios');
+const FormData = require('form-data');
+const fs = require('fs');
 const gm = require('gm');
 const { GridFSBucket } = require('mongodb');
 const stream = require('stream');
 const util = require('util');
+const config = require('../config');
 
 async function getOriginal(cacheId, cacheHash, bucketName = 'fs') {
     const bucket = new GridFSBucket(database, { bucketName });
@@ -24,11 +28,35 @@ async function getThumbnail(cacheId, cacheHash, bucketName = 'fs') {
     // Try to fetch original file, and make thumbnail from it.
     const original = await getOriginal(cacheId, cacheHash, bucketName);
     if (original) {
-        await updateFile(thumbnailId, cacheHash, 'thumbnail.png', 'image/png', async () => {
-            return gm(original.stream).crop(595, 400).stream('PNG');
-        });
+        const originalMime = original.file.metadata.mimeType;
 
-        return getOriginal(thumbnailId, cacheHash, bucketName);
+        if (originalMime === 'application/pdf' || config.unoconv.uri) {
+            await updateFile(thumbnailId, cacheHash, 'thumbnail.png', 'image/png', async () => {
+                let originalStream = original.stream;
+
+                // Convert to PDF
+                if (originalMime !== 'application/pdf') {
+                    const form = new FormData();
+                    form.append('file', original.stream, original.file.filename);
+
+                    const response = await axios.post(config.unoconv.uri, form, {
+                        responseType: 'stream',
+                        headers: form.getHeaders(),
+                    });
+
+                    originalStream = response.data;
+                }
+
+                // Conver to PNG
+                return gm(originalStream, 'file.pdf').crop(595, 400).stream('PNG');
+            });
+
+            return getOriginal(thumbnailId, cacheHash, bucketName);
+        }
+        else {
+            // close the stream
+            original.stream.destroy();
+        }
     }
 }
 
@@ -54,6 +82,13 @@ async function getGeneratedFile(cacheId, cacheHash, task, taskAttr, thumbnail = 
         result = await getFile(cacheId, cacheHash, thumbnail, bucketName);
     }
 
+    if (!result && thumbnail) {
+        return {
+            file: { length: 20351, filename: 'placeholder.png', metadata: { mimeType: 'image/png' } },
+            stream: fs.createReadStream('data/placeholder.png')
+        }
+    }
+
     return result;
 }
 
@@ -77,4 +112,4 @@ async function updateFile(cacheId, cacheHash, filename, mimeType, createStream, 
     }
 }
 
-module.exports = { getFile, getGeneratedFile, updateFile };
+module.exports = { getGeneratedFile, updateFile };
