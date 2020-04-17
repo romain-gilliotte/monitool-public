@@ -75,6 +75,7 @@ async function start(web = true, worker = true) {
 		require('./tasks/downloads');
 		require('./tasks/mail');
 		require('./tasks/reporting');
+		require('./tasks/thumbnail');
 		winston.log('info', `All tasks registered.`);
 	}
 }
