@@ -64,21 +64,5 @@ router.delete('/invitation/:id', async ctx => {
     }
 });
 
-router.get('/project/:id/user', async ctx => {
-    const project = await getProject(ctx.state.profile.email, ctx.params.id, { owner: 1 });
-
-    if (project) {
-        const invitations = await database.collection('invitation').find({
-            projectId: new ObjectId(ctx.params.id),
-            accepted: true,
-        }, { email: 1 }).toArray();
-
-        const emails = [project.owner, ...invitations.map(i => i.email)];
-        const users = database.collection('user').find({ _id: { $in: emails } });
-
-        ctx.response.type = 'application/json';
-        ctx.response.body = users.pipe(JSONStream.stringify());
-    }
-});
 
 module.exports = router;
