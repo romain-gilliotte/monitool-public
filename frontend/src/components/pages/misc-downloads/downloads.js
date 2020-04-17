@@ -1,6 +1,5 @@
 import uiRouter from '@uirouter/angularjs';
 import angular from 'angular';
-import TimeSlot from 'timeslot-dag';
 
 const module = angular.module(__moduleName, [uiRouter]);
 
@@ -35,23 +34,6 @@ module.component(__componentName, {
             const token = this.$rootScope.accessToken;
 
             this.files = [
-                {
-                    id: 'reporting',
-                    category: 'shared.reporting_general',
-                    name: '',
-                    thumbnail: `${serviceUrl}/project/${projectId}/reporting/month.png?token=${token}`,
-                    main: {
-                        icon: 'fa-file-excel-o',
-                        key: 'project.dimensions.month',
-                        url: `${serviceUrl}/project/${projectId}/reporting/month.xlsx?token=${token}`
-                    },
-                    dropdown: ['day', ...TimeSlot.upperSlots.day].map(periodicity => ({
-                        icon: 'fa-file-excel-o',
-                        key: `project.dimensions.${periodicity}`,
-                        url: `${serviceUrl}/project/${projectId}/reporting/${periodicity}.xlsx?token=${token}`
-                    }))
-                },
-
                 ...this.project.logicalFrames.map(lf => {
                     const url = `${serviceUrl}/project/${projectId}/logical-frame/${lf.id}`;
 
