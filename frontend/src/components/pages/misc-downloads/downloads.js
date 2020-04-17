@@ -31,7 +31,7 @@ module.component(__componentName, {
         $onChanges() {
             const projectId = this.project._id;
             const language = this.$rootScope.language;
-            const serviceUrl = this.$rootScope.serviceUrl + '/download';
+            const serviceUrl = this.$rootScope.serviceUrl;
             const token = this.$rootScope.accessToken;
 
             this.files = [

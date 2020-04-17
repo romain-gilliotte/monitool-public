@@ -25,7 +25,7 @@ export default class Input {
 		const sum = variables.map((v, i) => `not isNaN(variable_${i})`).join('+');
 		const formula = `(${sum})/${variables.length}`;
 		const query = {
-			projectId: project._id,
+			renderer: 'json',
 			formula: formula,
 			parameters: {},
 			dice: [
@@ -57,7 +57,8 @@ export default class Input {
 			}
 		});
 
-		const response = await axios.post(`/rpc/build-report`, query);
+		const b64Query = btoa(JSON.stringify(query)).replace('+', '-').replace('/', '_').replace(/=+$/g, '');
+		const response = await axios.get(`/project/${project._id}/report/${b64Query}`);
 		const result = response.data;
 
 		const sortedResult = {};
@@ -86,14 +87,16 @@ export default class Input {
 				];
 
 				// Query server
-				const response = await axios.post(`/rpc/build-report`, {
-					output: 'flatArray',
-					projectId: project._id,
+				const query = {
+					renderer: 'json',
+					rendererOpts: 'flatArray',
 					formula: 'cst',
 					parameters: { cst: { variableId: variable.id, dice: [] } },
 					dice: dimensions,
 					aggregate: activePartitions.map(p => ({ id: p.id, attribute: 'element' })),
-				});
+				}
+				const b64Query = btoa(JSON.stringify(query)).replace('+', '-').replace('/', '_').replace(/=+$/g, '');
+				const response = await axios.get(`/project/${project._id}/report/${b64Query}`);
 
 				// Check that query result have the expected format.
 				// If not, it means that we're making a query outside of the bounds of the project,
@@ -120,9 +123,9 @@ export default class Input {
 
 		let response;
 		if (this._id) {
-			response = await axios.put('/resources/input/' + this._id, data);
+			response = await axios.put('/input/' + this._id, data);
 		} else {
-			response = await axios.post('/resources/input', data);
+			response = await axios.post('/input', data);
 		}
 
 		Object.assign(this, response.data);

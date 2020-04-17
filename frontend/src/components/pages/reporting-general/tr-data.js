@@ -96,10 +96,9 @@ module.directive(__componentName, () => {
 					this.errorMessage = 'shared.loading';
 
 					// Load data
-					const response = await axios.post(
-						'/rpc/build-report',
-						{ output: 'report', projectId: this.project._id, ...query }
-					);
+					const remoteQuery = JSON.stringify({ renderer: 'json', rendererOpts: 'report', ...query });
+					const b64Query = btoa(remoteQuery).replace('+', '-').replace('/', '_').replace(/=+$/g, '');
+					const response = await axios.get(`/project/${this.project._id}/report/${b64Query}`);
 
 					this.tableCells = [
 						...this.columns.map(col => response.data[col.id]),

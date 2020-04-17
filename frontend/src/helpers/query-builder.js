@@ -27,10 +27,6 @@ export function buildQueryFromIndicator(indicator, logicalFramework = null, proj
     // Add extra dices provided by the logical framework.
     const dice = baseDice.slice();
 
-    if (project) {
-        dice.push({ id: 'time', attribute: 'day', range: [project.start, project.end] });
-    }
-
     if (logicalFramework) {
         dice.push({ id: 'location', attribute: 'entity', items: logicalFramework.entities });
 
@@ -51,9 +47,6 @@ export function buildQueryFromIndicator(indicator, logicalFramework = null, proj
  */
 export function buildQueryFromVariable(variable, dataSource = null, project = null, baseAggregate = [], baseDice = []) {
     const dice = [];
-
-    if (project)
-        dice.push({ id: 'time', attribute: 'day', range: [project.start, project.end] });
 
     if (dataSource)
         dice.push({ id: 'location', attribute: 'entity', items: dataSource.entities });

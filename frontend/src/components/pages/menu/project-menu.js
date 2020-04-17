@@ -25,7 +25,7 @@ module.config($stateProvider => {
 				const projectId = $stateParams.projectId;
 				return projectId === 'new' ?
 					[] :
-					axios.get(`/resources/project/${projectId}/invitation`).then(r => r.data);
+					axios.get(`/project/${projectId}/invitation`).then(r => r.data);
 			}
 		}
 	});

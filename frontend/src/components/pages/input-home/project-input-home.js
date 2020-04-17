@@ -12,7 +12,7 @@ module.config($stateProvider => {
 		resolve: {
 			users: $stateParams =>
 				axios
-					.get(`/resources/project/${$stateParams.projectId}/user`)
+					.get(`/project/${$stateParams.projectId}/user`)
 					.then(r => r.data)
 		}
 	});

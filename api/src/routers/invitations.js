@@ -2,31 +2,22 @@ const Router = require('@koa/router');
 const ObjectId = require('mongodb').ObjectID;
 const JSONStream = require('JSONStream');
 const validateBody = require('../middlewares/validate-body');
-const { listProjectInvitations, listWaitingInvitations, getInvitation, getProject } = require('../storage/queries');
+const { listWaitingInvitations, getInvitation, getProject } = require('../storage/queries');
 
 const validator = validateBody(require('../storage/validator/invitation'))
 
 const router = new Router();
 
 // liste mes invitations.
-router.get('/resources/invitation', async ctx => {
+router.get('/invitation', async ctx => {
     const invitations = listWaitingInvitations(ctx.state.profile.email);
 
     ctx.response.type = 'application/json';
     ctx.response.body = invitations.pipe(JSONStream.stringify());
 });
 
-// liste les invitations du projet
-// si pas owner, ne contiendra que celle de l'utilisateur.
-router.get('/resources/project/:id/invitation', async ctx => {
-    const invitations = listProjectInvitations(ctx.state.profile.email, ctx.params.id);
-
-    ctx.response.type = 'application/json';
-    ctx.response.body = invitations.pipe(JSONStream.stringify());
-});
-
 // invite un nouvel utilisateur
-router.post('/resources/invitation', validator, async ctx => {
+router.post('/invitation', validator, async ctx => {
     if (!await ctx.state.profile.ownsProject(ctx.request.body.projectId)) {
         ctx.response.status = 403;
         return;
@@ -42,7 +33,7 @@ router.post('/resources/invitation', validator, async ctx => {
 });
 
 // modifie / accepte une invitation
-router.put('/resources/invitation/:id', validator, async ctx => {
+router.put('/invitation/:id', validator, async ctx => {
     const oldIvt = await getInvitation(ctx.state.profile.email, ctx.params.id);
     const newIvt = {
         ...ctx.request.body,
@@ -64,7 +55,7 @@ router.put('/resources/invitation/:id', validator, async ctx => {
 });
 
 // refuse une invitation ou deinvite un utilisateur
-router.delete('/resources/invitation/:id', async ctx => {
+router.delete('/invitation/:id', async ctx => {
     const oldIvt = await getInvitation(ctx.state.profile.email, ctx.params.id);
 
     if (oldIvt) {
@@ -73,7 +64,7 @@ router.delete('/resources/invitation/:id', async ctx => {
     }
 });
 
-router.get('/resources/project/:id/user', async ctx => {
+router.get('/project/:id/user', async ctx => {
     const project = await getProject(ctx.state.profile.email, ctx.params.id, { owner: 1 });
 
     if (project) {

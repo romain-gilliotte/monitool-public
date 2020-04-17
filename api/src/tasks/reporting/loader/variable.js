@@ -112,7 +112,14 @@ function createVariableDimensions(project, form, variable, periodicity = null) {
     const time = new TimeDimension('time', periodicity || form.periodicity, project.start, project.end);
 
     // location dimension
-    const entity = new GenericDimension('location', 'entity', form.entities);
+    const entity = new GenericDimension(
+        'location',
+        'entity',
+        form.entities,
+        'Site',
+        item => project.entities.find(s => s.id == item).name
+    );
+
     project.groups.forEach(group => {
         entity.addAttribute(
             'entity',
@@ -123,7 +130,13 @@ function createVariableDimensions(project, form, variable, periodicity = null) {
 
     // partitions
     const partitions = variable.partitions.map(partition => {
-        const dim = new GenericDimension(partition.id, 'element', partition.elements.map(e => e.id));
+        const dim = new GenericDimension(
+            partition.id,
+            'element',
+            partition.elements.map(e => e.id),
+            partition.name,
+            item => partition.elements.find(e => e.id == item).name
+        );
 
         partition.groups.forEach(group => {
             dim.addAttribute(
@@ -156,6 +169,7 @@ function loadProject(projectId) {
         'start': true,
         'end': true,
         'entities.id': true,
+        'entities.name': true,
         'groups.id': true,
         'groups.members': true,
         'forms.entities': true,
@@ -166,6 +180,7 @@ function loadProject(projectId) {
         'forms.elements.partitions.id': true,
         'forms.elements.partitions.aggregation': true,
         'forms.elements.partitions.elements.id': true,
+        'forms.elements.partitions.elements.name': true,
         'forms.elements.partitions.groups.id': true,
         'forms.elements.partitions.groups.members': true,
     };

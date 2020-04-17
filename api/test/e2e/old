@@ -2,7 +2,7 @@
     let projectId;
 
     it('should create project', async () => {
-        const response = await api.post('/resources/project', {
+        const response = await api.post('/project', {
             owner: 'rgilliotte@gmail.com',
             active: true,
             "country": "testCountry",
@@ -74,19 +74,19 @@
     })
 
     it('should list project', async () => {
-        const response = await api.get(`/resources/project`);
+        const response = await api.get(`/project`);
         console.log(response.data)
         console.log(response.headers)
     })
 
     it('should get project', async () => {
-        const response = await api.get(`/resources/project/${projectId}`);
+        const response = await api.get(`/project/${projectId}`);
         console.log(response.data)
 
     })
 
     it.skip('should edit project', async () => {
-        const response = await api.put(`/resources/project/${projectId}`, {
+        const response = await api.put(`/project/${projectId}`, {
             _id: projectId,
             owner: 'rgilliotte@gmail.com',
             country: "testCountry2",
@@ -106,13 +106,13 @@
     })
 
     it('should get revisions', async () => {
-        const response = await api.get(`/resources/project/${projectId}/revisions`);
+        const response = await api.get(`/project/${projectId}/revisions`);
         console.log(response.data)
 
     })
 
     it('should allow writing inputs', async () => {
-        const response = await api.post(`/resources/project/${projectId}/input`, {
+        const response = await api.post(`/project/${projectId}/input`, {
             content: [
                 {
                     variableId: '01c18ad2-f840-49c0-aaab-7a2c079c525c',
@@ -149,7 +149,7 @@
     });
 
     it.skip('should allow fetching input for data entry of one variable by ', async () => {
-        const response = await api.post(`/resources/project/${projectId}/reporting`, {
+        const response = await api.post(`/project/${projectId}/reporting`, {
             formula: 'anc1 / anc * 100',
             parameters: {
                 anc1: {
@@ -190,7 +190,7 @@
     });
 
     it.skip('should allow fetching data entry status of many variables', async () => {
-        const response = await api.post(`/resources/project/${projectId}/reporting`, {
+        const response = await api.post(`/project/${projectId}/reporting`, {
             formula: '(!Number.isNaN(variable_1) + !Number.isNaN(variable_2)) / 2',
             parameters: {
                 variable_1: {
@@ -210,7 +210,7 @@
     });
 
     it('should allow fetching data before performing a data entry', async () => {
-        const response = await api.post(`/resources/project/${projectId}/reporting`, {
+        const response = await api.post(`/project/${projectId}/reporting`, {
             "formula": "cst",
             "parameters": {
                 "cst": {
@@ -223,10 +223,11 @@
                 { "id": "location", "attribute": "entity", "items": ["0c243e08-8c21-4946-9f5f-ce255106901b"] }
             ],
             "dimensionIds": [],
-            "output": 'flatArray'
+            "renderer": 'json',
+            "rendererOpts": 'flatArray'
         });
 
-        const response = await api.post(`/resources/project/${projectId}/reporting`, {
+        const response = await api.post(`/project/${projectId}/reporting`, {
             dimensions: [
                 { id: 'time', attribute: 'month', items: ['2015-01'] },
                 { id: 'location', attribute: 'entity', items: ['0c243e08-8c21-4946-9f5f-ce255106901b'] },

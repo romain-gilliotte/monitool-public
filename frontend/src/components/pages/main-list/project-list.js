@@ -127,9 +127,9 @@ module.component(__componentName, {
 				this.projects.splice(this.projects.indexOf(project), 1);
 				this.$onChanges();
 
-				const response = await axios.get(`/resources/project/${project._id}/invitation`);
+				const response = await axios.get(`/project/${project._id}/invitation`);
 				const invitationId = response.data[0]._id;
-				await axios.delete(`/resources/invitation/${invitationId}`);
+				await axios.delete(`/invitation/${invitationId}`);
 			}
 		}
 

@@ -50,7 +50,7 @@ module.component(__componentName, {
 			if (oldIvt) {
 				if (newIvt) {
 					// Replace
-					const response = await axios.put(`/resources/invitation/${invitation._id}`, newIvt);
+					const response = await axios.put(`/invitation/${invitation._id}`, newIvt);
 
 					this.invitations.splice(
 						this.invitations.indexOf(oldIvt),
@@ -63,7 +63,7 @@ module.component(__componentName, {
 			}
 			// Create
 			else {
-				const response = await axios.post(`/resources/invitation`, newIvt);
+				const response = await axios.post(`/invitation`, newIvt);
 				this.invitations.push(response.data);
 			}
 
@@ -74,7 +74,7 @@ module.component(__componentName, {
 			// BAD!! we are modifying an attribute of the component.
 			// we should notify our parent that we need them to change it.
 			this.invitations.splice(this.invitations.indexOf(invitation), 1);
-			await axios.delete(`/resources/invitation/${invitation._id}`);
+			await axios.delete(`/invitation/${invitation._id}`);
 
 			// this.onProjectUpdate({ newProject: this.editableProject, isValid: true });
 		}

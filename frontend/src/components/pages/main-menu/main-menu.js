@@ -12,7 +12,7 @@ module.config($stateProvider => {
         resolve: {
             projects: () => Project.fetchAll(),
             invitations: async () => {
-                const response = await axios.get(`/resources/invitation`);
+                const response = await axios.get(`/invitation`);
                 return response.data;
             }
         }

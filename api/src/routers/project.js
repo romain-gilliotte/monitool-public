@@ -2,14 +2,14 @@ const jiff = require('jiff');
 const Router = require('@koa/router');
 const ObjectId = require('mongodb').ObjectID;
 const JSONStream = require('JSONStream');
-const { listProjects, getProject } = require('../storage/queries');
+const { listProjects, getProject, listProjectInvitations } = require('../storage/queries');
 const validateBody = require('../middlewares/validate-body');
 
 const validator = validateBody(require('../storage/validator/project'))
 
 const router = new Router();
 
-router.get('/resources/project', async ctx => {
+router.get('/project', async ctx => {
 	const projects = listProjects(ctx.state.profile.email);
 
 	ctx.response.type = 'application/json';
@@ -19,7 +19,7 @@ router.get('/resources/project', async ctx => {
 /**
  * Retrieve one project
  */
-router.get('/resources/project/:id', async ctx => {
+router.get('/project/:id', async ctx => {
 	try {
 		ctx.response.body = await getProject(ctx.state.profile.email, ctx.params.id);
 	}
@@ -31,31 +31,10 @@ router.get('/resources/project/:id', async ctx => {
 	}
 });
 
-
-/**
- * Retrieve project revisions
- */
-router.get('/resources/project/:id/revisions', async ctx => {
-	if (await ctx.state.profile.ownsProject(ctx.params.id)) {
-		const revisions = database.collection('revision').find(
-			{ projectId: new ObjectId(ctx.params.id) },
-			{
-				skip: (+ctx.request.query.offset) || 0,
-				limit: (+ctx.request.query.limit) || 10,
-				sort: [['time', -1]],
-				projection: { projectId: false, _id: false },
-			}
-		);
-
-		ctx.response.type = 'application/json';
-		ctx.response.body = revisions.pipe(JSONStream.stringify());
-	}
-});
-
 /**
  * Create project
  */
-router.post('/resources/project', validator, async ctx => {
+router.post('/project', validator, async ctx => {
 	const project = ctx.request.body;
 
 	const errors = projectValidator(project);
@@ -79,7 +58,7 @@ router.post('/resources/project', validator, async ctx => {
 /**
  * Save an existing project
  */
-router.put('/resources/project/:id', validator, async ctx => {
+router.put('/project/:id', validator, async ctx => {
 	const newProject = ctx.request.body;
 
 	// Update database and fetch previous version.
@@ -112,6 +91,81 @@ router.put('/resources/project/:id', validator, async ctx => {
 	});
 
 	ctx.response.body = { _id: ctx.params.id, ...newProject };
+});
+
+/**
+ * Retrieve project revisions
+ */
+router.get('/project/:id/revisions', async ctx => {
+	if (await ctx.state.profile.ownsProject(ctx.params.id)) {
+		const revisions = database.collection('revision').find(
+			{ projectId: new ObjectId(ctx.params.id) },
+			{
+				skip: (+ctx.request.query.offset) || 0,
+				limit: (+ctx.request.query.limit) || 10,
+				sort: [['time', -1]],
+				projection: { projectId: false, _id: false },
+			}
+		);
+
+		ctx.response.type = 'application/json';
+		ctx.response.body = revisions.pipe(JSONStream.stringify());
+	}
+});
+
+// liste les invitations du projet
+// si pas owner, ne contiendra que celle de l'utilisateur.
+router.get('/project/:id/invitation', async ctx => {
+	const invitations = listProjectInvitations(ctx.state.profile.email, ctx.params.id);
+
+	ctx.response.type = 'application/json';
+	ctx.response.body = invitations.pipe(JSONStream.stringify());
+});
+
+router.get('/project/:id/user', async ctx => {
+	const project = await getProject(ctx.state.profile.email, ctx.params.id, { owner: 1 });
+
+	if (project) {
+		const invitations = await database.collection('invitation').find({
+			projectId: new ObjectId(ctx.params.id),
+			accepted: true,
+		}, { email: 1 }).toArray();
+
+		const emails = [project.owner, ...invitations.map(i => i.email)];
+		const users = database.collection('user').find({ _id: { $in: emails } });
+
+		ctx.response.type = 'application/json';
+		ctx.response.body = users.pipe(JSONStream.stringify());
+	}
+});
+
+router.get('/project/:id/report/:query', async ctx => {
+	if (await ctx.state.profile.canViewProject(ctx.params.id)) {
+		const b64query = ctx.params.query.replace('-', '+').replace('_', '/');
+		const query = JSON.parse(Buffer.from(b64query, 'base64').toString());
+
+		const jobParams = { ...query, projectId: ctx.params.id };
+		const job = await queue.add('compute-report', jobParams, {
+			attempts: 1,
+			removeOnComplete: true
+		});
+		const result = await job.finished();
+
+		if (query.renderer === 'json') {
+			ctx.response.body = result;
+		}
+		else if (query.renderer === 'xlsx') {
+			ctx.response.body = Buffer.from(result, 'base64');
+			ctx.response.type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+			ctx.response.attachment('report.xlsx', { type: 'inline' });
+		}
+		else {
+			throw new Error('Unknown renderer');
+		}
+	}
+	else {
+		ctx.response.status = 403;
+	}
 });
 
 module.exports = router;

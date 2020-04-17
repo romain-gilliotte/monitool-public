@@ -6,6 +6,7 @@ const module = angular.module(__moduleName, []);
 module.component(__componentName, {
 	bindings: {
 		project: '<', // To get the indicators
+		download: '<',
 		onUpdate: '&'
 	},
 	template: require(__templatePath),
@@ -16,10 +17,12 @@ module.component(__componentName, {
 		}
 
 		$onChanges(changes) {
-			this.elementOptions = this._computeChoices();
-			this.chosenElement = this.elementOptions[0];
+			if (changes.project) {
+				this.elementOptions = this._computeChoices();
+				this.chosenElement = this.elementOptions[0];
 
-			this.onUpdate(this.chosenElement);
+				this.onUpdate(this.chosenElement);
+			}
 		}
 
 		_computeChoices() {

@@ -6,7 +6,7 @@ const { getGeneratedFile } = require('../storage/gridfs');
 const router = new Router();
 
 /** Logical framework */
-router.get('/download/project/:prjId/logical-frame/:lfId.:format(png|xlsx|pdf)', async ctx => {
+router.get('/project/:prjId/logical-frame/:lfId.:format(png|xlsx|pdf)', async ctx => {
 	const { prjId, lfId } = ctx.params;
 	const { language, orientation, format, thumbnail } = validateDownloadParams(ctx, 'pdf');
 
@@ -38,7 +38,7 @@ router.get('/download/project/:prjId/logical-frame/:lfId.:format(png|xlsx|pdf)',
 });
 
 /** Form */
-router.get('/download/project/:prjId/data-source/:dsId.:format(png|xlsx|pdf)', async ctx => {
+router.get('/project/:prjId/data-source/:dsId.:format(png|xlsx|pdf)', async ctx => {
 	const { prjId, dsId } = ctx.params;
 	const { language, orientation, format, thumbnail } = validateDownloadParams(ctx, 'pdf');
 
@@ -70,7 +70,7 @@ router.get('/download/project/:prjId/data-source/:dsId.:format(png|xlsx|pdf)', a
 });
 
 /** Render file containing all data entry up to a given date */
-router.get('/download/project/:prjId/reporting/:periodicity.:format(png|xlsx)', async ctx => {
+router.get('/project/:prjId/export/:periodicity.:format(png|xlsx)', async ctx => {
 	const { prjId } = ctx.params;
 	const { language, format, thumbnail, periodicity } = validateDownloadParams(ctx, 'xlsx');
 

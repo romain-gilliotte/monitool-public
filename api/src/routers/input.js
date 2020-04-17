@@ -3,7 +3,7 @@ const ObjectId = require('mongodb').ObjectID;
 
 const router = new Router();
 
-router.post('/resources/input', async ctx => {
+router.post('/input', async ctx => {
 	const { projectId, content } = ctx.request.body;
 
 	if (!await ctx.state.profile.canViewProject(projectId)) {
@@ -30,7 +30,7 @@ router.post('/resources/input', async ctx => {
 	ctx.response.body = input;
 });
 
-router.put('/resources/input/:id', async ctx => {
+router.put('/input/:id', async ctx => {
 	const { _id, projectId, ...rest } = ctx.request.body;
 
 	// Check that user owns the inputs

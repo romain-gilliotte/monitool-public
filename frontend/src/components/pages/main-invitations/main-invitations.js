@@ -31,14 +31,14 @@ module.component(__componentName, {
         async acceptInvitation(ivt) {
             const { project, _id, ...newIvt } = ivt;
             newIvt.accepted = true;
-            await axios.put(`/resources/invitation/${_id}`, newIvt);
+            await axios.put(`/invitation/${_id}`, newIvt);
 
             this.$state.go('main.projects', {}, { reload: true });
         }
 
         async refuseInvitation(ivt) {
             this.invitations = this.invitations.filter(i => i !== ivt);
-            await axios.delete(`/resources/invitation/${ivt._id}`);
+            await axios.delete(`/invitation/${ivt._id}`);
 
             this.$state.reload();
         }

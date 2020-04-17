@@ -36,8 +36,9 @@ module.component(__componentName, {
 
 	controller: class OlapReportingController {
 
-		constructor($scope) {
+		constructor($scope, $rootScope) {
 			this.$scope = $scope;
+			this.$rootScope = $rootScope
 
 			this.baseQueryUpdated = false;
 			this.aggregateUpdated = false;
@@ -83,19 +84,29 @@ module.component(__componentName, {
 				this.query = {
 					...this.baseQuery,
 					dice: [...this.baseQuery.dice, ...this.extraDices],
-					aggregate: [...this.baseQuery.aggregate, ...this.aggregate]
+					aggregate: [...this.baseQuery.aggregate, ...this.aggregate],
 				};
 
-				const response = await axios.post(
-					'/rpc/build-report',
-					{ output: 'report', projectId: this.project._id, ...this.query }
-				);
+				// Update download url
+				this.downloadUrl =
+					this.$rootScope.serviceUrl +
+					this._makeUrl({ renderer: 'xlsx', rendererOpts: this.distribution, ...this.query }) +
+					`?token=${this.$rootScope.accessToken}`;
 
-				// Ignore query result if a new query was launched in between.
-				this.errorMessage = null;
+				// Update olap-grid
+
+				const fetchUrl = this._makeUrl({ renderer: 'json', rendererOpts: 'report', ...this.query });
+				const response = await axios.get(fetchUrl);
+
 				this.data = response.data;
+				this.errorMessage = null;
 				this.$scope.$apply();
 			}
+		}
+
+		_makeUrl(query) {
+			const b64Query = btoa(JSON.stringify(query)).replace('+', '-').replace('/', '_').replace(/=+$/g, '');
+			return `/project/${this.project._id}/report/${b64Query}`;
 		}
 	}
 });

@@ -4,12 +4,12 @@ import { getParser } from 'olap-in-memory';
 export default class Project {
 
 	static async fetchAll() {
-		const response = await axios.get(`/resources/project`);
+		const response = await axios.get(`/project`);
 		return response.data;
 	}
 
 	static async get(id) {
-		const response = await axios.get('/resources/project/' + id);
+		const response = await axios.get('/project/' + id);
 		return new Project(response.data);
 	}
 
@@ -168,15 +168,15 @@ export default class Project {
 
 		let response;
 		if (this._id)
-			response = await axios.put('/resources/project/' + this._id, payload);
+			response = await axios.put('/project/' + this._id, payload);
 		else
-			response = await axios.post('/resources/project', payload);
+			response = await axios.post('/project', payload);
 
 		Object.assign(this, response.data);
 	}
 
 	async delete() {
-		return axios.delete('/resources/project/' + this._id);
+		return axios.delete('/project/' + this._id);
 	}
 
 }

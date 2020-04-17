@@ -1,15 +1,19 @@
 const { getIndicatorCube } = require('./loader/indicator');
+const renderJson = require('./renderer/json')
+const renderXlsx = require('./renderer/xlsx')
 
-queue.process('compute-report-json', async job => {
+queue.process('compute-report', async job => {
     try {
-        const { projectId, output, formula, parameters, aggregate, dice } = job.data;
+        const { projectId, formula, parameters, aggregate, dice } = job.data;
         const cube = await getIndicatorCube(projectId, formula, parameters, aggregate, dice);
 
-        // Format response.
-        if (output == 'report') return cube.getNestedObject('main', true, true);
-        else if (output == 'flatArray') return cube.getData('main');
-        else if (output == 'nestedArray') return cube.getNestedArray('main');
-        else return cube.getNestedObject('main');
+        const { renderer, rendererOpts } = job.data;
+        if (renderer === 'json')
+            return renderJson(cube, rendererOpts);
+        else if (renderer === 'xlsx')
+            return renderXlsx(cube, rendererOpts);
+        else
+            throw new Error('Unknown renderer');
     }
     catch (e) {
         console.log(e);

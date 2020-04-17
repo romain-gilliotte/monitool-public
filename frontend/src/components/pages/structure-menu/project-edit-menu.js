@@ -90,8 +90,6 @@ module.component(__componentName, {
 			this.childProject = angular.copy(newProject);
 			this.projectChanged = !angular.equals(this.project, this.childProject);
 			this.projectIsValid = isValid;
-
-			console.log('updated child project.')
 		}
 
 		/**

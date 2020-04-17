@@ -56,23 +56,23 @@ describe('Project router', () => {
         });
 
         it('Getting an inserted project should work', async () => {
-            const response = await api.get(`/resources/project/${projectId} `);
+            const response = await api.get(`/project/${projectId} `);
             assert.equal(response.status, 200);
         });
 
         it('Getting a project with an invalid id should return 404', async () => {
-            const response = await api.get(`/resources/project/abcdef`);
+            const response = await api.get(`/project/abcdef`);
             assert.equal(response.status, 404);
         });
 
         it('Getting a project with a valid id, but not existing should return 404', async () => {
-            const response = await api.get(`/resources/project/${new ObjectId().toHexString()} `);
+            const response = await api.get(`/project/${new ObjectId().toHexString()} `);
             assert.equal(response.status, 404);
         });
 
         it('Getting a project which is not allowed for us should return 404', async () => {
             const response = await api.get(
-                `/resources/project/${projectId} `,
+                `/project/${projectId} `,
                 { headers: { email: 'otheremail@gmail.com' } }
             );
 
@@ -87,7 +87,7 @@ describe('Project router', () => {
     describe('POST /project', () => {
 
         it('Creation should work if the passed object is valid', async () => {
-            const response = await api.post('/resources/project', projectData);
+            const response = await api.post('/project', projectData);
             const { _id, ...project } = response.data;
             assert.ok(_id);
             assert.deepEqual(project, projectData);
@@ -98,7 +98,7 @@ describe('Project router', () => {
 
         it('Creation should return 400 if the object already has an id', async () => {
             const response = await api.post(
-                '/resources/project',
+                '/project',
                 { _id: '5e7b7b87e20155423379cbf7', ...projectData }
             );
 
@@ -108,7 +108,7 @@ describe('Project router', () => {
         it('Creation should return 400 if the object does not pass validation', async () => {
             delete projectData.entities;
 
-            const response = await api.post('/resources/project', projectData);
+            const response = await api.post('/project', projectData);
             assert.equal(response.status, 400);
         });
     });
