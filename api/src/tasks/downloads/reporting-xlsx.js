@@ -8,19 +8,14 @@ const { getIndicatorCube } = require('../reporting/loader/indicator');
 
 queue.process('generate-reporting-xlsx', async job => {
     const { cacheId, cacheHash, prjId, periodicity } = job.data;
-    const project = await database.collection('project').findOne(
-        { _id: new ObjectId(prjId) }
-    );
-
-    if (!project && !project.forms.length)
-        throw new Error('Not found');
-
-    const dataSource = project.forms[0];
-    const title = dataSource.name || 'data-source';
     const mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
-    await updateFile(cacheId, cacheHash, `${title}.xlsx`, mime, async () => {
-        try {
+    const project = await database.collection('project').findOne({ _id: new ObjectId(prjId) });
+    if (project) {
+        const filename = `${project.name || 'report'}.xlsx`;
+
+        await updateFile(cacheId, cacheHash, filename, mime, async () => {
+
             const wb = await getWorkbook(project, periodicity);
             const buffer = await wb.writeToBuffer();
 
@@ -29,11 +24,8 @@ queue.process('generate-reporting-xlsx', async job => {
             passThrough.end();
 
             return passThrough;
-        }
-        catch (e) {
-            console.log(e)
-        }
-    });
+        });
+    }
 });
 
 async function getWorkbook(project, periodicity = 'month') {
