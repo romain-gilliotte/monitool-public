@@ -69,8 +69,9 @@ export default {
 	},
 
 	project: {
-		portrait: 'Portrait Version',
-		landscape: 'Landscape Version',
+		download_portrait: 'Download PDF (Portrait)',
+		download_landscape: 'Download PDF (Landscape)',
+		download_excel: 'Download Excel',
 
 		time_to_fill: "Estimated time to fill",
 		confirm_delete_site: `If you delete this collection site, you won't be able to access its data in reporting. Confirm to delete.`,

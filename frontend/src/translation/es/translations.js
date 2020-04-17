@@ -69,8 +69,9 @@ export default {
 	},
 
 	project: {
-		portrait: 'Versión vertical',
-		landscape: 'Versión horizontal',
+		download_portrait: 'Descargar PDF (vertical)',
+		download_landscape: 'Descargar PDF (horizontal)',
+		download_excel: 'Descargar Excel',
 
 		time_to_fill: "Tiempo de ingreso estimado",
 		confirm_delete_site: `Si elimina este sitio, ya no podrá acceder a sus datos en los informes. Confirme para eliminar.`,

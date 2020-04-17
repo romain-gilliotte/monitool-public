@@ -5,12 +5,10 @@ const { getGeneratedFile } = require('../storage/gridfs');
 
 const router = new Router();
 
-/**
- * Render a PDF file containing a sample paper form (for a datasource).
- */
-router.get('/resources/project/:prjId/logical-frame/:lfId.:format', async ctx => {
+/** Logical framework */
+router.get('/download/project/:prjId/logical-frame/:lfId.:format(png|xlsx|pdf)', async ctx => {
 	const { prjId, lfId } = ctx.params;
-	const { language, orientation, format } = validateDownloadParams(ctx);
+	const { language, orientation, format, thumbnail } = validateDownloadParams(ctx, 'pdf');
 
 	try {
 		const project = await getProject(ctx.state.profile.email, prjId, { _id: 0, logicalFrames: 1, forms: 1 });
@@ -19,11 +17,11 @@ router.get('/resources/project/:prjId/logical-frame/:lfId.:format', async ctx =>
 			throw new Error('not found');
 
 		const result = await getGeneratedFile(
-			`lf:${prjId}:${lfId}:${language}:${orientation}`,
+			`lf:${prjId}:${lfId}:${language}:${orientation}:${format}`,
 			hash({ lf: logicalFramework, ds: project.forms, language, orientation }),
-			'generate-logframe-pdf',
+			`generate-logframe-${format}`,
 			{ prjId, lfId, language, orientation },
-			format === 'png'
+			thumbnail
 		);
 
 		ctx.response.type = result.file.mimeType;
@@ -39,12 +37,10 @@ router.get('/resources/project/:prjId/logical-frame/:lfId.:format', async ctx =>
 	}
 });
 
-/**
- * Render a PDF file containing a sample paper form (for a datasource).
- */
-router.get('/resources/project/:prjId/data-source/:dsId.:format', async ctx => {
+/** Form */
+router.get('/download/project/:prjId/data-source/:dsId.:format(png|xlsx|pdf)', async ctx => {
 	const { prjId, dsId } = ctx.params;
-	const { language, orientation, format } = validateDownloadParams(ctx);
+	const { language, orientation, format, thumbnail } = validateDownloadParams(ctx, 'pdf');
 
 	try {
 		const project = await getProject(ctx.state.profile.email, prjId, { forms: true });
@@ -53,11 +49,11 @@ router.get('/resources/project/:prjId/data-source/:dsId.:format', async ctx => {
 			throw new Error('not found');
 
 		const result = await getGeneratedFile(
-			`ds:${prjId}:${dsId}:${language}:${orientation}`,
+			`ds:${prjId}:${dsId}:${language}:${orientation}:${format}`,
 			hash({ dataSource, language, orientation }),
-			'generate-datasource-pdf',
+			`generate-datasource-${format}`,
 			{ prjId, dsId, language, orientation },
-			format === 'png'
+			thumbnail
 		);
 
 		ctx.response.type = result.file.mimeType;
@@ -73,12 +69,35 @@ router.get('/resources/project/:prjId/data-source/:dsId.:format', async ctx => {
 	}
 });
 
-function validateDownloadParams(ctx) {
-	let { format } = ctx.params;
+/** Render file containing all data entry up to a given date */
+router.get('/download/project/:prjId/reporting/:periodicity.:format(png|xlsx)', async ctx => {
+	const { prjId } = ctx.params;
+	const { language, format, thumbnail, periodicity } = validateDownloadParams(ctx, 'xlsx');
+
+	if (await ctx.state.profile.canViewProject(prjId)) {
+		const result = await getGeneratedFile(
+			`reporting:${prjId}:${periodicity}`,
+			'aaaa',
+			`generate-reporting-${format}`,
+			{ prjId, periodicity, language },
+			thumbnail
+		);
+
+		ctx.response.type = result.file.mimeType;
+		ctx.response.length = result.file.length;
+		ctx.response.attachment(result.file.filename, { type: 'inline' });
+		ctx.response.body = result.stream;
+	}
+});
+
+function validateDownloadParams(ctx, thumbnailFormat) {
+	let { format, periodicity } = ctx.params;
 	let { language, orientation } = ctx.request.query;
 
-	if (!['pdf', 'png'].includes(format))
-		format = 'pdf';
+	const thumbnail = format === 'png';
+
+	if (!['xlsx', 'pdf'].includes(format))
+		format = thumbnailFormat;
 
 	if (!['en', 'es', 'fr'].includes(language))
 		language = 'en';
@@ -86,7 +105,16 @@ function validateDownloadParams(ctx) {
 	if (!['portrait', 'landscape'].includes(orientation))
 		orientation = 'portrait';
 
-	return { format, language, orientation };
+	const periodicities = [
+		'day', 'month_week_sat', 'month_week_sun', 'month_week_mon',
+		'week_sat', 'week_sun', 'week_mon',
+		'month', 'quarter', 'semester', 'year'
+	];
+
+	if (!periodicities.includes(periodicity))
+		periodicity = 'month';
+
+	return { format, language, orientation, periodicity, thumbnail };
 }
 
 module.exports = router;

@@ -13,6 +13,10 @@ module.component(__componentName, {
 
 	controller: class GeneralGroupBy {
 
+		constructor($rootScope) {
+			this.$rootScope = $rootScope;
+		}
+
 		$onChanges(changes) {
 			const dimension = new TimeDimension('time', 'day', this.project.start, this.project.end);
 
@@ -22,13 +26,20 @@ module.component(__componentName, {
 		}
 
 		onValueChange() {
-			let value;
-			if (this.groupBy === 'entity')
-				value = { id: 'location', attribute: 'entity' }
-			else
-				value = { id: 'time', attribute: this.groupBy }
+			// Tell parent
+			this.onUpdate({
+				aggregate: {
+					id: this.groupBy === 'entity' ? 'location' : 'time',
+					attribute: this.groupBy
+				}
+			})
 
-			this.onUpdate({ aggregate: value })
+			// Update download link
+			const projectId = this.project._id;
+			const serviceUrl = this.$rootScope.serviceUrl + '/download';
+			const token = this.$rootScope.accessToken;
+			const periodicity = this.groupBy === 'entity' ? 'month' : this.groupBy;
+			this.downloadUrl = `${serviceUrl}/project/${projectId}/reporting/${periodicity}.xlsx?token=${token}`;
 		}
 
 		_chooseDefaultGroupBy() {

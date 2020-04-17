@@ -69,8 +69,9 @@ export default {
 	},
 
 	project: {
-		portrait: 'Version Portrait',
-		landscape: 'Version Paysage',
+		download_portrait: 'Télécharger PDF (Portrait)',
+		download_landscape: 'Télécharger PDF (Landscape)',
+		download_excel: 'Télécharger Excel',
 
 		time_to_fill: "Durée estimée saisie",
 		confirm_delete_site: `Si vous supprimez ce site, vous ne pourrez plus accéder à ses données dans les rapports. Confirmez pour supprimer.`,

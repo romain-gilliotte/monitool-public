@@ -324,3 +324,7 @@ dd {
 .btn-group > .btn.btn-xxs + .dropdown-toggle {
   padding: 1px 5px
 }
+
+.input-group .form-control {
+  min-height: 25px;
+}
