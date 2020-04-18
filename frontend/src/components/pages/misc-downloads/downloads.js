@@ -52,12 +52,7 @@ module.component(__componentName, {
                                 icon: 'fa-file-pdf-o',
                                 key: 'project.download_landscape',
                                 url: `${url}.pdf?token=${token}&language=${language}&orientation=landscape`
-                            },
-                            {
-                                icon: 'fa-file-excel-o',
-                                key: 'project.download_excel',
-                                url: `${url}.xlsx?token=${token}&language=${language}&orientation=landscape`
-                            },
+                            }
                         ]
                     };
                 }),

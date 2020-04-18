@@ -6,7 +6,7 @@ const { getGeneratedFile } = require('../storage/gridfs');
 const router = new Router();
 
 /** Logical framework */
-router.get('/project/:prjId/logical-frame/:lfId.:format(png|xlsx|pdf)', async ctx => {
+router.get('/project/:prjId/logical-frame/:lfId.:format(png|pdf)', async ctx => {
 	const { prjId, lfId } = ctx.params;
 	const { language, orientation, format, thumbnail } = validateDownloadParams(ctx, 'pdf');
 
