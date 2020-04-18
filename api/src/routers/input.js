@@ -1,12 +1,14 @@
 const Router = require('@koa/router');
 const ObjectId = require('mongodb').ObjectID;
 const { deleteFiles } = require('../storage/gridfs');
+const validateBody = require('../middlewares/validate-body');
+
+const validator = validateBody(require('../storage/validator/input'));
 
 const router = new Router();
 
-router.post('/input', async ctx => {
+router.post('/input', validator, async ctx => {
 	const { projectId, content } = ctx.request.body;
-
 	if (!await ctx.state.profile.canViewProject(projectId)) {
 		ctx.response.status = 403;
 		return;
@@ -29,36 +31,14 @@ router.post('/input', async ctx => {
 
 	await database.collection('input').insertOne(input);
 
-	// Clear reporting cache.
+	// Clear reporting cache
 	await Promise.all([
 		redis.del(`reporting:${projectId}`),
 		deleteFiles(`reporting:${projectId}`)
 	]);
 
-	ctx.response.body = input;
-});
-
-router.put('/input/:id', async ctx => {
-	const { _id, projectId, ...rest } = ctx.request.body;
-
-	// Check that user owns the inputs
-	if (!await ctx.state.profile.canViewProject(projectId)) {
-		ctx.response.status = 404;
-		return;
-	}
-
-	const fifteenMinsAgo = new Date(new Date().getTime() - 15 * 60 * 1000);
-	const inputDate = new ObjectId(_id).getTimestamp();
-	if (inputDate < fifteenMinsAgo) {
-		ctx.response.status = 403;
-		ctx.response.body = { error: 'This input can no longer be modified.' };
-	}
-
-	const input = { _id: new mongoId, projectId: new ObjectId(projectId), ...rest };
-	await database.collection('input').replaceOne(
-		{ _id: new ObjectId(_id) },
-		input
-	);
+	delete input._id;
+	delete input.sequenceId;
 
 	ctx.response.body = input;
 });

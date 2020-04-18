@@ -1,0 +1,96 @@
+{
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "content",
+        "projectId"
+    ],
+    "properties": {
+        "projectId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{24}$"
+        },
+        "content": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                    "variableId",
+                    "data",
+                    "dimensions"
+                ],
+                "properties": {
+                    "variableId": {
+                        "$ref": "#/definitions/uuid"
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "type": [
+                                "null",
+                                "number"
+                            ]
+                        }
+                    },
+                    "dimensions": {
+                        "type": "array",
+                        "maxItems": 5,
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                                "id",
+                                "attribute",
+                                "items"
+                            ],
+                            "properties": {
+                                "id": {
+                                    "oneOf": [
+                                        {
+                                            "enum": [
+                                                "time",
+                                                "location"
+                                            ]
+                                        },
+                                        {
+                                            "$ref": "#/definitions/uuid"
+                                        }
+                                    ]
+                                },
+                                "attribute": {
+                                    "enum": [
+                                        "day",
+                                        "month_week_sat",
+                                        "month_week_sun",
+                                        "month_week_mon",
+                                        "week_sat",
+                                        "week_sun",
+                                        "week_mon",
+                                        "month",
+                                        "quarter",
+                                        "semester",
+                                        "year",
+                                        "entity",
+                                        "element"
+                                    ]
+                                },
+                                "items": {
+                                    "type": "array",
+                                    "uniqueItems": true,
+                                    "minItems": 1,
+                                    "maxItems": 255,
+                                    "items": {
+                                        "type": "string",
+                                        "minLength": 1,
+                                        "maxLength": 36
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
