@@ -1,3 +1,4 @@
+const crypto = require('crypto')
 const jiff = require('jiff');
 const Router = require('@koa/router');
 const ObjectId = require('mongodb').ObjectID;
@@ -140,32 +141,37 @@ router.get('/project/:id/user', async ctx => {
 });
 
 router.get('/project/:id/report/:query', async ctx => {
-	if (await ctx.state.profile.canViewProject(ctx.params.id)) {
+	const projectId = ctx.params.id;
+	if (!await ctx.state.profile.canViewProject(projectId)) {
+		ctx.response.status = 403;
+		return;
+	}
+
+	const sha1 = crypto.createHash('sha1').update(ctx.params.query).digest('hex');
+
+	let result = await redis.hget(`reporting:${projectId}`, sha1);
+	if (result)
+		result = JSON.parse(result);
+	else {
 		const b64query = ctx.params.query.replace('-', '+').replace('_', '/');
 		const query = JSON.parse(Buffer.from(b64query, 'base64').toString());
+		// fixme validate query...
 
-		const jobParams = { ...query, projectId: ctx.params.id };
+		const jobParams = { ...query, projectId };
 		const job = await queue.add('compute-report', jobParams, {
 			attempts: 1,
 			removeOnComplete: true
 		});
-		const result = await job.finished();
 
-		if (query.renderer === 'json') {
-			ctx.response.body = result;
-		}
-		else if (query.renderer === 'xlsx') {
-			ctx.response.body = Buffer.from(result, 'base64');
-			ctx.response.type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-			ctx.response.attachment('report.xlsx', { type: 'inline' });
-		}
-		else {
-			throw new Error('Unknown renderer');
-		}
+		result = await job.finished();
+
+		await redis.hset(`reporting:${projectId}`, sha1, JSON.stringify(result));
 	}
-	else {
-		ctx.response.status = 403;
-	}
+
+	ctx.response.body = Buffer.from(result.payload, 'base64');
+	ctx.response.type = result.mimeType;
+	if (result.filename)
+		ctx.response.attachment(result.filename, { type: 'inline' });
 });
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const Router = require('@koa/router');
 const ObjectId = require('mongodb').ObjectID;
+const { deleteFiles } = require('../storage/gridfs');
 
 const router = new Router();
 
@@ -11,6 +12,7 @@ router.post('/input', async ctx => {
 		return;
 	}
 
+	// Save input on last sequence of the project.
 	const sequence = await database.collection('input_seq').findOne(
 		{ projectIds: new ObjectId(projectId) },
 		{ projection: { _id: true }, sort: [['_id', -1]] }
@@ -26,6 +28,12 @@ router.post('/input', async ctx => {
 	};
 
 	await database.collection('input').insertOne(input);
+
+	// Clear reporting cache.
+	await Promise.all([
+		redis.del(`reporting:${projectId}`),
+		deleteFiles(`reporting:${projectId}`)
+	]);
 
 	ctx.response.body = input;
 });

@@ -73,4 +73,15 @@ async function updateFile(cacheId, cacheHash, filename, mimeType, createStream, 
     }
 }
 
-module.exports = { getFile, getGeneratedFile, updateFile };
+async function deleteFiles(cacheIdPrefix, bucketName = 'fs') {
+    const bucket = new GridFSBucket(database, { bucketName });
+    const collection = database.collection(`${bucketName}.files`);
+    const files = await collection.find(
+        { _id: { $regex: new RegExp(`^${cacheIdPrefix}`) } },
+        { projection: { _id: 1 } }
+    ).toArray();
+
+    await Promise.all(files.map(file => bucket.delete(file._id)));
+}
+
+module.exports = { getFile, getGeneratedFile, updateFile, deleteFiles };

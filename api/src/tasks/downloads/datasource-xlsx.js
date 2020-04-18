@@ -3,7 +3,7 @@ const { ObjectId } = require('mongodb');
 const stream = require('stream');
 const { updateFile } = require('../../storage/gridfs');
 
-const mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+const mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
 queue.process('generate-datasource-xlsx', async job => {
     const { cacheId, cacheHash, prjId, dsId } = job.data;
