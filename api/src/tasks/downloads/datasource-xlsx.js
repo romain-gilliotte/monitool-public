@@ -17,20 +17,14 @@ queue.process('generate-datasource-xlsx', async job => {
         const title = dataSource.name || 'data-source';
 
         await updateFile(cacheId, cacheHash, `${title}.xlsx`, mime, async () => {
-            try {
+            const wb = await getWorkbook(dataSource);
+            const buffer = await wb.writeToBuffer();
 
-                const wb = await getWorkbook(dataSource);
-                const buffer = await wb.writeToBuffer();
+            const passThrough = new stream.PassThrough();
+            passThrough.write(buffer);
+            passThrough.end();
 
-                const passThrough = new stream.PassThrough();
-                passThrough.write(buffer);
-                passThrough.end();
-
-                return passThrough;
-            }
-            catch (e) {
-                console.log(e)
-            }
+            return passThrough;
         });
     }
 });
