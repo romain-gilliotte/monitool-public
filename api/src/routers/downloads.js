@@ -1,4 +1,5 @@
 const Router = require('@koa/router');
+const { ObjectId } = require('mongodb');
 const hash = require('object-hash');
 const { getProject } = require('../storage/queries');
 const { getGeneratedFile } = require('../storage/gridfs');
@@ -75,9 +76,21 @@ router.get('/project/:prjId/export/:periodicity.:format(png|xlsx)', async ctx =>
 	const { language, format, thumbnail, periodicity } = validateDownloadParams(ctx, 'xlsx');
 
 	if (await ctx.state.profile.canViewProject(prjId)) {
+		// The hash of the generated file is the id of the most recent input
+		// This will allow generating only when new data entry was performed.
+		const sequenceIds = await database.collection('input_seq').find(
+			{ projectIds: new ObjectId(prjId) },
+			{ projection: { _id: true } }
+		).map(s => s._id).toArray();
+
+		const lastInput = await database.collection('input').findOne(
+			{ 'sequenceId': { $in: sequenceIds } },
+			{ projection: { _id: true }, sort: [['_id', -1]] }
+		);
+
 		const result = await getGeneratedFile(
 			`reporting:${prjId}:${periodicity}`,
-			'aaaa',
+			lastInput._id.toHexString(),
 			`generate-reporting-${format}`,
 			{ prjId, periodicity, language },
 			thumbnail

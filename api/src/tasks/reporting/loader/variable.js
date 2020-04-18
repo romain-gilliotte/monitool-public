@@ -1,6 +1,10 @@
 const { ObjectId } = require('mongodb');
 const { Cube, TimeDimension, GenericDimension } = require('olap-in-memory');
 
+// FIXME: rewrite all this, and unit test it properly
+// We should find a way to move part of it at least to olap-in-memory
+
+
 /**
  * Build a variable cube from data entries
  * 
