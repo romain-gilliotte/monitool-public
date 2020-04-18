@@ -296,7 +296,9 @@ export default {
 			semester: "Semestres",
 			year: "Années",
 			entity: "Lieux de collecte",
-			group: "Groupe de collecte"
+			group: "Lieux de collecte: {{name}}",
+			partition: "Désagrégation: {{name}}",
+			partition_group: "Désagrégation: {{name}} / {{groupName}} "
 		},
 
 		edit_user: "Édition utilisateur",

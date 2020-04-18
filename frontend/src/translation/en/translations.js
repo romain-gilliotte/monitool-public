@@ -295,8 +295,10 @@ export default {
 			quarter: "Quarters",
 			semester: "Semesters",
 			year: "Years",
-			entity: "Collection site",
-			group: "Collection group"
+			entity: "Sites",
+			group: "Sites: {{name}}",
+			partition: "Disagregation: {{name}}",
+			partition_group: "Disagregation: {{name}} / {{groupName}} "
 		},
 
 		edit_user: "User edition",

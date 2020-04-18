@@ -27,8 +27,9 @@ router.get('/project/:prjId/logical-frame/:lfId.:format(png|pdf)', async ctx => 
 
 		ctx.response.type = result.file.mimeType;
 		ctx.response.length = result.file.length;
-		ctx.response.attachment(result.file.filename, { type: 'inline' });
 		ctx.response.body = result.stream;
+		if (result.file.mimeType !== 'image/png')
+			ctx.response.attachment(result.file.filename);
 	}
 	catch (e) {
 		if (e.message === 'not found' || /must be .* 24 hex characters/.test(e.message))
@@ -59,8 +60,9 @@ router.get('/project/:prjId/data-source/:dsId.:format(png|xlsx|pdf)', async ctx 
 
 		ctx.response.type = result.file.mimeType;
 		ctx.response.length = result.file.length;
-		ctx.response.attachment(result.file.filename, { type: 'inline' });
 		ctx.response.body = result.stream;
+		if (result.file.mimeType !== 'image/png')
+			ctx.response.attachment(result.file.filename);
 	}
 	catch (e) {
 		if (e.message === 'not found' || /must be .* 24 hex characters/.test(e.message))
@@ -87,8 +89,9 @@ router.get('/project/:prjId/export/:periodicity.:format(png|xlsx)', async ctx =>
 
 		ctx.response.type = result.file.mimeType;
 		ctx.response.length = result.file.length;
-		ctx.response.attachment(result.file.filename, { type: 'inline' });
 		ctx.response.body = result.stream;
+		if (result.file.mimeType !== 'image/png')
+			ctx.response.attachment(result.file.filename);
 	}
 });
 

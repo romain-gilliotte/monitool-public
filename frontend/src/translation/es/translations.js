@@ -296,7 +296,9 @@ export default {
 			semester: "Semestres",
 			year: "Años",
 			entity: "Lugar de colecta",
-			group: "Grupo de colecta"
+			group: "Grupo de colecta: {{name}}",
+			partition: "Desagregación: {{name}}",
+			partition_group: "Desagregación: {{name}} / {{groupName}}",
 		},
 
 		edit_user: "Editar usuario",

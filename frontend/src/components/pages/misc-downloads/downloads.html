@@ -11,7 +11,7 @@
                 <h3 style="margin-top: 5px;">{{file.category|translate}}</h3>
                 <p>{{file.name}}</p>
                 <div class="btn-group pull-right">
-                    <a href="{{file.main.url}}" target="_blank" class="btn btn-default btn-xs">
+                    <a href="{{file.main.url}}" download class="btn btn-default btn-xs">
                         <i class="fa" ng-class="file.main.icon"></i>
                         <span translate="{{file.main.key}}"></span>
                     </a>
@@ -21,7 +21,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li ng-repeat="link in file.dropdown">
-                                <a href="{{link.url}}" target="_blank">
+                                <a href="{{link.url}}" download>
                                     <i class="fa" ng-class="link.icon"></i>
                                     <span translate="{{link.key}}"></span>
                                 </a>
