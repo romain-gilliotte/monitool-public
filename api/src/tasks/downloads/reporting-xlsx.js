@@ -1,14 +1,15 @@
 const xl = require('excel4node');
 const { ObjectId } = require('mongodb');
-const stream = require('stream');
-const { updateFile } = require('../../storage/gridfs');
-const { getVariableCube } = require('../reporting/loader/variable');
 const { TimeDimension } = require('olap-in-memory');
+const stream = require('stream');
+const { getVariableCube } = require('../reporting/loader/variable');
 const { getIndicatorCube } = require('../reporting/loader/indicator');
+const { updateFile } = require('../../storage/gridfs');
+
+const mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
 queue.process('generate-reporting-xlsx', async job => {
     const { cacheId, cacheHash, prjId, periodicity } = job.data;
-    const mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 
     const project = await database.collection('project').findOne({ _id: new ObjectId(prjId) });
     if (project) {
