@@ -1,11 +1,18 @@
 import angular from 'angular';
-import Handsontable from 'handsontable/dist/handsontable.js';
-import 'handsontable/dist/handsontable.css';
 require(__cssPath);
 
 const module = angular.module(__moduleName, []);
 
 const onScreenGrids = [];
+
+let Handsontable;
+async function loadHot() {
+	await import('handsontable/dist/handsontable.css');
+
+	const HotDep = await import('handsontable/dist/handsontable.js');
+	Handsontable = HotDep.default;
+}
+
 
 /**
  * Warning: do not rebind variable after the component has initialized.
@@ -26,26 +33,29 @@ module.component(__componentName, {
 
 	controller: class InputGridController {
 
-		constructor($element) {
+		constructor($element, $scope) {
 			"ngInject";
 
 			this.$element = $element;
+			this.$scope = $scope;
 
 			// bind the event handler so that we can remove it when the component is destroyed
 			this._keyDownHandler = e => this._onKeyDown(e);
 		}
 
-		$onInit() {
+		async $onInit() {
 			// Convert a 1D array with all the data to a 2D table with headers and back.
 			this.ngModelCtrl.$formatters.push(this._modelToView.bind(this));
 			this.ngModelCtrl.$parsers.push(this._viewToModel.bind(this));
 
-			this.ngModelCtrl.$render = () => this.handsOnTable.loadData(this.ngModelCtrl.$viewValue);
+			this.ngModelCtrl.$render = () => this.handsOnTable && this.handsOnTable.loadData(this.ngModelCtrl.$viewValue);
 
 			this.ngModelCtrl.$validators.isNumber = modelValue => modelValue.every(v => typeof v === 'number' || v === null);
 		}
 
-		$onDestroy() {
+		async $onDestroy() {
+			await loadHot();
+
 			onScreenGrids.splice(onScreenGrids.indexOf(this), 1);
 			document.body.removeEventListener('keydown', this._keyDownHandler);
 
@@ -54,7 +64,7 @@ module.component(__componentName, {
 			}
 		}
 
-		$onChanges() {
+		async $onChanges() {
 			// hack: we just remove inactive partitions & partition elements
 			// this whole component needs to be rewritten.
 			// ideally we should be based on the structure of the input we are updating so that
@@ -67,7 +77,7 @@ module.component(__componentName, {
 			this.distribution = this.variable.distribution;
 		}
 
-		$postLink() {
+		async $postLink() {
 			const withSum =
 				this.partitions.length > 0
 				&& this.partitions.every(p => p.aggregation === 'sum');
@@ -83,6 +93,7 @@ module.component(__componentName, {
 			this._width = colPartitions.reduce((m, p) => m * p.elements.length, 1) + rowPartitions.length + (this.withSumX ? 1 : 0);
 			this._height = rowPartitions.reduce((m, p) => m * p.elements.length, 1) + colPartitions.length + (this.withSumY ? 1 : 0);
 
+			await loadHot();
 			this.handsOnTable = new Handsontable(this.$element[0].firstElementChild, {
 				licenceKey: '00000-00000-00000-00000-00000',
 				stretchH: "all", // use all of container width
@@ -97,6 +108,8 @@ module.component(__componentName, {
 				afterChange: this._onHandsOnTableChange.bind(this),
 				cells: this._handsOnTableCellRenderer.bind(this)
 			});
+			this.handsOnTable.loadData(this.ngModelCtrl.$viewValue)
+			this.$scope.$apply();
 
 			// Simulate tab index between all fields.
 			onScreenGrids.push(this);
