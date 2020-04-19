@@ -262,7 +262,12 @@ module.component(__componentName, {
 
 			// editable field
 			else
-				return { type: 'numeric', validator: /^\d*$/ };
+				return {
+					type: 'numeric',
+					validator: function (value, callback) {
+						callback(value === null || Number.isFinite(value))
+					}
+				};
 		}
 
 		_updateSums(editedY, editedX) {
