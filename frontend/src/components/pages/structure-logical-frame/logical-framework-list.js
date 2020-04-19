@@ -29,6 +29,8 @@ module.component(__componentName, {
 	controller: class ProjectLogicalFrameListController {
 
 		constructor($state) {
+			"ngInject";
+
 			this.$state = $state;
 		}
 

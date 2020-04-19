@@ -28,6 +28,8 @@ module.component(__componentName, {
 	controller: class ProjectUserListController {
 
 		constructor($uibModal, $scope) {
+			"ngInject";
+
 			this.$uibModal = $uibModal;
 			this.$scope = $scope;
 		}

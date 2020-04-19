@@ -39,6 +39,8 @@ module.component(__componentName, {
 	controller: class ProjectSitesController {
 
 		constructor($filter) {
+			"ngInject";
+
 			this.translate = $filter('translate');
 		}
 

@@ -11,9 +11,11 @@ module.component(__componentName, {
 		'onUpdate': '&'
 	},
 	template: require(__templatePath),
-	controller: class {
+	controller: class xx {
 
 		constructor($uibModal) {
+			"ngInject";
+
 			this.$uibModal = $uibModal;
 		}
 

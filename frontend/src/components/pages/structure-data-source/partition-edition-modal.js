@@ -15,6 +15,8 @@ module.component(__componentName, {
 	controller: class PartitionEditionModalController {
 
 		constructor($scope, $filter) {
+			"ngInject";
+
 			this.translate = $filter('translate');
 			this.$scope = $scope;
 		}

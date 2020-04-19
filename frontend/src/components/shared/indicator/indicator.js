@@ -22,6 +22,8 @@ module.component(__componentName, {
 	controller: class IndicatorController {
 
 		constructor($uibModal) {
+			"ngInject";
+
 			this.$uibModal = $uibModal;
 		}
 

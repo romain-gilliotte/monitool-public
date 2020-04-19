@@ -34,6 +34,8 @@ module.component(__componentName, {
 	controller: class ProjectListController {
 
 		constructor($rootScope, $filter, $scope, $state, $window) {
+			"ngInject";
+
 			this.userEmail = $rootScope.profile.email;
 			this.$scope = $scope;
 			this.$state = $state;

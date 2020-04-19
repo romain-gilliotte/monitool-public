@@ -13,6 +13,8 @@ module.component(__componentName, {
 	controller: class IndicatorSelectController {
 
 		constructor($filter) {
+			"ngInject";
+
 			this.translate = $filter('translate');
 		}
 

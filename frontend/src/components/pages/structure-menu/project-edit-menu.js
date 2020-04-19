@@ -27,6 +27,8 @@ module.component(__componentName, {
 	controller: class ProjectEditController {
 
 		constructor($transitions, $filter, $scope, $state) {
+			"ngInject";
+
 			this.$transitions = $transitions;
 			this.$scope = $scope;
 			this.translate = $filter('translate');

@@ -37,6 +37,8 @@ module.component(__componentName, {
 	controller: class OlapReportingController {
 
 		constructor($scope, $rootScope) {
+			"ngInject";
+
 			this.$scope = $scope;
 			this.$rootScope = $rootScope
 

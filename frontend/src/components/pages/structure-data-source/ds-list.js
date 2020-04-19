@@ -29,6 +29,8 @@ module.component(__componentName, {
 	controller: class ProjectDataSourcesController {
 
 		constructor($state, $filter) {
+			"ngInject";
+
 			this.$state = $state;
 			this.translate = $filter('translate');
 		}

@@ -50,6 +50,8 @@ module.component(__componentName, {
 		}
 
 		constructor($scope, $state, $transitions, $filter) {
+			"ngInject";
+
 			this.$scope = $scope;
 			this.$state = $state;
 			this.$transitions = $transitions;

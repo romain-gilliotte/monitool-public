@@ -27,6 +27,8 @@ module.component(__componentName, {
 	controller: class ProjectInputHomeController {
 
 		constructor($scope) {
+			"ngInject";
+
 			this.$scope = $scope;
 		}
 

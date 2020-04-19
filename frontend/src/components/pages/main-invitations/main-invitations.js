@@ -22,9 +22,11 @@ module.component(__componentName, {
         invitations: '<'
     },
     template: require(__templatePath),
-    controller: class {
+    controller: class xx {
 
         constructor($state) {
+            "ngInject";
+
             this.$state = $state;
         }
 

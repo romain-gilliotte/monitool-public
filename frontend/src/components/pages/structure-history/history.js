@@ -30,6 +30,8 @@ module.component(__componentName, {
 	controller: class ProjectHistoryController {
 
 		constructor($scope) {
+			"ngInject";
+
 			this.$scope = $scope;
 		}
 

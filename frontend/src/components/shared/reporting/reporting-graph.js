@@ -16,6 +16,8 @@ module.component(__componentName, {
 	controller: class GraphController {
 
 		constructor($element, $scope) {
+			"ngInject";
+
 			this.$scope = $scope;
 			this.element = $element[0].querySelector('div>div');
 			this._formattedYs = [];

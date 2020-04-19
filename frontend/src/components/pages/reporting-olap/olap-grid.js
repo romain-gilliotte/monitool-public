@@ -23,6 +23,8 @@ module.component(__componentName, {
 	controller: class OlapGridController {
 
 		constructor($element, $scope) {
+			"ngInject";
+
 			this._element = angular.element($element);
 			this.$scope = $scope;
 		}

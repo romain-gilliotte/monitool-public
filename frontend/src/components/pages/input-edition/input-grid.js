@@ -27,6 +27,8 @@ module.component(__componentName, {
 	controller: class InputGridController {
 
 		constructor($element) {
+			"ngInject";
+
 			this.$element = $element;
 
 			// bind the event handler so that we can remove it when the component is destroyed

@@ -17,7 +17,7 @@ module.component(__componentName, {
     },
     template: require(__templatePath),
 
-    controller: class {
+    controller: class xx {
 
         $onChanges(changes) {
             if (changes.variant) {

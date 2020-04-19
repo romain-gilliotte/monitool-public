@@ -20,9 +20,11 @@ module.component(__componentName, {
 
     template: require(__templatePath),
 
-    controller: class {
+    controller: class xx {
 
         constructor($rootScope, $element) {
+            "ngInject";
+
             this.$rootScope = $rootScope;
             this.$element = $element[0];
         }

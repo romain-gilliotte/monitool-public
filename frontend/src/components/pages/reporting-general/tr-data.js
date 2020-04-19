@@ -37,6 +37,8 @@ module.directive(__componentName, () => {
 		controller: class TrDataController {
 
 			constructor($scope) {
+				"ngInject";
+
 				this.$scope = $scope;
 			}
 

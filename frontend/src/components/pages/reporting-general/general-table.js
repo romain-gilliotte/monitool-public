@@ -22,6 +22,8 @@ module.component(__componentName, {
 	controller: class GeneralTableController {
 
 		constructor($element) {
+			"ngInject";
+
 			this._element = $element[0]; // Used to spy scroll and translate headers
 
 			this.sectionOpen = {}; // { rowId: <boolean> }

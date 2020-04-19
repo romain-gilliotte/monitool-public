@@ -14,6 +14,8 @@ module.component(__componentName, {
 	controller: class GeneralGroupBy {
 
 		constructor($rootScope) {
+			"ngInject";
+
 			this.$rootScope = $rootScope;
 		}
 

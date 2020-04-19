@@ -27,6 +27,8 @@ module.component(__componentName, {
 	controller: class ProjectInputMenuController {
 
 		constructor($state, $stateParams) {
+			"ngInject";
+
 			this.$state = $state;
 			this.$stateParams = $stateParams;
 		}

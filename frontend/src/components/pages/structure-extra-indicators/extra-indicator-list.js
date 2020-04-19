@@ -29,6 +29,8 @@ module.component(__componentName, {
 	controller: class ProjectExtraIndicators {
 
 		constructor($uibModal) {
+			"ngInject";
+
 			this.$uibModal = $uibModal;
 		}
 

@@ -11,6 +11,8 @@ module.component(__componentName, {
 	controller: class RevisionSummaryController {
 
 		constructor($filter, $sce, $rootScope) {
+			"ngInject";
+
 			this.translate = $filter('translate');
 			this.$sce = $sce;
 			this.$rootScope = $rootScope;

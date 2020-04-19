@@ -55,6 +55,8 @@ module.component(__componentName, {
 	controller: class ProjectLogicalFrameEditController {
 
 		constructor($uibModal) {
+			"ngInject";
+
 			this.$uibModal = $uibModal;
 		}
 
