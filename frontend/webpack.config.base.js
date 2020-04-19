@@ -14,6 +14,7 @@ module.exports = {
 		filename: 'monitool2-[name]-[chunkhash].js'
 	},
 
+	node: false,
 	module: {
 		rules: [
 			{
