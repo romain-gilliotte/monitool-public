@@ -2,6 +2,8 @@ const fs = require('fs');
 
 require('dotenv').config();
 
+let success = true;
+
 const toBool = function (str) {
 	return str
 		&& str !== '0'
@@ -18,16 +20,22 @@ const readEnv = function (key, defaultValue = undefined) {
 	}
 
 	if (value === undefined) {
-		value = defaultValue;
+		if (defaultValue === undefined) {
+			console.log(`Missing environment variable: ${key}`);
+			success = false;
+		}
+		else {
+			value = defaultValue;
+		}
 	}
 
 	return value;
 }
 
-module.exports = {
-	debug: toBool(readEnv('MONITOOL_DEBUG', 'TRUE')),
-	port: parseInt(readEnv('MONITOOL_PORT', '8080')),
-	cluster: toBool(readEnv('MONITOOL_CLUSTER', 'FALSE')),
+const config = {
+	debug: toBool(readEnv('MONITOOL_DEBUG', 'FALSE')),
+	port: parseInt(readEnv('MONITOOL_PORT', '8000')),
+	cluster: toBool(readEnv('MONITOOL_CLUSTER', 'TRUE')),
 
 	jwt: {
 		jwksHost: readEnv('MONITOOL_JWKS_HOST'),
@@ -37,7 +45,7 @@ module.exports = {
 
 	mongo: {
 		uri: readEnv('MONITOOL_MONGO_URI'),
-		database: readEnv('MONITOOL_MONGO_DB')
+		database: readEnv('MONITOOL_MONGO_DB', 'monitool')
 	},
 
 	redis: {
@@ -45,6 +53,13 @@ module.exports = {
 	},
 
 	unoconv: {
-		uri: readEnv('MONITOOL_UNOCONV_URI')
+		uri: readEnv('MONITOOL_UNOCONV_URI', null)
 	}
 };
+
+if (!success) {
+	console.log("Failed to start");
+	process.exit(1);
+}
+
+module.exports = config;
