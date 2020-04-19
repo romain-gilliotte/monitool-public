@@ -3,7 +3,7 @@
 		<tr ng-repeat="row in $ctrl.grid.body">
 			<th ng-repeat="headerCol in row.headerCols" rowspan="{{headerCol.rowspan}}" ng-style="$ctrl.firstColStyle"
 				style="min-width: 100px">
-				{{headerCol.name|formatSlot}}
+				{{headerCol.name}}
 			</th>
 
 			<td ng-repeat="col in row.dataCols track by $index" td-reporting-field value="col" baseline="$ctrl.baseline"
