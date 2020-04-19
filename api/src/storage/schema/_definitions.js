@@ -1,4 +1,103 @@
-{
+module.exports = {
+    "dice": {
+        "type": "array",
+        "items": {
+            "oneOf": [
+                {
+                    "type": "object",
+                    "required": ["id", "attribute", "items"],
+                    "additionalProperties": false,
+                    "properties": {
+                        "id": { "$ref": "#/definitions/dimensionId" },
+                        "attribute": { "$ref": "#/definitions/dimensionAttribute" },
+                        "items": {
+                            "$ref": "#/definitions/dimensionItems"
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "required": ["id", "attribute", "range"],
+                    "additionalProperties": false,
+                    "properties": {
+                        "id": { "$ref": "#/definitions/dimensionId" },
+                        "attribute": { "$ref": "#/definitions/dimensionAttribute" },
+                        "range": {
+                            "type": "array",
+                            "uniqueItems": true,
+                            "additionalItems": false,
+                            "items": [
+                                { "oneOf": [{ "type": "null" }, { "$ref": "#/definitions/timeslot" }] },
+                                { "oneOf": [{ "type": "null" }, { "$ref": "#/definitions/timeslot" }] }
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "dimensionId": {
+        "oneOf": [
+            {
+                "enum": [
+                    "time",
+                    "location"
+                ]
+            },
+            {
+                "$ref": "#/definitions/uuid"
+            }
+        ]
+    },
+    "dimensionAttribute": {
+        "oneOf": [
+            {
+                "enum": [
+                    "day",
+                    "month_week_sat",
+                    "month_week_sun",
+                    "month_week_mon",
+                    "week_sat",
+                    "week_sun",
+                    "week_mon",
+                    "month",
+                    "quarter",
+                    "semester",
+                    "year",
+                    "entity",
+                    "element"
+                ]
+            },
+            {
+                "$ref": "#/definitions/dimensionId"
+            }
+        ]
+    },
+    "dimensionItems": {
+        "oneOf": [
+            {
+                "type": "array",
+                "uniqueItems": true,
+                "maxItems": 255,
+                "items": {
+                    "$ref": "#/definitions/uuid"
+                }
+            },
+            {
+                "type": "array",
+                "uniqueItems": true,
+                "maxItems": 255,
+                "items": {
+                    "$ref": "#/definitions/timeslot"
+                }
+            }
+        ]
+    },
+    "timeslot": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 20 // fixme: write a pattern
+    },
     "uuid": {
         "type": "string",
         "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"

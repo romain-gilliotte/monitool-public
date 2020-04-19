@@ -1,4 +1,5 @@
-{
+module.exports = {
+	"definitions": require('./_definitions'),
 	"$id": "http://monitool.org/schemas/schema.json",
 	"type": "object",
 	"additionalProperties": false,
@@ -93,15 +94,11 @@
 		},
 		"forms": {
 			"type": "array",
-			"items": {
-				"type": "object"
-			}
+			"items": require('./data-source')
 		},
 		"logicalFrames": {
 			"type": "array",
-			"items": {
-				"type": "object"
-			}
+			"items": require('./logical-framework')
 		},
 		"extraIndicators": {
 			"type": "array",

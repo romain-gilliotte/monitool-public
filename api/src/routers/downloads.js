@@ -1,5 +1,4 @@
 const Router = require('@koa/router');
-const { ObjectId } = require('mongodb');
 const hash = require('object-hash');
 const { getProject } = require('../storage/queries');
 const { getGeneratedFile } = require('../storage/gridfs');

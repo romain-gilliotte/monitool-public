@@ -1,12 +1,3 @@
-const Ajv = require('ajv');
-
-const schema = require('../schema/project.json');
-schema.properties.forms.items = require('../schema/data-source.json');
-schema.properties.logicalFrames.items = require('../schema/logical-framework.json');
-schema.definitions = require('../schema/shared.json');
-
-const schemaValidate = new Ajv().compile(schema);
-
 function isUnique(arr) {
 	return arr.every((v, i, a) => a.indexOf(v) === i);
 }
@@ -15,18 +6,7 @@ function hasUniqueId(arr) {
 	return isUnique(arr.map(e => e.id));
 }
 
-function validate(project) {
-	// If schema validation does not pass, do not go futher
-	if (!schemaValidate(project)) {
-		return schemaValidate.errors.map(error => {
-			let path = error.dataPath;
-			if (error.keyword === 'additionalProperties')
-				path += `.${error.params.additionalProperty}`;
-
-			return { path: path, code: error.keyword, message: error.message };
-		});
-	}
-
+module.exports = (project) => {
 	const errors = [];
 
 	const lfDatesValid = project.logicalFrames.some(lf => {
@@ -73,7 +53,16 @@ function validate(project) {
 		errors.push({ code: 'references', message: 'no dead references' });
 
 	// Check indicators
-	const indicators = [
+	const indicators = getIndicators(project);
+	const indicatorErrors = indicators.reduce((m, i) => [...m, ...checkIndicator(i, variables)], []);
+	errors.push(...indicatorErrors)
+
+	return errors;
+}
+
+
+function getIndicators(project) {
+	return [
 		...project.extraIndicators,
 		...project.logicalFrames.reduce((m, lf) => [
 			...m,
@@ -89,36 +78,37 @@ function validate(project) {
 			], [])
 		], [])
 	];
+}
 
-	indicators.forEach(indicator => {
-		if (indicator.computation) {
-			for (let paramName in indicator.computation.parameters) {
-				// Check param usage
-				if (!indicator.computation.formula.includes(paramName))
-					errors.push({ code: 'unused param', message: 'all parameters must be used' });
 
-				// Check param is computable
-				const parameter = indicator.computation.parameters[paramName];
-				const variable = variables.find(v => v.id === parameter.elementId);
-				if (variable) {
-					for (let partitionId in parameter.filters) {
-						const filter = parameter.filters[partitionId];
-						const partition = variable.partitons.find(p => p.id === partitionId);
-						if (partition) {
-							if (!filter.every(peId => partition.elements.find(pe => pe.id == peId)))
-								errors.push({ code: 'references', message: 'dead reference from indicator to pelement' });
-						}
-						else
-							errors.push({ code: 'references', message: 'dead reference from indicator to partition' });
-					}
+function checkIndicator(indicator, variables) {
+	if (!indicator.computation)
+		return [];
+
+	const errors = [];
+	for (let paramName in indicator.computation.parameters) {
+		// Check param usage
+		if (!indicator.computation.formula.includes(paramName))
+			errors.push({ code: 'unused param', message: 'all parameters must be used' });
+
+		// Check param is computable
+		const parameter = indicator.computation.parameters[paramName];
+		const variable = variables.find(v => v.id === parameter.elementId);
+		if (variable) {
+			for (let partitionId in parameter.filters) {
+				const filter = parameter.filters[partitionId];
+				const partition = variable.partitons.find(p => p.id === partitionId);
+				if (partition) {
+					if (!filter.every(peId => partition.elements.find(pe => pe.id == peId)))
+						errors.push({ code: 'references', message: 'dead reference from indicator to pelement' });
 				}
 				else
-					errors.push({ code: 'references', message: 'dead reference from indicator to variable' });
+					errors.push({ code: 'references', message: 'dead reference from indicator to partition' });
 			}
 		}
-	});
+		else
+			errors.push({ code: 'references', message: 'dead reference from indicator to variable' });
+	}
 
 	return errors;
 }
-
-module.exports = validate;

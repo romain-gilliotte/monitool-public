@@ -3,11 +3,9 @@ const ObjectId = require('mongodb').ObjectID;
 const { deleteFiles } = require('../storage/gridfs');
 const validateBody = require('../middlewares/validate-body');
 
-const validator = validateBody(require('../storage/validator/input'));
-
 const router = new Router();
 
-router.post('/input', validator, async ctx => {
+router.post('/input', validateBody('input'), async ctx => {
 	const { projectId, content } = ctx.request.body;
 	if (!await ctx.state.profile.canViewProject(projectId)) {
 		ctx.response.status = 403;
@@ -39,7 +37,6 @@ router.post('/input', validator, async ctx => {
 
 	delete input._id;
 	delete input.sequenceId;
-
 	ctx.response.body = input;
 });
 
