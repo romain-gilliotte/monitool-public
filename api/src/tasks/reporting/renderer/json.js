@@ -8,6 +8,6 @@ module.exports = async (cube, rendererOpts) => {
     else if (rendererOpts == 'nestedArray') result = cube.getNestedArray('main');
     else result = cube.getNestedObject('main');
 
-    const payload = Buffer.from(JSON.stringify(result)).toString('base64');
+    const payload = Buffer.from(JSON.stringify(result));
     return { mimeType, payload, filename };
 };

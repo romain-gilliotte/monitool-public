@@ -143,9 +143,7 @@ router.get('/project/:id/report/:query([-_=a-z0-9]+)', async ctx => {
 
 	const sha1 = crypto.createHash('sha1').update(ctx.params.query).digest('hex');
 	let result = await redis.hget(`reporting:${projectId}`, sha1);
-	if (result)
-		result = JSON.parse(result);
-	else {
+	if (!result)
 		try {
 			// Decode and validate query
 			const ajv = new Ajv();
@@ -165,19 +163,20 @@ router.get('/project/:id/report/:query([-_=a-z0-9]+)', async ctx => {
 			result = await job.finished();
 
 			// Update cache
-			await redis.hset(`reporting:${projectId}`, sha1, JSON.stringify(result));
+			await redis.hset(`reporting:${projectId}`, sha1, result);
 		}
 		catch (e) {
 			console.log(e)
 			ctx.response.status = 400;
 			return;
 		}
-	}
 
-	ctx.response.body = Buffer.from(result.payload, 'base64');
-	ctx.response.type = result.mimeType;
-	if (result.filename)
-		ctx.response.attachment(result.filename, { type: 'inline' });
+	const { payload, mimeType, filename } = JSON.parse(result);
+	ctx.response.body = Buffer.from(payload, 'base64');
+	ctx.response.type = mimeType;
+	ctx.response.set('content-encoding', 'gzip');
+	if (filename)
+		ctx.response.attachment(filename, { type: 'inline' });
 });
 
 module.exports = router;

@@ -4,10 +4,12 @@ const filename = 'report.xlsx';
 const mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
 module.exports = async (cube, rendererOpts) => {
-    const buffer = await getWorkbook(cube, rendererOpts).writeToBuffer();
-    const payload = buffer.toString('base64');
+    const distribution = typeof rendererOpts === 'number' && rendererOpts < cube.numDimensions ?
+        rendererOpts :
+        Math.floor(cube.numDimensions / 2);
 
-    return { mimeType, payload, filename };
+    const payload = await getWorkbook(cube, distribution).writeToBuffer();
+    return { mimeType, filename, payload };
 };
 
 function getWorkbook(cube, distribution) {
