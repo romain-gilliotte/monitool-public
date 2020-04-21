@@ -2,7 +2,7 @@
 
 <div ng-repeat="user in $ctrl.users track by user._id" class="thumbnail"
 	style="width: 160px; margin-right: 10px; display: inline-block;">
-	<img ng-src="{{user.picture}}" style="width: 150px; height: 150px;" />
+	<img ng-src="{{user.picture}}" referrerpolicy="no-referrer" style="width: 150px; height: 150px;" />
 	<div class="caption">
 		<b>Nom:</b><br /> {{user.name}}<br />
 		<b>Email:</b><br /> <a href="mailto:{{ user._id }}" target="_blank">{{ user._id }}</a><br />
