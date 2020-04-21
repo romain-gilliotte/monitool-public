@@ -24,10 +24,10 @@ router.get('/project/:prjId/logical-frame/:lfId.:format(png|pdf)', async ctx => 
 			thumbnail
 		);
 
-		ctx.response.type = result.file.mimeType;
+		ctx.response.type = result.file.metadata.mimeType;
 		ctx.response.length = result.file.length;
 		ctx.response.body = result.stream;
-		if (result.file.mimeType !== 'image/png')
+		if (result.file.metadata.mimeType !== 'image/png')
 			ctx.response.attachment(result.file.filename);
 	}
 	catch (e) {
@@ -57,10 +57,10 @@ router.get('/project/:prjId/data-source/:dsId.:format(png|xlsx|pdf)', async ctx 
 			thumbnail
 		);
 
-		ctx.response.type = result.file.mimeType;
+		ctx.response.type = result.file.metadata.mimeType;
 		ctx.response.length = result.file.length;
 		ctx.response.body = result.stream;
-		if (result.file.mimeType !== 'image/png')
+		if (result.file.metadata.mimeType !== 'image/png')
 			ctx.response.attachment(result.file.filename);
 	}
 	catch (e) {
@@ -86,10 +86,10 @@ router.get('/project/:prjId/export/:periodicity.:format(png|xlsx)', async ctx =>
 			thumbnail
 		);
 
-		ctx.response.type = result.file.mimeType;
+		ctx.response.type = result.file.metadata.mimeType;
 		ctx.response.length = result.file.length;
 		ctx.response.body = result.stream;
-		if (result.file.mimeType !== 'image/png')
+		if (result.file.metadata.mimeType !== 'image/png')
 			ctx.response.attachment(result.file.filename);
 	}
 });
