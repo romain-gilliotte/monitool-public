@@ -11,7 +11,7 @@ module.exports = {
         ...config.plugins,
 
         new webpack.DefinePlugin({
-            SERVICE_URL: '"https://api.monitool.org"'
+            SERVICE_URL: '"/api"'
         }),
 
         new CompressionPlugin({
