@@ -407,7 +407,7 @@ export default {
 
 		start_date: "Fecha de inicio",
 		end_date: "Fecha de fin",
-		country_ph: 'ej: República Centroafricana',
+		country_ph: 'ej: Gondawa',
 		name_ph: 'ej: Acceso a atención de calidad para las personas afectadas por la crisis',
 		add_indicator: 'Añadir un indicador',
 

@@ -407,7 +407,7 @@ export default {
 
 		start_date: "Begin date",
 		end_date: "End date",
-		country_ph: 'For instance: CAR',
+		country_ph: 'e.g. Gondawa',
 		name_ph: 'e.g. Access to quality care for people affected by the crisis',
 		add_indicator: 'Add indicator',
 

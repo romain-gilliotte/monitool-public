@@ -407,7 +407,7 @@ export default {
 
 		start_date: "Date de lancement",
 		end_date: "Date de fin",
-		country_ph: "ex: RCA",
+		country_ph: "ex: Gondawa",
 		name_ph: 'ex: Accès a des soins de santé de qualité pour les populations touchées par la crise',
 		add_indicator: 'Ajouter un indicateur',
 
