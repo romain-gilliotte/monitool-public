@@ -1,46 +1,5 @@
 const { ObjectId } = require('mongodb');
 
-function listProjects(userEmail, projection = null) {
-    const pipeline = [
-        { $lookup: { from: 'invitation', localField: '_id', foreignField: 'projectId', as: 'invitations' } },
-        {
-            $match: {
-                $or: [
-                    { owner: userEmail },
-                    { invitations: { $elemMatch: { email: userEmail, accepted: true } } }
-                ]
-            }
-        },
-        { $project: { invitations: false } },
-        ...(projection ? [{ $project: projection }] : [])
-    ];
-
-    return database.collection('project').aggregate(pipeline);
-}
-
-async function getProject(userEmail, projectId, projection = null) {
-    const pipeline = [
-        { $match: { _id: new ObjectId(projectId) } },
-        { $lookup: { from: 'invitation', localField: '_id', foreignField: 'projectId', as: 'invitations' } },
-        {
-            $match: {
-                $or: [
-                    { owner: userEmail },
-                    { invitations: { $elemMatch: { email: userEmail, accepted: true } } }
-                ]
-            }
-        },
-        { $project: { invitations: false } },
-        ...(projection ? [{ $project: projection }] : [])
-    ];
-
-    const project = await database.collection('project').aggregate(pipeline).next();
-    if (!project)
-        throw new Error('not found');
-
-    return project;
-}
-
 function listWaitingInvitations(userEmail) {
     return database.collection('invitation').aggregate([
         { $match: { email: userEmail, accepted: false } },
@@ -76,4 +35,4 @@ async function getInvitation(userEmail, id) {
 }
 
 
-module.exports = { listProjects, getProject, listWaitingInvitations, listProjectInvitations, getInvitation };
+module.exports = { listWaitingInvitations, listProjectInvitations, getInvitation };

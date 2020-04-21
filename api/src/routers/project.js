@@ -4,9 +4,11 @@ const jiff = require('jiff');
 const Router = require('@koa/router');
 const ObjectId = require('mongodb').ObjectID;
 const JSONStream = require('JSONStream');
-const { listProjects, getProject, listProjectInvitations } = require('../storage/queries');
-const reportingSchema = require('../storage/schema/reporting');
 const validateBody = require('../middlewares/validate-body');
+const { deleteFiles } = require('../storage/gridfs');
+const { listProjects, getProject } = require('../storage/queries/project');
+const { listProjectInvitations } = require('../storage/queries/invitations');
+const reportingSchema = require('../storage/schema/reporting');
 
 const router = new Router();
 
@@ -85,6 +87,12 @@ router.put('/project/:id', validateBody('project'), async ctx => {
 		)
 	});
 
+	// Clear reporting cache
+	await Promise.all([
+		redis.del(`reporting:${projectId}`),
+		deleteFiles(`reporting:${projectId}`)
+	]);
+
 	ctx.response.body = { _id: ctx.params.id, ...newProject };
 });
 
@@ -92,7 +100,7 @@ router.put('/project/:id', validateBody('project'), async ctx => {
  * Retrieve project revisions
  */
 router.get('/project/:id/revisions', async ctx => {
-	if (await ctx.state.profile.ownsProject(ctx.params.id)) {
+	if (await ctx.state.profile.isOwnerOf(ctx.params.id)) {
 		const revisions = database.collection('revision').find(
 			{ projectId: new ObjectId(ctx.params.id) },
 			{
@@ -136,21 +144,20 @@ router.get('/project/:id/user', async ctx => {
 
 router.get('/project/:id/report/:query([-_=a-z0-9]+)', async ctx => {
 	const projectId = ctx.params.id;
-	if (!await ctx.state.profile.canViewProject(projectId)) {
+	if (!await ctx.state.profile.isInvitedTo(projectId)) {
 		ctx.response.status = 404;
 		return;
 	}
 
 	const sha1 = crypto.createHash('sha1').update(ctx.params.query).digest('hex');
 	let result = await redis.hget(`reporting:${projectId}`, sha1);
-	if (!result)
+	if (!result) {
 		try {
 			// Decode and validate query
 			const ajv = new Ajv();
 			const b64query = ctx.params.query.replace('-', '+').replace('_', '/');
 			const query = JSON.parse(Buffer.from(b64query, 'base64').toString());
 			if (!ajv.validate(reportingSchema, query)) {
-				console.log(ajv.errors, query)
 				throw new Error('validation failed');
 			}
 
@@ -166,10 +173,10 @@ router.get('/project/:id/report/:query([-_=a-z0-9]+)', async ctx => {
 			await redis.hset(`reporting:${projectId}`, sha1, result);
 		}
 		catch (e) {
-			console.log(e)
 			ctx.response.status = 400;
 			return;
 		}
+	}
 
 	const { payload, mimeType, filename } = JSON.parse(result);
 	ctx.response.body = Buffer.from(payload, 'base64');

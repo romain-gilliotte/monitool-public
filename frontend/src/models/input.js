@@ -122,12 +122,13 @@ export default class Input {
 
 	async save() {
 		const data = JSON.parse(angular.toJson(this));
+		delete data.projectId;
 
 		let response;
 		if (this._id) {
-			response = await axios.put('/input/' + this._id, data);
+			response = await axios.put(`/project/${this.projectId}/input/${this._id}`, data);
 		} else {
-			response = await axios.post('/input', data);
+			response = await axios.post(`/project/${this.projectId}/input`, data);
 		}
 
 		Object.assign(this, response.data);

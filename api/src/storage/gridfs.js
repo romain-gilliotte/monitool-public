@@ -12,6 +12,37 @@ async function getFile(cacheId, cacheHash, bucketName = 'fs') {
     }
 }
 
+async function updateFile(cacheId, cacheHash, filename, mimeType, createStream, bucketName = 'fs') {
+    const bucket = new GridFSBucket(database, { bucketName });
+    const collection = database.collection(`${bucketName}.files`);
+    const file = await collection.findOne({ _id: cacheId });
+
+    if (!file || file.metadata.hash !== cacheHash) {
+        if (file)
+            await bucket.delete(cacheId);
+
+        const readStream = await createStream();
+        const writeStream = bucket.openUploadStreamWithId(
+            cacheId,
+            filename,
+            { metadata: { hash: cacheHash, mimeType: mimeType } }
+        );
+
+        await util.promisify(stream.pipeline)(readStream, writeStream);
+    }
+}
+
+async function deleteFiles(cacheIdPrefix, bucketName = 'fs') {
+    const bucket = new GridFSBucket(database, { bucketName });
+    const collection = database.collection(`${bucketName}.files`);
+    const files = await collection.find(
+        { _id: { $regex: new RegExp(`^${cacheIdPrefix}`) } },
+        { projection: { _id: 1 } }
+    ).toArray();
+
+    await Promise.all(files.map(file => bucket.delete(file._id)));
+}
+
 async function getGeneratedFile(sourceId, sourceHash, task, taskAttr, thumbnail = false, bucketName = 'fs') {
     let result;
 
@@ -51,37 +82,6 @@ async function getGeneratedFile(sourceId, sourceHash, task, taskAttr, thumbnail 
     }
 
     return result;
-}
-
-async function updateFile(cacheId, cacheHash, filename, mimeType, createStream, bucketName = 'fs') {
-    const bucket = new GridFSBucket(database, { bucketName });
-    const collection = database.collection(`${bucketName}.files`);
-    const file = await collection.findOne({ _id: cacheId });
-
-    if (!file || file.metadata.hash !== cacheHash) {
-        if (file)
-            await bucket.delete(cacheId);
-
-        const readStream = await createStream();
-        const writeStream = bucket.openUploadStreamWithId(
-            cacheId,
-            filename,
-            { metadata: { hash: cacheHash, mimeType: mimeType } }
-        );
-
-        await util.promisify(stream.pipeline)(readStream, writeStream);
-    }
-}
-
-async function deleteFiles(cacheIdPrefix, bucketName = 'fs') {
-    const bucket = new GridFSBucket(database, { bucketName });
-    const collection = database.collection(`${bucketName}.files`);
-    const files = await collection.find(
-        { _id: { $regex: new RegExp(`^${cacheIdPrefix}`) } },
-        { projection: { _id: 1 } }
-    ).toArray();
-
-    await Promise.all(files.map(file => bucket.delete(file._id)));
 }
 
 module.exports = { getFile, getGeneratedFile, updateFile, deleteFiles };

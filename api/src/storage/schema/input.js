@@ -3,14 +3,9 @@ module.exports = {
     "type": "object",
     "additionalProperties": false,
     "required": [
-        "content",
-        "projectId"
+        "content"
     ],
     "properties": {
-        "projectId": {
-            "type": "string",
-            "pattern": "^[0-9a-f]{24}$"
-        },
         "content": {
             "type": "array",
             "items": {

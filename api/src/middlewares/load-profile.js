@@ -4,8 +4,7 @@ const koaCompose = require('koa-compose');
 const koaJwt = require('koa-jwt');
 const { ObjectId } = require('mongodb');
 const config = require('../config');
-const { getProject } = require('../storage/queries');
-const insertDemoProject = require('../storage/demo-project');
+const { getProject, insertDemoProject } = require('../storage/queries/project');
 
 const auth0Client = new AuthenticationClient({ domain: config.jwt.jwksHost });
 
@@ -85,7 +84,7 @@ class Profile {
         this.lastSeen = user.lastSeen;
     }
 
-    async canViewProject(projectId) {
+    async isInvitedTo(projectId) {
         try {
             await getProject(this.email, projectId, { _id: true })
             return true;
@@ -95,7 +94,7 @@ class Profile {
         }
     }
 
-    async ownsProject(projectId) {
+    async isOwnerOf(projectId) {
         return 1 === await database.collection('project').countDocuments({
             _id: new ObjectId(projectId),
             owner: this.email

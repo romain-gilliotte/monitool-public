@@ -2,7 +2,7 @@ const Router = require('@koa/router');
 const ObjectId = require('mongodb').ObjectID;
 const JSONStream = require('JSONStream');
 const validateBody = require('../middlewares/validate-body');
-const { listWaitingInvitations, getInvitation } = require('../storage/queries');
+const { listWaitingInvitations, getInvitation } = require('../storage/queries/invitations');
 
 const router = new Router();
 
@@ -16,7 +16,7 @@ router.get('/invitation', async ctx => {
 
 // invite un nouvel utilisateur
 router.post('/invitation', validateBody('invitation'), async ctx => {
-    if (!await ctx.state.profile.ownsProject(ctx.request.body.projectId)) {
+    if (!await ctx.state.profile.isOwnerOf(ctx.request.body.projectId)) {
         ctx.response.status = 403;
         return;
     }

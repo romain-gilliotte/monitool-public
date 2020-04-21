@@ -1,6 +1,6 @@
 const Router = require('@koa/router');
 const hash = require('object-hash');
-const { getProject } = require('../storage/queries');
+const { getProject } = require('../storage/queries/project');
 const { getGeneratedFile } = require('../storage/gridfs');
 
 const router = new Router();
@@ -76,7 +76,7 @@ router.get('/project/:prjId/export/:periodicity.:format(png|xlsx)', async ctx =>
 	const { prjId } = ctx.params;
 	const { language, format, thumbnail, periodicity } = validateDownloadParams(ctx, 'xlsx');
 
-	if (await ctx.state.profile.canViewProject(prjId)) {
+	if (await ctx.state.profile.isInvitedTo(prjId)) {
 		// No need to compute a hash here: the cache will be deleted when inputs are posted.
 		const result = await getGeneratedFile(
 			`reporting:${prjId}:${periodicity}`,
