@@ -11,16 +11,27 @@
 	</div>
 
 	<div class="btn-group">
-		<a ng-click="$ctrl.toggleOngoing()" class="btn btn-default" ng-class="{active: $ctrl.displayOngoing}"
-			translate="project.show_ongoing_projects"></a>
-		<a ng-click="$ctrl.toggleFinished()" class="btn btn-default" ng-class="{active: $ctrl.displayFinished}"
-			translate="project.show_finished_projects"></a>
-		<a ng-click="$ctrl.toggleArchived()" class="btn btn-default" ng-class="{active: $ctrl.displayArchived}"
-			translate="project.show_archived_projects"></a>
+		<a ng-click="$ctrl.toggleOngoing()" class="btn btn-default"
+			ng-class="{active: $ctrl.numOngoingProjects && $ctrl.displayOngoing, disabled: $ctrl.numOngoingProjects == 0}"
+			translate="project.show_ongoing_projects" translate-values="{count: $ctrl.numOngoingProjects}"></a>
+
+		<a ng-click="$ctrl.toggleFinished()" class="btn btn-default"
+			ng-class="{active: $ctrl.numFinishedProjects && $ctrl.displayFinished, disabled: $ctrl.numFinishedProjects == 0}"
+			translate="project.show_finished_projects" translate-values="{count: $ctrl.numFinishedProjects}"></a>
+
+		<a ng-click="$ctrl.toggleArchived()" class="btn btn-default"
+			ng-class="{active: $ctrl.numArchivedProjects && $ctrl.displayArchived, disabled: $ctrl.numArchivedProjects == 0}"
+			translate="project.show_archived_projects" translate-values="{count: $ctrl.numArchivedProjects}"></a>
 	</div>
 </div>
 
-<div ng-if="!$ctrl.displayedProjects.length" translate="project.no_matches"></div>
+<div class="centered" ng-if="!$ctrl.displayedProjects.length">
+	<span translate="project.no_matches" ng-if="$ctrl.projects.length"></span>
+	<span translate="project.no_projects" ng-if="!$ctrl.projects.length"></span>
+	<a ng-click="$ctrl.showAll()" translate="project.show_all_projects"
+		translate-values="{count: $ctrl.projects.length}" ng-if="$ctrl.projects.length"></a>
+	<a ng-click="$ctrl.createProject()" translate="project.create" ng-if="!$ctrl.projects.length"></a>
+</div>
 
 <div>
 	<columns-panel ng-repeat="p in $ctrl.displayedProjects track by p._id" variant="p.variant">

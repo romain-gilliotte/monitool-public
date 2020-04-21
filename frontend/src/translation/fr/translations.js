@@ -69,6 +69,8 @@ export default {
 	},
 
 	project: {
+		show_all_projects: 'Afficher tous les projets ({{count}})',
+		no_projects: "Vous n'avez aucun projet",
 		download_portrait: 'Télécharger PDF (Portrait)',
 		download_landscape: 'Télécharger PDF (Landscape)',
 		download_excel: 'Télécharger Excel',
@@ -91,9 +93,9 @@ export default {
 		no_matches: "Aucun projet ne correspond à vos critères de recherche",
 		is_finished: "Ce projet est terminé",
 		was_archived: "Ce projet a été archivé",
-		show_ongoing_projects: "Afficher les projets en cours",
-		show_finished_projects: "Afficher les projets terminés",
-		show_archived_projects: "Afficher les projets archivés",
+		show_ongoing_projects: 'Afficher les projets en cours ({{count}})',
+		show_finished_projects: "Afficher les projets terminés ({{count}})",
+		show_archived_projects: "Afficher les projets archivés ({{count}})",
 		filter_placeholder: "Rentrez du texte pour filtrer les projets",
 
 		revisions: "Historique",

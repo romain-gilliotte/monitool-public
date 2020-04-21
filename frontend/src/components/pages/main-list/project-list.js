@@ -49,14 +49,24 @@ module.component(__componentName, {
 
 		$onChanges(changes) {
 			this.displayedProjects = this.projects.slice();
+			this.numOngoingProjects = this.numFinishedProjects = this.numArchivedProjects = 0;
 
 			this.displayedProjects.forEach(p => {
 				p.running = p.end > new Date().toISOString().slice(0, 10);
 				p.favorite = !!localStorage['favorites::projects::' + p._id];
 
-				if (!p.active) p.variant = 'archived';
-				else if (!p.running) p.variant = 'dashed';
-				else p.variant = 'default';
+				if (!p.active) {
+					p.variant = 'archived';
+					this.numArchivedProjects++;
+				}
+				else if (!p.running) {
+					p.variant = 'dashed';
+					this.numFinishedProjects++;
+				}
+				else {
+					p.variant = 'default';
+					this.numOngoingProjects++;
+				}
 			});
 
 			this.displayedProjects = this.displayedProjects.filter(p => {
@@ -85,9 +95,18 @@ module.component(__componentName, {
 
 				return 0;
 			});
+
 		}
 
 		filter() {
+			this.$onChanges();
+		}
+
+		showAll() {
+			this.filterValue = '';
+			this.displayOngoing = true;
+			this.displayFinished = true;
+			this.displayArchived = true;
 			this.$onChanges();
 		}
 

@@ -69,6 +69,8 @@ export default {
 	},
 
 	project: {
+		show_all_projects: 'Mostrar todos los proyectos',
+		no_projects: "You don't have any project",
 		download_portrait: 'Download PDF (Portrait)',
 		download_landscape: 'Download PDF (Landscape)',
 		download_excel: 'Download Excel',
@@ -91,9 +93,9 @@ export default {
 		no_matches: "No projects match the selected criterias",
 		is_finished: "This project is finished",
 		was_archived: "This project was archived",
-		show_ongoing_projects: "Show ongoing projects",
-		show_finished_projects: "Show finished projects",
-		show_archived_projects: "Show archived projects",
+		show_ongoing_projects: "Show ongoing projects ({{count}})",
+		show_finished_projects: "Show finished projects ({{count}})",
+		show_archived_projects: "Show archived projects ({{count}})",
 		filter_placeholder: "Enter text here to filter the projects",
 
 		revisions: "History",
