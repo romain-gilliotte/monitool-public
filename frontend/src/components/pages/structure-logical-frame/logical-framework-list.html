@@ -1,3 +1,8 @@
+<div class="centered" ng-if="!$ctrl.editableProject.logicalFrames.length">
+	<span translate="project.no_logframe_yet"></span>
+	<a ng-click="$ctrl.onCreateLogicalFrameClicked()" translate="form.create_blank"></a>
+</div>
+
 <div ng-sortable="$ctrl.ngSortableOptions">
 	<columns-panel sortable="true" ng-repeat="logicalFrame in $ctrl.editableProject.logicalFrames">
 		<pane-title>
@@ -62,7 +67,9 @@
 	</columns-panel>
 </div>
 
-<a ng-click="$ctrl.onCreateLogicalFrameClicked()" class="btn btn-default">
-	<i class="fa fa-plus"></i>
-	<span translate="form.create_blank"></span>
-</a>
+<div ng-if="$ctrl.editableProject.logicalFrames.length">
+	<a ng-click="$ctrl.onCreateLogicalFrameClicked()" class="btn btn-default">
+		<i class="fa fa-plus"></i>
+		<span translate="form.create_blank"></span>
+	</a>
+</div>

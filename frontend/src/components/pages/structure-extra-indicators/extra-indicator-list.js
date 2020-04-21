@@ -4,6 +4,7 @@ import uiModal from 'angular-ui-bootstrap/src/modal';
 import 'angular-legacy-sortablejs-maintained';
 import mtIndicator from '../../shared/indicator/indicator';
 import mtHelpPanel from '../../shared/misc/help-panel';
+require(__cssPath);
 
 const module = angular.module(__moduleName, [uiRouter, uiModal, 'ng-sortable', mtIndicator, mtHelpPanel]);
 
@@ -28,10 +29,11 @@ module.component(__componentName, {
 
 	controller: class ProjectExtraIndicators {
 
-		constructor($uibModal) {
+		constructor($uibModal, $scope) {
 			"ngInject";
 
 			this.$uibModal = $uibModal;
+			this.$scope = $scope;
 		}
 
 		$onInit() {
@@ -72,7 +74,7 @@ module.component(__componentName, {
 				}
 			}
 
-			const newIndicator = this.$uibModal.open(modalOpts).result;
+			const newIndicator = await this.$uibModal.open(modalOpts).result;
 			if (newIndicator) {
 				this.editableProject.extraIndicators.push(newIndicator);
 				this.onProjectUpdate({ newProject: this.editableProject, isValid: true });

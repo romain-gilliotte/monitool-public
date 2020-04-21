@@ -1,11 +1,6 @@
 <div class="centered" ng-if="!$ctrl.invitations.length">
 	<span translate="project.no_invitations_yet"></span>
-	<span>
-		<a class="btn btn-default" ng-click="$ctrl.onEditClicked()">
-			<i class="fa fa-plus"></i>
-			<span translate="project.add_invitation"></span>
-		</a>
-	</span>
+	<a ng-click="$ctrl.onEditClicked()" translate="project.add_invitation"></a>
 </div>
 
 <div ng-if="$ctrl.invitations.length">

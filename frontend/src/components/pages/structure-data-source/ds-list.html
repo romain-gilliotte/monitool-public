@@ -1,3 +1,8 @@
+<div class="centered" ng-if="!$ctrl.editableProject.forms.length">
+	<span translate="project.no_data_source_yet"></span>
+	<a ng-click="$ctrl.onCreateClicked()" translate="project.add_datasource"></a>
+</div>
+
 <div ng-sortable="$ctrl.dataSourceSortOptions">
 	<columns-panel ng-repeat="dataSource in $ctrl.editableProject.forms" sortable="true" handle-class="ds-handle"
 		variant="dataSource.active ? 'default' : 'dashed'">
@@ -85,7 +90,9 @@
 	</columns-panel>
 </div>
 
-<a class="btn btn-default" ng-click="$ctrl.onCreateClicked()">
-	<i class="fa fa-plus"></i>
-	<span translate="project.add_datasource"></span>
-</a>
+<div ng-if="$ctrl.editableProject.forms.length">
+	<a class="btn btn-default" ng-click="$ctrl.onCreateClicked()">
+		<i class="fa fa-plus"></i>
+		<span translate="project.add_datasource"></span>
+	</a>
+</div>

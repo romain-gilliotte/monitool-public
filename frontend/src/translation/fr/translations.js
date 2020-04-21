@@ -69,6 +69,7 @@ export default {
 	},
 
 	project: {
+		no_logframe_yet: "Vous n'avez pas encore créé de cadre logique sur ce projet",
 		show_all_projects: 'Afficher tous les projets ({{count}})',
 		no_projects: "Vous n'avez aucun projet",
 		download_portrait: 'Télécharger PDF (Portrait)',
@@ -232,7 +233,8 @@ export default {
 
 		show_more_inputs: "Voir les dates précedentes",
 		all_elements: "Tout",
-		no_extra_indicators: "Aucune indicateur annexé n'a été créé. Cliquez sur \"Ajouter un indicateur\" pour en créer un!",
+		no_extra_indicators: "Aucun indicateur annexé n'a été créé.",
+		no_data_source_yet: "Aucune source de données n'a été créée.",
 		no_data_source: "<span style=\"font-style: italic\">Aucune source de données n'est prête à la saisie</span>",
 		general_info: "Information génerales",
 		indicator_computation_missing: "Calcul absent",

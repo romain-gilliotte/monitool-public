@@ -69,6 +69,7 @@ export default {
 	},
 
 	project: {
+		no_logframe_yet: "Aún no ha creado ningún marco logico en este proyecto",
 		show_all_projects: 'Display all projects ({{count}})',
 		no_projects: 'No tiene ningún proyecto',
 		download_portrait: 'Descargar PDF (vertical)',
@@ -232,7 +233,8 @@ export default {
 
 		show_more_inputs: "Ver la fechas anteriores",
 		all_elements: "Todo",
-		no_extra_indicators: "Ningún indicador adicional ha sido creado. ¡Haga click en \"Añadir un indicador\" para agregar uno!",
+		no_extra_indicators: "Ningún indicador adicional ha sido creado.",
+		no_data_source_yet: "Ninguna fuente de datos ha sido creada.",
 		no_data_source: "<span style=\"font-style: italic\">Ninguna fuente de datos esta lista para entrar datos</span>",
 		general_info: "Información general",
 		indicator_computation_missing: "Falta el cálculo",

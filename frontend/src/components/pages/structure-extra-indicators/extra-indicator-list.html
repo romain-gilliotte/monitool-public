@@ -1,4 +1,7 @@
-<p ng-if="$ctrl.editableProject.extraIndicators.length == 0" translate="project.no_extra_indicators"></p>
+<div class="centered" ng-if="!$ctrl.editableProject.extraIndicators.length">
+	<span translate="project.no_extra_indicators"></span>
+	<a ng-click="$ctrl.onAddIndicatorClick()" translate="project.add_indicator"></a>
+</div>
 
 <div ng-sortable="$ctrl.sortableOptions">
 	<indicator ng-repeat="indicator in $ctrl.editableProject.extraIndicators" indicator="indicator"
@@ -6,7 +9,9 @@
 		on-deleted="$ctrl.onIndicatorDeleted(indicator)"></indicator>
 </div>
 
-<a class="btn btn-default btn-sm" ng-click="$ctrl.onAddIndicatorClick()" style="margin-bottom: 20px">
-	<i class="fa fa-plus"></i>
-	{{"project.add_indicator"|translate}}
-</a>
+<div ng-if="ctrl.editableProject.extraIndicators.length">
+	<a class="btn btn-default btn-sm" ng-click="$ctrl.onAddIndicatorClick()" style="margin-bottom: 20px">
+		<i class="fa fa-plus"></i>
+		{{"project.add_indicator"|translate}}
+	</a>
+</div>

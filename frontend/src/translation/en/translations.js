@@ -69,6 +69,7 @@ export default {
 	},
 
 	project: {
+		no_logframe_yet: "This project does not have logical frameworks yet",
 		show_all_projects: 'Mostrar todos los proyectos',
 		no_projects: "You don't have any project",
 		download_portrait: 'Download PDF (Portrait)',
@@ -232,7 +233,8 @@ export default {
 
 		show_more_inputs: "See older dates",
 		all_elements: "All",
-		no_extra_indicators: "No extra indicator has been created yet. Click on \"Add indicator\" to create one!",
+		no_extra_indicators: "No extra indicator has been created yet.",
+		no_data_source_yet: "No data source has been created yet.",
 		no_data_source: "<span style=\"font-style: italic\">No data sources are ready for data entry</span>",
 		general_info: "General information",
 		indicator_computation_missing: "Calculation is missing",
