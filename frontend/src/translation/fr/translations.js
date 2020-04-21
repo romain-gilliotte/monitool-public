@@ -2,6 +2,7 @@
 
 export default {
 	shared: {
+		archive: "Archiver",
 		enable: "Réactiver la saisie",
 		disable: "Désactiver la saisie",
 		accept_invitation: "Accepter",
@@ -55,7 +56,6 @@ export default {
 		reporting: 'Rapport',
 		reporting_general: 'Rapport général',
 		colorize: 'Colorer',
-		download_plot: 'Télécharger le graphique',
 
 		logout: 'Déconnecter',
 
@@ -90,10 +90,10 @@ export default {
 		add_datasource: "Créer une nouvelle source de données",
 		no_matches: "Aucun projet ne correspond à vos critères de recherche",
 		is_finished: "Ce projet est terminé",
-		was_deleted: "Ce projet a été supprimé",
+		was_archived: "Ce projet a été archivé",
 		show_ongoing_projects: "Afficher les projets en cours",
 		show_finished_projects: "Afficher les projets terminés",
-		show_deleted_projects: "Afficher les projets supprimés",
+		show_archived_projects: "Afficher les projets archivés",
 		filter_placeholder: "Rentrez du texte pour filtrer les projets",
 
 		revisions: "Historique",
@@ -316,7 +316,6 @@ export default {
 
 		show_finished: "Voir les saisies réalisées",
 		are_you_sure_to_uninvite: "Êtes-vous sûr de vouloir retirer ce projet? Le propriétaire devra vous inviter à nouveau pour y avoir accès. Confirmez pour retirer.",
-		are_you_sure_to_delete: "Êtes-vous sûr de vouloir supprimer ce projet? Confirmez pour supprimer.",
 		data_selection: "Selection des données",
 		filters: "Filtres",
 		input_status: {

@@ -2,6 +2,7 @@
 
 export default {
 	shared: {
+		archive: "Archive",
 		enable: "Enable data entry",
 		disable: "Disable data entry",
 		accept_invitation: "Accept",
@@ -55,7 +56,6 @@ export default {
 		reporting: 'Reporting',
 		reporting_general: 'General reporting',
 		colorize: 'Colorize',
-		download_plot: 'Download plot',
 
 		logout: 'Log Out',
 
@@ -90,10 +90,10 @@ export default {
 		add_datasource: "Create a new data source",
 		no_matches: "No projects match the selected criterias",
 		is_finished: "This project is finished",
-		was_deleted: "This project was deleted",
+		was_archived: "This project was archived",
 		show_ongoing_projects: "Show ongoing projects",
 		show_finished_projects: "Show finished projects",
-		show_deleted_projects: "Show deleted projects",
+		show_archived_projects: "Show archived projects",
 		filter_placeholder: "Enter text here to filter the projects",
 
 		revisions: "History",
@@ -316,7 +316,6 @@ export default {
 
 		show_finished: "See all data entries",
 		are_you_sure_to_uninvite: "Are you sure that you want to remove this project from your list? The owner will have to invite you again if you need access later. Confirm to remove.",
-		are_you_sure_to_delete: "Are you sure that you want to delete this project? Confirm to delete.",
 		data_selection: "Data selection",
 		filters: "Filters",
 		input_status: {

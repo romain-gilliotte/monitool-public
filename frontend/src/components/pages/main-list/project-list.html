@@ -15,8 +15,8 @@
 			translate="project.show_ongoing_projects"></a>
 		<a ng-click="$ctrl.toggleFinished()" class="btn btn-default" ng-class="{active: $ctrl.displayFinished}"
 			translate="project.show_finished_projects"></a>
-		<a ng-click="$ctrl.toggleDeleted()" class="btn btn-default" ng-class="{active: $ctrl.displayDeleted}"
-			translate="project.show_deleted_projects"></a>
+		<a ng-click="$ctrl.toggleArchived()" class="btn btn-default" ng-class="{active: $ctrl.displayArchived}"
+			translate="project.show_archived_projects"></a>
 	</div>
 </div>
 
@@ -53,9 +53,9 @@
 				<span ng-if="!$ctrl.lastInputDate[p._id]" translate="shared.none"></span>
 			</div>
 
-			<div ng-if="!p.active" class="text-danger">
-				<i class="fa fa-fw fa-trash"></i>
-				<span translate="project.was_deleted"></span>
+			<div ng-if="!p.active" class="text-warning">
+				<i class="fa fa-fw fa-archive"></i>
+				<span translate="project.was_archived"></span>
 			</div>
 			<div ng-if="p.active && !p.running" class="text-warning">
 				<i class="fa fa-fw fa-warning"></i>
@@ -111,9 +111,9 @@
 							</a>
 						</li>
 						<li ng-if="p.owner == $root.profile.email">
-							<a ng-click="$ctrl.onDeleteClicked(p)">
-								<i class="fa fa-fw fa-trash text-danger"></i>
-								<span class="text-danger" translate="shared.delete"></span>
+							<a ng-click="$ctrl.onArchiveClicked(p)">
+								<i class="text-warning fa fa-fw fa-archive"></i>
+								<span class="text-warning" translate="shared.archive"></span>
 							</a>
 						</li>
 					</ul>

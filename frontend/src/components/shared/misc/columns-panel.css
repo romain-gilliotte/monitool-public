@@ -96,15 +96,15 @@ columns-panel .handle {
   
   
   
-  .panel-deleted {
-    border-color: #b33;
+  .panel-archived {
+    border-color: #8a6d3b;
     border-style: dashed;
   }
   
-  .panel-deleted > .panel-heading {
-    color: #b33;
-    background-color: #f5dddd;
-    border-color: #b33;
+  .panel-archived > .panel-heading {
+    color: #8a6d3b;
+    background-color: #EEE9E0;
+    border-color: #8a6d3b;
     border-bottom-style: dashed;
   }
   

@@ -44,7 +44,7 @@ module.component(__componentName, {
 
 			this.displayOngoing = true;
 			this.displayFinished = true;
-			this.displayDeleted = false;
+			this.displayArchived = false;
 		}
 
 		$onChanges(changes) {
@@ -54,7 +54,7 @@ module.component(__componentName, {
 				p.running = p.end > new Date().toISOString().slice(0, 10);
 				p.favorite = !!localStorage['favorites::projects::' + p._id];
 
-				if (!p.active) p.variant = 'deleted';
+				if (!p.active) p.variant = 'archived';
 				else if (!p.running) p.variant = 'dashed';
 				else p.variant = 'default';
 			});
@@ -66,9 +66,9 @@ module.component(__componentName, {
 				const matchSearch = search.includes(needle);
 				const matchOngoing = this.displayOngoing && p.running && p.active;
 				const matchFinished = this.displayFinished && !p.running && p.active;
-				const matchDeleted = this.displayDeleted && !p.active;
+				const matchArchived = this.displayArchived && !p.active;
 
-				return matchSearch && (matchOngoing || matchFinished || matchDeleted)
+				return matchSearch && (matchOngoing || matchFinished || matchArchived)
 			});
 
 			this.displayedProjects.sort((p1, p2) => {
@@ -101,8 +101,8 @@ module.component(__componentName, {
 			this.$onChanges();
 		}
 
-		toggleDeleted() {
-			this.displayDeleted = !this.displayDeleted;
+		toggleArchived() {
+			this.displayArchived = !this.displayArchived;
 			this.$onChanges();
 		}
 
@@ -147,24 +147,20 @@ module.component(__componentName, {
 			this.$window.scrollTo(0, 0);
 		}
 
-		async onDeleteClicked(shortProject) {
-			var question = this.translate('project.are_you_sure_to_delete');
+		async onArchiveClicked(shortProject) {
+			const project = await Project.get(shortProject._id);
+			project.active = false;
 
-			if (window.confirm(question)) {
-				const project = await Project.get(shortProject._id);
-				project.active = false;
+			try {
+				await project.save();
 
-				try {
-					await project.save();
-
-					this.projects = await Project.fetchAll();
-					this.$onChanges();
-					this.$scope.$apply();
-				}
-				catch (error) {
-					// Display message to tell user that it's not possible to save.
-					alert(this.translate('project.saving_failed'));
-				}
+				this.projects = await Project.fetchAll();
+				this.$onChanges();
+				this.$scope.$apply();
+			}
+			catch (error) {
+				// Display message to tell user that it's not possible to save.
+				alert(this.translate('project.saving_failed'));
 			}
 		}
 
