@@ -92,11 +92,9 @@ module.component(__componentName, {
 				// Update download url
 				this.downloadUrl =
 					this.$rootScope.serviceUrl +
-					this._makeUrl({ renderer: 'xlsx', rendererOpts: this.distribution, ...this.query }) +
-					`?token=${this.$rootScope.accessToken}`;
+					this._makeUrl({ renderer: 'xlsx', rendererOpts: this.distribution, ...this.query });
 
 				// Update olap-grid
-
 				const fetchUrl = this._makeUrl({ renderer: 'json', rendererOpts: 'report', ...this.query });
 				const response = await axios.get(fetchUrl);
 

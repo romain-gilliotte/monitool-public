@@ -33,7 +33,6 @@ module.component(__componentName, {
             const projectId = this.project._id;
             const language = this.$rootScope.language;
             const serviceUrl = this.$rootScope.serviceUrl;
-            const token = this.$rootScope.accessToken;
 
             this.files = [
                 ...this.project.logicalFrames.map(lf => {
@@ -43,17 +42,17 @@ module.component(__componentName, {
                         id: lf.id,
                         category: 'project.logical_frame',
                         name: lf.name,
-                        thumbnail: `${url}.png?token=${token}&language=${language}`,
+                        thumbnail: `${url}.png?language=${language}`,
                         main: {
                             icon: 'fa-file-pdf-o',
                             key: 'project.download_portrait',
-                            url: `${url}.pdf?token=${token}&language=${language}&orientation=portrait`
+                            url: `${url}.pdf?language=${language}&orientation=portrait`
                         },
                         dropdown: [
                             {
                                 icon: 'fa-file-pdf-o',
                                 key: 'project.download_landscape',
-                                url: `${url}.pdf?token=${token}&language=${language}&orientation=landscape`
+                                url: `${url}.pdf?language=${language}&orientation=landscape`
                             }
                         ]
                     };
@@ -65,22 +64,22 @@ module.component(__componentName, {
                         id: ds.id,
                         category: 'project.collection_form2',
                         name: ds.name,
-                        thumbnail: `${url}.png?token=${token}&language=${language}`,
+                        thumbnail: `${url}.png?language=${language}`,
                         main: {
                             key: 'project.download_portrait',
                             icon: 'fa-file-pdf-o',
-                            url: `${url}.pdf?token=${token}&language=${language}&orientation=portrait`
+                            url: `${url}.pdf?language=${language}&orientation=portrait`
                         },
                         dropdown: [
                             {
                                 icon: 'fa-file-pdf-o',
                                 key: 'project.download_landscape',
-                                url: `${url}.pdf?token=${token}&language=${language}&orientation=landscape`
+                                url: `${url}.pdf?language=${language}&orientation=landscape`
                             },
                             {
                                 icon: 'fa-file-excel-o',
                                 key: 'project.download_excel',
-                                url: `${url}.xlsx?token=${token}&language=${language}&orientation=landscape`
+                                url: `${url}.xlsx?language=${language}&orientation=landscape`
                             }
                         ]
                     };

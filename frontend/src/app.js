@@ -15,7 +15,6 @@ async function authenticate() {
 		audience: "https://api.monitool.org"
 	});
 
-
 	// Handle callback
 	const query = window.location.search;
 	if (query.includes("code=") && query.includes("state=")) {
@@ -43,6 +42,9 @@ async function authenticate() {
 }
 
 function startApp(accessToken, profile) {
+	// FIXME we should use the cookie only it: secure + path == api + ....
+	document.cookie = `monitool_access_token=${encodeURIComponent(accessToken)}`;
+
 	const module = angular.module(__moduleName, [mtPages, mtTranslation, mtFilterMisc]);
 
 	module.config(function ($urlRouterProvider) {
@@ -77,11 +79,9 @@ function startApp(accessToken, profile) {
 	module.run(function ($rootScope) {
 		// Configure axios
 		axios.defaults.baseURL = SERVICE_URL;
-		axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
 		// Set api url in $rootScope (needed to download pdfs)
 		$rootScope.serviceUrl = SERVICE_URL
-		$rootScope.accessToken = accessToken;
 
 		// Put user email in $rootScope
 		$rootScope.profile = profile;

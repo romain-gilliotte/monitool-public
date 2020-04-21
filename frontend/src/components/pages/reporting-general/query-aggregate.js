@@ -39,9 +39,8 @@ module.component(__componentName, {
 			// Update download link
 			const projectId = this.project._id;
 			const serviceUrl = this.$rootScope.serviceUrl;
-			const token = this.$rootScope.accessToken;
 			const periodicity = this.groupBy === 'entity' ? 'month' : this.groupBy;
-			this.downloadUrl = `${serviceUrl}/project/${projectId}/export/${periodicity}.xlsx?token=${token}`;
+			this.downloadUrl = `${serviceUrl}/project/${projectId}/export/${periodicity}.xlsx`;
 		}
 
 		_chooseDefaultGroupBy() {

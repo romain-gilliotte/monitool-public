@@ -8,10 +8,6 @@ const { getProject } = require('../storage/queries');
 const insertDemoProject = require('../storage/demo-project');
 
 const auth0Client = new AuthenticationClient({ domain: config.jwt.jwksHost });
-const getToken = function (ctx) {
-    const token = (ctx.request.header.authorization || ctx.request.query.token);
-    return token ? token.replace(/^Bearer /, '') : undefined;
-}
 
 module.exports = koaCompose([
     // Validate token
@@ -25,7 +21,7 @@ module.exports = koaCompose([
         audience: config.jwt.audience,
         issuer: config.jwt.issuer,
         algorithms: ['RS256'],
-        getToken: getToken
+        cookie: 'monitool_access_token'
     }),
 
     // Load profile
@@ -38,7 +34,7 @@ module.exports = koaCompose([
         let user = await collection.findOne({ subs: subcriber });
         if (!user) {
             // User was not found from the subcriber id
-            const token = getToken(ctx);
+            const token = ctx.request.header.authorization || ctx.cookies.get('monitool_access_token');
             const profile = await auth0Client.getProfile(token);
 
             user = await collection.findOne({ _id: profile.email });
