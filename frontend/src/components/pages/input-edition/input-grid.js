@@ -95,7 +95,7 @@ module.component(__componentName, {
 
 			await loadHot();
 			this.handsOnTable = new Handsontable(this.$element[0].firstElementChild, {
-				licenceKey: '00000-00000-00000-00000-00000',
+				licenseKey: 'non-commercial-and-evaluation',
 				stretchH: "all", // use all of container width
 				preventOverflow: true, // to not go over container width
 				className: "htLeft", // content in cells is left aligned

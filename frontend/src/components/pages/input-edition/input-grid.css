@@ -5,8 +5,3 @@ input-grid .wtHolder {
     height: auto !important;
     overflow: hidden !important;
 }
-
-/* work around passing non-commercial licence key in options does nothing */ 
-#hot-display-license-info {
-    display: none;
-}
