@@ -5,6 +5,7 @@ const koaJwt = require('koa-jwt');
 const { ObjectId } = require('mongodb');
 const config = require('../config');
 const { getProject } = require('../storage/queries');
+const insertDemoProject = require('../storage/demo-project');
 
 const auth0Client = new AuthenticationClient({ domain: config.jwt.jwksHost });
 const getToken = function (ctx) {
@@ -29,38 +30,79 @@ module.exports = koaCompose([
 
     // Load profile
     async (ctx, next) => {
-        const token = (ctx.request.header.authorization || ctx.request.query.token).replace(/^Bearer /, '');
-        const redisKey = `profile:${ctx.state.user.sub}`;
+        const collection = database.collection('user');
+        const subcriber = ctx.state.user.sub;
+        const lock = await redisLock.lock(`profile:${subcriber}`, 1000);
 
-        ctx.state.profile = JSON.parse(await redis.get(redisKey));
-        if (!ctx.state.profile) {
-            ctx.state.profile = await auth0Client.getProfile(token);
+        // Find or create user
+        let user = await collection.findOne({ subs: subcriber });
+        if (!user) {
+            // User was not found from the subcriber id
+            const token = getToken(ctx);
+            const profile = await auth0Client.getProfile(token);
 
-            await redis.set(
-                redisKey,
-                JSON.stringify(ctx.state.profile),
-                'EX',
-                60 * 60 * 24
-            );
+            user = await collection.findOne({ _id: profile.email });
+            if (user) {
+                // User logged with a new identity provider
+                user.subs.push(subcriber);
+                collection.updateOne({ _id: user._id }, { $addToSet: { subs: subcriber } });
+            }
+            else {
+                // User is new: we wait for the insertion before releasing the lock.
+                user = {
+                    _id: profile.email,
+                    name: profile.name,
+                    picture: profile.picture,
+                    subs: [subcriber],
+                    lastSeen: new Date()
+                };
+
+                await collection.insertOne(user);
+                await insertDemoProject(profile.email);
+            }
         }
 
-        ctx.state.profile.canViewProject = async projectId => {
-            try {
-                await getProject(ctx.state.profile.email, projectId, { _id: true })
-                return true;
-            }
-            catch (e) {
-                return false;
-            }
-        };
+        // Unlock access to this user (no waiting).
+        lock.unlock().catch(e => { });
 
-        ctx.state.profile.ownsProject = async projectId => {
-            return 1 === await database.collection('project').countDocuments({
-                _id: new ObjectId(projectId),
-                owner: ctx.state.profile.email
-            });
-        };
+        // Update lastSeen date if older than 10 minutes (no waiting).
+        if (new Date() - user.lastSeen > 10 * 60 * 1000) {
+            user.lastSeen = new Date();
+            await collection
+                .updateOne({ _id: user._id }, { $currentDate: { lastSeen: true } })
+                .catch(e => { });
+        }
+
+        ctx.state.profile = new Profile(user);
 
         await next();
     }
 ])
+
+
+class Profile {
+    constructor(user) {
+        this.email = user._id;
+        this.name = user.name;
+        this.picture = user.picture;
+        this.subs = user.subs;
+        this.lastSeen = user.lastSeen;
+    }
+
+    async canViewProject(projectId) {
+        try {
+            await getProject(this.email, projectId, { _id: true })
+            return true;
+        }
+        catch (e) {
+            return false;
+        }
+    }
+
+    async ownsProject(projectId) {
+        return 1 === await database.collection('project').countDocuments({
+            _id: new ObjectId(projectId),
+            owner: this.email
+        });
+    }
+}

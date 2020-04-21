@@ -42,6 +42,10 @@ async function start(web = true, worker = true) {
 	global.database.collection('input').createIndex(
 		{ sequenceId: 1, 'content.variableId': 1 }
 	);
+	global.database.collection('user').createIndex(
+		{ subs: 1 }
+	);
+
 	// move this somewhere else
 
 	global.redis = new Redis(config.redis.uri);
@@ -60,7 +64,6 @@ async function start(web = true, worker = true) {
 		else
 			app.use(require('./middlewares/load-profile'));
 
-		app.use(require('./middlewares/last-seen'));
 		app.use(require('./routers/invitations').routes());
 		app.use(require('./routers/input').routes());
 		app.use(require('./routers/downloads').routes());
