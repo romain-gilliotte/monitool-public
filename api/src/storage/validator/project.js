@@ -9,7 +9,7 @@ function hasUniqueId(arr) {
 module.exports = (project) => {
 	const errors = [];
 
-	const lfDatesValid = project.logicalFrames.some(lf => {
+	const lfDatesValid = project.logicalFrames.every(lf => {
 		return (!lf.start || lf.start >= project.start) && (!lf.end || lf.end <= project.end);
 	});
 	if (!lfDatesValid)
