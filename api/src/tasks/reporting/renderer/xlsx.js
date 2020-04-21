@@ -4,9 +4,9 @@ const filename = 'report.xlsx';
 const mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
 module.exports = async (cube, rendererOpts) => {
-    const distribution = typeof rendererOpts === 'number' && rendererOpts < cube.numDimensions ?
+    const distribution = typeof rendererOpts === 'number' && rendererOpts < cube.dimensions.length ?
         rendererOpts :
-        Math.floor(cube.numDimensions / 2);
+        Math.floor(cube.dimensions.length / 2);
 
     const payload = await getWorkbook(cube, distribution).writeToBuffer();
     return { mimeType, filename, payload };
