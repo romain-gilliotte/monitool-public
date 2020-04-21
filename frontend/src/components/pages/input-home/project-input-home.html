@@ -10,36 +10,35 @@
 	</div>
 </div>
 
-<legend>Avancement des saisies</legend>
+<div ng-if="$ctrl.activeDataSources.length != 0">
+	<legend>Avancement des saisies</legend>
 
-<table class="table table-bordered table-striped">
-	<thead>
-		<tr>
-			<th style="width: 25%">Formulaire</th>
-			<th style="width: 10%; text-align: center;">#</th>
-			<th translate="shared.state"></th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr ng-if="$ctrl.activeDataSources.length == 0">
-			<td colspan="3" translate="project.no_data_source" style="text-align: center;"></td>
-		</tr>
-		<tr ng-repeat="dataSource in $ctrl.activeDataSources track by dataSource.id">
-			<td>
-				<a class="btn btn-default btn-xs" title="{{dataSource.name}}"
-					ui-sref="project.usage.list({dataSourceId: dataSource.id})">
-					<i class="fa fa-pencil"></i>
-					{{dataSource.name|maxLength:30}}
-				</a>
-			</td>
-			<td style="text-align: center;">
-				<i class="fa fa-circle-o-notch fa-spin" ng-if="!$ctrl.status[dataSource.id]"></i>
-				{{$ctrl.status[dataSource.id].total}}
-			</td>
-			<td ng-if="$ctrl.status">
-				<progress-bar done="$ctrl.status[dataSource.id].complete"
-					incomplete="$ctrl.status[dataSource.id].incomplete"></progress-bar>
-			</td>
-		</tr>
-	</tbody>
-</table>
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th style="width: 25%">Formulaire</th>
+				<th style="width: 10%; text-align: center;">#</th>
+				<th translate="shared.state"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="dataSource in $ctrl.activeDataSources track by dataSource.id">
+				<td>
+					<a class="btn btn-default btn-xs" title="{{dataSource.name}}"
+						ui-sref="project.usage.list({dataSourceId: dataSource.id})">
+						<i class="fa fa-pencil"></i>
+						{{dataSource.name|maxLength:30}}
+					</a>
+				</td>
+				<td style="text-align: center;">
+					<i class="fa fa-circle-o-notch fa-spin" ng-if="!$ctrl.status[dataSource.id]"></i>
+					{{$ctrl.status[dataSource.id].total}}
+				</td>
+				<td ng-if="$ctrl.status">
+					<progress-bar done="$ctrl.status[dataSource.id].complete"
+						incomplete="$ctrl.status[dataSource.id].incomplete"></progress-bar>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

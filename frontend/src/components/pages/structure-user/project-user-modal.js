@@ -5,7 +5,7 @@ import mtForbidden from '../../../directives/validators/forbidden-values';
 const module = angular.module(__moduleName, [uiModal, mtForbidden]);
 
 /**
- * Component used on a modal called from "project.config.user_list"
+ * Component used on a modal called from "project.config.invitation_list"
  * Allows to edit a user
  */
 module.component(__componentName, {
@@ -34,9 +34,15 @@ module.component(__componentName, {
 			this.isNew = !this.resolve.invitation;
 
 			// The form updates a copy of the object, so that user can cancel the changes by just dismissing the modal.
-			this.invitation = angular.copy(this.resolve.invitation) || { projectId: this.resolve.project._id, email: "", accepted: false };
-			// this.invitation.entities = this.invitation.entities || [];
-			// this.invitation.dataSources = this.invitation.dataSources || [];
+			this.invitation = angular.copy(this.resolve.invitation) || {
+				projectId: this.resolve.project._id,
+				email: "",
+				accepted: false,
+				dataEntry: {
+					dataSourceIds: this.resolve.project.forms.map(f => f.id),
+					siteIds: this.resolve.project.entities.map(s => s.id)
+				}
+			};
 
 			this.masterInvitation = angular.copy(this.invitation);
 		}
@@ -48,7 +54,6 @@ module.component(__componentName, {
 		done() {
 			this.close({ $value: this.invitation });
 		}
-
 	}
 });
 

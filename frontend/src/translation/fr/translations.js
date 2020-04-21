@@ -82,7 +82,6 @@ export default {
 		no_invitations_yet: "Vous n'avez pas encore invité d'autres personnes à participer à votre projet",
 		add_invitation: "Inviter une personne",
 		email: "Email",
-		user_help_email: "Quel est l'email de l'utilisateur que vous désirez inviter?",
 		total: "Total",
 		variables: "Variables",
 		owner: "Propriétaire",
@@ -305,10 +304,9 @@ export default {
 			partition_group: "Désagrégation: {{name}} / {{groupName}} "
 		},
 
-		edit_user: "Édition utilisateur",
-		update_user: "Mettre à jour l'utilisateur",
-
-		user: "Utilisateur",
+		invitation_help_email: "Quel est l'email de l'utilisateur que vous désirez inviter?",
+		send_invitation: "Envoyer l'invitation",
+		update_invitation: "Mettre à jour l'invitation",
 
 		parameter: "Paramètre",
 		unnamed_logframe: "Cadre logique sans nom",

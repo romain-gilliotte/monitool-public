@@ -11,7 +11,7 @@
 			</a>
 		</div>
 
-		<div class="panel panel-default">
+		<div class="panel panel-default" ng-if="$ctrl.activeDataSources.length != 0">
 			<div class="panel-heading">
 				<h4 class="panel-title" translate="project.input"></h4>
 			</div>
@@ -25,11 +25,6 @@
 						style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
 						<i class="fa fa-pencil fa-fw"></i>
 						<span>{{dataSource.name}}</span>
-					</a>
-
-					<a class="list-group-item" ng-if="$ctrl.activeDataSources.length === 0" disable-if="1">
-						<i class="fa fa-pencil fa-fw"></i>
-						<span translate="project.no_data_source"></span>
 					</a>
 				</div>
 			</div>

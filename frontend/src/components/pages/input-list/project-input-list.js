@@ -23,6 +23,7 @@ module.component(__componentName, {
 	bindings: {
 		'project': '<',
 		'dataSourceId': '<',
+		'invitations': '<'
 	},
 	template: require(__templatePath),
 
@@ -63,14 +64,21 @@ module.component(__componentName, {
 			this.dataSource = this.project.forms.find(ds => ds.id === this.dataSourceId);
 
 			// Define sites (depending on user permissions)
-			this.sites = this.project.entities.filter(e => e.active && this.dataSource.entities.includes(e.id));
+			const myInvitation = this.invitations.find(i => i.email === this.userEmail);
+			this.sites = this.project.entities.filter(e =>
+				e.active && this.dataSource.entities.includes(e.id) &&
+				(!myInvitation || myInvitation.dataEntry.siteIds.includes(e.id))
+			);
 
 			this.loading = true;
 			this.load();
 		}
 
 		async load() {
-			this.inputsStatus = await Input.fetchFormStatus(this.project, this.dataSourceId);
+			const myInvitation = this.invitations.find(i => i.email === this.userEmail);
+			const siteIds = myInvitation ? myInvitation.dataEntry.siteIds : null;
+
+			this.inputsStatus = await Input.fetchFormStatus(this.project, this.dataSourceId, siteIds);
 
 			// Those list tell which rows should be displayed.
 			this.visibleStatus = Object.keys(this.inputsStatus).slice(0, 20);

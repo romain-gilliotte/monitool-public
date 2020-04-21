@@ -3,10 +3,10 @@ import axios from 'axios';
 
 export default class Input {
 
-	static async fetchFormShortStatus(project, dataSourceId) {
+	static async fetchFormShortStatus(project, dataSourceId, siteIds = null) {
 		const dataSource = project.forms.find(ds => ds.id == dataSourceId)
 		const dsResult = Object
-			.values(await this.fetchFormStatus(project, dataSource.id))
+			.values(await this.fetchFormStatus(project, dataSource.id, siteIds))
 			.reduce((m, e) => [...m, ...Object.values(e)], []);
 
 		return {
@@ -18,7 +18,7 @@ export default class Input {
 	}
 
 	/** fixme The computed percentage is no precise enough: it is by variable, we need by cell */
-	static async fetchFormStatus(project, dataSourceId) {
+	static async fetchFormStatus(project, dataSourceId, siteIds = null) {
 		const dataSource = project.forms.find(ds => ds.id === dataSourceId);
 		const variables = dataSource.elements.filter(variable => variable.active);
 
@@ -37,7 +37,9 @@ export default class Input {
 				{
 					id: 'location',
 					attribute: 'entity',
-					items: project.entities.filter(s => s.active).map(s => s.id)
+					items: project.entities
+						.filter(s => s.active && (siteIds === null || siteIds.includes(s.id)))
+						.map(s => s.id)
 				}
 			],
 			aggregate: [

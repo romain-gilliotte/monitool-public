@@ -66,7 +66,7 @@ module.exports = {
                 Ils permettent de suivre des éléments spécifiques du projet (données médicales, logistiques, ...)
             `
         },
-        'project.config.user_list': {
+        'project.config.invitation_list': {
             title: `Liste des utilisateurs`,
             paragraph: `
                 Plusieurs types d'utilisateurs interviennent dans la mise en place et dans le suivi d'un projet:

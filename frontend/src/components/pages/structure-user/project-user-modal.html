@@ -1,36 +1,35 @@
-<div class="modal-header">
-	<h3 class="modal-title">
+<div class="modal-body">
+	<form class="form-horizontal" role="form" name="invitationForm" novalidate autocomplete="off">
 		<a ng-click="$ctrl.dismiss()" class="pull-right" style="cursor: pointer">
 			<i class="fa fa-times"></i>
 		</a>
-		<span translate="project.edit_user"></span>
-	</h3>
-</div>
+		<legend>Contact</legend>
 
-<div class="modal-body">
-	<form class="form-horizontal" role="form" name="userForm" novalidate autocomplete="off">
+		<form-group input-id="login-input" label="project.email" help="project.invitation_help_email">
+			<input id="login-input" type="text" ng-model="$ctrl.invitation.email" class="form-control" ng-minlength="4"
+				ng-pattern="/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/" forbidden-values="$ctrl.takenEmails"
+				required ng-disabled="!$ctrl.isNew">
+		</form-group>
 
-		<div class="form-group">
-			<label for="login-input" class="col-sm-3 control-label" translate="project.email"></label>
-			<div class="col-sm-9">
-				<input id="login-input" type="text" ng-model="$ctrl.invitation.email" class="form-control"
-					ng-minlength="4" ng-pattern="/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/"
-					forbidden-values="$ctrl.takenEmails" required ng-disabled="!$ctrl.isNew">
+		<legend>Autorisations saisie</legend>
 
-				<p class="help-block">
-					<i class="fa fa-info-circle"></i>
-					{{'project.user_help_email'|translate}}
-				</p>
-			</div>
-		</div>
+		<form-group input-id="entities-input" label="project.collection_site_list" help="project.invitation_help_sites">
+			<element-filter ng-model="$ctrl.invitation.dataEntry.siteIds" elements="$ctrl.entities"
+				groups="$ctrl.groups">
+			</element-filter>
+		</form-group>
+
+		<form-group input-id="dataSources-input" label="project.collection_form_list"
+			help="project.invitation_help_datasources">
+			<element-filter ng-model="$ctrl.invitation.dataEntry.dataSourceIds" elements="$ctrl.dataSources">
+			</element-filter>
+		</form-group>
 	</form>
 </div>
 
 <div class="modal-footer">
-	{{userForm.$invalid}}
-	{{$ctrl.hasChanged()}}
 	<div style="float: left">
-		<p class="text-danger" ng-if="userForm.$invalid">
+		<p class="text-danger" ng-if="invitationForm.$invalid">
 			<i class="fa fa-exclamation-triangle"></i>
 			<span translate="project.form_error_short"></span>
 		</p>
@@ -40,15 +39,16 @@
 			<span translate="project.form_persisted_short"></span>
 		</p>
 
-		<p class="text-warning" ng-if="$ctrl.hasChanged() && !userForm.$invalid">
+		<p class="text-warning" ng-if="$ctrl.hasChanged() && !invitationForm.$invalid">
 			<i class="fa fa-exclamation-triangle"></i>
 			<span translate="project.form_changed_short"></span>
 		</p>
 	</div>
 
-	<button ng-click="$ctrl.done()" ng-disabled="userForm.$invalid || !$ctrl.hasChanged()" class="btn btn-primary">
+	<button ng-click="$ctrl.done()" ng-disabled="invitationForm.$invalid || !$ctrl.hasChanged()"
+		class="btn btn-primary">
 		<i class="fa fa-object-group"></i>
-		<span translate="project.update_user"></span>
+		<span translate="project.update_invitation"></span>
 	</button>
 
 	<button ng-click="$ctrl.reset()" ng-disabled="!$ctrl.hasChanged()" class="btn btn-default">

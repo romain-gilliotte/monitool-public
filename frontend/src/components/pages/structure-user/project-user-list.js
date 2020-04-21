@@ -11,8 +11,8 @@ const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtProjectU
 
 module.config($stateProvider => {
 
-	$stateProvider.state('project.config.user_list', {
-		url: '/users',
+	$stateProvider.state('project.config.invitation_list', {
+		url: '/invitations',
 		component: __componentName,
 	});
 });
@@ -52,7 +52,8 @@ module.component(__componentName, {
 			if (oldIvt) {
 				if (newIvt) {
 					// Replace
-					const response = await axios.put(`/invitation/${invitation._id}`, newIvt);
+					const { _id, ...body } = newIvt;
+					const response = await axios.put(`/invitation/${_id}`, body);
 
 					this.invitations.splice(
 						this.invitations.indexOf(oldIvt),

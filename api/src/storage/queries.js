@@ -48,7 +48,7 @@ function listWaitingInvitations(userEmail) {
         { $unwind: '$project' },
         {
             $project: {
-                'projectId': 1, 'email': 1, 'accepted': 1,
+                'projectId': 1, 'email': 1, 'accepted': 1, 'dataEntry': 1,
                 'project.owner': 1, 'project.country': 1, 'project.name': 1, 'project.start': 1, 'project.end': 1
             }
         }
@@ -61,7 +61,7 @@ function listProjectInvitations(userEmail, projectId) {
         { $lookup: { from: 'project', localField: 'projectId', foreignField: '_id', as: 'project' } },
         { $unwind: '$project' },
         { $match: { $or: [{ email: userEmail }, { 'project.owner': userEmail }] } },
-        { $project: { 'projectId': 1, 'email': 1, 'accepted': 1 } }
+        { $project: { 'projectId': 1, 'email': 1, 'accepted': 1, 'dataEntry': 1, } }
     ]);
 }
 
@@ -71,7 +71,7 @@ async function getInvitation(userEmail, id) {
         { $lookup: { from: 'project', localField: 'projectId', foreignField: '_id', as: 'project' } },
         { $unwind: '$project' },
         { $match: { $or: [{ email: userEmail }, { 'project.owner': userEmail }] } },
-        { $project: { 'projectId': 1, 'email': 1, 'accepted': 1 } }
+        { $project: { 'projectId': 1, 'email': 1, 'accepted': 1, 'dataEntry': 1, } }
     ]).next();
 }
 
