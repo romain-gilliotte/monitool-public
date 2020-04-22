@@ -20,6 +20,7 @@
     "font-awesome": "^4.7.0",
     "handsontable": "^7.4.2",
     "jiff": "github:romain-gilliotte/jiff",
+    "js-cookie": "^2.2.1",
     "lodash.range": "^3.2.0",
     "olap-in-memory": "^7.0.5",
     "sortablejs": "~1.9.0",

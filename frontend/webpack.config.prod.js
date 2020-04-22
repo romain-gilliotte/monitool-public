@@ -11,7 +11,8 @@ module.exports = {
         ...config.plugins,
 
         new webpack.DefinePlugin({
-            SERVICE_URL: '"/api"'
+            SERVICE_URL: '"/api"',
+            IS_PRODUCTION: true,
         }),
 
         new CompressionPlugin({

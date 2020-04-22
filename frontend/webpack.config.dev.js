@@ -24,6 +24,9 @@ module.exports = {
 
     plugins: [
         ...config.plugins,
-        new webpack.DefinePlugin({ SERVICE_URL: '"/api"' }),
+        new webpack.DefinePlugin({
+            SERVICE_URL: '"/api"',
+            IS_PRODUCTION: false,
+        }),
     ]
 };

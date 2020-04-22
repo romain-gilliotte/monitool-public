@@ -1,11 +1,12 @@
-import 'bootstrap/dist/css/bootstrap.css';
-import 'font-awesome/css/font-awesome.min.css';
+import createAuth0Client from '@auth0/auth0-spa-js';
 import angular from 'angular';
 import axios from 'axios';
-import createAuth0Client from '@auth0/auth0-spa-js';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'font-awesome/css/font-awesome.min.css';
+import Cookies from 'js-cookie';
 import mtPages from './components/pages/all-pages';
-import mtTranslation from './translation/bootstrap';
 import mtFilterMisc from './filters/misc';
+import mtTranslation from './translation/bootstrap';
 require(__cssPath)
 
 async function authenticate() {
@@ -42,8 +43,11 @@ async function authenticate() {
 }
 
 function startApp(accessToken, profile) {
-	// FIXME we should use the cookie only it: secure + path == api + ....
-	document.cookie = `monitool_access_token=${encodeURIComponent(accessToken)}`;
+	Cookies.set(
+		'monitool_access_token',
+		accessToken,
+		{ path: '/api', sameSite: 'strict', secure: IS_PRODUCTION }
+	);
 
 	const module = angular.module(__moduleName, [mtPages, mtTranslation, mtFilterMisc]);
 
