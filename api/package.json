@@ -26,7 +26,6 @@
     "koa-response-time": "^2.0.0",
     "lodash": "^4.17.15",
     "mongodb": "^3.5.6",
-    "nodemailer": "^6.4.6",
     "object-hash": "^2.0.3",
     "olap-in-memory": "^7.0.3",
     "pdfmake": "^0.1.65",

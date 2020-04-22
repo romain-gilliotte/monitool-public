@@ -8,7 +8,9 @@ const { deleteFiles } = require('../storage/gridfs');
 const router = new Router();
 
 router.post('/project/:id/input', validateBody('input'), async ctx => {
-	const project = await getProject(ctx.state.profile.email, ctx.params.id);
+	let project
+	try { project = await getProject(ctx.state.profile.email, ctx.params.id); }
+	catch (e) { ctx.response.status = 404; }
 
 	let allowed;
 	if (!project)
