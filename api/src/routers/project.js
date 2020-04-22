@@ -89,8 +89,8 @@ router.put('/project/:id', validateBody('project'), async ctx => {
 
 	// Clear reporting cache
 	await Promise.all([
-		redis.del(`reporting:${projectId}`),
-		deleteFiles(`reporting:${projectId}`)
+		redis.del(`reporting:${ctx.params.id}`),
+		deleteFiles(`reporting:${ctx.params.id}`)
 	]);
 
 	ctx.response.body = { _id: ctx.params.id, ...newProject };
