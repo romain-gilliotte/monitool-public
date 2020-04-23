@@ -12,9 +12,8 @@ module.component(__componentName, {
     transclude: true,
     template: require(__templatePath),
     controller: class {
-
         constructor($rootScope, $sce, $transitions, $state) {
-            "ngInject";
+            'ngInject';
 
             this.language = $rootScope.language;
             this.$transitions = $transitions;
@@ -51,10 +50,9 @@ module.component(__componentName, {
                     .map(qa => ({
                         question: this.$sce.trustAsHtml(qa.question),
                         answer: this.$sce.trustAsHtml(qa.answer),
-                        selected: false
+                        selected: false,
                     }));
-            }
-            catch (e) {
+            } catch (e) {
                 console.log(`Missing help section: ${this.page}`);
                 this.title = this.paragraph = '';
                 this.qas = [];
@@ -64,8 +62,7 @@ module.component(__componentName, {
         onQaClick(qa) {
             qa.selected = !qa.selected;
         }
-
-    }
+    },
 });
 
 export default module.name;

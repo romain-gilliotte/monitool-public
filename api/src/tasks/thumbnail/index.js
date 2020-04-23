@@ -13,7 +13,7 @@ queue.process('generate-thumbnail', async job => {
     let document = {
         stream: original.stream,
         filename: original.file.filename,
-        mimeType: original.file.metadata.mimeType
+        mimeType: original.file.metadata.mimeType,
     };
 
     if (document) {
@@ -27,18 +27,19 @@ queue.process('generate-thumbnail', async job => {
                 headers: form.getHeaders(),
             });
 
-            document = { stream: response.data, filename: 'document.pdf', mimeType: 'application/pdf' }
+            document = {
+                stream: response.data,
+                filename: 'document.pdf',
+                mimeType: 'application/pdf',
+            };
         }
 
         // Create thumbnail
         if (document.mimeType === 'application/pdf') {
-            const newStream = gm(document.stream, document.filename)
-                .crop(595, 400)
-                .stream('PNG')
+            const newStream = gm(document.stream, document.filename).crop(595, 400).stream('PNG');
 
-            document = { stream: newStream, filename: 'thumbnail.png', mimeType: 'image/png' }
-        }
-        else {
+            document = { stream: newStream, filename: 'thumbnail.png', mimeType: 'image/png' };
+        } else {
             document.stream.destroy();
             document = null;
         }
@@ -49,8 +50,8 @@ queue.process('generate-thumbnail', async job => {
         document = {
             filename: 'placeholder.png',
             mimeType: 'image/png',
-            stream: fs.createReadStream('data/placeholder.png')
-        }
+            stream: fs.createReadStream('data/placeholder.png'),
+        };
     }
 
     await updateFile(

@@ -7,54 +7,48 @@ import Project from '../../../models/project';
 const module = angular.module(__moduleName, [uiRouter, mtDisableIf]);
 
 module.config($stateProvider => {
+    $stateProvider.state('project', {
+        abstract: true,
+        url: '/projects/:projectId',
+        component: __componentName,
 
-	$stateProvider.state('project', {
-		abstract: true,
-		url: '/projects/:projectId',
-		component: __componentName,
+        resolve: {
+            loadedProject: ($rootScope, $stateParams, $q) => {
+                const projectId = $stateParams.projectId;
 
-		resolve: {
-			loadedProject: ($rootScope, $stateParams, $q) => {
-				const projectId = $stateParams.projectId;
-
-				return projectId === 'new' ?
-					$q.when(new Project({ owner: $rootScope.profile.email })) :
-					Project.get(projectId);
-			},
-			invitations: ($stateParams) => {
-				const projectId = $stateParams.projectId;
-				return projectId === 'new' ?
-					[] :
-					axios.get(`/project/${projectId}/invitation`).then(r => r.data);
-			}
-		}
-	});
+                return projectId === 'new'
+                    ? $q.when(new Project({ owner: $rootScope.profile.email }))
+                    : Project.get(projectId);
+            },
+            invitations: $stateParams => {
+                const projectId = $stateParams.projectId;
+                return projectId === 'new'
+                    ? []
+                    : axios.get(`/project/${projectId}/invitation`).then(r => r.data);
+            },
+        },
+    });
 });
-
 
 module.component(__componentName, {
-	bindings: {
-		loadedProject: '<',
-		invitations: '<'
-	},
-	transclude: true,
-	template: require(__templatePath),
+    bindings: {
+        loadedProject: '<',
+        invitations: '<',
+    },
+    transclude: true,
+    template: require(__templatePath),
 
-	controller: class {
+    controller: class {
+        $onChanges(changes) {
+            // fixme why rename?
+            // do we need the pointer to the original project for something?
+            this.project = this.loadedProject;
+        }
 
-		$onChanges(changes) {
-			// fixme why rename?
-			// do we need the pointer to the original project for something?
-			this.project = this.loadedProject;
-		}
-
-		onProjectSaveSuccess(newProject) {
-			this.project = newProject;
-		}
-
-	}
-
+        onProjectSaveSuccess(newProject) {
+            this.project = newProject;
+        }
+    },
 });
-
 
 export default module.name;

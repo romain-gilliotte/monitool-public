@@ -15,12 +15,12 @@ module.exports = koaCompose([
             cache: true,
             rateLimit: true,
             jwksRequestsPerMinute: 2,
-            jwksUri: `https://${config.jwt.jwksHost}/.well-known/jwks.json`
+            jwksUri: `https://${config.jwt.jwksHost}/.well-known/jwks.json`,
         }),
         audience: config.jwt.audience,
         issuer: config.jwt.issuer,
         algorithms: ['RS256'],
-        cookie: 'monitool_access_token'
+        cookie: 'monitool_access_token',
     }),
 
     // Load profile
@@ -33,7 +33,8 @@ module.exports = koaCompose([
         let user = await collection.findOne({ subs: subcriber });
         if (!user) {
             // User was not found from the subcriber id
-            const token = ctx.request.header.authorization || ctx.cookies.get('monitool_access_token');
+            const token =
+                ctx.request.header.authorization || ctx.cookies.get('monitool_access_token');
             const profile = await auth0Client.getProfile(token);
 
             user = await collection.findOne({ _id: profile.email });
@@ -41,15 +42,14 @@ module.exports = koaCompose([
                 // User logged with a new identity provider
                 user.subs.push(subcriber);
                 collection.updateOne({ _id: user._id }, { $addToSet: { subs: subcriber } });
-            }
-            else {
+            } else {
                 // User is new: we wait for the insertion before releasing the lock.
                 user = {
                     _id: profile.email,
                     name: profile.name,
                     picture: profile.picture,
                     subs: [subcriber],
-                    lastSeen: new Date()
+                    lastSeen: new Date(),
                 };
 
                 await collection.insertOne(user);
@@ -58,22 +58,21 @@ module.exports = koaCompose([
         }
 
         // Unlock access to this user (no waiting).
-        lock.unlock().catch(e => { });
+        lock.unlock().catch(e => {});
 
         // Update lastSeen date if older than 10 minutes (no waiting).
         if (new Date() - user.lastSeen > 10 * 60 * 1000) {
             user.lastSeen = new Date();
             await collection
                 .updateOne({ _id: user._id }, { $currentDate: { lastSeen: true } })
-                .catch(e => { });
+                .catch(e => {});
         }
 
         ctx.state.profile = new Profile(user);
 
         await next();
-    }
-])
-
+    },
+]);
 
 class Profile {
     constructor(user) {
@@ -86,18 +85,19 @@ class Profile {
 
     async isInvitedTo(projectId) {
         try {
-            await getProject(this.email, projectId, { _id: true })
+            await getProject(this.email, projectId, { _id: true });
             return true;
-        }
-        catch (e) {
+        } catch (e) {
             return false;
         }
     }
 
     async isOwnerOf(projectId) {
-        return 1 === await database.collection('project').countDocuments({
+        const numProjects = await database.collection('project').countDocuments({
             _id: new ObjectId(projectId),
-            owner: this.email
+            owner: this.email,
         });
+
+        return 1 === numProjects;
     }
 }

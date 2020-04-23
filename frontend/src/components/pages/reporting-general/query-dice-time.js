@@ -1,23 +1,22 @@
-import angular from "angular";
+import angular from 'angular';
 
 const module = angular.module(__moduleName, []);
 
 module.component(__componentName, {
     bindings: {
         project: '<',
-        onUpdate: '&'
+        onUpdate: '&',
     },
 
     template: require(__templatePath),
 
     controller: class {
-
         $onInit() {
             this.panelOpen = false;
         }
 
         $onChanges(changes) {
-            const now = new Date().toISOString().substring(0, 10)
+            const now = new Date().toISOString().substring(0, 10);
             this.startDate = this.project.start;
             this.endDate = this.project.end < now ? this.project.end : now;
 
@@ -26,10 +25,14 @@ module.component(__componentName, {
 
         onFilterChange() {
             this.onUpdate({
-                dice: { id: 'time', attribute: 'day', range: [this.startDate, this.endDate] }
-            })
+                dice: {
+                    id: 'time',
+                    attribute: 'day',
+                    range: [this.startDate, this.endDate],
+                },
+            });
         }
-    }
+    },
 });
 
 export default module.name;

@@ -9,74 +9,67 @@ require(__scssPath);
 const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtColumnsPanel, mtHelpPanel]);
 
 module.config($stateProvider => {
-
-	$stateProvider.state('project.config.logical_frame_list', {
-		url: '/logical-frame',
-		component: __componentName
-	});
+    $stateProvider.state('project.config.logical_frame_list', {
+        url: '/logical-frame',
+        component: __componentName,
+    });
 });
-
 
 module.component(__componentName, {
+    bindings: {
+        // injected from parent component.
+        project: '<',
+        onProjectUpdate: '&',
+    },
 
-	bindings: {
-		// injected from parent component.
-		project: '<',
-		onProjectUpdate: '&'
-	},
+    template: require(__templatePath),
 
-	template: require(__templatePath),
+    controller: class {
+        constructor($state) {
+            'ngInject';
 
-	controller: class {
+            this.$state = $state;
+        }
 
-		constructor($state) {
-			"ngInject";
+        $onInit() {
+            this.ngSortableOptions = {
+                handle: '.handle',
+                onUpdate: this.onFieldChange.bind(this),
+            };
+        }
 
-			this.$state = $state;
-		}
+        $onChanges(changes) {
+            // Project is a single way data bindings: we must not change it.
+            if (changes.project) this.editableProject = angular.copy(this.project);
+        }
 
-		$onInit() {
-			this.ngSortableOptions = {
-				handle: '.handle',
-				onUpdate: this.onFieldChange.bind(this)
-			};
-		}
+        /**
+         * Called from onUpdate for the list reordering:
+         * tell parent component that we updated the project.
+         */
+        onFieldChange() {
+            this.onProjectUpdate({
+                newProject: this.editableProject,
+                isValid: true,
+            });
+        }
 
-		$onChanges(changes) {
-			// Project is a single way data bindings: we must not change it.
-			if (changes.project)
-				this.editableProject = angular.copy(this.project);
-		}
+        onCreateLogicalFrameClicked(logicalFrame) {
+            this.$state.go('project.config.logical_frame_edition', {
+                logicalFrameId: uuid(),
+                from: logicalFrame ? logicalFrame.id : null,
+            });
+        }
 
-		/**
-		 * Called from onUpdate for the list reordering:
-		 * tell parent component that we updated the project.
-		 */
-		onFieldChange() {
-			this.onProjectUpdate({ newProject: this.editableProject, isValid: true });
-		}
+        onDeleteClicked(logicalFrame) {
+            this.editableProject.logicalFrames.splice(
+                this.editableProject.logicalFrames.indexOf(logicalFrame),
+                1
+            );
 
-		onCreateLogicalFrameClicked(logicalFrame) {
-			this.$state.go(
-				'project.config.logical_frame_edition',
-				{
-					logicalFrameId: uuid(),
-					from: logicalFrame ? logicalFrame.id : null
-				}
-			);
-		}
-
-		onDeleteClicked(logicalFrame) {
-			this.editableProject.logicalFrames.splice(
-				this.editableProject.logicalFrames.indexOf(logicalFrame),
-				1
-			);
-
-			this.onFieldChange();
-		}
-	}
+            this.onFieldChange();
+        }
+    },
 });
 
-
 export default module.name;
-

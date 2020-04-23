@@ -1,13 +1,13 @@
-import angular from 'angular'
-import uiRouter from '@uirouter/angularjs'
-import uiModal from 'angular-ui-bootstrap/src/modal'
-import 'angular-legacy-sortablejs-maintained'
-import mtIndicatorDisplay from '../../shared/indicator/indicator'
-import mtIndicatorModal from '../../shared/indicator/indicator-edition-modal'
-import mtDirectiveAutoresize from '../../../directives/helpers/autoresize'
-import mtDatePicker from '../../shared/ng-models/utc-datepicker'
-import mtHelpPanel from '../../shared/misc/help-panel'
-require(__scssPath)
+import angular from 'angular';
+import uiRouter from '@uirouter/angularjs';
+import uiModal from 'angular-ui-bootstrap/src/modal';
+import 'angular-legacy-sortablejs-maintained';
+import mtIndicatorDisplay from '../../shared/indicator/indicator';
+import mtIndicatorModal from '../../shared/indicator/indicator-edition-modal';
+import mtDirectiveAutoresize from '../../../directives/helpers/autoresize';
+import mtDatePicker from '../../shared/ng-models/utc-datepicker';
+import mtHelpPanel from '../../shared/misc/help-panel';
+require(__scssPath);
 
 const module = angular.module(__moduleName, [
     uiRouter, // for $stateProvider
@@ -19,18 +19,18 @@ const module = angular.module(__moduleName, [
     mtDirectiveAutoresize,
     mtDatePicker,
     mtHelpPanel,
-])
+]);
 
-module.config(($stateProvider) => {
+module.config($stateProvider => {
     $stateProvider.state('project.config.logical_frame_edition', {
         url: '/logical-frame/:logicalFrameId?from',
         component: __componentName,
         resolve: {
-            logicalFrameId: ($stateParams) => $stateParams.logicalFrameId,
-            from: ($stateParams) => $stateParams.from,
+            logicalFrameId: $stateParams => $stateParams.logicalFrameId,
+            from: $stateParams => $stateParams.from,
         },
-    })
-})
+    });
+});
 
 module.component(__componentName, {
     bindings: {
@@ -47,33 +47,25 @@ module.component(__componentName, {
 
     controller: class {
         constructor($uibModal) {
-            'ngInject'
+            'ngInject';
 
-            this.$uibModal = $uibModal
+            this.$uibModal = $uibModal;
         }
 
         $onChanges(changes) {
             if (changes.project || changes.logicalFrameId) {
-                const lfs = this.project.logicalFrames
+                const lfs = this.project.logicalFrames;
 
                 // Edit specified logframe
-                this.editableLogFrame = angular.copy(
-                    lfs.find((lf) => lf.id === this.logicalFrameId)
-                )
+                this.editableLogFrame = angular.copy(lfs.find(lf => lf.id === this.logicalFrameId));
 
                 // Or copy an existing one
                 if (!this.editableLogFrame) {
-                    this.editableLogFrame = angular.copy(
-                        lfs.find((lf) => lf.id === this.from)
-                    )
+                    this.editableLogFrame = angular.copy(lfs.find(lf => lf.id === this.from));
                     if (this.editableLogFrame) {
-                        const m = this.editableLogFrame.name.match(
-                            /^(.*) \((\d+)\)$/
-                        )
-                        if (!m) this.editableLogFrame.name += ' (2)'
-                        else
-                            this.editableLogFrame.name =
-                                m[1] + ' (' + (parseInt(m[2]) + 1) + ')'
+                        const m = this.editableLogFrame.name.match(/^(.*) \((\d+)\)$/);
+                        if (!m) this.editableLogFrame.name += ' (2)';
+                        else this.editableLogFrame.name = m[1] + ' (' + (parseInt(m[2]) + 1) + ')';
                     }
                 }
 
@@ -84,28 +76,28 @@ module.component(__componentName, {
                         goal: '',
                         start: null,
                         end: null,
-                        entities: this.project.entities.map((s) => s.id),
+                        entities: this.project.entities.map(s => s.id),
                         indicators: [],
                         purposes: [],
-                    }
+                    };
 
-                this.specificDates = this.editableLogFrame.start ? 'yes' : 'no'
+                this.specificDates = this.editableLogFrame.start ? 'yes' : 'no';
 
                 // and make sure that the id is defined.
-                this.editableLogFrame.id = this.logicalFrameId
-                this.onFieldChange()
+                this.editableLogFrame.id = this.logicalFrameId;
+                this.onFieldChange();
             }
         }
 
         toggleSpecificDates() {
             if (this.specificDates === 'no') {
-                this.editableLogFrame.start = this.editableLogFrame.end = null
+                this.editableLogFrame.start = this.editableLogFrame.end = null;
             } else {
-                this.editableLogFrame.start = this.project.start
-                this.editableLogFrame.end = this.project.end
+                this.editableLogFrame.start = this.project.start;
+                this.editableLogFrame.end = this.project.end;
             }
 
-            this.onFieldChange()
+            this.onFieldChange();
         }
 
         $onInit() {
@@ -118,21 +110,21 @@ module.component(__componentName, {
                 handle: '.purpose-handle',
                 onUpdate: this.onFieldChange.bind(this),
                 onAdd: this.onFieldChange.bind(this),
-            }
+            };
 
             this.outputSortOptions = {
                 group: 'outputs',
                 handle: '.output-handle',
                 onUpdate: this.onFieldChange.bind(this),
                 onAdd: this.onFieldChange.bind(this),
-            }
+            };
 
             this.activitySortOptions = {
                 group: 'activities',
                 handle: '.activity-handle',
                 onUpdate: this.onFieldChange.bind(this),
                 onAdd: this.onFieldChange.bind(this),
-            }
+            };
 
             this.indicatorsSortOptions = {
                 group: 'indicators',
@@ -141,7 +133,7 @@ module.component(__componentName, {
                 onEnd: () => document.body.classList.remove('dragging'),
                 onUpdate: this.onFieldChange.bind(this),
                 onAdd: this.onFieldChange.bind(this),
-            }
+            };
         }
 
         /**
@@ -149,29 +141,24 @@ module.component(__componentName, {
          * tell parent component that we updated the project.
          */
         onFieldChange() {
-            const newProject = angular.copy(this.project)
-            const index = newProject.logicalFrames.findIndex(
-                (lf) => lf.id === this.logicalFrameId
-            )
+            const newProject = angular.copy(this.project);
+            const index = newProject.logicalFrames.findIndex(lf => lf.id === this.logicalFrameId);
 
-            if (index !== -1)
-                newProject.logicalFrames[index] = this.editableLogFrame
-            else newProject.logicalFrames.push(this.editableLogFrame)
+            if (index !== -1) newProject.logicalFrames[index] = this.editableLogFrame;
+            else newProject.logicalFrames.push(this.editableLogFrame);
 
             this.onProjectUpdate({
                 newProject: newProject,
-                isValid:
-                    !!this.editableLogFrame.name &&
-                    (!this.lfForm || this.lfForm.$valid),
-            })
+                isValid: !!this.editableLogFrame.name && (!this.lfForm || this.lfForm.$valid),
+            });
         }
 
         onSortableMouseEvent(group, enter) {
-            if (group == 'outputs') this.purposeSortOptions.disabled = enter
+            if (group == 'outputs') this.purposeSortOptions.disabled = enter;
             else if (group == 'activities')
-                this.purposeSortOptions.disabled = this.outputSortOptions.disabled = enter
+                this.purposeSortOptions.disabled = this.outputSortOptions.disabled = enter;
             else if (group == 'indicators')
-                this.purposeSortOptions.disabled = this.outputSortOptions.disabled = this.activitySortOptions = enter
+                this.purposeSortOptions.disabled = this.outputSortOptions.disabled = this.activitySortOptions = enter;
         }
 
         onAddPurposeClicked() {
@@ -180,9 +167,9 @@ module.component(__componentName, {
                 assumptions: '',
                 indicators: [],
                 outputs: [],
-            })
+            });
 
-            this.onFieldChange()
+            this.onFieldChange();
         }
 
         onAddOutputClicked(purpose) {
@@ -191,37 +178,37 @@ module.component(__componentName, {
                 activities: [],
                 assumptions: '',
                 indicators: [],
-            })
+            });
 
-            this.onFieldChange()
+            this.onFieldChange();
         }
 
         onAddActivityClicked(output) {
             output.activities.push({
                 description: '',
                 indicators: [],
-            })
+            });
 
-            this.onFieldChange()
+            this.onFieldChange();
         }
 
         onRemoveClicked(element, list) {
-            list.splice(list.indexOf(element), 1)
-            this.onFieldChange()
+            list.splice(list.indexOf(element), 1);
+            this.onFieldChange();
         }
 
         onIndicatorUpdated(newIndicator, formerIndicator, list) {
-            const index = list.indexOf(formerIndicator)
-            list.splice(index, 1, newIndicator)
+            const index = list.indexOf(formerIndicator);
+            list.splice(index, 1, newIndicator);
 
-            this.onFieldChange()
+            this.onFieldChange();
         }
 
         onIndicatorDeleted(indicator, list) {
-            const index = list.indexOf(indicator)
-            list.splice(index, 1)
+            const index = list.indexOf(indicator);
+            list.splice(index, 1);
 
-            this.onFieldChange()
+            this.onFieldChange();
         }
 
         // handle indicator add, edit and remove are handled in a modal window.
@@ -234,15 +221,15 @@ module.component(__componentName, {
                     indicator: () => null,
                     dataSources: () => this.project.forms,
                 },
-            }
+            };
 
-            const newPlanning = await this.$uibModal.open(modalOpts).result
+            const newPlanning = await this.$uibModal.open(modalOpts).result;
             if (newPlanning) {
-                parent.push(newPlanning)
-                this.onFieldChange()
+                parent.push(newPlanning);
+                this.onFieldChange();
             }
         }
     },
-})
+});
 
-export default module.name
+export default module.name;

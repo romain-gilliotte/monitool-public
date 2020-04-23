@@ -4,26 +4,22 @@ import angular from 'angular';
 const module = angular.module(__moduleName, [uiRouter]);
 
 module.config($stateProvider => {
-
     $stateProvider.state('project.usage.downloads', {
         url: '/downloads',
         component: __componentName,
     });
-
 });
 
 module.component(__componentName, {
-
     bindings: {
-        project: '<'
+        project: '<',
     },
 
     template: require(__templatePath),
 
     controller: class {
-
         constructor($rootScope, $element) {
-            "ngInject";
+            'ngInject';
 
             this.$rootScope = $rootScope;
             this.$element = $element[0];
@@ -46,15 +42,15 @@ module.component(__componentName, {
                         main: {
                             icon: 'fa-file-pdf-o',
                             key: 'project.download_portrait',
-                            url: `${url}.pdf?language=${language}&orientation=portrait`
+                            url: `${url}.pdf?language=${language}&orientation=portrait`,
                         },
                         dropdown: [
                             {
                                 icon: 'fa-file-pdf-o',
                                 key: 'project.download_landscape',
-                                url: `${url}.pdf?language=${language}&orientation=landscape`
-                            }
-                        ]
+                                url: `${url}.pdf?language=${language}&orientation=landscape`,
+                            },
+                        ],
                     };
                 }),
                 ...this.project.forms.map(ds => {
@@ -68,27 +64,25 @@ module.component(__componentName, {
                         main: {
                             key: 'project.download_portrait',
                             icon: 'fa-file-pdf-o',
-                            url: `${url}.pdf?language=${language}&orientation=portrait`
+                            url: `${url}.pdf?language=${language}&orientation=portrait`,
                         },
                         dropdown: [
                             {
                                 icon: 'fa-file-pdf-o',
                                 key: 'project.download_landscape',
-                                url: `${url}.pdf?language=${language}&orientation=landscape`
+                                url: `${url}.pdf?language=${language}&orientation=landscape`,
                             },
                             {
                                 icon: 'fa-file-excel-o',
                                 key: 'project.download_excel',
-                                url: `${url}.xlsx?language=${language}&orientation=landscape`
-                            }
-                        ]
+                                url: `${url}.xlsx?language=${language}&orientation=landscape`,
+                            },
+                        ],
                     };
-                })
+                }),
             ];
         }
-    }
+    },
 });
 
-
 export default module.name;
-

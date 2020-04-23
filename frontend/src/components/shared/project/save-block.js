@@ -5,15 +5,15 @@ const module = angular.module(__moduleName, []);
 
 module.component(__componentName, {
     bindings: {
-        isValid: "<",
-        isChanged: "<",
+        isValid: '<',
+        isChanged: '<',
         isPersisted: '<',
         isSaving: '<',
 
         onSaveClicked: '&',
-        onResetClicked: '&'
+        onResetClicked: '&',
     },
-    template: require(__templatePath)
+    template: require(__templatePath),
 });
 
 export default module.name;

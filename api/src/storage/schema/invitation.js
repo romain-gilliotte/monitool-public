@@ -1,42 +1,39 @@
 module.exports = {
     definitions: require('./_definitions'),
-    type: "object",
+    type: 'object',
     additionalProperties: false,
-    required: [
-        "email",
-        "accepted"
-    ],
+    required: ['email', 'accepted'],
     properties: {
         projectId: {
-            type: "string",
-            match: "^[0-9a-z]{24}$"
+            type: 'string',
+            match: '^[0-9a-z]{24}$',
         },
         email: {
-            type: "string",
-            format: "email"
+            type: 'string',
+            format: 'email',
         },
         accepted: {
-            type: "boolean"
+            type: 'boolean',
         },
         dataEntry: {
-            type: "object",
-            required: ["dataSourceIds", "siteIds"],
+            type: 'object',
+            required: ['dataSourceIds', 'siteIds'],
             properties: {
                 dataSourceIds: {
-                    type: "array",
+                    type: 'array',
                     uniqueItems: true,
                     items: {
-                        $ref: "#/definitions/uuid"
-                    }
+                        $ref: '#/definitions/uuid',
+                    },
                 },
                 siteIds: {
-                    type: "array",
+                    type: 'array',
                     uniqueItems: true,
                     items: {
-                        $ref: "#/definitions/uuid"
-                    }
-                }
-            }
-        }
-    }
+                        $ref: '#/definitions/uuid',
+                    },
+                },
+            },
+        },
+    },
 };

@@ -5,13 +5,13 @@ const module = angular.module(__moduleName, []);
 
 module.component(__componentName, {
     bindings: {
-        back: '@'
+        back: '@',
     },
     transclude: {
-        'menus': 'menus',
-        'content': 'content',
+        menus: 'menus',
+        content: 'content',
     },
-    template: require(__templatePath)
+    template: require(__templatePath),
 });
 
 export default module.name;

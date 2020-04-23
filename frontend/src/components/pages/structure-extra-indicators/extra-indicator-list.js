@@ -6,83 +6,95 @@ import mtIndicator from '../../shared/indicator/indicator';
 import mtHelpPanel from '../../shared/misc/help-panel';
 require(__scssPath);
 
-const module = angular.module(__moduleName, [uiRouter, uiModal, 'ng-sortable', mtIndicator, mtHelpPanel]);
+const module = angular.module(__moduleName, [
+    uiRouter,
+    uiModal,
+    'ng-sortable',
+    mtIndicator,
+    mtHelpPanel,
+]);
 
 module.config($stateProvider => {
-
-	$stateProvider.state('project.config.extra', {
-		url: '/extra',
-		component: __componentName,
-	});
-
+    $stateProvider.state('project.config.extra', {
+        url: '/extra',
+        component: __componentName,
+    });
 });
 
 module.component(__componentName, {
+    bindings: {
+        // injected from parent component.
+        project: '<',
+        onProjectUpdate: '&',
+    },
 
-	bindings: {
-		// injected from parent component.
-		project: '<',
-		onProjectUpdate: '&'
-	},
+    template: require(__templatePath),
 
-	template: require(__templatePath),
+    controller: class {
+        constructor($uibModal, $scope) {
+            'ngInject';
 
-	controller: class {
+            this.$uibModal = $uibModal;
+            this.$scope = $scope;
+        }
 
-		constructor($uibModal, $scope) {
-			"ngInject";
+        $onInit() {
+            this.sortableOptions = {
+                handle: '.indicator-handle',
+                onUpdate: () =>
+                    this.onProjectUpdate({
+                        newProject: this.editableProject,
+                        isValid: true,
+                    }),
+            };
+        }
 
-			this.$uibModal = $uibModal;
-			this.$scope = $scope;
-		}
+        $onChanges(changes) {
+            // Project is a single way data bindings: we must not change it.
+            if (changes.project) this.editableProject = angular.copy(this.project);
+        }
 
-		$onInit() {
-			this.sortableOptions = {
-				handle: '.indicator-handle',
-				onUpdate: () => this.onProjectUpdate({ newProject: this.editableProject, isValid: true })
-			};
-		}
+        onIndicatorUpdated(newIndicator, formerIndicator) {
+            const index = this.editableProject.extraIndicators.indexOf(formerIndicator);
+            this.editableProject.extraIndicators.splice(index, 1, newIndicator);
 
-		$onChanges(changes) {
-			// Project is a single way data bindings: we must not change it.
-			if (changes.project)
-				this.editableProject = angular.copy(this.project);
-		}
+            this.onProjectUpdate({
+                newProject: this.editableProject,
+                isValid: true,
+            });
+        }
 
-		onIndicatorUpdated(newIndicator, formerIndicator) {
-			const index = this.editableProject.extraIndicators.indexOf(formerIndicator);
-			this.editableProject.extraIndicators.splice(index, 1, newIndicator);
+        onIndicatorDeleted(indicator) {
+            const index = this.editableProject.extraIndicators.indexOf(indicator);
+            this.editableProject.extraIndicators.splice(index, 1);
 
-			this.onProjectUpdate({ newProject: this.editableProject, isValid: true });
-		}
+            this.onProjectUpdate({
+                newProject: this.editableProject,
+                isValid: true,
+            });
+        }
 
-		onIndicatorDeleted(indicator) {
-			const index = this.editableProject.extraIndicators.indexOf(indicator);
-			this.editableProject.extraIndicators.splice(index, 1);
+        async onAddIndicatorClick() {
+            const modalOpts = {
+                component: 'indicatorEditionModal',
+                size: 'lg',
+                resolve: {
+                    planning: () => null,
+                    indicator: () => null,
+                    dataSources: () => this.editableProject.forms,
+                },
+            };
 
-			this.onProjectUpdate({ newProject: this.editableProject, isValid: true });
-		}
-
-		async onAddIndicatorClick() {
-			const modalOpts = {
-				component: 'indicatorEditionModal',
-				size: 'lg',
-				resolve: {
-					planning: () => null,
-					indicator: () => null,
-					dataSources: () => this.editableProject.forms
-				}
-			}
-
-			const newIndicator = await this.$uibModal.open(modalOpts).result;
-			if (newIndicator) {
-				this.editableProject.extraIndicators.push(newIndicator);
-				this.onProjectUpdate({ newProject: this.editableProject, isValid: true });
-			}
-		}
-	}
-})
-
+            const newIndicator = await this.$uibModal.open(modalOpts).result;
+            if (newIndicator) {
+                this.editableProject.extraIndicators.push(newIndicator);
+                this.onProjectUpdate({
+                    newProject: this.editableProject,
+                    isValid: true,
+                });
+            }
+        }
+    },
+});
 
 export default module.name;
-

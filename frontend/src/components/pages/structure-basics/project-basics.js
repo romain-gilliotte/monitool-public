@@ -8,42 +8,38 @@ import mtHelpPanel from '../../shared/misc/help-panel';
 const module = angular.module(__moduleName, [uiRouter, mtUtcDatepicker, mtFormGroup, mtHelpPanel]);
 
 module.config($stateProvider => {
-	$stateProvider.state('project.config.basics', {
-		url: '/basics',
-		component: __componentName
-	});
+    $stateProvider.state('project.config.basics', {
+        url: '/basics',
+        component: __componentName,
+    });
 });
-
 
 module.component(__componentName, {
-	bindings: {
-		// injected from parent component.
-		project: '<',
-		onProjectUpdate: '&'
-	},
+    bindings: {
+        // injected from parent component.
+        project: '<',
+        onProjectUpdate: '&',
+    },
 
-	template: require(__templatePath),
+    template: require(__templatePath),
 
-	controller: class {
+    controller: class {
+        $onChanges(changes) {
+            if (changes.project) {
+                this.editableProject = angular.copy(this.project);
+            }
+        }
 
-		$onChanges(changes) {
-			if (changes.project) {
-				this.editableProject = angular.copy(this.project);
-			}
-		}
-
-		/**
-		 * Called from ng-change on all inputs.
-		 */
-		onFieldChange() {
-			this.onProjectUpdate({
-				newProject: this.editableProject,
-				isValid: this.basicsForm.$valid
-			});
-		}
-
-	}
+        /**
+         * Called from ng-change on all inputs.
+         */
+        onFieldChange() {
+            this.onProjectUpdate({
+                newProject: this.editableProject,
+                isValid: this.basicsForm.$valid,
+            });
+        }
+    },
 });
-
 
 export default module.name;

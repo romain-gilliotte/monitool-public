@@ -6,51 +6,47 @@ import mtIndicatorComputation from './indicator-computation';
 const module = angular.module(__moduleName, [uiModal, mtNumberOptional, mtIndicatorComputation]);
 
 const defaultPlanning = {
-	display: '',
-	colorize: true,
-	baseline: null,
-	target: null,
-	computation: null
+    display: '',
+    colorize: true,
+    baseline: null,
+    target: null,
+    computation: null,
 };
 
-
 module.component(__componentName, {
-	bindings: {
-		resolve: '<',
-		close: '&',
-		dismiss: '&'
-	},
+    bindings: {
+        resolve: '<',
+        close: '&',
+        dismiss: '&',
+    },
 
-	template: require(__templatePath),
+    template: require(__templatePath),
 
-	controller: class {
+    controller: class {
+        $onChanges(changes) {
+            this.dataSources = this.resolve.dataSources;
+            this.indicator = this.resolve.indicator;
+            this.planning = angular.copy(this.resolve.planning || defaultPlanning);
 
-		$onChanges(changes) {
-			this.dataSources = this.resolve.dataSources;
-			this.indicator = this.resolve.indicator;
-			this.planning = angular.copy(this.resolve.planning || defaultPlanning);
+            // cross cutting indicators have no display field.
+            if (this.indicator) delete this.planning.display;
 
-			// cross cutting indicators have no display field.
-			if (this.indicator)
-				delete this.planning.display;
+            this.masterPlanning = angular.copy(this.planning);
+            this.isNew = !this.resolve.planning;
+        }
 
-			this.masterPlanning = angular.copy(this.planning);
-			this.isNew = !this.resolve.planning;
-		}
+        isUnchanged() {
+            return angular.equals(this.planning, this.masterPlanning);
+        }
 
-		isUnchanged() {
-			return angular.equals(this.planning, this.masterPlanning);
-		}
+        reset() {
+            angular.copy(this.masterPlanning, this.planning);
+        }
 
-		reset() {
-			angular.copy(this.masterPlanning, this.planning);
-		}
-
-		save() {
-			this.close({ '$value': this.planning });
-		}
-	}
+        save() {
+            this.close({ $value: this.planning });
+        }
+    },
 });
-
 
 export default module.name;

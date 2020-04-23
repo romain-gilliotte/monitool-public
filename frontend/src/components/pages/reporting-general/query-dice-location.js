@@ -6,13 +6,12 @@ const module = angular.module(__moduleName, [mtMselectWithGroups]);
 module.component(__componentName, {
     bindings: {
         project: '<',
-        onUpdate: '&'
+        onUpdate: '&',
     },
 
     template: require(__templatePath),
 
     controller: class {
-
         $onChanges(changes) {
             this.siteIds = this.project.entities.map(e => e.id);
 
@@ -22,12 +21,13 @@ module.component(__componentName, {
         onFilterChange() {
             this.onUpdate({
                 dice: {
-                    id: 'location', attribute: 'entity', items: this.siteIds
-                }
+                    id: 'location',
+                    attribute: 'entity',
+                    items: this.siteIds,
+                },
             });
         }
-    }
+    },
 });
-
 
 export default module.name;

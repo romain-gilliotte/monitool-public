@@ -16,14 +16,14 @@ router.get('/invitation', async ctx => {
 
 // invite un nouvel utilisateur
 router.post('/invitation', validateBody('invitation'), async ctx => {
-    if (!await ctx.state.profile.isOwnerOf(ctx.request.body.projectId)) {
+    if (!(await ctx.state.profile.isOwnerOf(ctx.request.body.projectId))) {
         ctx.response.status = 403;
         return;
     }
 
     const newIvt = {
         ...ctx.request.body,
-        projectId: new ObjectId(ctx.request.body.projectId)
+        projectId: new ObjectId(ctx.request.body.projectId),
     };
 
     await database.collection('invitation').insertOne(newIvt);
@@ -35,10 +35,11 @@ router.put('/invitation/:id', validateBody('invitation'), async ctx => {
     const oldIvt = await getInvitation(ctx.state.profile.email, ctx.params.id);
     const newIvt = {
         ...ctx.request.body,
-        projectId: new ObjectId(ctx.request.body.projectId)
+        projectId: new ObjectId(ctx.request.body.projectId),
     };
 
-    let isValid = oldIvt && oldIvt.projectId.equals(newIvt.projectId) && oldIvt.email === newIvt.email
+    let isValid =
+        oldIvt && oldIvt.projectId.equals(newIvt.projectId) && oldIvt.email === newIvt.email;
     if (oldIvt.email === ctx.state.profile.email)
         isValid = isValid && oldIvt.accepted === false && newIvt.accepted === true;
 
@@ -61,6 +62,5 @@ router.delete('/invitation/:id', async ctx => {
         ctx.response.status = 204;
     }
 });
-
 
 module.exports = router;

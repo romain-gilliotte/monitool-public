@@ -1,4 +1,3 @@
-
 // <div class="alert alert-info">
 //     <i class="fa fa-info-circle"></i>
 //         Use short names to name collection sites, data sources, variables, and indicators. <br />

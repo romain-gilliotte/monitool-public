@@ -4,12 +4,11 @@ const { Cube, TimeDimension, GenericDimension } = require('olap-in-memory');
 // FIXME: rewrite all this, and unit test it properly
 // We should find a way to move part of it at least to olap-in-memory
 
-
 /**
  * Build a variable cube from data entries
- * 
- * @param {string} projectId 
- * @param {string} variableId 
+ *
+ * @param {string} projectId
+ * @param {string} variableId
  */
 async function getVariableCube(projectId, variableId, aggregate, dice) {
     const project = await loadProject(projectId, variableId);
@@ -27,9 +26,12 @@ async function getVariableCube(projectId, variableId, aggregate, dice) {
     dice.forEach(dice => {
         const dimIndex = cubeDims.findIndex(dim => dim.id === dice.id);
         if (dice.range)
-            cubeDims[dimIndex] = cubeDims[dimIndex].diceRange(dice.attribute, dice.range[0], dice.range[1]);
-        else
-            cubeDims[dimIndex] = cubeDims[dimIndex].dice(dice.attribute, dice.items);
+            cubeDims[dimIndex] = cubeDims[dimIndex].diceRange(
+                dice.attribute,
+                dice.range[0],
+                dice.range[1]
+            );
+        else cubeDims[dimIndex] = cubeDims[dimIndex].dice(dice.attribute, dice.items);
     });
 
     // On fait deux cubes avec les memes dimensions.
@@ -43,41 +45,50 @@ async function getVariableCube(projectId, variableId, aggregate, dice) {
     overviewCube.createStoredMeasure('main', rules);
 
     // Load inputs in reverse chronological order.
-    const sequenceIds = await database.collection('input_seq').find(
-        { projectIds: new ObjectId(project._id) },
-        { projection: { _id: true } }
-    ).map(s => s._id).toArray();
+    const sequenceIds = await database
+        .collection('input_seq')
+        .find({ projectIds: new ObjectId(project._id) }, { projection: { _id: true } })
+        .map(s => s._id)
+        .toArray();
 
-    await database.collection('input')
+    await database
+        .collection('input')
         .find(
-            { 'sequenceId': { $in: sequenceIds }, 'content.variableId': variable.id },
+            { sequenceId: { $in: sequenceIds }, 'content.variableId': variable.id },
             { projection: { 'content.$': true }, sort: [['_id', 1]] }
         )
-        .forEach(input => void input.content.forEach(content => {
-            const inputDimensions = createInputDimensions(content);
-            const neededDims = createVariableDimensions(project, form, variable, content.dimensions[0].attribute) // pas beau
-                .filter(dimension => {
-                    // keep only dimension which are NEEDED FOR THE QUERY
-                    return [...aggregate, ...dice].find(e => e.id === dimension.id)
-                });
+        .forEach(
+            input =>
+                void input.content.forEach(content => {
+                    const inputDimensions = createInputDimensions(content);
+                    const neededDims = createVariableDimensions(
+                        project,
+                        form,
+                        variable,
+                        content.dimensions[0].attribute
+                    ) // pas beau
+                        .filter(dimension => {
+                            // keep only dimension which are NEEDED FOR THE QUERY
+                            return [...aggregate, ...dice].find(e => e.id === dimension.id);
+                        });
 
-            let inputCube = new Cube(inputDimensions);
-            inputCube.createStoredMeasure('main', rules); // fixme: aggregation rules for legacy partitions are missing.
-            inputCube.setData('main', content.data);
-            try {
-                // on doit reshape ce cube en suivant les regles suivantes:
-                // - On garde la meme periodicité ce celle qui venait
-                // - On rajoute les dimensions manquantes JUSTE AVEC LES DONNÉES du projet.
-                // (SANS PRENDRE EN COMPTE ce qu'on a fait sur nos deux cubes, ca sera fait après).
-                inputCube = inputCube.reshape(neededDims);
+                    let inputCube = new Cube(inputDimensions);
+                    inputCube.createStoredMeasure('main', rules); // fixme: aggregation rules for legacy partitions are missing.
+                    inputCube.setData('main', content.data);
+                    try {
+                        // on doit reshape ce cube en suivant les regles suivantes:
+                        // - On garde la meme periodicité ce celle qui venait
+                        // - On rajoute les dimensions manquantes JUSTE AVEC LES DONNÉES du projet.
+                        // (SANS PRENDRE EN COMPTE ce qu'on a fait sur nos deux cubes, ca sera fait après).
+                        inputCube = inputCube.reshape(neededDims);
 
-                overviewCube.hydrateFromCube(inputCube);
-                detailedCube.hydrateFromCube(inputCube);
-            }
-            catch (e) {
-                // les dates du projet ont changé => pas de cette saisie est en dehors des bornes.
-            }
-        }));
+                        overviewCube.hydrateFromCube(inputCube);
+                        detailedCube.hydrateFromCube(inputCube);
+                    } catch (e) {
+                        // les dates du projet ont changé => pas de cette saisie est en dehors des bornes.
+                    }
+                })
+        );
 
     // Remove dimensions which were only there to allow dicing.
     overviewCube = overviewCube.project(aggregate.map(agg => agg.id));
@@ -85,7 +96,7 @@ async function getVariableCube(projectId, variableId, aggregate, dice) {
 
     // Now that both cubes are filled, we can drill up cubeDetailed one so that both have the same shape.
     aggregate.forEach(agg => {
-        detailedCube = detailedCube.drillUp(agg.id, agg.attribute)
+        detailedCube = detailedCube.drillUp(agg.id, agg.attribute);
     });
 
     // Steal interpolation status from the overviewCube.
@@ -94,7 +105,8 @@ async function getVariableCube(projectId, variableId, aggregate, dice) {
         const detailedStatus = detailedCube.storedMeasures['main']._status[i];
         const overviewStatus = overviewCube.storedMeasures['main']._status[i];
 
-        detailedCube.storedMeasures['main']._status[i] = (~4 & detailedStatus) | (4 & overviewStatus);
+        detailedCube.storedMeasures['main']._status[i] =
+            (~4 & detailedStatus) | (4 & overviewStatus);
     }
 
     return detailedCube;
@@ -103,17 +115,25 @@ async function getVariableCube(projectId, variableId, aggregate, dice) {
 function createInputDimensions(content) {
     return content.dimensions.map(dim => {
         if (dim.id === 'time')
-            return new TimeDimension('time', dim.attribute, dim.items[0], dim.items[dim.items.length - 1]);
-        else
-            return new GenericDimension(dim.id, dim.attribute, dim.items);
+            return new TimeDimension(
+                'time',
+                dim.attribute,
+                dim.items[0],
+                dim.items[dim.items.length - 1]
+            );
+        else return new GenericDimension(dim.id, dim.attribute, dim.items);
     });
 }
-
 
 /** Create Cube dimensions for a given variable. This is needed to build a cube */
 function createVariableDimensions(project, form, variable, periodicity = null) {
     // Time dimension
-    const time = new TimeDimension('time', periodicity || form.periodicity, project.start, project.end);
+    const time = new TimeDimension(
+        'time',
+        periodicity || form.periodicity,
+        project.start,
+        project.end
+    );
 
     // location dimension
     const entity = new GenericDimension(
@@ -125,10 +145,8 @@ function createVariableDimensions(project, form, variable, periodicity = null) {
     );
 
     project.groups.forEach(group => {
-        entity.addAttribute(
-            'entity',
-            group.id,
-            entityId => group.members.includes(entityId) ? 'in' : 'out'
+        entity.addAttribute('entity', group.id, entityId =>
+            group.members.includes(entityId) ? 'in' : 'out'
         );
     });
 
@@ -143,10 +161,8 @@ function createVariableDimensions(project, form, variable, periodicity = null) {
         );
 
         partition.groups.forEach(group => {
-            dim.addAttribute(
-                'element',
-                group.id,
-                elementId => group.members.includes(elementId) ? 'in' : 'out'
+            dim.addAttribute('element', group.id, elementId =>
+                group.members.includes(elementId) ? 'in' : 'out'
             );
         });
 
@@ -165,13 +181,13 @@ function createVariableRules(variable) {
         aggregation[partition.id] = partition.aggregation;
     });
 
-    return aggregation
+    return aggregation;
 }
 
 function loadProject(projectId) {
     const projection = {
-        'start': true,
-        'end': true,
+        start: true,
+        end: true,
         'entities.id': true,
         'entities.name': true,
         'groups.id': true,
@@ -189,10 +205,7 @@ function loadProject(projectId) {
         'forms.elements.partitions.groups.members': true,
     };
 
-    return database.collection('project').findOne(
-        { _id: new ObjectId(projectId) },
-        { projection }
-    );
+    return database.collection('project').findOne({ _id: new ObjectId(projectId) }, { projection });
 }
 
 module.exports = { getVariableCube };

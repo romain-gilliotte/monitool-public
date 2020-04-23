@@ -13,54 +13,46 @@ import frenchLocale from './fr/locale';
 import englishLocale from './en/locale';
 import spanishLocale from './es/locale';
 
-const module = angular.module(
-	__moduleName,
-	[
-		ngTranslate,
-		ngTranslateLocalStorage,
-		ngTranslateCookieStorage,
-		ngCookies
-	]
-);
+const module = angular.module(__moduleName, [
+    ngTranslate,
+    ngTranslateLocalStorage,
+    ngTranslateCookieStorage,
+    ngCookies,
+]);
 
 /**
  * Init translation modules
  */
 module.config(function ($translateProvider) {
-	$translateProvider.translations('fr', frenchTranslation);
-	$translateProvider.translations('en', englishTranslation);
-	$translateProvider.translations('es', spanishTranslation);
+    $translateProvider.translations('fr', frenchTranslation);
+    $translateProvider.translations('en', englishTranslation);
+    $translateProvider.translations('es', spanishTranslation);
 
-	$translateProvider.useLocalStorage();
-	$translateProvider.preferredLanguage('fr');
-	$translateProvider.useSanitizeValueStrategy('escapeParameters');
+    $translateProvider.useLocalStorage();
+    $translateProvider.preferredLanguage('fr');
+    $translateProvider.useSanitizeValueStrategy('escapeParameters');
 });
-
 
 module.run(function ($translate, $rootScope, $locale) {
-	// Set list of available languages
-	$rootScope.languages = { fr: "french", en: "english", es: 'spanish' };
+    // Set list of available languages
+    $rootScope.languages = { fr: 'french', en: 'english', es: 'spanish' };
 
-	// Expose scope function to change the language everywhere
-	// in the application.
-	$rootScope.changeLanguage = function (langKey) {
-		$translate.use(langKey);
+    // Expose scope function to change the language everywhere
+    // in the application.
+    $rootScope.changeLanguage = function (langKey) {
+        $translate.use(langKey);
 
-		if (langKey == 'fr')
-			angular.copy(frenchLocale, $locale);
-		else if (langKey == 'es')
-			angular.copy(spanishLocale, $locale);
-		else
-			angular.copy(englishLocale, $locale);
+        if (langKey == 'fr') angular.copy(frenchLocale, $locale);
+        else if (langKey == 'es') angular.copy(spanishLocale, $locale);
+        else angular.copy(englishLocale, $locale);
 
-		$rootScope.language = langKey;
-		$rootScope.$broadcast('languageChange');
-		$rootScope.$broadcast('$localeChangeSuccess', langKey, $locale);
-	};
+        $rootScope.language = langKey;
+        $rootScope.$broadcast('languageChange');
+        $rootScope.$broadcast('$localeChangeSuccess', langKey, $locale);
+    };
 
-	// Set initial language from cookie/local storage
-	$rootScope.changeLanguage($translate.use());
+    // Set initial language from cookie/local storage
+    $rootScope.changeLanguage($translate.use());
 });
-
 
 export default module.name;

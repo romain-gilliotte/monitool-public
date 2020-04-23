@@ -8,24 +8,23 @@ module.component(__componentName, {
         sortable: '<',
         variant: '<',
         title: '<',
-        handleClass: '@'
+        handleClass: '@',
     },
     transclude: {
-        'title': '?paneTitle',
-        'body': 'paneBody',
-        'bottom-line': '?paneBottomLine'
+        title: '?paneTitle',
+        body: 'paneBody',
+        'bottom-line': '?paneBottomLine',
     },
     template: require(__templatePath),
 
     controller: class {
-
         $onChanges(changes) {
             if (changes.variant) {
                 const variant = this.variant || 'default';
                 this.panelClass = 'panel-' + variant;
             }
         }
-    }
+    },
 });
 
 export default module.name;

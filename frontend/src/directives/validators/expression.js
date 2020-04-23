@@ -4,26 +4,24 @@ import { getParser } from 'olap-in-memory';
 const module = angular.module(__moduleName, []);
 
 module.directive('expression', function () {
-	return {
-		restrict: 'A',
-		require: '?ngModel',
-		link: function ($scope, $element, attributes, controller) {
-			if (!controller)
-				return;
+    return {
+        restrict: 'A',
+        require: '?ngModel',
+        link: function ($scope, $element, attributes, controller) {
+            if (!controller) return;
 
-			controller.$validators.expression = function (value) {
-				try {
-					getParser().parse(value);
-					return true
-				}
-				catch (e) {
-					return false;
-				}
-			};
+            controller.$validators.expression = function (value) {
+                try {
+                    getParser().parse(value);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            };
 
-			controller.$validate();
-		}
-	}
+            controller.$validate();
+        },
+    };
 });
 
 export default module.name;

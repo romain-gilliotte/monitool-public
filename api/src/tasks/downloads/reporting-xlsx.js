@@ -6,7 +6,7 @@ const { getVariableCube } = require('../reporting/loader/variable');
 const { getIndicatorCube } = require('../reporting/loader/indicator');
 const { updateFile } = require('../../storage/gridfs');
 
-const mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+const mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
 queue.process('generate-reporting-xlsx', async job => {
     const { cacheId, cacheHash, prjId, periodicity } = job.data;
@@ -34,17 +34,14 @@ async function getWorkbook(project, periodicity = 'month') {
 
     const timeDimension = new TimeDimension('time', periodicity, project.start, project.end);
     const globalWs = createWorksheet(wb, 'Global', timeDimension);
-    const siteWs = project.entities.map(
-        site => createWorksheet(wb, site.name, timeDimension)
-    );
+    const siteWs = project.entities.map(site => createWorksheet(wb, site.name, timeDimension));
 
     for (let logFrame of project.logicalFrames) {
         // lf header
         const title = `Logical Framework: ${logFrame.name}`;
-        appendHeader(globalWs, title, timeDimension)
+        appendHeader(globalWs, title, timeDimension);
         for (let [i, site] of project.entities.entries())
-            if (logFrame.entities.includes(site.id))
-                appendHeader(siteWs[i], title, timeDimension)
+            if (logFrame.entities.includes(site.id)) appendHeader(siteWs[i], title, timeDimension);
 
         // indicators
         for (let indicator of getLogFrameIndicators(logFrame)) {
@@ -54,10 +51,16 @@ async function getWorkbook(project, periodicity = 'month') {
             }
 
             const { formula, parameters, dice } = query;
-            const cube = await getIndicatorCube(project._id, formula, parameters, [
-                { id: 'time', attribute: periodicity },
-                { id: 'location', attribute: 'entity' },
-            ], dice);
+            const cube = await getIndicatorCube(
+                project._id,
+                formula,
+                parameters,
+                [
+                    { id: 'time', attribute: periodicity },
+                    { id: 'location', attribute: 'entity' },
+                ],
+                dice
+            );
 
             appendIndicator(globalWs, indicator, cube);
 
@@ -73,18 +76,23 @@ async function getWorkbook(project, periodicity = 'month') {
     for (let dataSource of project.forms) {
         // Data source headers
         const title = `Data Source: ${dataSource.name}`;
-        appendHeader(globalWs, title, timeDimension)
+        appendHeader(globalWs, title, timeDimension);
         for (let [i, site] of project.entities.entries())
             if (dataSource.entities.includes(site.id))
-                appendHeader(siteWs[i], title, timeDimension)
+                appendHeader(siteWs[i], title, timeDimension);
 
         // Variables
         for (let variable of dataSource.elements) {
-            const cube = await getVariableCube(project._id, variable.id, [
-                { id: 'time', attribute: periodicity },
-                { id: 'location', attribute: 'entity' },
-                ...variable.partitions.map(p => ({ id: p.id, attribute: 'element' }))
-            ], []);
+            const cube = await getVariableCube(
+                project._id,
+                variable.id,
+                [
+                    { id: 'time', attribute: periodicity },
+                    { id: 'location', attribute: 'entity' },
+                    ...variable.partitions.map(p => ({ id: p.id, attribute: 'element' })),
+                ],
+                []
+            );
 
             appendVariable(globalWs, variable, cube);
 
@@ -103,27 +111,32 @@ async function getWorkbook(project, periodicity = 'month') {
 function getLogFrameIndicators(logFrame) {
     return [
         ...logFrame.indicators,
-        ...logFrame.purposes.reduce((m, p) => [
-            ...m,
-            ...p.indicators,
-            ...p.outputs.reduce((m, o) => [
+        ...logFrame.purposes.reduce(
+            (m, p) => [
                 ...m,
-                ...o.indicators,
-                ...o.activities.reduce((m, a) => [...m, ...a.indicators], [])
-            ], [])
-        ], [])
-    ]
+                ...p.indicators,
+                ...p.outputs.reduce(
+                    (m, o) => [
+                        ...m,
+                        ...o.indicators,
+                        ...o.activities.reduce((m, a) => [...m, ...a.indicators], []),
+                    ],
+                    []
+                ),
+            ],
+            []
+        ),
+    ];
 }
 
 // clean up mess: this code is copy pasted from the client.
 function getQuery(logicalFrame, indicator) {
-    if (!indicator.computation)
-        return null;
+    if (!indicator.computation) return null;
 
     const formula = indicator.computation.formula;
 
     // Compute parameters from indicator definition
-    const parameters = {}
+    const parameters = {};
     for (let key in indicator.computation.parameters) {
         const parameter = indicator.computation.parameters[key];
 
@@ -133,14 +146,14 @@ function getQuery(logicalFrame, indicator) {
             parameters[key].dice.push({
                 id: partitionId,
                 attribute: 'element',
-                items: parameter.filter[partitionId]
+                items: parameter.filter[partitionId],
             });
         }
     }
 
     const dice = [
         { id: 'location', attribute: 'entity', items: logicalFrame.entities },
-        { id: 'time', attribute: 'day', range: [logicalFrame.start, logicalFrame.end] }
+        { id: 'time', attribute: 'day', range: [logicalFrame.start, logicalFrame.end] },
     ];
 
     return { formula, parameters, dice };
@@ -166,8 +179,8 @@ function createStyles(wb) {
     return {
         header: wb.createStyle({
             font: {
-                color: "#FFFFFF",
-                bold: true
+                color: '#FFFFFF',
+                bold: true,
             },
             fill: {
                 type: 'pattern',
@@ -183,7 +196,7 @@ function createStyles(wb) {
         other: {
             text: wb.createStyle({
                 font: { color: '#666666', size: 10 },
-                alignment: { indent: 1 }
+                alignment: { indent: 1 },
             }),
             number: wb.createStyle({ font: { color: '#666666', size: 10 } }),
         },
@@ -191,8 +204,7 @@ function createStyles(wb) {
 }
 
 function appendHeader(ws, name, timeDimension) {
-    ws
-        .cell(ws.currentRow, 1, ws.currentRow, 1 + timeDimension.numItems, true)
+    ws.cell(ws.currentRow, 1, ws.currentRow, 1 + timeDimension.numItems, true)
         .string(name)
         .style(ws.wb.myStyles.header);
 
@@ -202,19 +214,21 @@ function appendHeader(ws, name, timeDimension) {
 function appendIndicator(ws, indicator, cube) {
     const cubeSum = cube.keepDimensions(['time']);
     appendDataRowRec(ws, cubeSum, [], [], true);
-    ws.cell(ws.currentRow - 1, 1).string(indicator.display).style(ws.wb.myStyles.total.text); // overwrite title
+    ws.cell(ws.currentRow - 1, 1)
+        .string(indicator.display)
+        .style(ws.wb.myStyles.total.text); // overwrite title
 }
-
 
 function appendVariable(ws, variable, cube) {
     // Insert variable total.
     const cubeSum = cube.keepDimensions(['time']);
     appendDataRowRec(ws, cubeSum, [], [], true);
-    ws.cell(ws.currentRow - 1, 1).string(variable.name).style(ws.wb.myStyles.total.text); // overwrite title
+    ws.cell(ws.currentRow - 1, 1)
+        .string(variable.name)
+        .style(ws.wb.myStyles.total.text); // overwrite title
 
     // Insert details if relevant
-    if (variable.partitions.length)
-        appendDataRowRec(ws, cube, variable.partitions, [], false);
+    if (variable.partitions.length) appendDataRowRec(ws, cube, variable.partitions, [], false);
 }
 
 function appendDataRowRec(ws, cube, partitions, partitionElsIdxs, total) {
@@ -229,20 +243,20 @@ function appendDataRowRec(ws, cube, partitions, partitionElsIdxs, total) {
             appendDataRowRec(ws, childCube, partitions, partitionElsIdxs, total);
             partitionElsIdxs.pop();
         }
-    }
-    else {
+    } else {
         const variableStyle = ws.wb.myStyles[total ? 'total' : 'other'];
 
         // Row title
-        const name = partitions.map((p, pIndex) => p.elements[partitionElsIdxs[pIndex]].name).join(' / ');
+        const name = partitions
+            .map((p, pIndex) => p.elements[partitionElsIdxs[pIndex]].name)
+            .join(' / ');
         ws.cell(ws.currentRow, 1).string(name).style(variableStyle.text);
 
         // Insert data
         const data = cube.keepDimensions(['time']).getData('main');
         for (let x = 0; x < data.length; ++x)
             if (!Number.isNaN(data[x]))
-                ws
-                    .cell(ws.currentRow, 2 + x)
+                ws.cell(ws.currentRow, 2 + x)
                     .number(Math.round(data[x]))
                     .style(variableStyle.number);
 

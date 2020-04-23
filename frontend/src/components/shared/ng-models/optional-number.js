@@ -3,39 +3,36 @@ import angular from 'angular';
 const module = angular.module(__moduleName, []);
 
 module.component(__componentName, {
-	require: {
-		ngModelCtrl: 'ngModel'
-	},
+    require: {
+        ngModelCtrl: 'ngModel',
+    },
 
-	template: require(__templatePath),
+    template: require(__templatePath),
 
-	bindings: {
-		default: '<',
-		message: '@'
-	},
+    bindings: {
+        default: '<',
+        message: '@',
+    },
 
-	controller: class {
+    controller: class {
+        $onInit() {
+            this.ngModelCtrl.$render = () => {
+                this.specifyValue = this.ngModelCtrl.$viewValue !== null;
+                this.chosenValue = this.ngModelCtrl.$viewValue;
+            };
+        }
 
-		$onInit() {
-			this.ngModelCtrl.$render = () => {
-				this.specifyValue = this.ngModelCtrl.$viewValue !== null;
-				this.chosenValue = this.ngModelCtrl.$viewValue;
-			};
-		}
+        toggleSpecifyValue() {
+            this.specifyValue = !this.specifyValue;
+            if (this.specifyValue) this.chosenValue = this.default;
 
-		toggleSpecifyValue() {
-			this.specifyValue = !this.specifyValue;
-			if (this.specifyValue)
-				this.chosenValue = this.default;
+            this.onValueChange();
+        }
 
-			this.onValueChange();
-		}
-
-		onValueChange() {
-			this.ngModelCtrl.$setViewValue(this.specifyValue ? this.chosenValue : null);
-		}
-	}
+        onValueChange() {
+            this.ngModelCtrl.$setViewValue(this.specifyValue ? this.chosenValue : null);
+        }
+    },
 });
-
 
 export default module.name;

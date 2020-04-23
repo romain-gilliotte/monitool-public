@@ -10,22 +10,18 @@ module.config($stateProvider => {
     $stateProvider.state('main.invitations', {
         url: '/invitations',
         component: __componentName,
-        resolve: {
-
-        }
+        resolve: {},
     });
-
 });
 
 module.component(__componentName, {
     bindings: {
-        invitations: '<'
+        invitations: '<',
     },
     template: require(__templatePath),
     controller: class {
-
         constructor($state) {
-            "ngInject";
+            'ngInject';
 
             this.$state = $state;
         }
@@ -44,7 +40,7 @@ module.component(__componentName, {
 
             this.$state.reload();
         }
-    }
+    },
 });
 
 export default module.name;

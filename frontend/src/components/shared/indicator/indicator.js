@@ -6,50 +6,55 @@ import mtColumnsPanel from '../misc/columns-panel';
 
 require(__scssPath);
 
-const module = angular.module(__moduleName, [uibModal, mtEditionModal, mtIndicatorUnit, mtColumnsPanel]);
+const module = angular.module(__moduleName, [
+    uibModal,
+    mtEditionModal,
+    mtIndicatorUnit,
+    mtColumnsPanel,
+]);
 
 module.component(__componentName, {
-	bindings: {
-		project: '<',
-		indicator: '<',
+    bindings: {
+        project: '<',
+        indicator: '<',
 
-		onUpdated: '&',
-		onDeleted: '&'
-	},
+        onUpdated: '&',
+        onDeleted: '&',
+    },
 
-	template: require(__templatePath),
+    template: require(__templatePath),
 
-	controller: class {
+    controller: class {
+        constructor($uibModal) {
+            'ngInject';
 
-		constructor($uibModal) {
-			"ngInject";
+            this.$uibModal = $uibModal;
+        }
 
-			this.$uibModal = $uibModal;
-		}
+        async onEditClicked() {
+            const modalOpts = {
+                component: 'indicatorEditionModal',
+                size: 'lg',
+                resolve: {
+                    planning: () => this.indicator,
+                    indicator: () => null,
+                    dataSources: () => this.project.forms,
+                },
+            };
 
-		async onEditClicked() {
-			const modalOpts = {
-				component: 'indicatorEditionModal',
-				size: 'lg',
-				resolve: {
-					planning: () => this.indicator,
-					indicator: () => null,
-					dataSources: () => this.project.forms
-				}
-			}
+            const newIndicator = await this.$uibModal.open(modalOpts).result;
+            if (newIndicator)
+                this.onUpdated({
+                    newIndicator: newIndicator,
+                    previousValue: this.indicator,
+                });
+            else this.onDeleted({ indicator: this.indicator });
+        }
 
-			const newIndicator = await this.$uibModal.open(modalOpts).result;
-			if (newIndicator)
-				this.onUpdated({ newIndicator: newIndicator, previousValue: this.indicator });
-			else
-				this.onDeleted({ indicator: this.indicator });
-		}
-
-		onDeleteClicked() {
-			this.onDeleted({ indicator: this.indicator });
-		}
-	}
+        onDeleteClicked() {
+            this.onDeleted({ indicator: this.indicator });
+        }
+    },
 });
-
 
 export default module.name;

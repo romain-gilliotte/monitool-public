@@ -1,7 +1,7 @@
 const zlib = require('zlib');
 const { getIndicatorCube } = require('./loader/indicator');
-const renderJson = require('./renderer/json')
-const renderXlsx = require('./renderer/xlsx')
+const renderJson = require('./renderer/json');
+const renderXlsx = require('./renderer/xlsx');
 
 queue.process('compute-report', async job => {
     const { projectId, formula, parameters, aggregate, dice } = job.data;
@@ -17,6 +17,6 @@ queue.process('compute-report', async job => {
     return JSON.stringify({
         mimeType,
         filename,
-        payload: zlib.gzipSync(payload).toString('base64')
+        payload: zlib.gzipSync(payload).toString('base64'),
     });
 });

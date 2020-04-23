@@ -4,57 +4,61 @@ import { TimeDimension } from 'olap-in-memory';
 const module = angular.module(__moduleName, []);
 
 module.component(__componentName, {
+    bindings: {
+        project: '<',
+        onUpdate: '&',
+    },
+    template: require(__templatePath),
 
-	bindings: {
-		project: '<',
-		onUpdate: '&'
-	},
-	template: require(__templatePath),
+    controller: class {
+        constructor($rootScope) {
+            'ngInject';
 
-	controller: class {
+            this.$rootScope = $rootScope;
+        }
 
-		constructor($rootScope) {
-			"ngInject";
+        $onChanges(changes) {
+            const dimension = new TimeDimension(
+                'time',
+                'day',
+                this.project.start,
+                this.project.end
+            );
 
-			this.$rootScope = $rootScope;
-		}
+            this.periodicities = dimension.attributes.filter(attr => attr !== 'all');
+            this.groupBy = this._chooseDefaultGroupBy();
+            this.onValueChange();
+        }
 
-		$onChanges(changes) {
-			const dimension = new TimeDimension('time', 'day', this.project.start, this.project.end);
+        onValueChange() {
+            // Tell parent
+            this.onUpdate({
+                aggregate: {
+                    id: this.groupBy === 'entity' ? 'location' : 'time',
+                    attribute: this.groupBy,
+                },
+            });
 
-			this.periodicities = dimension.attributes.filter(attr => attr !== 'all');
-			this.groupBy = this._chooseDefaultGroupBy();
-			this.onValueChange();
-		}
+            // Update download link
+            const projectId = this.project._id;
+            const serviceUrl = this.$rootScope.serviceUrl;
+            const periodicity = this.groupBy === 'entity' ? 'month' : this.groupBy;
+            this.downloadUrl = `${serviceUrl}/project/${projectId}/export/${periodicity}.xlsx`;
+        }
 
-		onValueChange() {
-			// Tell parent
-			this.onUpdate({
-				aggregate: {
-					id: this.groupBy === 'entity' ? 'location' : 'time',
-					attribute: this.groupBy
-				}
-			})
+        _chooseDefaultGroupBy() {
+            const now = new Date().toISOString().substring(0, 10);
+            const start = this.project.start;
+            const end = this.project.end < now ? this.project.end : now;
 
-			// Update download link
-			const projectId = this.project._id;
-			const serviceUrl = this.$rootScope.serviceUrl;
-			const periodicity = this.groupBy === 'entity' ? 'month' : this.groupBy;
-			this.downloadUrl = `${serviceUrl}/project/${projectId}/export/${periodicity}.xlsx`;
-		}
-
-		_chooseDefaultGroupBy() {
-			const now = new Date().toISOString().substring(0, 10)
-			const start = this.project.start;
-			const end = this.project.end < now ? this.project.end : now;
-
-			const dimension = new TimeDimension('time', 'day', start, end);
-			return this.periodicities.find(periodicity => {
-				return dimension.getItems(periodicity).length < 15;
-			}) || this.periodicities[this.periodicities.length - 1];
-		}
-
-	}
+            const dimension = new TimeDimension('time', 'day', start, end);
+            return (
+                this.periodicities.find(periodicity => {
+                    return dimension.getItems(periodicity).length < 15;
+                }) || this.periodicities[this.periodicities.length - 1]
+            );
+        }
+    },
 });
 
 export default module.name;

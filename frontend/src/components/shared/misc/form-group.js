@@ -3,18 +3,17 @@ import angular from 'angular';
 const module = angular.module(__moduleName, []);
 
 module.component(__componentName, {
-	bindings: {
-		inputId: '@',
-		label: '@',
+    bindings: {
+        inputId: '@',
+        label: '@',
 
-		help: '@',
-		helpValues: '<',
-	},
+        help: '@',
+        helpValues: '<',
+    },
 
-	transclude: true,
+    transclude: true,
 
-	template: require(__templatePath)
+    template: require(__templatePath),
 });
-
 
 export default module.name;
