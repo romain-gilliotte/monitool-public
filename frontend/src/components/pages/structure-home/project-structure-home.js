@@ -20,7 +20,24 @@ module.component(__componentName, {
 
     controller: class {
         $onChanges(changes) {
-            const lfIndicators = this.project.logicalFrames.reduce(
+            const lfIndicators = this._getIndicators(this.project);
+
+            this.percentages = {
+                basicsDone: this.project.name && this.project.country ? 1 : 0,
+                sitesDone: this.project.entities.length ? 1 : 0,
+                referenceLfDone: this.project.logicalFrames.length > 0 ? 1 : 0,
+                otherLfDone: this.project.logicalFrames.length > 1 ? 1 : 0,
+                extraIndicatorsDone2: this.project.extraIndicators.length ? 1 : 0,
+                lfIndicatorsDone:
+                    lfIndicators.filter(i => !!i.computation).length / lfIndicators.length,
+                extraIndicatorsDone:
+                    this.project.extraIndicators.filter(i => !!i.computation).length /
+                    this.project.extraIndicators.length,
+            };
+        }
+
+        _getIndicators(project) {
+            return project.logicalFrames.reduce(
                 (memo, lf) => [
                     ...memo,
                     ...lf.indicators,
@@ -45,19 +62,6 @@ module.component(__componentName, {
                 ],
                 []
             );
-
-            this.percentages = {
-                basicsDone: this.project.name && this.project.country ? 1 : 0,
-                sitesDone: this.project.entities.length ? 1 : 0,
-                referenceLfDone: this.project.logicalFrames.length > 0 ? 1 : 0,
-                otherLfDone: this.project.logicalFrames.length > 1 ? 1 : 0,
-                extraIndicatorsDone2: this.project.extraIndicators.length ? 1 : 0,
-                lfIndicatorsDone:
-                    lfIndicators.filter(i => !!i.computation).length / lfIndicators.length,
-                extraIndicatorsDone:
-                    this.project.extraIndicators.filter(i => !!i.computation).length /
-                    this.project.extraIndicators.length,
-            };
         }
     },
 });
