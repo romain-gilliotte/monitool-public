@@ -1,55 +1,57 @@
 <columns-panel sortable="true" title="$ctrl.indicator.display" handle-class="indicator-handle">
-	<pane-title>{{$ctrl.indicator.display|maxLength:90}}</pane-title>
-	<pane-body>
-		<!-- Baseline -->
-		<div>
-			<strong>{{'project.baseline'|translate}}:</strong>
-			<span
-				ng-if="$ctrl.indicator.baseline != null">{{$ctrl.indicator.baseline}}{{$ctrl.indicator|indicatorUnit}}</span>
-			<span ng-if="$ctrl.indicator.baseline == null">?</span>
-		</div>
+    <pane-title>{{$ctrl.indicator.display|maxLength:90}}</pane-title>
+    <pane-body>
+        <!-- Baseline -->
+        <div>
+            <strong>{{'project.baseline'|translate}}:</strong>
+            <span ng-if="$ctrl.indicator.baseline != null"
+                >{{$ctrl.indicator.baseline}}{{$ctrl.indicator|indicatorUnit}}</span
+            >
+            <span ng-if="$ctrl.indicator.baseline == null">?</span>
+        </div>
 
-		<!-- Target -->
-		<div>
-			<strong>{{'project.target'|translate}}:</strong>
-			<span
-				ng-if="$ctrl.indicator.target != null">{{$ctrl.indicator.target}}{{$ctrl.indicator|indicatorUnit}}</span>
-			<span ng-if="$ctrl.indicator.target == null">?</span>
-		</div>
+        <!-- Target -->
+        <div>
+            <strong>{{'project.target'|translate}}:</strong>
+            <span ng-if="$ctrl.indicator.target != null"
+                >{{$ctrl.indicator.target}}{{$ctrl.indicator|indicatorUnit}}</span
+            >
+            <span ng-if="$ctrl.indicator.target == null">?</span>
+        </div>
 
-		<!-- Computation -->
-		<div>
-			<strong>{{'project.computation'|translate}}:</strong>
-			<span class="text-danger" ng-if="!$ctrl.indicator.computation">
-				{{'project.indicator_is_not_computed'|translate}}
-				<i class="fa fa-unlink"></i>
-			</span>
-			<span class="text-success" ng-if="$ctrl.indicator.computation">
-				{{'project.indicator_is_computed'|translate}}
-				<i class="fa fa-link"></i>
-			</span>
-		</div>
+        <!-- Computation -->
+        <div>
+            <strong>{{'project.computation'|translate}}:</strong>
+            <span class="text-danger" ng-if="!$ctrl.indicator.computation">
+                {{'project.indicator_is_not_computed'|translate}}
+                <i class="fa fa-unlink"></i>
+            </span>
+            <span class="text-success" ng-if="$ctrl.indicator.computation">
+                {{'project.indicator_is_computed'|translate}}
+                <i class="fa fa-link"></i>
+            </span>
+        </div>
 
-		<div class="panel-buttons btn-group">
-			<button class="btn btn-xxs btn-default" ng-click="$ctrl.onEditClicked()">
-				<i class="fa fa-pencil"></i>
-				<span translate="shared.edit"></span>
-			</button>
+        <div class="panel-buttons btn-group">
+            <button class="btn btn-xxs btn-default" ng-click="$ctrl.onEditClicked()">
+                <i class="fa fa-pencil"></i>
+                <span translate="shared.edit"></span>
+            </button>
 
-			<div class="btn-group" uib-dropdown>
-				<a class="btn btn-default btn-xxs" uib-dropdown-toggle>
-					<span class="caret"></span>
-				</a>
+            <div class="btn-group" uib-dropdown>
+                <a class="btn btn-default btn-xxs" uib-dropdown-toggle>
+                    <span class="caret"></span>
+                </a>
 
-				<ul class="dropdown-menu" uib-dropdown-menu>
-					<li>
-						<a ng-click="$ctrl.onDeleteClicked()">
-							<i class="fa fa-trash text-danger"></i>
-							<span class="text-danger" translate="shared.delete"></span>
-						</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</pane-body>
+                <ul class="dropdown-menu" uib-dropdown-menu>
+                    <li>
+                        <a ng-click="$ctrl.onDeleteClicked()">
+                            <i class="fa fa-trash text-danger"></i>
+                            <span class="text-danger" translate="shared.delete"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </pane-body>
 </columns-panel>

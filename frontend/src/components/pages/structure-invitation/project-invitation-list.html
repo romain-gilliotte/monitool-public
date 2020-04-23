@@ -1,59 +1,62 @@
 <div class="centered" ng-if="!$ctrl.invitations.length">
-	<span translate="invitation.no_invitations_yet"></span>
-	<a ng-click="$ctrl.onEditClicked()" translate="invitation.add_invitation"></a>
+    <span translate="invitation.no_invitations_yet"></span>
+    <a ng-click="$ctrl.onEditClicked()" translate="invitation.add_invitation"></a>
 </div>
 
 <columns-panel ng-repeat="invitation in $ctrl.invitations">
-	<pane-title>{{invitation.email}}</pane-title>
-	<pane-body>
-		<div>
-			<strong translate="invitation.accepted"></strong>
-			<span ng-if="invitation.accepted" translate="shared.yes"></span>
-			<span ng-if="!invitation.accepted" translate="shared.no"></span>
-		</div>
+    <pane-title>{{invitation.email}}</pane-title>
+    <pane-body>
+        <div>
+            <strong translate="invitation.accepted"></strong>
+            <span ng-if="invitation.accepted" translate="shared.yes"></span>
+            <span ng-if="!invitation.accepted" translate="shared.no"></span>
+        </div>
 
-		<strong translate="invitation.data_entry_perms"></strong>
+        <strong translate="invitation.data_entry_perms"></strong>
 
-		<div>
-			<span translate="project.collection_site_list"></span>:
-			<element-groups ids="invitation.dataEntry.siteIds" items="$ctrl.project.entities"
-				groups="$ctrl.project.groups">
-			</element-groups>
-		</div>
+        <div>
+            <span translate="project.collection_site_list"></span>:
+            <element-groups
+                ids="invitation.dataEntry.siteIds"
+                items="$ctrl.project.entities"
+                groups="$ctrl.project.groups"
+            >
+            </element-groups>
+        </div>
 
-		<div>
-			<span translate="project.collection_form_list"></span>:
-			<element-groups ids="invitation.dataEntry.dataSourceIds" items="$ctrl.project.forms">
-			</element-groups>
-		</div>
+        <div>
+            <span translate="project.collection_form_list"></span>:
+            <element-groups ids="invitation.dataEntry.dataSourceIds" items="$ctrl.project.forms">
+            </element-groups>
+        </div>
 
-		<div class="panel-buttons btn-group">
-			<a ng-click="$ctrl.onEditClicked(invitation)" class="btn btn-default btn-xxs">
-				<i class="fa fa-pencil"></i>
-				<span translate="shared.edit"></span>
-			</a>
+        <div class="panel-buttons btn-group">
+            <a ng-click="$ctrl.onEditClicked(invitation)" class="btn btn-default btn-xxs">
+                <i class="fa fa-pencil"></i>
+                <span translate="shared.edit"></span>
+            </a>
 
-			<div class="btn-group" uib-dropdown>
-				<a class="btn btn-default btn-xxs" uib-dropdown-toggle>
-					<span class="caret"></span>
-				</a>
+            <div class="btn-group" uib-dropdown>
+                <a class="btn btn-default btn-xxs" uib-dropdown-toggle>
+                    <span class="caret"></span>
+                </a>
 
-				<ul class="dropdown-menu" uib-dropdown-menu>
-					<li>
-						<a ng-click="$ctrl.onDeleteClicked(invitation)">
-							<i class="fa fa-trash text-danger"></i>
-							<span class="text-danger" translate="shared.delete"></span>
-						</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</pane-body>
+                <ul class="dropdown-menu" uib-dropdown-menu>
+                    <li>
+                        <a ng-click="$ctrl.onDeleteClicked(invitation)">
+                            <i class="fa fa-trash text-danger"></i>
+                            <span class="text-danger" translate="shared.delete"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </pane-body>
 </columns-panel>
 
 <div ng-if="$ctrl.invitations.length">
-	<a class="btn btn-default" ng-click="$ctrl.onEditClicked()">
-		<i class="fa fa-plus"></i>
-		<span translate="invitation.add_invitation"></span>
-	</a>
+    <a class="btn btn-default" ng-click="$ctrl.onEditClicked()">
+        <i class="fa fa-plus"></i>
+        <span translate="invitation.add_invitation"></span>
+    </a>
 </div>

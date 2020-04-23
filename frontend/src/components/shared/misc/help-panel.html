@@ -1,10 +1,9 @@
 <div class="toolbar-label" style="font-family: monospace;">
     &nbsp;&lt;
-
 </div>
 <div class="toolbar-body">
     <h2 translate="shared.help" style="text-align: center;"></h2>
-    <h4 ng-bind-html="$ctrl.title" style="text-align: center; margin-bottom: 2.5em"></h4>
+    <h4 ng-bind-html="$ctrl.title" style="text-align: center; margin-bottom: 2.5em;"></h4>
 
     <p ng-bind-html="$ctrl.paragraph"></p>
     <hr />
@@ -13,5 +12,4 @@
         <div class="panel-heading" ng-bind-html="qa.question" ng-click="$ctrl.onQaClick(qa)"></div>
         <div class="panel-body" ng-if="qa.selected" ng-bind-html="qa.answer"></div>
     </div>
-
 </div>

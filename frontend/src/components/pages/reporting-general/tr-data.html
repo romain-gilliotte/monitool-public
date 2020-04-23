@@ -1,45 +1,60 @@
 <td class="row-graph">
-	<i class="fa fa-line-chart" ng-click="$ctrl.onPlotClicked()"
-		ng-style="{color: $ctrl.plotted ? 'black' : 'revert'}"></i>
+    <i
+        class="fa fa-line-chart"
+        ng-click="$ctrl.onPlotClicked()"
+        ng-style="{color: $ctrl.plotted ? 'black' : 'revert'}"
+    ></i>
 </td>
 
 <td class="row-title" title="{{$ctrl.label}}">
-	<div>{{$ctrl.label|formatSlot}}</div>
+    <div>{{$ctrl.label|formatSlot}}</div>
 </td>
 
 <td class="row-dimension">
-	<div ng-if="$ctrl.aggregations.length">
-		<button class="btn btn-default btn-xs" ng-if="$ctrl.disagregated" ng-click="$ctrl.onDisagregateClicked({})">
-			<i class="fa fa-minus"></i>
-		</button>
+    <div ng-if="$ctrl.aggregations.length">
+        <button
+            class="btn btn-default btn-xs"
+            ng-if="$ctrl.disagregated"
+            ng-click="$ctrl.onDisagregateClicked({})"
+        >
+            <i class="fa fa-minus"></i>
+        </button>
 
-		<div class="btn-group" uib-dropdown dropdown-append-to-body ng-if="!$ctrl.disagregated">
-			<button class="btn btn-default btn-xs" uib-dropdown-toggle>
-				<i class="fa fa-plus"></i>
-			</button>
+        <div class="btn-group" uib-dropdown dropdown-append-to-body ng-if="!$ctrl.disagregated">
+            <button class="btn btn-default btn-xs" uib-dropdown-toggle>
+                <i class="fa fa-plus"></i>
+            </button>
 
-			<ul class="dropdown-menu" uib-dropdown-menu>
-				<li ng-repeat="agg in $ctrl.aggregations track by $index">
-					<a ng-click="$ctrl.onDisagregateClicked({dimensionId: agg.id, attribute: agg.attribute})">
-						{{agg.label|translate}}
-					</a>
-				</li>
-			</ul>
-		</div>
-	</div>
+            <ul class="dropdown-menu" uib-dropdown-menu>
+                <li ng-repeat="agg in $ctrl.aggregations track by $index">
+                    <a
+                        ng-click="$ctrl.onDisagregateClicked({dimensionId: agg.id, attribute: agg.attribute})"
+                    >
+                        {{agg.label|translate}}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </td>
 
 <td class="row-baseline" ng-class="{empty: $ctrl.baseline === null}">
-	<span>{{$ctrl.baseline}}{{$ctrl.query.formula|indicatorUnit}}</span>
+    <span>{{$ctrl.baseline}}{{$ctrl.query.formula|indicatorUnit}}</span>
 </td>
 <td class="row-target" ng-class="{empty: $ctrl.target === null}">
-	<span>{{$ctrl.target}}{{$ctrl.query.formula|indicatorUnit}}</span>
+    <span>{{$ctrl.target}}{{$ctrl.query.formula|indicatorUnit}}</span>
 </td>
 
 <td colspan="{{$ctrl.columns.length + 1}}" ng-if="!$ctrl.tableCells" class="error-td">
-	{{$ctrl.errorMessage|translate}}
+    {{$ctrl.errorMessage|translate}}
 </td>
 
-<td ng-repeat="cell in $ctrl.tableCells track by $index" td-reporting-field value="cell" baseline="$ctrl.baseline"
-	target="$ctrl.target" colorize="$ctrl.colorize" unit="$ctrl.query.formula|indicatorUnit">
-</td>
+<td
+    ng-repeat="cell in $ctrl.tableCells track by $index"
+    td-reporting-field
+    value="cell"
+    baseline="$ctrl.baseline"
+    target="$ctrl.target"
+    colorize="$ctrl.colorize"
+    unit="$ctrl.query.formula|indicatorUnit"
+></td>

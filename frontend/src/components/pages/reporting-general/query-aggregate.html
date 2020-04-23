@@ -1,17 +1,17 @@
 <div class="input-group">
-	<span class="input-group-addon"><i class="fa fa-columns"></i></span>
+    <span class="input-group-addon"><i class="fa fa-columns"></i></span>
 
-	<select class="form-control" ng-model="$ctrl.groupBy" ng-change="$ctrl.onValueChange()">
-		<option value="{{periodicity}}" ng-repeat="periodicity in $ctrl.periodicities">
-			{{('project.dimensions.' + periodicity)|translate}}
-		</option>
-		<option value="entity" translate="project.collection_site_list"></option>
-	</select>
+    <select class="form-control" ng-model="$ctrl.groupBy" ng-change="$ctrl.onValueChange()">
+        <option value="{{periodicity}}" ng-repeat="periodicity in $ctrl.periodicities">
+            {{('project.dimensions.' + periodicity)|translate}}
+        </option>
+        <option value="entity" translate="project.collection_site_list"></option>
+    </select>
 
-	<span class="input-group-btn">
-		<a href="{{$ctrl.downloadUrl}}" download class="btn btn-default">
-			<i class="fa fa-fw fa-file-excel-o"></i>
-			<span translate="project.download_excel"></span>
-		</a>
-	</span>
+    <span class="input-group-btn">
+        <a href="{{$ctrl.downloadUrl}}" download class="btn btn-default">
+            <i class="fa fa-fw fa-file-excel-o"></i>
+            <span translate="project.download_excel"></span>
+        </a>
+    </span>
 </div>

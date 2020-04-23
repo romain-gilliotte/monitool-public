@@ -1,22 +1,25 @@
-<div class="well" style="padding: 5px; margin-bottom: 0">
-	<ul style="list-style-type: none; padding-left: 5px">
-		<li ng-if="$ctrl.partitions.length == 0" translate="project.no_partitions"></li>
+<div class="well" style="padding: 5px; margin-bottom: 0;">
+    <ul style="list-style-type: none; padding-left: 5px;">
+        <li ng-if="$ctrl.partitions.length == 0" translate="project.no_partitions"></li>
 
-		<li ng-repeat="partition in $ctrl.partitions">
-			<a ng-click="$ctrl.editPartition(partition)" ng-class="{disabled: !partition.active}">
-				<i class="fa fa-pencil"></i>
-				<strong>{{partition.name}}:</strong>
-				<span ng-repeat="element in partition.elements track by element.id">
-					<span ng-bind="element.name" ng-class="{disabled: !element.active}"></span><span ng-if="!$last">,
-					</span>
-				</span>
-			</a>
-		</li>
-	</ul>
+        <li ng-repeat="partition in $ctrl.partitions">
+            <a ng-click="$ctrl.editPartition(partition)" ng-class="{disabled: !partition.active}">
+                <i class="fa fa-pencil"></i>
+                <strong>{{partition.name}}:</strong>
+                <span ng-repeat="element in partition.elements track by element.id">
+                    <span ng-bind="element.name" ng-class="{disabled: !element.active}"></span
+                    ><span ng-if="!$last">, </span>
+                </span>
+            </a>
+        </li>
+    </ul>
 
-	<a ng-click="$ctrl.addPartition()" class="btn btn-xxs btn-default"
-		ng-class="{disabled: $ctrl.partitions.length >= 5}">
-		<i class="fa fa-plus"></i>
-		<span translate="project.add_partition"></span>
-	</a>
+    <a
+        ng-click="$ctrl.addPartition()"
+        class="btn btn-xxs btn-default"
+        ng-class="{disabled: $ctrl.partitions.length >= 5}"
+    >
+        <i class="fa fa-plus"></i>
+        <span translate="project.add_partition"></span>
+    </a>
 </div>

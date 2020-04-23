@@ -1,75 +1,83 @@
 <div class="centered" ng-if="!$ctrl.editableProject.logicalFrames.length">
-	<span translate="project.no_logframe_yet"></span>
-	<a ng-click="$ctrl.onCreateLogicalFrameClicked()" translate="form.create_blank"></a>
+    <span translate="project.no_logframe_yet"></span>
+    <a ng-click="$ctrl.onCreateLogicalFrameClicked()" translate="form.create_blank"></a>
 </div>
 
 <div ng-sortable="$ctrl.ngSortableOptions">
-	<columns-panel sortable="true" ng-repeat="logicalFrame in $ctrl.editableProject.logicalFrames">
-		<pane-title>
-			<span ng-show="logicalFrame.name">{{logicalFrame.name}}</span>
-			<span ng-hide="logicalFrame.name" translate="project.unnamed_logframe"></span>
-		</pane-title>
-		<pane-body>
-			<div>
-				<strong translate="shared.date"></strong>
-				{{logicalFrame.start|date}} - {{logicalFrame.end|date}}
-			</div>
-			<div>
-				<strong translate="project.collection_site_list"></strong>
-				<element-groups ids="logicalFrame.entities" items="$ctrl.project.entities"
-					groups="$ctrl.project.groups"></element-groups>
-			</div>
+    <columns-panel sortable="true" ng-repeat="logicalFrame in $ctrl.editableProject.logicalFrames">
+        <pane-title>
+            <span ng-show="logicalFrame.name">{{logicalFrame.name}}</span>
+            <span ng-hide="logicalFrame.name" translate="project.unnamed_logframe"></span>
+        </pane-title>
+        <pane-body>
+            <div>
+                <strong translate="shared.date"></strong>
+                {{logicalFrame.start|date}} - {{logicalFrame.end|date}}
+            </div>
+            <div>
+                <strong translate="project.collection_site_list"></strong>
+                <element-groups
+                    ids="logicalFrame.entities"
+                    items="$ctrl.project.entities"
+                    groups="$ctrl.project.groups"
+                ></element-groups>
+            </div>
 
-			<div class="panel-buttons btn-group">
-				<a class="btn btn-default btn-xxs"
-					ui-sref="project.config.logical_frame_edition({logicalFrameId: logicalFrame.id})">
-					<i class="fa fa-pencil"></i>
-					<span translate="shared.edit"></span>
-				</a>
+            <div class="panel-buttons btn-group">
+                <a
+                    class="btn btn-default btn-xxs"
+                    ui-sref="project.config.logical_frame_edition({logicalFrameId: logicalFrame.id})"
+                >
+                    <i class="fa fa-pencil"></i>
+                    <span translate="shared.edit"></span>
+                </a>
 
-				<div class="btn-group" uib-dropdown>
-					<a class="btn btn-default btn-xxs" uib-dropdown-toggle>
-						<span class="caret"></span>
-					</a>
+                <div class="btn-group" uib-dropdown>
+                    <a class="btn btn-default btn-xxs" uib-dropdown-toggle>
+                        <span class="caret"></span>
+                    </a>
 
-					<ul class="dropdown-menu" uib-dropdown-menu>
-						<li>
-							<a ng-click="$ctrl.onCreateLogicalFrameClicked(logicalFrame)">
-								<i class="fa fa-clone"></i>
-								<span translate="shared.clone"></span>
-							</a>
-						</li>
-						<li>
-							<a href="{{::$root.serviceUrl}}/project/{{$ctrl.editableProject._id}}/logical-frame/{{logicalFrame.id}}.pdf?orientation=portrait&language={{$root.language}}"
-								target="_blank">
-								<i class="fa fa-file-pdf-o"></i>
-								<span translate="project.download_portrait"></span>
-							</a>
-						</li>
-						<li>
-							<a href="{{::$root.serviceUrl}}/project/{{$ctrl.editableProject._id}}/logical-frame/{{logicalFrame.id}}.pdf?orientation=landscape&language={{$root.language}}"
-								target="_blank">
-								<i class="fa fa-file-pdf-o fa-rotate-270"></i>
-								<span translate="project.download_landscape"></span>
-							</a>
-						</li>
-						<li>
-							<a ng-click="$ctrl.onDeleteClicked(logicalFrame)">
-								<i class="fa fa-trash text-danger"></i>
-								<span class="text-danger" translate="shared.delete"></span>
-							</a>
-						</li>
-					</ul>
-				</div>
-
-			</div>
-		</pane-body>
-	</columns-panel>
+                    <ul class="dropdown-menu" uib-dropdown-menu>
+                        <li>
+                            <a ng-click="$ctrl.onCreateLogicalFrameClicked(logicalFrame)">
+                                <i class="fa fa-clone"></i>
+                                <span translate="shared.clone"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                href="{{::$root.serviceUrl}}/project/{{$ctrl.editableProject._id}}/logical-frame/{{logicalFrame.id}}.pdf?orientation=portrait&language={{$root.language}}"
+                                target="_blank"
+                            >
+                                <i class="fa fa-file-pdf-o"></i>
+                                <span translate="project.download_portrait"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                href="{{::$root.serviceUrl}}/project/{{$ctrl.editableProject._id}}/logical-frame/{{logicalFrame.id}}.pdf?orientation=landscape&language={{$root.language}}"
+                                target="_blank"
+                            >
+                                <i class="fa fa-file-pdf-o fa-rotate-270"></i>
+                                <span translate="project.download_landscape"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-click="$ctrl.onDeleteClicked(logicalFrame)">
+                                <i class="fa fa-trash text-danger"></i>
+                                <span class="text-danger" translate="shared.delete"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </pane-body>
+    </columns-panel>
 </div>
 
 <div ng-if="$ctrl.editableProject.logicalFrames.length">
-	<a ng-click="$ctrl.onCreateLogicalFrameClicked()" class="btn btn-default">
-		<i class="fa fa-plus"></i>
-		<span translate="form.create_blank"></span>
-	</a>
+    <a ng-click="$ctrl.onCreateLogicalFrameClicked()" class="btn btn-default">
+        <i class="fa fa-plus"></i>
+        <span translate="form.create_blank"></span>
+    </a>
 </div>

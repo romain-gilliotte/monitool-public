@@ -1,9 +1,16 @@
-<project-query project="$ctrl.project" on-update="$ctrl.onQueryUpdate(query)">
-</project-query>
+<project-query project="$ctrl.project" on-update="$ctrl.onQueryUpdate(query)"> </project-query>
 
-<reporting-graph ng-if="$ctrl.plotData.ys.length > 0" x="$ctrl.plotData.x" ys="$ctrl.plotData.ys"
-	presentation="$ctrl.plotData.presentation">
+<reporting-graph
+    ng-if="$ctrl.plotData.ys.length > 0"
+    x="$ctrl.plotData.x"
+    ys="$ctrl.plotData.ys"
+    presentation="$ctrl.plotData.presentation"
+>
 </reporting-graph>
 
-<general-table project="$ctrl.project" query="$ctrl.query" on-plot-change="$ctrl.onPlotChange(plotData)">
+<general-table
+    project="$ctrl.project"
+    query="$ctrl.query"
+    on-plot-change="$ctrl.onPlotChange(plotData)"
+>
 </general-table>

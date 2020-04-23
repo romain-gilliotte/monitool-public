@@ -1,7 +1,11 @@
 <div class="panel" ng-class="$ctrl.panelClass">
     <div class="panel-heading" title="{{$ctrl.title}}">
         <div class="panel-title">
-            <i class="fa fa-arrows fa-fw handle" ng-class="$ctrl.handleClass" ng-if="$ctrl.sortable"></i>
+            <i
+                class="fa fa-arrows fa-fw handle"
+                ng-class="$ctrl.handleClass"
+                ng-if="$ctrl.sortable"
+            ></i>
             <ng-transclude ng-transclude-slot="title"></ng-transclude>
         </div>
     </div>

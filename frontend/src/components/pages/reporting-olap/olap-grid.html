@@ -1,23 +1,38 @@
 <table class="table table-bordered table-condensed data-grid" id="reporting">
-	<tbody>
-		<tr ng-repeat="row in $ctrl.grid.body">
-			<th ng-repeat="headerCol in row.headerCols" rowspan="{{headerCol.rowspan}}" ng-style="$ctrl.firstColStyle"
-				style="min-width: 100px">
-				{{headerCol.name}}
-			</th>
+    <tbody>
+        <tr ng-repeat="row in $ctrl.grid.body">
+            <th
+                ng-repeat="headerCol in row.headerCols"
+                rowspan="{{headerCol.rowspan}}"
+                ng-style="$ctrl.firstColStyle"
+                style="min-width: 100px;"
+            >
+                {{headerCol.name}}
+            </th>
 
-			<td ng-repeat="col in row.dataCols track by $index" td-reporting-field value="col" baseline="$ctrl.baseline"
-				target="$ctrl.target" colorize="$ctrl.colorize" unit="$ctrl.query.formula|indicatorUnit"></td>
-		</tr>
-	</tbody>
-	<thead ng-style="$ctrl.headerStyle">
-		<tr ng-repeat="row in $ctrl.grid.header">
-			<th colspan="{{$ctrl.grid.body[0].headerCols.length}}" rowspan="{{$ctrl.grid.header.length}}"
-				ng-style="$ctrl.firstColStyle" ng-if="$first"></th>
+            <td
+                ng-repeat="col in row.dataCols track by $index"
+                td-reporting-field
+                value="col"
+                baseline="$ctrl.baseline"
+                target="$ctrl.target"
+                colorize="$ctrl.colorize"
+                unit="$ctrl.query.formula|indicatorUnit"
+            ></td>
+        </tr>
+    </tbody>
+    <thead ng-style="$ctrl.headerStyle">
+        <tr ng-repeat="row in $ctrl.grid.header">
+            <th
+                colspan="{{$ctrl.grid.body[0].headerCols.length}}"
+                rowspan="{{$ctrl.grid.header.length}}"
+                ng-style="$ctrl.firstColStyle"
+                ng-if="$first"
+            ></th>
 
-			<th colspan="{{row.colspan}}" ng-repeat="col in row.cols track by $index">
-				{{col.name}}
-			</th>
-		</tr>
-	</thead>
+            <th colspan="{{row.colspan}}" ng-repeat="col in row.cols track by $index">
+                {{col.name}}
+            </th>
+        </tr>
+    </thead>
 </table>

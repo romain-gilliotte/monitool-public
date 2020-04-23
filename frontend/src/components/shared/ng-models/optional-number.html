@@ -1,21 +1,26 @@
-
 <div class="input-group">
-	<div class="input-group-addon" style="vertical-align: middle;" ng-click="$ctrl.toggleSpecifyValue()">
-		<i class="fa fa-thumb-tack"
-		   ng-style="{color: $ctrl.specifyValue ? 'black' : 'revert'}"></i>
-	</div>
+    <div
+        class="input-group-addon"
+        style="vertical-align: middle;"
+        ng-click="$ctrl.toggleSpecifyValue()"
+    >
+        <i class="fa fa-thumb-tack" ng-style="{color: $ctrl.specifyValue ? 'black' : 'revert'}"></i>
+    </div>
 
-	<input type="number"
-		   ng-if="$ctrl.specifyValue"
-		   ng-model="$ctrl.chosenValue"
-		   ng-change="$ctrl.onValueChange()"
-		   required
-		   class="form-control" />
+    <input
+        type="number"
+        ng-if="$ctrl.specifyValue"
+        ng-model="$ctrl.chosenValue"
+        ng-change="$ctrl.onValueChange()"
+        required
+        class="form-control"
+    />
 
-	<input type="text"
-		   ng-if="!$ctrl.specifyValue"
-		   value="{{$ctrl.message|translate}}"
-		   disabled
-		   class="form-control disabled" />
-
+    <input
+        type="text"
+        ng-if="!$ctrl.specifyValue"
+        value="{{$ctrl.message|translate}}"
+        disabled
+        class="form-control disabled"
+    />
 </div>

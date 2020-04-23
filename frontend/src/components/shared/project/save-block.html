@@ -1,17 +1,23 @@
 <div>
-    <a ng-disabled="!$ctrl.isChanged || !$ctrl.isValid || $ctrl.isSaving" ng-click="$ctrl.onSaveClicked()"
-        class="btn btn-primary">
+    <a
+        ng-disabled="!$ctrl.isChanged || !$ctrl.isValid || $ctrl.isSaving"
+        ng-click="$ctrl.onSaveClicked()"
+        class="btn btn-primary"
+    >
         <i class="fa fa-floppy-o" ng-if="!$ctrl.isSaving"></i>
         <i class="fa fa-circle-o-notch fa-spin" ng-if="$ctrl.isSaving"></i>
 
         <span translate="shared.save"></span>
     </a>
 
-    <a ng-disabled="!$ctrl.isChanged || $ctrl.isSaving" ng-click="$ctrl.onResetClicked()" class="btn btn-default">
+    <a
+        ng-disabled="!$ctrl.isChanged || $ctrl.isSaving"
+        ng-click="$ctrl.onResetClicked()"
+        class="btn btn-default"
+    >
         <i class="fa fa-undo"></i>
         <span translate="shared.remove_changes"></span>
     </a>
-
 </div>
 <div>
     <p class="text-danger" ng-if="!$ctrl.isValid">
