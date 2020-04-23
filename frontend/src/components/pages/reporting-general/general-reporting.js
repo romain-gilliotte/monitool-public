@@ -1,6 +1,6 @@
 import uiRouter from '@uirouter/angularjs';
 import angular from 'angular';
-import mtGraph from '../../shared/reporting/reporting-graph';
+import mtGraph from './reporting-graph';
 import mtTable from './general-table';
 import mtProjectQuery from './project-query';
 import mtHelpPanel from '../../shared/misc/help-panel';
