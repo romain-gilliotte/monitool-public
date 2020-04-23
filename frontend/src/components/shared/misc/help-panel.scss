@@ -12,6 +12,11 @@ help-panel {
     transition-delay: 0.2s;
     transition-duration: 0.5s;
 
+    &:hover,
+    &.locked {
+        right: 0;
+    }
+
     .toolbar-label {
         width: 30px;
         display: flex;
@@ -35,11 +40,7 @@ help-panel {
     }
 }
 
-help-panel:hover,
-help-panel.locked {
-    right: 0;
-}
-
+/** Blur background when help panel is active */
 help-panel ~ div {
     transition-property: filter;
     transition-delay: 0.2s;
