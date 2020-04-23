@@ -1,35 +1,34 @@
-
 olap-grid {
     display: block;
     overflow: auto;
     border: 0 solid #ccc;
     border-top-width: 1px;
-}
 
-olap-grid table {
-    overflow: hidden;
-    border-collapse: separate !important;
-    border-spacing: 0px !important;
-    border-width: 0 !important;
-}
+    table {
+        overflow: hidden;
+        border-collapse: separate !important;
+        border-spacing: 0px !important;
+        border-width: 0 !important;
+    }
 
-olap-grid table td, olap-grid table th {
-    border-top-width: 0 !important;
-    border-left-width: 0 !important;
-    background-color: white;
-}
+    table td,
+    table th {
+        border-top-width: 0 !important;
+        border-left-width: 0 !important;
+        background-color: white;
+    }
 
-olap-grid table td:first-child, olap-grid table th:first-child {
-    border-left-width: 1px !important;
-}
+    table td:first-child,
+    table th:first-child {
+        border-left-width: 1px !important;
+    }
 
-olap-grid th:first-child {
-    width: 15%;
+    th:first-child {
+        width: 15%;
+    }
 }
-
 
 .data-grid th {
     text-align: center;
     vertical-align: middle !important;
-  }
-
+}

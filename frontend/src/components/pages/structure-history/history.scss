@@ -1,13 +1,14 @@
+history {
+    .revtbody .restore {
+        display: none;
+    }
 
-  .revtbody .restore {
-    display: none;
-  }
+    .revtbody:hover .restore,
+    .revtbody .selected {
+        display: table-row;
+    }
 
-  .revtbody:HOVER .restore, .revtbody .selected {
-    display: table-row;
-  }
-
-  .table>tbody.revtbody+tbody.revtbody {
-    border-top-width: 1px;
-  }
-  
+    .table > tbody.revtbody + tbody.revtbody {
+        border-top-width: 1px;
+    }
+}

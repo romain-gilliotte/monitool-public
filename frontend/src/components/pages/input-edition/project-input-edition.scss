@@ -4,11 +4,11 @@ project-input-edition {
     justify-content: space-between;
     height: calc(100% + 20px);
     margin: -10px -20px;
-}
 
-project-input-edition > div {
-    flex: 1;
-    height: 100%;
-    overflow: auto;
-    padding: 10px 20px;
+    > div {
+        flex: 1;
+        height: 100%;
+        overflow: auto;
+        padding: 10px 20px;
+    }
 }

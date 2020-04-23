@@ -1,30 +1,32 @@
-project-sites tr.disabled {
-    background-color: #eaeaea;
-}
+project-sites {
+    tr.disabled {
+        background-color: #eaeaea;
+    }
 
-project-sites table.sites tr > th:nth-child(1),
-project-sites table.groups tr > th:nth-child(1) {
-    width: 30px;
-}
+    table.sites tr > th:nth-child(1),
+    table.groups tr > th:nth-child(1) {
+        width: 30px;
+    }
 
-project-sites table.sites tr > th:nth-child(3),
-project-sites table.groups tr > th:nth-child(4) {
-    width: 180px;
-}
+    table.sites tr > th:nth-child(3),
+    table.groups tr > th:nth-child(4) {
+        width: 180px;
+    }
 
-project-sites table.sites td[colspan="3"],
-project-sites table.groups td[colspan="4"] {
-    text-align: center;
-}
+    table.sites td[colspan='3'],
+    table.groups td[colspan='4'] {
+        text-align: center;
+    }
 
-project-sites table.groups tr > th:nth-child(2) {
-    width: 300px;
-}
+    table.groups tr > th:nth-child(2) {
+        width: 300px;
+    }
 
-project-sites table.groups tr > td:nth-child(4) .btn {
-    width: 100%;
-}
+    table.groups tr > td:nth-child(4) .btn {
+        width: 100%;
+    }
 
-project-sites .form-group {
-    margin: 0;
+    .form-group {
+        margin: 0;
+    }
 }

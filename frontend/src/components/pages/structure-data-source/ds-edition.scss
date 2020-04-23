@@ -1,8 +1,9 @@
+ds-edition {
+    .sortable-drag .panel-body {
+        display: none;
+    }
 
-ds-edition .sortable-drag .panel-body {
-    display: none;
-}
-
-ds-edition .disabled .panel-title {
-    color: #bbb;
+    .disabled .panel-title {
+        color: #bbb;
+    }
 }

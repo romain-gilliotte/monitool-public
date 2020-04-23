@@ -1,76 +1,82 @@
-
 general-table {
     display: block;
     overflow: auto;
     border: 0 solid #ccc;
     border-top-width: 1px;
-}
-  
-general-table table {
-    overflow: hidden;
-    border-collapse: separate !important;
-    border-spacing: 0px !important;
-    border-width: 0 !important;
-}
-  
-general-table table td, general-table table th {
-    border-top-width: 0 !important;
-    border-left-width: 0 !important;
-    background-color: white;
-}
-  
-general-table table td:first-child, general-table table th:first-child {
-    border-left-width: 1px !important;
+
+    table {
+        overflow: hidden;
+        border-collapse: separate !important;
+        border-spacing: 0px !important;
+        border-width: 0 !important;
+    }
+
+    table td,
+    table th {
+        border-top-width: 0 !important;
+        border-left-width: 0 !important;
+        background-color: white;
+    }
+
+    table td:first-child,
+    table th:first-child {
+        border-left-width: 1px !important;
+    }
 }
 
 #reporting {
     width: auto;
     min-width: 100%;
     table-layout: fixed;
-  }
-  
-  #reporting .row-graph {
-    width: 30px;
-    text-align: center;
-  }
-  
-  #reporting .row-title {
-    width: 300px;
-    border-right-color: white;
-  }
-  
-  #reporting .row-title div {
-    width: 300px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  #reporting .indent1 .row-title div, #reporting .indent1 .row-header-title div {
-    padding-left: 20px !important;
-  }
-  
-  #reporting .indent2 .row-title div, #reporting .indent2 .row-header-title div {
-    padding-left: 40px !important;
-  }
-  #reporting .indent3 .row-title div, #reporting .indent3 .row-header-title div {
-    padding-left: 60px !important;
-  }
-  
-  #reporting .indent4 .row-title div, #reporting .indent4 .row-header-title div {
-    padding-left: 80px !important;
-  }
-  
-  #reporting .indent5 .row-title div, #reporting .indent5 .row-header-title div {
-    padding-left: 100px !important;
-  }
-  
-  #reporting .indent6 .row-title div, #reporting .indent6 .row-header-title div {
-    padding-left: 120px !important;
-  }
-  
-  #reporting .row-dimension {
-    width: 30px;
-    border-left-color: white;
-  }
-  
+
+    .row-graph {
+        width: 30px;
+        text-align: center;
+    }
+
+    .row-title {
+        width: 300px;
+        border-right-color: white;
+    }
+
+    .row-title div {
+        width: 300px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .indent1 .row-title div,
+    .indent1 .row-header-title div {
+        padding-left: 20px !important;
+    }
+
+    .indent2 .row-title div,
+    .indent2 .row-header-title div {
+        padding-left: 40px !important;
+    }
+    .indent3 .row-title div,
+    .indent3 .row-header-title div {
+        padding-left: 60px !important;
+    }
+
+    .indent4 .row-title div,
+    .indent4 .row-header-title div {
+        padding-left: 80px !important;
+    }
+
+    .indent5 .row-title div,
+    .indent5 .row-header-title div {
+        padding-left: 100px !important;
+    }
+
+    .indent6 .row-title div,
+    .indent6 .row-header-title div {
+        padding-left: 120px !important;
+    }
+
+    .row-dimension {
+        width: 30px;
+        border-left-color: white;
+    }
+}

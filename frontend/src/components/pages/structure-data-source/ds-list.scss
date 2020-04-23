@@ -2,19 +2,19 @@ ds-list {
     display: flex;
     flex-direction: column;
     min-height: 100%;
-}
 
-ds-list .centered {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    justify-content: center;
-    font-size: 18px;
-    color: #999;
-    border: dashed 1px;
-}
+    .centered {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+        font-size: 18px;
+        color: #999;
+        border: dashed 1px;
+    }
 
-ds-list li.disabled {
-    color: #999;
+    li.disabled {
+        color: #999;
+    }
 }

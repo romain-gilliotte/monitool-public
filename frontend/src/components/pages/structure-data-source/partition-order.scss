@@ -1,21 +1,20 @@
-
 .partition-order {
     border: 1px solid #ccc;
     background-color: #e8e8e8;
     color: #444;
-  }
-  
-  .partition-order td {
-    border: 1px solid #ccc;
-    padding: 4px 8px;
-  }
 
-  .partition-order td select {
-    width: 100%;
-  }
+    td {
+        border: 1px solid #ccc;
+        padding: 4px 8px;
+    }
 
-  .partition-order td.data-field {
-    border: 1px solid #ccc;
-    padding: 4px 8px;
-    background-color: white;
-  }
+    td select {
+        width: 100%;
+    }
+
+    td.data-field {
+        border: 1px solid #ccc;
+        padding: 4px 8px;
+        background-color: white;
+    }
+}

@@ -1,81 +1,73 @@
-
-
-.input-table-container {
-    flex: 1;
-    display: block;
-    overflow: auto;
-    border: 0 solid #ccc;
-    border-top-width: 1px;
-}
-
-
-.input-table-container table {
-    overflow: hidden;
-    border-collapse: separate !important;
-    border-spacing: 0px !important;
-    border-width: 0 !important;
-}
-
-.input-table-container table td, .input-table-container table th {
-    border-top-width: 0 !important;
-    border-left-width: 0 !important;
-    background-color: white;
-}
-
-.input-table-container table td:first-child, .input-table-container table th:first-child {
-    border-left-width: 1px !important;
-}
-
-.input-table-container th:first-child, .input-table-container td:first-child {
-    width: 15%;
-}
-
-.input-table-container td:first-child {
-    width: 15%;
-}
-
-
-
 project-input-list {
     display: flex;
     height: 100%;
     flex-direction: column;
-}
-  
-project-input-list .headerField {
-    min-width: 100px;
-    width: 100%;
-    height: 46px;
-    line-height: 46px;
-    overflow: hidden;
-    text-align: center;
-}
 
-project-input-list .headerField div {
-    display: inline-block;
-    vertical-align: middle;
-    line-height: 14px;
+    .headerField {
+        min-width: 100px;
+        width: 100%;
+        height: 46px;
+        line-height: 46px;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    .headerField div {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 14px;
+    }
+
+    .bodyField {
+        height: 20px;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .bodyField a {
+        display: block;
+        width: 100%;
+    }
+
+    .bodyField2 {
+        height: 24px;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .input-table-container {
+        flex: 1;
+        display: block;
+        overflow: auto;
+        border: 0 solid #ccc;
+        border-top-width: 1px;
+
+        table {
+            overflow: hidden;
+            border-collapse: separate !important;
+            border-spacing: 0px !important;
+            border-width: 0 !important;
+        }
+
+        table td,
+        table th {
+            border-top-width: 0 !important;
+            border-left-width: 0 !important;
+            background-color: white;
+        }
+
+        table td:first-child,
+        table th:first-child {
+            border-left-width: 1px !important;
+        }
+
+        th:first-child,
+        td:first-child {
+            width: 15%;
+        }
+
+        td:first-child {
+            width: 15%;
+        }
+    }
 }
-
-project-input-list .bodyField {
-    height: 20px;
-    text-align: center;
-    overflow: hidden;
-}
-
-project-input-list .bodyField a {
-    display: block;
-    width: 100%;
-}
-
-project-input-list .bodyField2 {
-    height: 24px;
-    text-align: center;
-    overflow: hidden;
-}
-
-
-.pdf-export {
-    width: 180px;
-  }
-  

@@ -1,45 +1,42 @@
-
 project-list {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 10px 20px;
+
+    .centered {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+        font-size: 18px;
+        color: #999;
+        border: dashed 1px;
+    }
+
+    .filter-text {
+        margin-bottom: 10px;
+    }
+
+    .filter-toggles {
+        margin-bottom: 10px;
+    }
+
+    .create-button {
+        float: right;
+    }
+
+    pane-title {
+        i.fa {
+            margin-top: 3px;
+        }
+
+        i.fa.fa-star,
+        i.fa.fa-star-o {
+            cursor: pointer;
+        }
+    }
 }
-
-project-list .centered {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  justify-content: center;
-  font-size: 18px;
-  color: #999;
-  border: dashed 1px;
-}
-
-project-list .filter-text {
-    margin-bottom: 10px;
-}
-
-project-list .filter-toggles {
-    margin-bottom: 10px;
-}
-
-project-list .create-button {
-    float: right;
-}
-
-
-project-list pane-title i.fa {
-  margin-top: 3px;
-}
-
-project-list pane-title i.fa.fa-star, project-list pane-title i.fa.fa-star-o {
-  cursor: pointer
-}
-  
-.profile-img { width: 16px; height: 16px; border-radius: 8px; }
-
-

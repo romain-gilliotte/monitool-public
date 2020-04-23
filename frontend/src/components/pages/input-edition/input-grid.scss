@@ -1,7 +1,9 @@
- 
-/* work around wtHolder having very big values */
-input-grid .wtHolder {
-    width: auto !important;
-    height: auto !important;
-    overflow: hidden !important;
+input-grid {
+    /* work around wtHolder having very big values */
+    /* @see https://github.com/handsontable/handsontable/issues/3013 */
+    .wtHolder {
+        width: auto !important;
+        height: auto !important;
+        overflow: hidden !important;
+    }
 }

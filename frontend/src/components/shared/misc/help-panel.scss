@@ -1,4 +1,5 @@
 help-panel {
+    display: flex;
     position: fixed;
     right: -60vw;
     top: 0;
@@ -6,38 +7,37 @@ help-panel {
     width: calc(60vw + 30px);
     background-color: white;
     z-index: 10;
-    
+
     transition-property: right;
     transition-delay: 0.2s;
     transition-duration: 0.5s;
 
-    display: flex;
+    .toolbar-label {
+        width: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background-color: #eee;
+        border-right: 1px solid #c0c0c0;
+        border-color: #c0c0c0;
+        font-weight: bold;
+        border-width: 0 0 0 1px;
+        border-style: solid;
+    }
+
+    .toolbar-body {
+        border-color: #999;
+        border-width: 0 0 0 1px;
+        border-style: dotted;
+        width: 60vw;
+        overflow: auto;
+        padding: 20px;
+    }
 }
 
-help-panel:hover, help-panel.locked {
+help-panel:hover,
+help-panel.locked {
     right: 0;
-}
-
-help-panel .toolbar-label {
-    width: 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-color: #eee;
-    border-right: 1px solid #c0c0c0;
-    border-color: #c0c0c0;
-    font-weight: bold;
-    border-width: 0 0 0 1px;
-    border-style: solid;
-}
-
-help-panel .toolbar-body {
-    border-color: #999;
-    border-width: 0 0 0 1px;
-    border-style: dotted;
-    width: 60vw;
-    overflow: auto;
-    padding: 20px;
 }
 
 help-panel ~ div {

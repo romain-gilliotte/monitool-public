@@ -1,5 +1,3 @@
-
-
 .partition-table-item {
     /* from well */
     min-height: 20px;
@@ -9,9 +7,9 @@
     background-color: #fcfcfc;
     border: 1px solid #e3e3e3;
     border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
-  
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+
     /* from doc */
     text-align: center;
     padding: 5px;
@@ -19,20 +17,20 @@
     vertical-align: middle;
     margin-right: 15px;
     font-weight: normal !important;
-  }
-  
-  .partition-table-item table {
-    background-color: #e8e8e8;
-    color: #444;
-    border-color: #ccc !important;
-  }
-  
-  .partition-table-item table td {
-    border-color: #ccc !important;
-    border-bottom-width: 1px !important;
-    padding: 4px 8px !important;
-  }
-  
-  .partition-table-item table td.data-field {
-    background-color: white;
-  }
+
+    table {
+        background-color: #e8e8e8;
+        color: #444;
+        border-color: #ccc !important;
+    }
+
+    table td {
+        border-color: #ccc !important;
+        border-bottom-width: 1px !important;
+        padding: 4px 8px !important;
+    }
+
+    table td.data-field {
+        background-color: white;
+    }
+}
