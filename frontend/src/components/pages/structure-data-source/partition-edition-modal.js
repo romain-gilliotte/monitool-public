@@ -12,7 +12,7 @@ module.component(__componentName, {
 		dismiss: '&'
 	},
 	template: require(__templatePath),
-	controller: class PartitionEditionModalController {
+	controller: class {
 
 		constructor($scope, $filter) {
 			"ngInject";

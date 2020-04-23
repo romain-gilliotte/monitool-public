@@ -11,7 +11,7 @@ module.component(__componentName, {
 	},
 	template: require(__templatePath),
 
-	controller: class PartitionOrderController {
+	controller: class {
 
 		$onChanges(changes) {
 			// Make an editable version of the partitions (one way data bindings).

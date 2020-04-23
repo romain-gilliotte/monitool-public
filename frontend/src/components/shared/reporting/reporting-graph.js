@@ -13,7 +13,7 @@ module.component(__componentName, {
 
 	template: require(__templatePath),
 
-	controller: class GraphController {
+	controller: class {
 
 		constructor($element, $scope) {
 			"ngInject";

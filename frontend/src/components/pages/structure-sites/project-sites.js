@@ -36,7 +36,7 @@ module.component(__componentName, {
 
 	template: require(__templatePath),
 
-	controller: class ProjectSitesController {
+	controller: class {
 
 		constructor($filter) {
 			"ngInject";

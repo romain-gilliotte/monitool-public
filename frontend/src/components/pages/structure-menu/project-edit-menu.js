@@ -24,7 +24,7 @@ module.component(__componentName, {
 
 	template: require(__templatePath),
 
-	controller: class ProjectEditController {
+	controller: class {
 
 		constructor($transitions, $filter, $scope, $state) {
 			"ngInject";

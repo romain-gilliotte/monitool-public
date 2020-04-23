@@ -19,7 +19,7 @@ module.component(__componentName, {
 
 	template: require(__templatePath),
 
-	controller: class IndicatorComputationController {
+	controller: class {
 
 		constructor() {
 			this.parser = getParser();

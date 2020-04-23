@@ -19,7 +19,7 @@ module.component(__componentName, {
 		onPlotChange: '&'
 	},
 	template: require(__templatePath),
-	controller: class GeneralTableController {
+	controller: class {
 
 		constructor($element) {
 			"ngInject";

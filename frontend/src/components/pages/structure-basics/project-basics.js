@@ -24,7 +24,7 @@ module.component(__componentName, {
 
 	template: require(__templatePath),
 
-	controller: class ProjectBasicsController {
+	controller: class {
 
 		$onChanges(changes) {
 			if (changes.project) {

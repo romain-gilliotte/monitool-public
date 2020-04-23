@@ -11,7 +11,7 @@ module.component(__componentName, {
     bindings: {},
     transclude: true,
     template: require(__templatePath),
-    controller: class xx {
+    controller: class {
 
         constructor($rootScope, $sce, $transitions, $state) {
             "ngInject";

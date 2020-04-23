@@ -8,7 +8,7 @@ module.component(__componentName, {
 		incomplete: '<'
 	},
 	template: require(__templatePath),
-	controller: class ProgressBarController {
+	controller: class {
 
 		$onChanges(changes) {
 			this.done = Math.round(100 * (this.done || 0));

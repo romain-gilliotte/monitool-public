@@ -19,7 +19,7 @@ module.component(__componentName, {
 		groups: '<'
 	},
 
-	controller: class ElementFilterController {
+	controller: class {
 
 		$onInit() {
 			this.ngModelCtrl.$formatters.push(

@@ -27,7 +27,7 @@ module.component(__componentName, {
 
 	template: require(__templatePath),
 
-	controller: class ProjectExtraIndicators {
+	controller: class {
 
 		constructor($uibModal, $scope) {
 			"ngInject";

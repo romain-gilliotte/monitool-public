@@ -27,7 +27,7 @@ module.component(__componentName, {
     },
     template: require(__templatePath),
 
-    controller: class xx {
+    controller: class {
         logout() {
             window.auth0.logout({
                 returnTo: window.location.origin

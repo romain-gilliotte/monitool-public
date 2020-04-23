@@ -14,7 +14,7 @@ module.component(__componentName, {
 		message: '@'
 	},
 
-	controller: class OptionalNumberController {
+	controller: class {
 
 		$onInit() {
 			this.ngModelCtrl.$render = () => {

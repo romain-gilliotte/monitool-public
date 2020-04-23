@@ -40,7 +40,7 @@ module.component(__componentName, {
 	transclude: true,
 	template: require(__templatePath),
 
-	controller: class ProjectMenuController {
+	controller: class {
 
 		$onChanges(changes) {
 			// fixme why rename?

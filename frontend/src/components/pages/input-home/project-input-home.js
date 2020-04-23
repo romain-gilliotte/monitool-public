@@ -25,7 +25,7 @@ module.component(__componentName, {
 		users: '<'
 	},
 	template: require(__templatePath),
-	controller: class ProjectInputHomeController {
+	controller: class {
 
 		constructor($scope, $rootScope) {
 			"ngInject";

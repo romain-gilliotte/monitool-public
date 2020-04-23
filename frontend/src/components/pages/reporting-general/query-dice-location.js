@@ -11,7 +11,7 @@ module.component(__componentName, {
 
     template: require(__templatePath),
 
-    controller: class ProjectFilterController {
+    controller: class {
 
         $onChanges(changes) {
             this.siteIds = this.project.entities.map(e => e.id);

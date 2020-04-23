@@ -21,7 +21,7 @@ module.component(__componentName, {
 
 	template: require(__templatePath),
 
-	controller: class ProjectStructureHomeController {
+	controller: class {
 
 		$onChanges(changes) {
 			const lfIndicators = this.project.logicalFrames.reduce((memo, lf) => [

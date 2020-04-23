@@ -20,7 +20,7 @@ module.component(__componentName, {
 
     template: require(__templatePath),
 
-    controller: class xx {
+    controller: class {
 
         constructor($rootScope, $element) {
             "ngInject";

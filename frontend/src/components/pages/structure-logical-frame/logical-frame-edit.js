@@ -52,7 +52,7 @@ module.component(__componentName, {
 
 	template: require(__templatePath),
 
-	controller: class ProjectLogicalFrameEditController {
+	controller: class {
 
 		constructor($uibModal) {
 			"ngInject";

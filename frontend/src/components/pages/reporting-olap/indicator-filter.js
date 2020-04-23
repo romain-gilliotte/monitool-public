@@ -19,7 +19,7 @@ module.component(__componentName, {
 
 	template: require(__templatePath),
 
-	controller: class IndicatorFilterController {
+	controller: class {
 
 		$onInit() {
 			this.panelOpen = false;

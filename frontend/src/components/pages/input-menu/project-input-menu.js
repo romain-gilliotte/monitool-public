@@ -24,7 +24,7 @@ module.component(__componentName, {
 
 	template: require(__templatePath),
 
-	controller: class ProjectInputMenuController {
+	controller: class {
 
 		constructor($state, $stateParams, $rootScope) {
 			"ngInject";

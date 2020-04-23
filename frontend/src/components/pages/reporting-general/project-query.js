@@ -13,7 +13,7 @@ module.component(__componentName, {
 
 	template: require(__templatePath),
 
-	controller: class ProjectFilterController {
+	controller: class {
 
 		$onInit() {
 			this.panelOpen = false;

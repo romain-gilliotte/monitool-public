@@ -34,7 +34,7 @@ module.component(__componentName, {
 
 	template: require(__templatePath),
 
-	controller: class OlapReportingController {
+	controller: class {
 
 		constructor($scope, $rootScope) {
 			"ngInject";

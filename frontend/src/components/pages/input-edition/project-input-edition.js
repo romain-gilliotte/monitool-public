@@ -43,7 +43,7 @@ module.component(__componentName, {
 
 	template: require(__templatePath),
 
-	controller: class ProjectInputEditionController {
+	controller: class {
 
 		get isUnchanged() {
 			return angular.equals(this.master, this.input)

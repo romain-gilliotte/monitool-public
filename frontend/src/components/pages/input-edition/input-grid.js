@@ -31,7 +31,7 @@ module.component(__componentName, {
 	},
 	template: require(__templatePath),
 
-	controller: class InputGridController {
+	controller: class {
 
 		constructor($element, $scope) {
 			"ngInject";

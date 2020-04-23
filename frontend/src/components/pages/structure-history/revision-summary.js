@@ -8,7 +8,7 @@ module.component(__componentName, {
 		'revision': '<'
 	},
 	template: require(__templatePath),
-	controller: class RevisionSummaryController {
+	controller: class {
 
 		constructor($filter, $sce, $rootScope) {
 			"ngInject";

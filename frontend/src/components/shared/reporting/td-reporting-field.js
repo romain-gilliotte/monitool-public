@@ -16,7 +16,7 @@ module.directive(__componentName, function () {
 			unit: '<'
 		},
 
-		controller: class ReportingFieldController {
+		controller: class {
 
 			constructor($element) {
 				"ngInject";

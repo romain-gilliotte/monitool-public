@@ -11,7 +11,7 @@ module.component(__componentName, {
 
 	template: require(__templatePath),
 
-	controller: class ElementGroupsController {
+	controller: class {
 
 		$onChanges(changes) {
 			this.view = this._model2view(this.ids, this.items, this.groups);

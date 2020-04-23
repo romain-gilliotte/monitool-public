@@ -10,7 +10,7 @@ module.component(__componentName, {
 		onUpdate: '&'
 	},
 	template: require(__templatePath),
-	controller: class IndicatorSelectController {
+	controller: class {
 
 		constructor($filter) {
 			"ngInject";

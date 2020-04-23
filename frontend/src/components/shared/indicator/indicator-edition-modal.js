@@ -23,7 +23,7 @@ module.component(__componentName, {
 
 	template: require(__templatePath),
 
-	controller: class IndicatorEditionModal {
+	controller: class {
 
 		$onChanges(changes) {
 			this.dataSources = this.resolve.dataSources;

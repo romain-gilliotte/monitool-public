@@ -26,7 +26,7 @@ module.component(__componentName, {
 	},
 	template: require(__templatePath),
 
-	controller: class UtcDatepickerController {
+	controller: class {
 
 		$onChanges() {
 			this.datePickerOptions = {};

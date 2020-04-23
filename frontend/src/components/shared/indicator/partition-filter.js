@@ -13,7 +13,7 @@ module.component(__componentName, {
 
 	template: require(__templatePath),
 
-	controller: class PartitionFilterController {
+	controller: class {
 
 		$onInit() {
 			this.ngModelCtrl.$parsers.push(this._viewToModel.bind(this));

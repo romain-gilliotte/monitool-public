@@ -18,7 +18,7 @@ module.component(__componentName, {
 
 	template: require(__templatePath),
 
-	controller: class ProjectUserModalController {
+	controller: class {
 
 		hasChanged() {
 			return !angular.equals(this.masterInvitation, this.invitation);

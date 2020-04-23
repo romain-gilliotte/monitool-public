@@ -20,7 +20,7 @@ module.component(__componentName, {
 
 	template: require(__templatePath),
 
-	controller: class OlapGridController {
+	controller: class {
 
 		constructor($element, $scope) {
 			"ngInject";

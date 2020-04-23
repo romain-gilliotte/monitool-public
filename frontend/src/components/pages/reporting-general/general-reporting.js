@@ -21,7 +21,7 @@ module.component(__componentName, {
 		project: '<',
 	},
 	template: require(__templatePath),
-	controller: class GeneralReportingController {
+	controller: class {
 
 		constructor() {
 			this.query = null;

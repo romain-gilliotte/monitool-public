@@ -13,7 +13,7 @@ module.component(__componentName, {
 	},
 	template: require(__templatePath),
 
-	controller: class PartitionDistributionController {
+	controller: class {
 
 		$onChanges(changes) {
 			// ... we check that current distribution is valid.

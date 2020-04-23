@@ -55,7 +55,7 @@ module.component(__componentName, {
 
 	template: require(__templatePath),
 
-	controller: class DataSourceEdition {
+	controller: class {
 
 		$onChanges(changes) {
 			if (changes.project || changes.dsId) {
