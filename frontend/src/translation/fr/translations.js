@@ -68,16 +68,53 @@ export default {
         spanish: 'Espagnol',
         english: 'Anglais',
     },
-
+    welcome: {
+        i_got_it: "J'ai compris",
+        text: /* html */ `
+            <legend>Bienvenu!</legend>
+            <p>C'est votre première visite sur Monitool.</p>
+            <p>
+                Afin de vous aider à appréhender l'outil nous avons créé un premier projet dans votre
+                espace!<br />
+                Il utilise la majorité des fonctionalitées de l'outil, et pourra vous servir de référence.
+            </p>
+            <ul>
+                <li>
+                    Pour consulter ses rapports et saisir des nouvelles données, cliquez sur
+                    <span class="btn btn-default btn-xxs">
+                        <i class="fa fa-fw fa-play"></i>
+                        <span translate="shared.open"></span>
+                    </span>
+                </li>
+                <li>
+                    Pour accéder à sa configuration, cliquez sur
+                    <span class="btn btn-default btn-xxs"><span class="caret"></span></span>
+                    puis sur
+                    <span class="btn btn-default btn-xxs">
+                        <i class="fa fa-fw fa-cogs"></i>
+                        <span translate="shared.configure"></span>
+                    </span>
+                </li>
+            </ul>
+            <p>
+                Sur toutes les pages, un panneau dépliant d'aide est disponible.<br />
+                Son contenu s'adapte à la page sur laquelle vous êtes, n'hésitez-pas à le consulter!<br />
+                Pour y accéder:
+            </p>
+            <ul style="margin-bottom: 20px">
+                <li>Déplacez le pointeur de votre souris sur la barre latéral à droite de votre écran.</li>
+                <li>Attendez un court instant.</li>
+            </ul>
+        `,
+    },
     invitation: {
         no_invitations_yet:
             "Vous n'avez pas encore invité d'autres personnes à participer à votre projet",
         add_invitation: 'Inviter une personne',
-
         email: 'Email',
-        help_email: "Quel est l'email de l'utilisateur que vous désirez inviter?",
-        help_sites: " Sur quels lieux de collecte cet utilisateur pourra-t'il saisir?",
-        help_datasources: " Sur quels sources de données cet utilisateur pourra-t'il saisir?",
+        help_email: "Quel est l'email de la personne que vous désirez inviter?",
+        help_sites: "Sur quels lieux de collecte cette personne pourra-t'elle saisir?",
+        help_datasources: " Sur quels sources de données cette personne pourra-t'il saisir?",
         accepted: 'Acceptée',
         contact: 'Contact',
         data_entry_perms: 'Permissions saisie',

@@ -1,5 +1,7 @@
 export default {
     shared: {
+        yes: 'Yes',
+        no: 'No',
         archive: 'Archive',
         enable: 'Enable data entry',
         disable: 'Disable data entry',
@@ -66,7 +68,58 @@ export default {
         spanish: 'Spanish',
         english: 'English',
     },
-
+    welcome: {
+        i_got_it: 'I got it',
+        text: /* html */ `
+            <legend> Welcome! </legend>
+            <p>This is your first visit to Monitool.</p>
+            <p>
+                To help you understand the tool, we have created a first project in your
+                space! <br />
+                It uses most of the functionality of the tool, and can be used as a reference.
+            </p>
+            <ul>
+                <li>
+                    To view its reports and enter new data, click on
+                    <span class="btn btn-default btn-xxs">
+                        <i class="fa fa-fw fa-play"></i>
+                        <span translate="shared.open"></span>
+                    </span>
+                </li>
+                <li>
+                    To access its configuration, click on
+                    <span class="btn btn-default btn-xxs"><span class="caret"></span></span>
+                    then on
+                    <span class="btn btn-default btn-xxs">
+                        <i class="fa fa-fw fa-cogs"></i>
+                        <span translate="shared.configure"></span>
+                    </span>
+                </li>
+            </ul>
+            <p>
+                On all pages, a help panel is available.<br />
+                Its content adapts to the page on which you are, do not hesitate to check it!<br />
+                To get there:
+            </p>
+            <ul style="margin-bottom: 20px">
+                <li>Move your mouse pointer over the sidebar on the right of your screen.</li>
+                <li>Wait a short instant.</li>
+            </ul>
+        `,
+    },
+    invitation: {
+        no_invitations_yet: 'You have not yet invited other people to participate in your project',
+        add_invitation: 'Invite a person',
+        email: 'Email',
+        help_email: 'What is the email address of the person you want to invite?',
+        help_sites: 'On which collection points can this person enter data?',
+        help_datasources: 'On which data sources can this person enter data?',
+        accepted: 'Accepted',
+        contact: 'Contact',
+        data_entry_perms: 'Data entry permissions',
+        create_invitation: 'Send invitation',
+        update_invitation: 'Update invitation',
+    },
     project: {
         no_logframe_yet: 'This project does not have logical frameworks yet',
         show_all_projects: 'Mostrar todos los proyectos',

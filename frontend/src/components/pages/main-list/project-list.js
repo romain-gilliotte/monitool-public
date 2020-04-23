@@ -5,10 +5,10 @@ import axios from 'axios';
 import diacritics from 'diacritics';
 import Project from '../../../models/project';
 import mtColumnsPanel from '../../shared/misc/columns-panel';
-
+import mtHelpPopup from './help-popup';
 require(__scssPath);
 
-const module = angular.module(__moduleName, [uiDropdown, uiRouter, mtColumnsPanel]);
+const module = angular.module(__moduleName, [uiDropdown, uiRouter, mtColumnsPanel, mtHelpPopup]);
 
 module.config($stateProvider => {
     $stateProvider.state('main.projects', {
@@ -32,18 +32,35 @@ module.component(__componentName, {
     template: require(__templatePath),
 
     controller: class {
-        constructor($rootScope, $filter, $scope, $state, $window) {
+        constructor($filter, $rootScope, $scope, $state, $uibModal, $window) {
             'ngInject';
 
+            this.translate = $filter('translate');
             this.userEmail = $rootScope.profile.email;
             this.$scope = $scope;
             this.$state = $state;
+            this.$uibModal = $uibModal;
             this.$window = $window;
-            this.translate = $filter('translate');
 
             this.displayOngoing = true;
             this.displayFinished = true;
             this.displayArchived = false;
+        }
+
+        $onInit() {
+            const hasSeenHelp = window.localStorage.getItem('help_disclaimer_shown');
+            if (!hasSeenHelp) {
+                window.localStorage.setItem('help_disclaimer_shown', 'true');
+
+                this.$uibModal
+                    .open({ component: 'helpPopup' })
+                    .result.catch(e => {})
+                    .then(() => {
+                        const node = document.querySelector('help-panel');
+                        node.classList.add('locked');
+                        setTimeout(() => node.classList.remove('locked'), 3000);
+                    });
+            }
         }
 
         $onChanges(changes) {

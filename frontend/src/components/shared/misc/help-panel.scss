@@ -48,6 +48,7 @@ help-panel ~ div {
     filter: none;
 }
 
-help-panel:hover ~ div {
+help-panel:hover ~ div,
+help-panel.locked ~ div {
     filter: blur(4px) brightness(75%);
 }

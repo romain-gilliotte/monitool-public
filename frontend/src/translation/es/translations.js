@@ -1,5 +1,7 @@
 export default {
     shared: {
+        yes: 'Si',
+        no: 'No',
         archive: 'Archivar',
         enable: 'Activar',
         disable: 'Deactivar',
@@ -66,7 +68,58 @@ export default {
         spanish: 'Español',
         english: 'Inglés',
     },
-
+    welcome: {
+        i_got_it: 'He entendido',
+        text: /* html */ `
+            <legend>¡Bienvenido!</legend>
+            <p>Es su primera visita a Monitool.</p>
+            <p>
+                Para ayudarlo a comprender la herramienta, hemos creado un primer proyecto en su
+                espacio!<br />
+                Utiliza la mayor parte de las funcionalidades de la herramienta y puede usarse como referencia.
+            </p>
+            <ul>
+                <li>
+                    Para ver sus informes e ingresar nuevos datos, haga clic en
+                    <span class="btn btn-default btn-xxs">
+                        <i class="fa fa-fw fa-play"></i>
+                        <span translate="shared.open"></span>
+                    </span>
+                </li>
+                <li>
+                Para acceder a su configuración, haga clic en
+                <span class="btn btn-default btn-xxs"><span class="caret"></span></span>
+                luego en
+                <span class="btn btn-default btn-xxs">
+                    <i class="fa fa-fw fa-cogs"></i>
+                    <span translate="shared.configure"></span>
+                </span>
+                </li>
+            </ul>
+            <p>
+                En todas las páginas, hay un panel de ayuda disponible.<br />
+                Su contenido se adapta a la página en la que se encuentra, ¡no dude en consultarlo!<br />
+                Para acceder a él:
+            </p>
+            <ul style="margin-bottom: 20px">
+                <li>Mueva el puntero del mouse sobre la barra lateral a la derecha de su pantalla.</li>
+                <li>Espera un momento.</li>
+            </ul>
+        `,
+    },
+    invitation: {
+        no_invitations_yet: 'Aún no ha invitado a otras personas a participar en su proyecto',
+        add_invitation: 'Invitar a una persona',
+        email: 'Correo electrónico',
+        help_email: '¿Cuál es la dirección de correo electrónico de la persona que desea invitar?',
+        help_sites: '¿En qué puntos de recolección puede ingresar esta persona?',
+        help_datasources: '¿En qué fuentes de datos puede ingresar esta persona?',
+        accepted: 'Aceptado',
+        contact: 'Contacto',
+        data_entry_perms: 'Permisos para ingresar datos',
+        create_invitation: 'Enviar invitación',
+        update_invitation: 'Actualizar invitación',
+    },
     project: {
         no_logframe_yet: 'Aún no ha creado ningún marco logico en este proyecto',
         show_all_projects: 'Display all projects ({{count}})',
