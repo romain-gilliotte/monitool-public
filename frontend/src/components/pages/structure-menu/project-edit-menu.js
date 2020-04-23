@@ -100,11 +100,20 @@ module.component(__componentName, {
                 this.projectSaveRunning = true;
 
                 try {
+                    const isNew = !this.childProject._id;
                     this.childProject.sanitize();
                     await this.childProject.save();
 
-                    // Tell parent component that we saved the project.
-                    this.onProjectSaveSuccess({ newProject: this.childProject });
+                    if (isNew) {
+                        // Change the URL to avoid loosing the state if the user refreshes the page at some point.
+                        this._cancelTransitionListener();
+                        this.$state.go('project.config.basics', {
+                            projectId: this.childProject._id,
+                        });
+                    } else {
+                        // Tell parent component that we saved the project.
+                        this.onProjectSaveSuccess({ newProject: this.childProject });
+                    }
                 } catch (error) {
                     // Display message to tell user that it's not possible to save.
                     alert(this.translate('project.saving_failed'));
