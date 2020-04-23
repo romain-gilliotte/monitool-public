@@ -3,24 +3,24 @@
 		<a ng-click="$ctrl.dismiss()" class="pull-right" style="cursor: pointer">
 			<i class="fa fa-times"></i>
 		</a>
-		<legend>Contact</legend>
+		<legend translate="invitation.contact"></legend>
 
-		<form-group input-id="login-input" label="project.email" help="project.invitation_help_email">
+		<form-group input-id="login-input" label="invitation.email" help="invitation.help_email">
 			<input id="login-input" type="text" ng-model="$ctrl.invitation.email" class="form-control" ng-minlength="4"
 				ng-pattern="/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/" forbidden-values="$ctrl.takenEmails"
 				required ng-disabled="!$ctrl.isNew">
 		</form-group>
 
-		<legend>Autorisations saisie</legend>
+		<legend translate="invitation.data_entry_perms"></legend>
 
-		<form-group input-id="entities-input" label="project.collection_site_list" help="project.invitation_help_sites">
+		<form-group input-id="entities-input" label="project.collection_site_list" help="invitation.help_sites">
 			<element-filter ng-model="$ctrl.invitation.dataEntry.siteIds" elements="$ctrl.entities"
 				groups="$ctrl.groups">
 			</element-filter>
 		</form-group>
 
 		<form-group input-id="dataSources-input" label="project.collection_form_list"
-			help="project.invitation_help_datasources">
+			help="invitation.help_datasources">
 			<element-filter ng-model="$ctrl.invitation.dataEntry.dataSourceIds" elements="$ctrl.dataSources">
 			</element-filter>
 		</form-group>
@@ -48,7 +48,8 @@
 	<button ng-click="$ctrl.done()" ng-disabled="invitationForm.$invalid || !$ctrl.hasChanged()"
 		class="btn btn-primary">
 		<i class="fa fa-object-group"></i>
-		<span translate="project.update_invitation"></span>
+		<span ng-if="$ctrl.isNew" translate="invitation.create_invitation"></span>
+		<span ng-if="!$ctrl.isNew" translate="invitation.update_invitation"></span>
 	</button>
 
 	<button ng-click="$ctrl.reset()" ng-disabled="!$ctrl.hasChanged()" class="btn btn-default">

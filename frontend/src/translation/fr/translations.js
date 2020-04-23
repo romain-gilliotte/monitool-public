@@ -2,6 +2,8 @@
 
 export default {
 	shared: {
+		yes: "Oui",
+		no: "Non",
 		archive: "Archiver",
 		enable: "Réactiver la saisie",
 		disable: "Désactiver la saisie",
@@ -68,6 +70,20 @@ export default {
 		english: "Anglais",
 	},
 
+	invitation: {
+		no_invitations_yet: "Vous n'avez pas encore invité d'autres personnes à participer à votre projet",
+		add_invitation: "Inviter une personne",
+
+		email: "Email",
+		help_email: "Quel est l'email de l'utilisateur que vous désirez inviter?",
+		help_sites: " Sur quels lieux de collecte cet utilisateur pourra-t'il saisir?",
+		help_datasources: " Sur quels sources de données cet utilisateur pourra-t'il saisir?",
+		accepted: "Acceptée",
+		contact: "Contact",
+		data_entry_perms: "Permissions saisie",
+		create_invitation: "Envoyer l'invitation",
+		update_invitation: "Mettre à jour l'invitation",
+	},
 	project: {
 		no_logframe_yet: "Vous n'avez pas encore créé de cadre logique sur ce projet",
 		show_all_projects: 'Afficher tous les projets ({{count}})',
@@ -79,9 +95,6 @@ export default {
 		time_to_fill: "Durée estimée saisie",
 		confirm_delete_site: `Si vous supprimez ce site, vous ne pourrez plus accéder à ses données dans les rapports. Confirmez pour supprimer.`,
 		confirm_delete_datasource: `Si vous supprimez cette source de données, vous ne pourrez plus accéder à ses données dans les rapports, ni en indicateurs qui en dépendent. Confirmez pour supprimer.`,
-		no_invitations_yet: "Vous n'avez pas encore invité d'autres personnes à participer à votre projet",
-		add_invitation: "Inviter une personne",
-		email: "Email",
 		total: "Total",
 		variables: "Variables",
 		owner: "Propriétaire",
@@ -303,10 +316,6 @@ export default {
 			partition: "Désagrégation: {{name}}",
 			partition_group: "Désagrégation: {{name}} / {{groupName}} "
 		},
-
-		invitation_help_email: "Quel est l'email de l'utilisateur que vous désirez inviter?",
-		send_invitation: "Envoyer l'invitation",
-		update_invitation: "Mettre à jour l'invitation",
 
 		parameter: "Paramètre",
 		unnamed_logframe: "Cadre logique sans nom",

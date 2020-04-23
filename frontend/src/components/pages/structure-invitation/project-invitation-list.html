@@ -1,27 +1,28 @@
 <div class="centered" ng-if="!$ctrl.invitations.length">
-	<span translate="project.no_invitations_yet"></span>
-	<a ng-click="$ctrl.onEditClicked()" translate="project.add_invitation"></a>
+	<span translate="invitation.no_invitations_yet"></span>
+	<a ng-click="$ctrl.onEditClicked()" translate="invitation.add_invitation"></a>
 </div>
 
 <columns-panel ng-repeat="invitation in $ctrl.invitations">
 	<pane-title>{{invitation.email}}</pane-title>
 	<pane-body>
 		<div>
-			<strong>Invitation acceptée:</strong>
-			{{invitation.accepted}}
+			<strong translate="invitation.accepted"></strong>
+			<span ng-if="invitation.accepted" translate="shared.yes"></span>
+			<span ng-if="!invitation.accepted" translate="shared.no"></span>
 		</div>
 
-		<strong>Autorisations de saisie:</strong>
+		<strong translate="invitation.data_entry_perms"></strong>
 
 		<div>
-			Lieux de collecte:
+			<span translate="project.collection_site_list"></span>:
 			<element-groups ids="invitation.dataEntry.siteIds" items="$ctrl.project.entities"
 				groups="$ctrl.project.groups">
 			</element-groups>
 		</div>
 
 		<div>
-			Sources de données:
+			<span translate="project.collection_form_list"></span>:
 			<element-groups ids="invitation.dataEntry.dataSourceIds" items="$ctrl.project.forms">
 			</element-groups>
 		</div>
@@ -53,6 +54,6 @@
 <div ng-if="$ctrl.invitations.length">
 	<a class="btn btn-default" ng-click="$ctrl.onEditClicked()">
 		<i class="fa fa-plus"></i>
-		<span translate="project.add_invitation"></span>
+		<span translate="invitation.add_invitation"></span>
 	</a>
 </div>

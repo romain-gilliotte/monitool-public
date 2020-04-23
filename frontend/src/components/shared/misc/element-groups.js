@@ -23,6 +23,9 @@ module.component(__componentName, {
 			if (model.length == elements.length)
 				return [{ name: 'project.all_elements' }];
 
+			else if (model.length == 0)
+				return [{ name: 'shared.none' }]
+
 			// retrieve all groups that are in the list.
 			const selectedGroups = groups.filter(group => {
 				return group.members.every(id => model.includes(id));

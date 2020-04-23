@@ -16,7 +16,7 @@ import structExtra from "./structure-extra-indicators/extra-indicator-list";
 import structHistory from "./structure-history/history";
 import structLfList from "./structure-logical-frame/logical-framework-list";
 import structLfEdit from "./structure-logical-frame/logical-frame-edit";
-import structUserList from "./structure-user/project-user-list";
+import structInvitationList from "./structure-invitation/project-invitation-list";
 
 import inputMenu from "./input-menu/project-input-menu";
 import inputHome from "./input-home/project-input-home";
@@ -45,7 +45,7 @@ const module = angular.module(
 		structHistory,
 		structLfList,
 		structLfEdit,
-		structUserList,
+		structInvitationList,
 		inputMenu,
 		inputHome,
 		inputList,

@@ -52,11 +52,13 @@ function loadTemplates() {
 
 function getTranslationCalls(templates) {
     const regexps = [
-        /translate="([\._a-z]+)"/g,
-        /\{\{'([\._a-z]+)'\s*\|\s*translate\s*\}\}/g,
-        /translate\('([\._a-z]+)'\)/g,
-        /translate\("([\._a-z]+)"\)/g
-    ]
+        /translate="([\._a-z]+)"/g, // <xx translate="">
+        /label="([\._a-z]+)"/g, // form groups
+        /help="([\._a-z]+)"/g, // form groups
+        /\{\{'([\._a-z]+)'\s*\|\s*translate\s*\}\}/g, // {{'toto'|translate}}
+        /translate\('([\._a-z]+)'\)/g, // function call in ctrl
+        /translate\("([\._a-z]+)"\)/g // function call in ctrl
+    ];
 
     const result = {};
     for (let re of regexps) {

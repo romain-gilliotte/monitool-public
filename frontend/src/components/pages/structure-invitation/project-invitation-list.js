@@ -2,12 +2,12 @@ import axios from 'axios';
 import uiRouter from '@uirouter/angularjs';
 import angular from 'angular';
 import 'angular-legacy-sortablejs-maintained';
-import mtProjectUserEditModal from './project-user-modal';
+import mtProjectInvitationModal from './project-invitation-modal';
 import mtColumnsPanel from '../../shared/misc/columns-panel';
 import mtHelpPanel from '../../shared/misc/help-panel';
 require(__cssPath);
 
-const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtProjectUserEditModal, mtColumnsPanel, mtHelpPanel]);
+const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtProjectInvitationModal, mtColumnsPanel, mtHelpPanel]);
 
 module.config($stateProvider => {
 
@@ -36,7 +36,7 @@ module.component(__componentName, {
 
 		async onEditClicked(oldIvt = null) {
 			let newIvt = await this.$uibModal.open({
-				component: 'projectUserModal',
+				component: 'projectInvitationModal',
 				size: 'lg',
 				resolve: {
 					invitation: () => oldIvt,
