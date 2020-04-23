@@ -7,7 +7,7 @@ import Cookies from 'js-cookie';
 import mtPages from './components/pages/all-pages';
 import mtFilterMisc from './filters/misc';
 import mtTranslation from './translation/bootstrap';
-require(__cssPath)
+require(__scssPath)
 
 async function authenticate() {
 	const auth0 = window.auth0 = await createAuth0Client({

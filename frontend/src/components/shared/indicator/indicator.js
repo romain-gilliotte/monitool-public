@@ -4,7 +4,7 @@ import mtEditionModal from './indicator-edition-modal';
 import mtIndicatorUnit from '../../../filters/indicator';
 import mtColumnsPanel from '../misc/columns-panel';
 
-require(__cssPath);
+require(__scssPath);
 
 const module = angular.module(__moduleName, [uibModal, mtEditionModal, mtIndicatorUnit, mtColumnsPanel]);
 

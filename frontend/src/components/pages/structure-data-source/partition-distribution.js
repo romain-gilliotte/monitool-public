@@ -1,6 +1,6 @@
 import angular from 'angular';
 import range from 'lodash.range';
-require(__cssPath);
+require(__scssPath);
 
 const module = angular.module(__moduleName, []);
 

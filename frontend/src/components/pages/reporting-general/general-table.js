@@ -4,7 +4,7 @@ import mtTrData from './tr-data';
 import mtFaOpen from '../../shared/misc/fa-open';
 import { buildQueryFromIndicator, buildQueryFromVariable, getQueryDimensions } from '../../../helpers/query-builder';
 import { updateArrayInPlace } from '../../../helpers/array';
-require(__cssPath);
+require(__scssPath);
 
 /**
  * Note for future self: this component is performing too many digest cycles.

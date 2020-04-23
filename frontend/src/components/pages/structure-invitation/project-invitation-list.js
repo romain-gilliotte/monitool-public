@@ -5,7 +5,7 @@ import 'angular-legacy-sortablejs-maintained';
 import mtProjectInvitationModal from './project-invitation-modal';
 import mtColumnsPanel from '../../shared/misc/columns-panel';
 import mtHelpPanel from '../../shared/misc/help-panel';
-require(__cssPath);
+require(__scssPath);
 
 const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtProjectInvitationModal, mtColumnsPanel, mtHelpPanel]);
 

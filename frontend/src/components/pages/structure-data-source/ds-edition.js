@@ -9,7 +9,7 @@ import mtPartitionList from './partition-list';
 import mtPartitionDistribution from './partition-distribution';
 import mtPartitionOrder from './partition-order';
 import mtHelpPanel from '../../shared/misc/help-panel';
-require(__cssPath);
+require(__scssPath);
 
 const module = angular.module(
 	__moduleName,

@@ -3,7 +3,7 @@ import axios from 'axios';
 import mtIndicatorUnit from '../../../filters/indicator';
 import { getQueryDimensions } from '../../../helpers/query-builder';
 import mtReportingField from '../../shared/reporting/td-reporting-field';
-require(__cssPath);
+require(__scssPath);
 
 const module = angular.module(__moduleName, [mtReportingField, mtIndicatorUnit]);
 

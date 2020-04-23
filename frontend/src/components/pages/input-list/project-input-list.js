@@ -3,7 +3,7 @@ import Input from '../../../models/input';
 import uiRouter from '@uirouter/angularjs';
 import mtFilterTimeSlot from '../../../filters/time-slot';
 import mtHelpPanel from '../../shared/misc/help-panel';
-require(__cssPath);
+require(__scssPath);
 
 const module = angular.module(__moduleName, [uiRouter, mtFilterTimeSlot, mtHelpPanel]);
 

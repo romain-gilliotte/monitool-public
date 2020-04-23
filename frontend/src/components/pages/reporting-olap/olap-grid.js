@@ -2,7 +2,7 @@ import angular from 'angular';
 import { product } from '../../../helpers/array';
 import mtTdReportingField from '../../shared/reporting/td-reporting-field';
 import { getQueryDimensions } from '../../../helpers/query-builder';
-require(__cssPath);
+require(__scssPath);
 
 const module = angular.module(__moduleName, [mtTdReportingField]);
 

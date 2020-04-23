@@ -2,7 +2,7 @@ import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
 import mtSaveBlock from '../../shared/project/save-block';
 import mtProjectColumns from '../../shared/project/project-columns';
-require(__cssPath);
+require(__scssPath);
 
 const module = angular.module(__moduleName, [uiRouter, mtSaveBlock, mtProjectColumns]);
 

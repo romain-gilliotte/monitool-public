@@ -1,7 +1,7 @@
 import angular from 'angular';
 import uiModal from 'angular-ui-bootstrap/src/modal';
 import mtPartitionEdition from './partition-edition-modal';
-require(__cssPath);
+require(__scssPath);
 
 const module = angular.module(__moduleName, [uiModal, mtPartitionEdition]);
 

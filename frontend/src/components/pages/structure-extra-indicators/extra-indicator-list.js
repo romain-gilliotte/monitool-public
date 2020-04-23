@@ -4,7 +4,7 @@ import uiModal from 'angular-ui-bootstrap/src/modal';
 import 'angular-legacy-sortablejs-maintained';
 import mtIndicator from '../../shared/indicator/indicator';
 import mtHelpPanel from '../../shared/misc/help-panel';
-require(__cssPath);
+require(__scssPath);
 
 const module = angular.module(__moduleName, [uiRouter, uiModal, 'ng-sortable', mtIndicator, mtHelpPanel]);
 

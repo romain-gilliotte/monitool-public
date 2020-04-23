@@ -6,7 +6,7 @@ import diacritics from 'diacritics';
 import Project from '../../../models/project';
 import mtColumnsPanel from '../../shared/misc/columns-panel';
 
-require(__cssPath);
+require(__scssPath);
 
 const module = angular.module(__moduleName, [uiDropdown, uiRouter, mtColumnsPanel]);
 

@@ -49,6 +49,14 @@ module.exports = {
 				]
 			},
 			{
+				test: /\.scss$/,
+				use: [
+					{ loader: 'style-loader' },
+					{ loader: 'css-loader' },
+					{ loader: 'sass-loader' }
+				]
+			},
+			{
 				test: /\.css$/,
 				use: [
 					{ loader: 'style-loader' },
@@ -68,7 +76,7 @@ module.exports = {
 		// Clear /dist folder before building.
 		new CleanWebpackPlugin(),
 
-		// Define __moduleName, __templatePath, __cssPath and __componentName macros.
+		// Define __moduleName, __templatePath, __scssPath and __componentName macros.
 		new webpack.DefinePlugin({
 			// 'components.pages.project-structure-basics.project-basics'
 			__moduleName: webpack.DefinePlugin.runtimeValue(
@@ -88,10 +96,10 @@ module.exports = {
 			),
 
 			// './project-basics.css'
-			__cssPath: webpack.DefinePlugin.runtimeValue(
+			__scssPath: webpack.DefinePlugin.runtimeValue(
 				({ module }) => {
 					const basename = path.basename(module.resource, '.js');
-					return `'./${basename}.css'`
+					return `'./${basename}.scss'`
 				}
 			),
 

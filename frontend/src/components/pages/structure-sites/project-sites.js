@@ -5,7 +5,7 @@ import uiSelect from 'ui-select';
 import 'angular-legacy-sortablejs-maintained';
 import 'ui-select/dist/select.min.css';
 import mtHelpPanel from '../../shared/misc/help-panel';
-require(__cssPath);
+require(__scssPath);
 
 const module = angular.module(
 	__moduleName,

@@ -3,7 +3,7 @@ import helpFr from '../../../translation/fr/help';
 import helpEn from '../../../translation/fr/help';
 import helpEs from '../../../translation/fr/help';
 
-require(__cssPath);
+require(__scssPath);
 
 const module = angular.module(__moduleName, []);
 

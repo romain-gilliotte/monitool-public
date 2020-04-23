@@ -1,6 +1,6 @@
 import angular from 'angular';
 import { v4 as uuid } from 'uuid';
-require(__cssPath);
+require(__scssPath);
 
 const module = angular.module(__moduleName, []);
 

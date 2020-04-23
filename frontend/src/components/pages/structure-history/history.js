@@ -4,7 +4,7 @@ import Project from '../../../models/project';
 import uiRouter from '@uirouter/angularjs';
 import mtRevisionSummary from './revision-summary';
 import mtHelpPanel from '../../shared/misc/help-panel';
-require(__cssPath);
+require(__scssPath);
 
 const module = angular.module(__moduleName, [uiRouter, mtRevisionSummary, mtHelpPanel]);
 

@@ -2,7 +2,7 @@ import uiRouter from '@uirouter/angularjs';
 import angular from 'angular';
 import axios from 'axios';
 
-require(__cssPath);
+require(__scssPath);
 
 const module = angular.module(__moduleName, [uiRouter]);
 
