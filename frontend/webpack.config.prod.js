@@ -27,11 +27,11 @@ module.exports = {
         new CompressionPlugin({
             filename: '[path].br[query]',
             minRatio: 0.8,
-            algorithm: 'brotliCompress'
+            algorithm: 'brotliCompress',
         }),
 
         new BundleAnalyzerPlugin({
-            analyzerMode: 'static'
-        })
-    ]
-}
+            analyzerMode: 'static',
+        }),
+    ],
+};

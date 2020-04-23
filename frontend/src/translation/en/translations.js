@@ -71,39 +71,39 @@ export default {
     welcome: {
         i_got_it: 'I got it',
         text: /* html */ `
-            <legend> Welcome! </legend>
+            <legend>Welcome!</legend>
             <p>This is your first visit to Monitool.</p>
             <p>
-                To help you understand the tool, we have created a first project in your
-                space! <br />
-                It uses most of the functionality of the tool, and can be used as a reference.
+                To help you understand the tool, we have created a first project in your
+                space! <br />
+                It uses most of the functionality of the tool, and can be used as a reference.
             </p>
             <ul>
-                <li>
-                    To view its reports and enter new data, click on
-                    <span class="btn btn-default btn-xxs">
-                        <i class="fa fa-fw fa-play"></i>
-                        <span translate="shared.open"></span>
-                    </span>
-                </li>
-                <li>
-                    To access its configuration, click on
-                    <span class="btn btn-default btn-xxs"><span class="caret"></span></span>
-                    then on
-                    <span class="btn btn-default btn-xxs">
-                        <i class="fa fa-fw fa-cogs"></i>
-                        <span translate="shared.configure"></span>
-                    </span>
-                </li>
+                <li>
+                    To view its reports and enter new data, click on
+                    <span class="btn btn-default btn-xxs">
+                        <i class="fa fa-fw fa-play"></i>
+                        <span>Open</span>
+                    </span>
+                </li>
+                <li>
+                    To access its configuration, click on
+                    <span class="btn btn-default btn-xxs"><span class="caret"></span></span>
+                    then on
+                    <span class="btn btn-default btn-xxs">
+                        <i class="fa fa-fw fa-cogs"></i>
+                        <span>Configure</span>
+                    </span>
+                </li>
             </ul>
             <p>
-                On all pages, a help panel is available.<br />
-                Its content adapts to the page on which you are, do not hesitate to check it!<br />
-                To get there:
+                On all pages, a help panel is available.<br />
+                Its content adapts to the page on which you are, do not hesitate to check it!<br />
+                To get there:
             </p>
             <ul style="margin-bottom: 20px">
-                <li>Move your mouse pointer over the sidebar on the right of your screen.</li>
-                <li>Wait a short instant.</li>
+                <li>Move your mouse pointer over the sidebar on the right of your screen.</li>
+                <li>Wait a short instant.</li>
             </ul>
         `,
     },

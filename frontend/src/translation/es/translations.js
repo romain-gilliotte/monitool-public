@@ -83,7 +83,7 @@ export default {
                     Para ver sus informes e ingresar nuevos datos, haga clic en
                     <span class="btn btn-default btn-xxs">
                         <i class="fa fa-fw fa-play"></i>
-                        <span translate="shared.open"></span>
+                        <span>Abrir</span>
                     </span>
                 </li>
                 <li>
@@ -92,7 +92,7 @@ export default {
                 luego en
                 <span class="btn btn-default btn-xxs">
                     <i class="fa fa-fw fa-cogs"></i>
-                    <span translate="shared.configure"></span>
+                    <span>Configuración</span>
                 </span>
                 </li>
             </ul>

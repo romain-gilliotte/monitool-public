@@ -17,9 +17,9 @@ module.exports = {
         proxy: {
             '/api': {
                 target: 'http://localhost:8000',
-                pathRewrite: { '^/api': '' }
-            }
-        }
+                pathRewrite: { '^/api': '' },
+            },
+        },
     },
 
     plugins: [
@@ -28,5 +28,5 @@ module.exports = {
             SERVICE_URL: '"/api"',
             IS_PRODUCTION: false,
         }),
-    ]
+    ],
 };

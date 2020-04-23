@@ -29,16 +29,18 @@ module.config(function ($translateProvider) {
     $translateProvider.translations('es', spanishTranslation);
 
     $translateProvider.useLocalStorage();
-    $translateProvider.preferredLanguage('fr');
     $translateProvider.useSanitizeValueStrategy('escapeParameters');
+
+    $translateProvider.preferredLanguage(
+        ['en', 'es', 'fr'].includes(window.profile.locale) ? window.profile.locale : 'en'
+    );
 });
 
 module.run(function ($translate, $rootScope, $locale) {
     // Set list of available languages
     $rootScope.languages = { fr: 'french', en: 'english', es: 'spanish' };
 
-    // Expose scope function to change the language everywhere
-    // in the application.
+    // Expose scope function to change the language everywhere in the application.
     $rootScope.changeLanguage = function (langKey) {
         $translate.use(langKey);
 
@@ -47,7 +49,12 @@ module.run(function ($translate, $rootScope, $locale) {
         else angular.copy(englishLocale, $locale);
 
         $rootScope.language = langKey;
+
+        // Broadcast event in case components are using one-time binding
+        // and want to listen for this to redraw.
         $rootScope.$broadcast('languageChange');
+
+        // Datepickers are listening to this even to update.
         $rootScope.$broadcast('$localeChangeSuccess', langKey, $locale);
     };
 

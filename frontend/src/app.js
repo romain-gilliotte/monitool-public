@@ -1,92 +1,43 @@
-import createAuth0Client from '@auth0/auth0-spa-js';
 import angular from 'angular';
-import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.min.css';
-import Cookies from 'js-cookie';
 import mtPages from './components/pages/all-pages';
 import mtFilterMisc from './filters/misc';
 import mtTranslation from './translation/bootstrap';
 require(__scssPath);
 require('./small-bootstrap3.css');
 
-async function authenticate() {
-    const auth0 = (window.auth0 = await createAuth0Client({
-        domain: 'monitool.eu.auth0.com',
-        client_id: 'z31Kt6FYp8YDG4BypH4qp1ibLd1Ns4ME',
-        audience: 'https://api.monitool.org',
-    }));
+const module = angular.module(__moduleName, [mtPages, mtTranslation, mtFilterMisc]);
 
-    // Handle callback
-    const query = window.location.search;
-    if (query.includes('code=') && query.includes('state=')) {
-        // Process the login state
-        await auth0.handleRedirectCallback();
+module.config(function ($urlRouterProvider) {
+    $urlRouterProvider.otherwise('/projects');
+});
 
-        // Use replaceState to redirect the user away and remove the querystring parameters
-        window.history.replaceState({}, document.title, '/');
-    }
+module.config(function ($sceDelegateProvider) {
+    $sceDelegateProvider.resourceUrlWhitelist(['self', SERVICE_URL + '/**']);
+});
 
-    // If authenticated, start app
-    const isAuthenticated = await auth0.isAuthenticated();
-    if (isAuthenticated) {
-        const accessToken = await auth0.getTokenSilently();
-        const profile = await auth0.getUser();
+// Hook angular-ui-router transitions.
+module.run(function ($window, $transitions) {
+    $transitions.onBefore({}, function (transition) {});
 
-        startApp(accessToken, profile);
-    }
-    // otherwise, go login
-    else {
-        await auth0.loginWithRedirect({
-            redirect_uri: window.location.origin,
-        });
-    }
-}
-
-function startApp(accessToken, profile) {
-    Cookies.set('monitool_access_token', accessToken, {
-        path: '/api',
-        sameSite: 'strict',
-        secure: IS_PRODUCTION,
+    // Scroll to top when changing page.
+    $transitions.onSuccess({}, function (transition) {
+        $window.scrollTo(0, 0);
     });
 
-    const module = angular.module(__moduleName, [mtPages, mtTranslation, mtFilterMisc]);
-
-    module.config(function ($urlRouterProvider) {
-        $urlRouterProvider.otherwise('/projects');
+    $transitions.onError({}, function (transition) {
+        const error = transition.error();
+        console.log(error);
     });
+});
 
-    module.config(function ($sceDelegateProvider) {
-        $sceDelegateProvider.resourceUrlWhitelist(['self', SERVICE_URL + '/**']);
-    });
+module.run(function ($rootScope) {
+    // Set api url in $rootScope (needed to download pdfs)
+    $rootScope.serviceUrl = SERVICE_URL;
 
-    // Hook angular-ui-router transitions.
-    module.run(function ($window, $transitions) {
-        $transitions.onBefore({}, function (transition) {});
+    // Put user email in $rootScope
+    $rootScope.profile = window.profile;
+});
 
-        // Scroll to top when changing page.
-        $transitions.onSuccess({}, function (transition) {
-            $window.scrollTo(0, 0);
-        });
-
-        $transitions.onError({}, function (transition) {
-            const error = transition.error();
-            console.log(error);
-        });
-    });
-
-    module.run(function ($rootScope) {
-        // Configure axios
-        axios.defaults.baseURL = SERVICE_URL;
-
-        // Set api url in $rootScope (needed to download pdfs)
-        $rootScope.serviceUrl = SERVICE_URL;
-
-        // Put user email in $rootScope
-        $rootScope.profile = profile;
-    });
-
-    angular.bootstrap(document, [module.name]);
-}
-
-authenticate();
+export default () => angular.bootstrap(document, [module.name]);
