@@ -1,98 +1,122 @@
 <div class="centered" ng-if="!$ctrl.editableProject.forms.length">
-	<span translate="project.no_data_source_yet"></span>
-	<a ng-click="$ctrl.onCreateClicked()" translate="project.add_datasource"></a>
+    <span translate="project.no_data_source_yet"></span>
+    <a ng-click="$ctrl.onCreateClicked()" translate="project.add_datasource"></a>
 </div>
 
 <div ng-sortable="$ctrl.dataSourceSortOptions">
-	<columns-panel ng-repeat="dataSource in $ctrl.editableProject.forms" sortable="true" handle-class="ds-handle"
-		variant="dataSource.active ? 'default' : 'dashed'">
-		<pane-title>{{dataSource.name}}</pane-title>
-		<pane-body>
-			<div>
-				<strong translate="project.periodicity"></strong>
-				{{'project.periodicities.' + dataSource.periodicity|translate}}
-			</div>
-			<div>
-				<strong translate="project.collection_site_list"></strong>
-				<element-groups ids="dataSource.entities" items="$ctrl.project.entities" groups="$ctrl.project.groups">
-				</element-groups>
-			</div>
-			<div>
-				<strong translate="project.time_to_fill"></strong>
-				≈ {{$ctrl.timeToFill[dataSource.id]}} min
-			</div>
-			<div>
-				<strong translate="project.variables"></strong>
-				<ul ng-sortable="$ctrl.variableSortOptions">
-					<li ng-repeat="variable in dataSource.elements track by variable.id" class="clickable"
-						ng-class="{disabled: !variable.active}">
-						<i class="fa fa-sort fa-fw"></i>
-						<span ng-bind="variable.name"></span>
-					</li>
-				</ul>
-			</div>
+    <columns-panel
+        ng-repeat="dataSource in $ctrl.editableProject.forms"
+        sortable="true"
+        handle-class="ds-handle"
+        variant="dataSource.active ? 'default' : 'dashed'"
+    >
+        <pane-title>{{dataSource.name}}</pane-title>
+        <pane-body>
+            <div>
+                <strong translate="project.periodicity"></strong>
+                {{'project.periodicities.' + dataSource.periodicity|translate}}
+            </div>
+            <div>
+                <strong translate="project.collection_site_list"></strong>
+                <element-groups
+                    ids="dataSource.entities"
+                    items="$ctrl.project.entities"
+                    groups="$ctrl.project.groups"
+                >
+                </element-groups>
+            </div>
+            <div>
+                <strong translate="project.time_to_fill"></strong>
+                ≈ {{$ctrl.timeToFill[dataSource.id]}} min
+            </div>
+            <div>
+                <strong translate="project.variables"></strong>
+                <ul ng-sortable="$ctrl.variableSortOptions">
+                    <li
+                        ng-repeat="variable in dataSource.elements track by variable.id"
+                        ng-class="{disabled: !variable.active}"
+                    >
+                        <i class="fa fa-sort fa-fw"></i>
+                        <span ng-bind="variable.name"></span>
+                    </li>
+                </ul>
+            </div>
 
-			<div class="panel-buttons btn-group" uib-dropdown>
-				<a class="btn btn-default btn-xxs" ng-if="dataSource.active"
-					ui-sref="project.config.collection_form_edition({dataSourceId: dataSource.id})">
-					<i class="fa fa-pencil"></i>
-					<span translate="shared.edit"></span>
-				</a>
+            <div class="panel-buttons btn-group" uib-dropdown>
+                <a
+                    class="btn btn-default btn-xxs"
+                    ng-if="dataSource.active"
+                    ui-sref="project.config.collection_form_edition({dataSourceId: dataSource.id})"
+                >
+                    <i class="fa fa-pencil"></i>
+                    <span translate="shared.edit"></span>
+                </a>
 
-				<a class="btn btn-default btn-xxs" ng-if="!dataSource.active"
-					ng-click="$ctrl.onChangeStatusClicked(dataSource, true)">
-					<i class="fa fa-play-circle-o"></i>
-					<span translate="shared.enable"></span>
-				</a>
+                <a
+                    class="btn btn-default btn-xxs"
+                    ng-if="!dataSource.active"
+                    ng-click="$ctrl.onChangeStatusClicked(dataSource, true)"
+                >
+                    <i class="fa fa-play-circle-o"></i>
+                    <span translate="shared.enable"></span>
+                </a>
 
-				<a class="btn btn-default btn-xxs" uib-dropdown-toggle>
-					<span class="caret"></span>
-				</a>
+                <a class="btn btn-default btn-xxs" uib-dropdown-toggle>
+                    <span class="caret"></span>
+                </a>
 
-				<ul class="dropdown-menu" uib-dropdown-menu>
-
-					<li>
-						<a ng-if="!dataSource.active"
-							ui-sref="project.config.collection_form_edition({dataSourceId: dataSource.id})">
-							<i class="fa fa-fw fa-pencil"></i>
-							<span translate="shared.edit"></span>
-						</a>
-					</li>
-					<li>
-						<a ng-click="$ctrl.onChangeStatusClicked(dataSource, false)" ng-if="dataSource.active">
-							<i class="fa fa-fw fa-pause-circle-o"></i>
-							<span translate="shared.disable"></span>
-						</a>
-					</li>
-					<li>
-						<a href="{{::$root.serviceUrl}}/project/{{$ctrl.editableProject._id}}/data-source/{{dataSource.id}}.pdf?orientation=portrait&language={{$root.language}}"
-							target="_blank">
-							<i class="fa fa-fw fa-file-pdf-o"></i>
-							<span translate="project.download_portrait"></span>
-						</a>
-					</li>
-					<li>
-						<a href="{{::$root.serviceUrl}}/project/{{$ctrl.editableProject._id}}/data-source/{{dataSource.id}}.pdf?orientation=landscape&language={{$root.language}}"
-							target="_blank">
-							<i class="fa fa-fw fa-file-pdf-o fa-rotate-270"></i>
-							<span translate="project.download_landscape"></span>
-						</a>
-					</li>
-					<li>
-						<a ng-click="$ctrl.onDeleteClicked(dataSource)">
-							<i class="fa fa-fw fa-trash text-danger"></i>
-							<span class="text-danger" translate="shared.delete"></span>
-						</a>
-					</li>
-				</ul>
-			</div>
-		</pane-body>
-	</columns-panel>
+                <ul class="dropdown-menu" uib-dropdown-menu>
+                    <li>
+                        <a
+                            ng-if="!dataSource.active"
+                            ui-sref="project.config.collection_form_edition({dataSourceId: dataSource.id})"
+                        >
+                            <i class="fa fa-fw fa-pencil"></i>
+                            <span translate="shared.edit"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            ng-click="$ctrl.onChangeStatusClicked(dataSource, false)"
+                            ng-if="dataSource.active"
+                        >
+                            <i class="fa fa-fw fa-pause-circle-o"></i>
+                            <span translate="shared.disable"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            href="{{::$root.serviceUrl}}/project/{{$ctrl.editableProject._id}}/data-source/{{dataSource.id}}.pdf?orientation=portrait&language={{$root.language}}"
+                            target="_blank"
+                        >
+                            <i class="fa fa-fw fa-file-pdf-o"></i>
+                            <span translate="project.download_portrait"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            href="{{::$root.serviceUrl}}/project/{{$ctrl.editableProject._id}}/data-source/{{dataSource.id}}.pdf?orientation=landscape&language={{$root.language}}"
+                            target="_blank"
+                        >
+                            <i class="fa fa-fw fa-file-pdf-o fa-rotate-270"></i>
+                            <span translate="project.download_landscape"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a ng-click="$ctrl.onDeleteClicked(dataSource)">
+                            <i class="fa fa-fw fa-trash text-danger"></i>
+                            <span class="text-danger" translate="shared.delete"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </pane-body>
+    </columns-panel>
 </div>
 
 <div ng-if="$ctrl.editableProject.forms.length">
-	<a class="btn btn-default" ng-click="$ctrl.onCreateClicked()">
-		<i class="fa fa-plus"></i>
-		<span translate="project.add_datasource"></span>
-	</a>
+    <a class="btn btn-default" ng-click="$ctrl.onCreateClicked()">
+        <i class="fa fa-plus"></i>
+        <span translate="project.add_datasource"></span>
+    </a>
 </div>

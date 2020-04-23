@@ -1,48 +1,68 @@
 <table id="reporting" class="table table-bordered table-condensed">
-	<tbody>
-		<!-- Main section titles (i.e. logframes, datasources) -->
-		<tr class="section-header-row" ng-repeat-start="row in $ctrl.rows track by row.id" ng-if="row.type == 'title'"
-			ng-click="$ctrl.onSectionToggle(row.id)">
-			<th colspan="{{6 + $ctrl.columns.length}}">
-				<fa-open value="$ctrl.sectionOpen[row.id]" class="noprint"></fa-open>
-				<span ng-if="row.subtype">{{row.subtype|translate}}</span><span ng-if="row.title">: {{row.title}}</span>
-			</th>
-		</tr>
+    <tbody>
+        <!-- Main section titles (i.e. logframes, datasources) -->
+        <tr
+            class="section-header-row"
+            ng-repeat-start="row in $ctrl.rows track by row.id"
+            ng-if="row.type == 'title'"
+            ng-click="$ctrl.onSectionToggle(row.id)"
+        >
+            <th colspan="{{6 + $ctrl.columns.length}}">
+                <fa-open value="$ctrl.sectionOpen[row.id]"></fa-open>
+                <span ng-if="row.subtype">{{row.subtype|translate}}</span
+                ><span ng-if="row.title">: {{row.title}}</span>
+            </th>
+        </tr>
 
-		<!-- Subsections (i.e. outputs, activities) -->
-		<tr class="section-header-row indent{{row.indent}}" ng-if="row.type == 'subtitle'">
-			<td class="noprint"></td>
+        <!-- Subsections (i.e. outputs, activities) -->
+        <tr class="section-header-row indent{{row.indent}}" ng-if="row.type == 'subtitle'">
+            <td></td>
 
-			<th colspan="{{5 + $ctrl.columns.length}}" class="row-header-title">
-				<div>
-					<span ng-if="row.subtype">
-						{{row.subtype|translate}}:
-					</span>
-					{{row.title|translate}}
-				</div>
-			</th>
-		</tr>
+            <th colspan="{{5 + $ctrl.columns.length}}" class="row-header-title">
+                <div>
+                    <span ng-if="row.subtype">
+                        {{row.subtype|translate}}:
+                    </span>
+                    {{row.title|translate}}
+                </div>
+            </th>
+        </tr>
 
-		<!-- Data -->
-		<tr ng-repeat-end ng-if="row.type == 'data'" class="indent{{row.indent}}" tr-data project="$ctrl.project"
-			label="row.label" query="row.query" indent="row.indent" baseline="row.baseline" target="row.target"
-			colorize="row.colorize" columns="$ctrl.columns" disagregated="!!$ctrl.activeDisagregations[row.id]"
-			on-disagregate-clicked="$ctrl.onRowDisagregate(row.id, dimensionId, attribute)"
-			plotted="$ctrl.plots[row.id].active" on-plot-clicked="$ctrl.onRowPlotClicked(row.id)"
-			on-plot-data="$ctrl.onRowPlotData(row.id, data)">
-		</tr>
-	</tbody>
-	<thead>
-		<tr>
-			<th class="row-graph"></th>
-			<th class="row-title" translate="shared.name"></th>
-			<th class="row-dimension"></th>
-			<th translate="project.baseline"></th>
-			<th translate="project.target"></th>
-			<th ng-repeat="col in $ctrl.columns track by col.id" title="{{col.title|formatSlotRange}}">
-				{{col.name|formatSlot}}
-			</th>
-			<th translate="project.total"></th>
-		</tr>
-	</thead>
+        <!-- Data -->
+        <tr
+            ng-repeat-end
+            ng-if="row.type == 'data'"
+            class="indent{{row.indent}}"
+            tr-data
+            project="$ctrl.project"
+            label="row.label"
+            query="row.query"
+            indent="row.indent"
+            baseline="row.baseline"
+            target="row.target"
+            colorize="row.colorize"
+            columns="$ctrl.columns"
+            disagregated="!!$ctrl.activeDisagregations[row.id]"
+            on-disagregate-clicked="$ctrl.onRowDisagregate(row.id, dimensionId, attribute)"
+            plotted="$ctrl.plots[row.id].active"
+            on-plot-clicked="$ctrl.onRowPlotClicked(row.id)"
+            on-plot-data="$ctrl.onRowPlotData(row.id, data)"
+        ></tr>
+    </tbody>
+    <thead>
+        <tr>
+            <th class="row-graph"></th>
+            <th class="row-title" translate="shared.name"></th>
+            <th class="row-dimension"></th>
+            <th translate="project.baseline"></th>
+            <th translate="project.target"></th>
+            <th
+                ng-repeat="col in $ctrl.columns track by col.id"
+                title="{{col.title|formatSlotRange}}"
+            >
+                {{col.name|formatSlot}}
+            </th>
+            <th translate="project.total"></th>
+        </tr>
+    </thead>
 </table>

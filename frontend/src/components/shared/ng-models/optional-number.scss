@@ -1,0 +1,10 @@
+optional-number {
+    .fa-thumb-tack {
+        color: #ccc;
+        cursor: pointer;
+
+        &:hover {
+            color: #555;
+        }
+    }
+}

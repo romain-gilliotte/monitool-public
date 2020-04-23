@@ -1,45 +1,66 @@
 <div class="panel panel-default">
-	<div class="panel-heading" ng-click="open=!open" style="cursor: pointer" ng-init="open=true">
-		<fa-open value="open"></fa-open>
-		<span translate="project.data_selection"></span>
-	</div>
-	<div class="panel-body" ng-if="open">
-		<form class="form-horizontal noprint" role="form" novalidate>
+    <div class="panel-heading" ng-click="open=!open" style="cursor: pointer;" ng-init="open=true">
+        <fa-open value="open"></fa-open>
+        <span translate="project.data_selection"></span>
+    </div>
+    <div class="panel-body" ng-if="open">
+        <form class="form-horizontal" role="form" novalidate>
+            <form-group label="project.rows" input-id="rows-input">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-table fa-fw"></i></span>
+                    <ui-select
+                        id="rows-input"
+                        multiple
+                        ng-model="$ctrl.selected.rows"
+                        ng-change="$ctrl.onSelectUpdate()"
+                        name="rows"
+                        theme="bootstrap"
+                    >
+                        <ui-select-match placeholder="{{'project.select_rows'|translate}}">
+                            {{$item.label|translate:$item.labelData}}
+                        </ui-select-match>
+                        <ui-select-choices
+                            group-by="'group'"
+                            repeat="row as row in $ctrl.availableRows"
+                        >
+                            {{row.label|translate:row.labelData}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </form-group>
 
-			<form-group label="project.rows" input-id="rows-input">
-				<div class="input-group">
-					<span class="input-group-addon"><i class="fa fa-table fa-fw"></i></span>
-					<ui-select id="rows-input" multiple ng-model="$ctrl.selected.rows"
-						ng-change="$ctrl.onSelectUpdate()" name="rows" theme="bootstrap">
-						<ui-select-match placeholder="{{'project.select_rows'|translate}}">
-							{{$item.label|translate:$item.labelData}}
-						</ui-select-match>
-						<ui-select-choices group-by="'group'" repeat="row as row in $ctrl.availableRows">
-							{{row.label|translate:row.labelData}}
-						</ui-select-choices>
-					</ui-select>
-				</div>
-			</form-group>
+            <form-group label="project.cols" input-id="cols-input">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-columns fa-fw"></i></span>
+                    <ui-select
+                        id="cols-input"
+                        multiple
+                        ng-model="$ctrl.selected.cols"
+                        ng-change="$ctrl.onSelectUpdate()"
+                        name="cols"
+                        theme="bootstrap"
+                    >
+                        <ui-select-match placeholder="{{'project.select_cols'|translate}}">
+                            {{$item.label|translate:$item.labelData}}
+                        </ui-select-match>
+                        <ui-select-choices
+                            group-by="'group'"
+                            repeat="col as col in $ctrl.availableCols"
+                        >
+                            {{col.label|translate:col.labelData}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </form-group>
 
-			<form-group label="project.cols" input-id="cols-input">
-				<div class="input-group">
-					<span class="input-group-addon"><i class="fa fa-columns fa-fw"></i></span>
-					<ui-select id="cols-input" multiple ng-model="$ctrl.selected.cols"
-						ng-change="$ctrl.onSelectUpdate()" name="cols" theme="bootstrap">
-						<ui-select-match placeholder="{{'project.select_cols'|translate}}">
-							{{$item.label|translate:$item.labelData}}
-						</ui-select-match>
-						<ui-select-choices group-by="'group'" repeat="col as col in $ctrl.availableCols">
-							{{col.label|translate:col.labelData}}
-						</ui-select-choices>
-					</ui-select>
-				</div>
-			</form-group>
-
-			<form-group label="project.show_totals" input-id="show-totals-input">
-				<input id="show-totals-input" type="checkbox" ng-model="$ctrl.showTotals"
-					ng-change="$ctrl.triggerUpdate()" />
-			</form-group>
-		</form>
-	</div>
+            <form-group label="project.show_totals" input-id="show-totals-input">
+                <input
+                    id="show-totals-input"
+                    type="checkbox"
+                    ng-model="$ctrl.showTotals"
+                    ng-change="$ctrl.triggerUpdate()"
+                />
+            </form-group>
+        </form>
+    </div>
 </div>

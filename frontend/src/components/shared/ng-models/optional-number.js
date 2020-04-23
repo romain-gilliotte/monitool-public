@@ -1,4 +1,5 @@
 import angular from 'angular';
+require(__scssPath);
 
 const module = angular.module(__moduleName, []);
 

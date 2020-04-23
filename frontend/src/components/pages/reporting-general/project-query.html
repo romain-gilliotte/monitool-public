@@ -1,17 +1,23 @@
-<query-aggregate project="$ctrl.project" on-update="$ctrl.onChildUpdate(null, aggregate)"></query-aggregate>
+<query-aggregate
+    project="$ctrl.project"
+    on-update="$ctrl.onChildUpdate(null, aggregate)"
+></query-aggregate>
 
 <div class="panel panel-default">
-	<div class="panel-heading" ng-click="$ctrl.onPanelHeaderClick()" style="cursor: pointer">
-		<fa-open value="$ctrl.panelOpen"></fa-open>
-		<span translate="project.filters"></span>
-	</div>
+    <div class="panel-heading" ng-click="$ctrl.onPanelHeaderClick()" style="cursor: pointer;">
+        <fa-open value="$ctrl.panelOpen"></fa-open>
+        <span translate="project.filters"></span>
+    </div>
 
-	<div class="panel-body" ng-show="$ctrl.panelOpen">
-		<form class="form-horizontal noprint" role="form" novalidate>
-			<query-dice-time project="$ctrl.project" on-update="$ctrl.onChildUpdate(dice, null)">
-			</query-dice-time>
-			<query-dice-location project="$ctrl.project" on-update="$ctrl.onChildUpdate(dice, null)">
-			</query-dice-location>
-		</form>
-	</div>
+    <div class="panel-body" ng-show="$ctrl.panelOpen">
+        <form class="form-horizontal" role="form" novalidate>
+            <query-dice-time project="$ctrl.project" on-update="$ctrl.onChildUpdate(dice, null)">
+            </query-dice-time>
+            <query-dice-location
+                project="$ctrl.project"
+                on-update="$ctrl.onChildUpdate(dice, null)"
+            >
+            </query-dice-location>
+        </form>
+    </div>
 </div>

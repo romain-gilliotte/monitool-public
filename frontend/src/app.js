@@ -8,6 +8,7 @@ import mtPages from './components/pages/all-pages';
 import mtFilterMisc from './filters/misc';
 import mtTranslation from './translation/bootstrap';
 require(__scssPath);
+require('./small-bootstrap3.css');
 
 async function authenticate() {
     const auth0 = (window.auth0 = await createAuth0Client({

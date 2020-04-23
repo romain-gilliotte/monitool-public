@@ -1,38 +1,60 @@
 <div class="project-content-inner">
+    <form class="form-horizontal" role="form" name="$ctrl.basicsForm" novalidate>
+        <fieldset>
+            <form-group
+                input-id="input-country"
+                label="shared.country"
+                help="project.basics_help_country"
+            >
+                <input
+                    id="input-country"
+                    class="form-control"
+                    type="text"
+                    name="country"
+                    ng-model="$ctrl.editableProject.country"
+                    ng-change="$ctrl.onFieldChange()"
+                    placeholder="{{'project.country_ph'|translate}}"
+                    required
+                />
+            </form-group>
 
-	<form class="form-horizontal noprint" role="form" name="$ctrl.basicsForm" novalidate>
-		<fieldset>
+            <form-group input-id="input-name" label="shared.name" help="project.basics_help_name">
+                <input
+                    id="input-name"
+                    type="text"
+                    class="form-control"
+                    name="name"
+                    ng-model="$ctrl.editableProject.name"
+                    ng-change="$ctrl.onFieldChange()"
+                    placeholder="{{'project.name_ph'|translate}}"
+                    required
+                />
+            </form-group>
 
-			<form-group input-id="input-country" label="shared.country" help="project.basics_help_country">
+            <form-group
+                input-id="input-start"
+                label="project.start_date"
+                help="project.basics_help_begin"
+            >
+                <utc-datepicker
+                    ng-model="$ctrl.editableProject.start"
+                    max-date="$ctrl.editableProject.end"
+                    ng-change="$ctrl.onFieldChange()"
+                >
+                </utc-datepicker>
+            </form-group>
 
-				<input id="input-country" class="form-control" type="text" name="country"
-					ng-model="$ctrl.editableProject.country" ng-change="$ctrl.onFieldChange()"
-					placeholder="{{'project.country_ph'|translate}}" required />
-
-			</form-group>
-
-			<form-group input-id="input-name" label="shared.name" help="project.basics_help_name">
-
-				<input id="input-name" type="text" class="form-control" name="name"
-					ng-model="$ctrl.editableProject.name" ng-change="$ctrl.onFieldChange()"
-					placeholder="{{'project.name_ph'|translate}}" required />
-
-			</form-group>
-
-			<form-group input-id="input-start" label="project.start_date" help="project.basics_help_begin">
-
-				<utc-datepicker ng-model="$ctrl.editableProject.start" max-date="$ctrl.editableProject.end"
-					ng-change="$ctrl.onFieldChange()">
-				</utc-datepicker>
-
-			</form-group>
-
-			<form-group input-id="input-end" label="project.end_date" help="project.basics_help_end">
-
-				<utc-datepicker ng-model="$ctrl.editableProject.end" min-date="$ctrl.editableProject.start"
-					ng-change="$ctrl.onFieldChange()"></utc-datepicker>
-			</form-group>
-
-		</fieldset>
-	</form>
+            <form-group
+                input-id="input-end"
+                label="project.end_date"
+                help="project.basics_help_end"
+            >
+                <utc-datepicker
+                    ng-model="$ctrl.editableProject.end"
+                    min-date="$ctrl.editableProject.start"
+                    ng-change="$ctrl.onFieldChange()"
+                ></utc-datepicker>
+            </form-group>
+        </fieldset>
+    </form>
 </div>

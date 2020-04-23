@@ -1,235 +1,6 @@
-html,
-body {
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-    background-color: #ccc;
-    font-size: 12px;
-}
-
-/* make bootstrap smaller */
-
+/** AngularJS forms */
 td.ng-invalid {
     background-color: #faa;
-}
-
-.form-control {
-    font-size: 12px;
-    padding: 3px 6px;
-    height: 24px;
-}
-
-.form-group {
-    margin-bottom: 8px;
-}
-
-.form-horizontal .control-label {
-    padding-top: 3px;
-}
-
-p {
-    margin: 0 0 5px;
-}
-
-.panel {
-    margin-bottom: 10px;
-}
-.panel-title {
-    font-size: 13px;
-}
-
-.btn {
-    padding: 3px 6px;
-    font-size: 12px;
-}
-
-.btn-sm {
-    padding: 2px 5px;
-}
-
-.btn-xs {
-    padding: 0px 5px;
-    font-size: 12px;
-    line-height: 1.5;
-    border-radius: 3px;
-}
-
-.btn-lg {
-    padding: 10px 16px;
-    font-size: 18px;
-}
-
-legend {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-.input-group-addon {
-    padding: 3px 6px;
-    font-size: 12px;
-}
-
-label {
-    margin-bottom: 0;
-}
-
-.nav > li > a {
-    padding: 5px 10px;
-}
-.navbar {
-    min-height: 30px;
-}
-
-.panel-heading {
-    padding: 5px 8px;
-}
-
-.form-control-static {
-    padding-top: 2px;
-    padding-bottom: 2px;
-}
-
-.list-group {
-    margin-bottom: 10px;
-}
-
-.list-group-item {
-    padding: 5px 10px;
-}
-
-h4 {
-    font-size: 16px;
-}
-
-.dropdown-menu {
-    min-width: 100px;
-    font-size: 12px;
-    padding: 2px 0;
-}
-
-.dropdown-menu > li > a {
-    padding: 3px 10px;
-}
-
-.table {
-    margin-bottom: 10px;
-}
-.table-condensed > tbody > tr > td {
-    padding: 3px;
-}
-
-.input-sm {
-    height: 24px;
-    padding: 3px 5px;
-    font-size: 12px;
-}
-
-select.input-sm {
-    height: 24px;
-    line-height: 24px;
-}
-
-.alert {
-    padding: 8px;
-    margin-bottom: 10px;
-}
-
-ol,
-ul {
-    margin-bottom: 5px;
-}
-
-/* we autosize textareas with a directive */
-
-textarea {
-    resize: none;
-}
-
-.invert.input-group .form-control {
-    border-radius: 4px;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-}
-
-.input-group-btn.square button {
-    border-radius: 0;
-    border-right-width: 0;
-}
-
-.clickable {
-    cursor: pointer;
-}
-
-.nonclickable {
-    cursor: not-allowed;
-}
-
-.panel-collapse > .list-group .list-group-item:first-child {
-    border-top-right-radius: 0;
-    border-top-left-radius: 0;
-}
-.panel-collapse > .list-group .list-group-item {
-    border-width: 1px 0;
-}
-.panel-collapse > .list-group {
-    margin-bottom: 0;
-}
-.panel-collapse .list-group-item {
-    border-radius: 0;
-}
-
-.panel-collapse .list-group .list-group {
-    margin: 0;
-    margin-top: 10px;
-}
-.panel-collapse .list-group-item li.list-group-item {
-    margin: 0 -15px;
-    border-top: 1px solid #ddd !important;
-    border-bottom: 0;
-    padding-left: 30px;
-}
-.panel-collapse .list-group-item li.list-group-item:last-child {
-    padding-bottom: 0;
-}
-
-.panel-collapse div.list-group div.list-group {
-    margin: 0;
-}
-.panel-collapse div.list-group .list-group a.list-group-item {
-    border-top: 1px solid #ddd !important;
-    border-bottom: 0;
-    padding-left: 30px;
-}
-.panel-collapse .list-group-item li.list-group-item {
-    border-top: 1px solid #ddd !important;
-}
-
-.print {
-    display: none;
-}
-
-@media print {
-    .print {
-        display: block;
-    }
-    .noprint {
-        display: none;
-    }
-    .print-only {
-        display: block !important;
-    }
-    .print-full-width {
-        width: 100% !important;
-    }
-
-    .c3-tooltip-container {
-        display: none !important;
-    }
-
-    .htNumeric {
-        color: white !important;
-        font-size: 0;
-    }
 }
 
 .form-control.ng-invalid.ng-touched {
@@ -238,59 +9,28 @@ textarea {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
-.form-control-static {
-    min-height: 22px;
+textarea {
+    /* we autosize textareas with a directive */
+    resize: none;
 }
 
-ul {
-    padding-left: 20px;
-}
-
-.btn-group-xxs > .btn,
-.btn-xxs {
-    padding: 1px 5px;
-    font-size: 10px;
-    line-height: 1.3;
-    border-radius: 3px;
+/** ng-sortable */
+.fa-sort,
+.fa-arrows {
+    cursor: pointer;
 }
 
 ul[ng-sortable] {
     padding-left: 3px;
     list-style-type: none;
-}
 
-ul[ng-sortable] i.fa.fa-bars {
-    padding-right: 3px;
-}
-
-ul[ng-sortable] li *,
-i.fa.fa-bars {
-    cursor: pointer;
+    li * {
+        cursor: pointer;
+    }
 }
 
 .sortable-ghost {
     opacity: 0.3;
-}
-
-.sortable-label-list {
-    padding: 0 2px;
-}
-
-.navbar-toggle {
-    padding: 4px;
-    margin: 3px;
-}
-
-.fa-sort {
-    cursor: pointer;
-}
-
-.modal-header {
-    padding: 7px 15px;
-}
-
-.modal-header h3 {
-    font-size: 18px;
 }
 
 .dragging .drag-destination {
@@ -302,12 +42,18 @@ i.fa.fa-bars {
     vertical-align: middle !important;
 }
 
-.fa-thumb-tack {
-    color: #ccc;
-    cursor: pointer;
+/** Unsorted mess */
+html,
+body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background-color: #ccc;
+    font-size: 12px;
 }
-.fa-thumb-tack:hover {
-    color: #555;
+
+ul {
+    padding-left: 20px;
 }
 
 query-aggregate,
@@ -330,25 +76,16 @@ olap-reporting {
     background-color: white;
 }
 
-/*
- * This class should be renamed, it is used everywhere
- * Unrelated to being the actual div inside 'project-content'.
- */
-
 .project-content-inner {
+    /*
+     * This class should be renamed, it is used everywhere
+     * Unrelated to being the actual div inside 'project-content'.
+     */
     background-color: white;
     border-radius: 4px;
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 10px;
-}
-
-dd {
-    margin-bottom: 5px;
-}
-
-.btn-group > .btn.btn-xxs + .dropdown-toggle {
-    padding: 1px 5px;
 }
 
 .input-group .form-control {
