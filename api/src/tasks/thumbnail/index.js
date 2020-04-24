@@ -5,7 +5,7 @@ const FormData = require('form-data');
 const config = require('../../config');
 const { getFile, updateFile } = require('../../storage/gridfs');
 
-// fixme add exception handling
+// fixme exception handling
 queue.process('generate-thumbnail', async job => {
     const { sourceId, sourceHash, thumbnailId, bucketName } = job.data;
     const original = await getFile(sourceId, sourceHash, bucketName);

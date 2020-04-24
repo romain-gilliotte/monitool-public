@@ -178,7 +178,9 @@ router.get('/project/:id/report/:query([-_=a-z0-9]+)', async ctx => {
     ctx.response.body = Buffer.from(payload, 'base64');
     ctx.response.type = mimeType;
     ctx.response.set('content-encoding', 'gzip');
-    if (filename) ctx.response.attachment(filename, { type: 'inline' });
+    if (filename) {
+        ctx.response.attachment(filename, { type: 'inline' });
+    }
 });
 
 module.exports = router;

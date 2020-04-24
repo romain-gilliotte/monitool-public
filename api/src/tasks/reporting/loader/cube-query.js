@@ -1,17 +1,16 @@
 const _ = require('lodash');
-const { getVariableCube } = require('./variable');
+const { getVariableCube } = require('./cube-variable');
 
 /**
- * Generate an indicator cube from scratch
+ * Generate a cube from a query.
  *
- * @param {string} projectId
- * @param {string} formula
- * @param {object} parameters
+ * This delegates most of the work to single variable cube generator, and
+ * then compose the results and add the relevant computed measure.
  */
-async function getIndicatorCube(projectId, formula, parameters, aggregate, dice) {
+async function getQueryCube(project, formula, parameters, aggregate, dice) {
     const cubes = await Promise.all(
         _.toPairs(parameters).map(async ([paramName, parameter]) => {
-            let cube = await getVariableCube(projectId, parameter.variableId, aggregate, [
+            let cube = await getVariableCube(project, parameter.variableId, aggregate, [
                 ...dice,
                 ...parameter.dice,
             ]);
@@ -27,4 +26,4 @@ async function getIndicatorCube(projectId, formula, parameters, aggregate, dice)
     return cube;
 }
 
-module.exports = { getIndicatorCube };
+module.exports = { getQueryCube };

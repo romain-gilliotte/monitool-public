@@ -2,8 +2,8 @@ const xl = require('excel4node');
 const { ObjectId } = require('mongodb');
 const { TimeDimension } = require('olap-in-memory');
 const stream = require('stream');
-const { getVariableCube } = require('../reporting/loader/variable');
-const { getIndicatorCube } = require('../reporting/loader/indicator');
+const { getVariableCube } = require('../reporting/loader/cube-variable');
+const { getQueryCube } = require('../reporting/loader/cube-query');
 const { updateFile } = require('../../storage/gridfs');
 
 const mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
@@ -51,8 +51,8 @@ async function getWorkbook(project, periodicity = 'month') {
             }
 
             const { formula, parameters, dice } = query;
-            const cube = await getIndicatorCube(
-                project._id,
+            const cube = await getQueryCube(
+                project,
                 formula,
                 parameters,
                 [
@@ -66,7 +66,7 @@ async function getWorkbook(project, periodicity = 'month') {
 
             for (let [i, site] of project.entities.entries()) {
                 if (logFrame.entities.includes(site.id)) {
-                    const siteCube = cube.dice('location', 'entity', [site.id]);
+                    const siteCube = cube.slice('location', 'entity', site.id);
                     appendIndicator(siteWs[i], indicator, siteCube);
                 }
             }
@@ -84,7 +84,7 @@ async function getWorkbook(project, periodicity = 'month') {
         // Variables
         for (let variable of dataSource.elements) {
             const cube = await getVariableCube(
-                project._id,
+                project,
                 variable.id,
                 [
                     { id: 'time', attribute: periodicity },
@@ -98,7 +98,7 @@ async function getWorkbook(project, periodicity = 'month') {
 
             for (let [i, site] of project.entities.entries()) {
                 if (dataSource.entities.includes(site.id)) {
-                    const siteCube = cube.dice('location', 'entity', [site.id]);
+                    const siteCube = cube.slice('location', 'entity', site.id);
                     appendVariable(siteWs[i], variable, siteCube);
                 }
             }
@@ -129,7 +129,7 @@ function getLogFrameIndicators(logFrame) {
     ];
 }
 
-// clean up mess: this code is copy pasted from the client.
+// FIXME clean up mess: this code is copy pasted from the client.
 function getQuery(logicalFrame, indicator) {
     if (!indicator.computation) return null;
 
@@ -237,7 +237,7 @@ function appendDataRowRec(ws, cube, partitions, partitionElsIdxs, total) {
 
         for (let i = 0; i < partition.elements.length; ++i) {
             const element = partition.elements[i];
-            const childCube = cube.dice(partition.id, 'element', [element.id]);
+            const childCube = cube.slice(partition.id, 'element', element.id);
 
             partitionElsIdxs.push(i);
             appendDataRowRec(ws, childCube, partitions, partitionElsIdxs, total);
@@ -250,6 +250,7 @@ function appendDataRowRec(ws, cube, partitions, partitionElsIdxs, total) {
         const name = partitions
             .map((p, pIndex) => p.elements[partitionElsIdxs[pIndex]].name)
             .join(' / ');
+
         ws.cell(ws.currentRow, 1).string(name).style(variableStyle.text);
 
         // Insert data
