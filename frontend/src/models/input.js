@@ -137,7 +137,7 @@ export default class Input {
 
                     return {
                         variableId: variable.id,
-                        data: data,
+                        data: data.map(Math.round),
                         dimensions: dimensions,
                     };
                 })
