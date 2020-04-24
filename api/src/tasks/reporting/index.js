@@ -1,13 +1,12 @@
 const zlib = require('zlib');
+const Cache = require('lru-cache');
 const { promisify } = require('util');
 const { getQueryCube } = require('./loader/cube-query');
+const { loadProject } = require('./loader/project');
 const renderJson = require('./renderer/json');
 const renderXlsx = require('./renderer/xlsx');
-const Cache = require('lru-cache');
-const { loadProject } = require('./loader/project');
 
-const cache = new Cache({ maxAge: 10000 });
-setInterval(cache.prune.bind(cache), 60 * 1000);
+const cache = new Cache({ max: 25, maxAge: 10000 });
 
 queue.process('compute-report', async job => {
     const { projectId, formula, parameters, aggregate, dice } = job.data;
