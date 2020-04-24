@@ -24,7 +24,8 @@ async function queueIterate(projectId, variableId, rules, itemHandler) {
                 callers: [{ itemHandler, end: resolve }],
             };
 
-            setTimeout(handler, 0);
+            // Give 100ms to group queries together.
+            setTimeout(handler, 100);
         } else {
             waiting[key].callers.push({ itemHandler, end: resolve });
         }
