@@ -1,7 +1,6 @@
 import angular from 'angular';
-import axios from 'axios';
 import mtIndicatorUnit from '../../../filters/indicator';
-import { getQueryDimensions } from '../../../helpers/query-builder';
+import { executeQuery, getQueryDimensions } from '../../../helpers/query-builder';
 import mtReportingField from '../../shared/reporting/td-reporting-field';
 require(__scssPath);
 
@@ -104,27 +103,12 @@ module.directive(__componentName, () => {
                     this.errorMessage = 'shared.loading';
 
                     // Load data
-                    const remoteQuery = JSON.stringify({
-                        renderer: 'json',
-                        rendererOpts: 'report',
-                        ...query,
-                    });
-                    const b64Query = btoa(remoteQuery)
-                        .replace('+', '-')
-                        .replace('/', '_')
-                        .replace(/=+$/g, '');
-                    const response = await axios.get(
-                        `/project/${this.project._id}/report/${b64Query}`
-                    );
-
-                    this.tableCells = [
-                        ...this.columns.map(col => response.data[col.id]),
-                        response.data['all'],
-                    ];
+                    const data = await executeQuery(this.project._id, query);
+                    this.tableCells = [...this.columns.map(col => data[col.id]), data['all']];
 
                     // Send graph data to parent.
                     this.onPlotData({
-                        data: this.columns.map(col => response.data[col.id]),
+                        data: this.columns.map(col => data[col.id]),
                     });
                 } catch (e) {
                     this.errorMessage = e.message;

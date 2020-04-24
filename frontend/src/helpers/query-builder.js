@@ -1,4 +1,37 @@
+import axios from 'axios';
 import { TimeDimension, GenericDimension } from 'olap-in-memory';
+
+export async function executeQuery(projectId, query, renderer = 'json', rendererOpts = 'report') {
+    let dice = JSON.parse(JSON.stringify(query.dice));
+    if (dice.length > 1) {
+        // Deduplicate dices to avoid urls to be too long
+        dice = dice.slice().sort((d1, d2) => {
+            if (d1.id == d2.id) return d1.attribute < d2.attribute ? -1 : 1;
+            else return d1.id < d2.id ? -1 : 1;
+        });
+
+        dice = dice.reduce((dices, dice) => {
+            const last = dices[dices.length - 1];
+            const isCompatible = last && last.id == dice.id && last.attribute == dice.attribute;
+
+            if (isCompatible && last.range && dice.range) {
+                last.range[0] = last.range[0] < dice.range[0] ? dice.range[0] : last.range[0]; // max
+                last.range[1] = last.range[1] < dice.range[1] ? last.range[1] : dice.range[1]; // min
+                return dices;
+            } else if (isCompatible && last.items && dice.items) {
+                last.items = last.items.filter(item => dice.items.includes(item));
+                return dices;
+            } else {
+                return [...dices, dice];
+            }
+        }, []);
+    }
+
+    const remoteQuery = JSON.stringify({ renderer, rendererOpts, ...query, dice });
+    const b64Query = btoa(remoteQuery).replace('+', '-').replace('/', '_').replace(/=+$/g, '');
+    const response = await axios.get(`/project/${projectId}/report/${b64Query}`);
+    return response.data;
+}
 
 /**
  * Take an indicator definition and build a reporting server query
@@ -34,11 +67,12 @@ export function buildQueryFromIndicator(
     const dice = baseDice.slice();
 
     if (logicalFramework) {
-        dice.push({
-            id: 'location',
-            attribute: 'entity',
-            items: logicalFramework.entities,
-        });
+        if (logicalFramework.entities.length !== project.entities.length)
+            dice.push({
+                id: 'location',
+                attribute: 'entity',
+                items: logicalFramework.entities,
+            });
 
         if (logicalFramework.start || logicalFramework.end)
             dice.push({
@@ -68,12 +102,15 @@ export function buildQueryFromVariable(
 ) {
     const dice = [];
 
-    if (dataSource)
-        dice.push({
-            id: 'location',
-            attribute: 'entity',
-            items: dataSource.entities,
-        });
+    if (dataSource) {
+        if (dataSource.entities.length !== project.entities.length) {
+            dice.push({
+                id: 'location',
+                attribute: 'entity',
+                items: dataSource.entities,
+            });
+        }
+    }
 
     return {
         formula: 'variable',
