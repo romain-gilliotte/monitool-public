@@ -2,11 +2,13 @@ const { AuthenticationClient } = require('auth0');
 const jwksRsa = require('jwks-rsa');
 const koaCompose = require('koa-compose');
 const koaJwt = require('koa-jwt');
+const Cache = require('lru-cache');
 const { ObjectId } = require('mongodb');
 const config = require('../config');
 const { getProject, insertDemoProject } = require('../storage/queries/project');
 
 const auth0Client = new AuthenticationClient({ domain: config.jwt.jwksHost });
+const cache = new Cache({ max: 150, maxAge: 10 * 60 * 1000 });
 
 module.exports = koaCompose([
     // Validate token
@@ -29,15 +31,15 @@ module.exports = koaCompose([
         const subcriber = ctx.state.user.sub;
 
         // Find or create user
-        let user = await collection.findOne({ subs: subcriber });
-        if (!user) {
-            user = await createUser(ctx);
-        }
+        let user = cache.get(subcriber);
+        if (!user) user = await collection.findOne({ subs: subcriber });
+        if (!user) user = await createUser(ctx);
+        cache.set(subcriber, user);
 
-        // Update lastSeen date if older than 10 minutes (no waiting).
-        if (new Date() - user.lastSeen > 10 * 60 * 1000) {
+        // Update lastSeen date if older than 1 minute (no waiting).
+        if (new Date() - user.lastSeen > 60 * 1000) {
             user.lastSeen = new Date();
-            await collection
+            collection
                 .updateOne({ _id: user._id }, { $currentDate: { lastSeen: true } })
                 .catch(e => {});
         }
