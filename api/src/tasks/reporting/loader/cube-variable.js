@@ -37,18 +37,19 @@ async function getVariableCube(project, variableId, aggregate, dices) {
 
 /**
  * Compute cube built with the finest detail, and then aggregate to requested dimension attributes.
- * This will have good data, incomplete flags.
- * However, all data will be marked as interpolated.
+ * This will have good data, however, all data will be marked as interpolated.
+ *
+ * Dicing beforehand improves performance a lot, but does not change the final result.
+ * If we wanted, we could move the dice afterwards, and load the prefilled cube from from cache.
  */
 async function getPostAggregatedCube(dimensions, projectId, variableId, rules, aggregate, dices) {
-    const cube = new Cube(dimensions);
+    let cube = new Cube(dimensions);
+    cube = dice(cube, dices);
+
     cube.createStoredMeasure('main', rules);
+    await iterateCubes(projectId, variableId, rules, cube.hydrateFromCube.bind(cube));
 
-    await iterateCubes(projectId, variableId, rules, inputCube => {
-        cube.hydrateFromCube(inputCube);
-    });
-
-    return drillDiceProject(cube, aggregate, dices);
+    return project(cube, aggregate);
 }
 
 /**
@@ -57,18 +58,17 @@ async function getPostAggregatedCube(dimensions, projectId, variableId, rules, a
  * However, we need this to approximate interpolation status of fields.
  */
 async function getPreAggregatedCube(dimensions, projectId, variableId, rules, aggregate, dices) {
-    let cube = drillDiceProject(new Cube(dimensions), aggregate, dices);
-    cube.createStoredMeasure('main', rules);
+    let cube = new Cube(dimensions);
+    cube = dice(cube, dices);
+    cube = project(cube, aggregate);
 
-    await iterateCubes(projectId, variableId, rules, inputCube => {
-        cube.hydrateFromCube(inputCube);
-    });
+    cube.createStoredMeasure('main', rules);
+    await iterateCubes(projectId, variableId, rules, cube.hydrateFromCube.bind(cube));
 
     return cube;
 }
 
-/** As the name implies, applies aggregate and dice operations to a cube */
-function drillDiceProject(cube, aggregate, dices) {
+function dice(cube, dices) {
     dices.forEach(dice => {
         if (dice.range) {
             cube = cube.diceRange(dice.id, dice.attribute, dice.range[0], dice.range[1]);
@@ -77,6 +77,10 @@ function drillDiceProject(cube, aggregate, dices) {
         }
     });
 
+    return cube;
+}
+
+function project(cube, aggregate) {
     aggregate.forEach(agg => {
         cube = cube.drillUp(agg.id, agg.attribute);
     });
