@@ -56,7 +56,7 @@ module.exports = koaCompose([
 async function createUser(ctx) {
     const subcriber = ctx.state.user.sub;
     const collection = database.collection('user');
-    const lock = await redisLock.lock(`profile:${subcriber}`, 1000);
+    const lock = await redisLock.lock(`profile:${subcriber}`, 10000);
 
     // Search user again, now that we own the lock.
     let user = await collection.findOne({ subs: subcriber });
