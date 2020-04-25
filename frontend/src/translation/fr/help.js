@@ -7,9 +7,16 @@ module.exports = {
                 sur l'outil.            
             `,
         },
+        'main.invitations': {
+            title: 'Invitations',
+            paragraph: /* html */ `
+                Sur cette page, retrouvez la liste des projets sur lesquels vous avez été invité à participer
+                par d'autres utilisateurs.
+            `,
+        },
         'project.config.home': {
             title: `Accueil configuration`,
-            paragraph: /* html */ ``,
+            paragraph: /* html */ `Visualisez votre avancement dans la configuration de votre projet`,
         },
         'project.config.basics': {
             title: 'Données de base',
@@ -83,15 +90,22 @@ module.exports = {
         },
         'project.usage.home': {
             title: `Accueil projet`,
-            paragraph: /* html */ ``,
+            paragraph: /* html */ `
+                La page d'accueil du projet vous présente les contacts des différents participants.<br/>
+                Si vous participez à la saisie des données du projet, vous pouvez également accéder à votre suivi d'avancement.
+            `,
+        },
+        'project.usage.downloads': {
+            title: `Téléchargements`,
+            paragraph: /* html */ `Vous pouvez ici accéder à différents fichiers à télécharger`,
         },
         'project.usage.list': {
-            title: `Liste des saisies`,
-            paragraph: /* html */ ``,
+            title: `Calendrier de saisie`,
+            paragraph: /* html */ `Le calendrier de saisie permet d'accèder aux fiches de saisie du projet`,
         },
         'project.usage.edit': {
             title: `Édition d'une saisie`,
-            paragraph: /* html */ ``,
+            paragraph: /* html */ `Vérifiez bien le lieu de collecte et la période couverte de la fiche de saisie avant de rentrer vos données`,
         },
         'project.usage.general': {
             title: `Rapport général`,
@@ -119,11 +133,7 @@ module.exports = {
             answer: /* html */ `
                 Ça n'a pas d'utilité d'un point de vue terrain, mais certains utilisateurs doivent pouvoir accéder 
                 à de nombreux projets qu'ils ne crée pas eux-même.<br/>
-                Notament:
-                <ul>
-                    <li>Consultants en ONG</li>
-                    <li>Salariés siège ou régionaux</li>
-                </ul>
+                Notament des salariés siège, régionaux ou des consultants
             `,
         },
         {
@@ -219,6 +229,24 @@ module.exports = {
             `,
         },
 
+        {
+            prefixes: ['main.invitations'],
+            question: `Je n'ai pas reçu l'invitation que j'attend`,
+            answer: /* html */ `
+                Pour vous inviter à participer à un projet, son propriétaire utilise votre adresse email.<br/>
+                Assurez-vous que vous vous êtes connecté avec la même adresse email que celle qui a été utilisée
+                pour vous inviter.
+            `,
+        },
+        {
+            prefixes: ['main.invitations'],
+            question: `J'ai refusé une invitation par erreur, comment faire?`,
+            answer: /* html */ `
+                Les invitations refusées ne peuvent plus être modifiées.<br/>
+                Demandez au propriétaire du projet auquel vous voulez avoir accès de vous inviter à nouveau
+            `,
+        },
+
         // Structure
         {
             prefixes: ['project.config'],
@@ -238,15 +266,48 @@ module.exports = {
             prefixes: ['project.config'],
             question: `J'ai supprimé quelque chose de mon projet par erreur, et j'ai sauvegardé ma modification. Comment revenir en arrière?`,
             answer: /* html */ `
-                Rendez-vous sur la page <a class="btn btn-default btn-xs"><i class="fa fa-history"></i> Historique</a> la structure de votre projet.<br/>
+                Rendez-vous sur la page <a class="btn btn-default btn-xs"><i class="fa fa-history"></i> Historique</a> 
+                la structure de votre projet.<br/>
                 Vous pouvez consulter toutes les modifications qui ont été réalisées depuis la création du projet, et
                 revenir au moment que vous désirez`,
+        },
+        {
+            prefixes: ['project.config.basics'],
+            question: `Je ne connais pas la date de fin de mon projet`,
+            answer: /* html */ `
+                Vous pourrez la modifier à tout instant, laissez la valeur par défaut (dans un an).
+            `,
+        },
+        {
+            prefixes: ['project.config.collection_form_list'],
+            question: `Comment est estimée la durée de saisie?`,
+            answer: /* html */ `
+                Cette indication est là pour donner un ordre de grandeur.<br/>
+                La formule utilisée considère qu'il faut 10 secondes par case remplie.
+            `,
+        },
+        {
+            prefixes: ['project.config.collection_form_list'],
+            question: `
+                Que se passe-t'il quand je déplace des variables entre des sources de données qui 
+                n'ont pas les même périodicités ou lieux de collecte?
+            `,
+            answer: /* html */ `
+                Les données déjà saisies vont êtres déplacées et aggrégées ou interpolées pour s'adapter à la nouvelle périodicité.<br/>
+                Si les lieux de collectes ne sont pas les mêmes entre les deux sources de données
+                <ul>
+                    <li>Les données qui ont été saisies sur les lieux supplémentaires deviendront inaccessibles.</li>
+                    <li>Les saisisseurs seront invités à saisir retro-activement les données manquante.</li>
+                </ul>
+            `,
         },
         {
             prefixes: ['project.config.collection_form_edition'],
             question: `Mes équipes passent trop de temps à saisir des données, comment réduire?`,
             answer: /* html */ `
                 Réduisez la quantitée de données à collecter!<br/>
+                Par exemple, vous pouvez désactiver des variables ou des désagrégations que vous n'analysez pas,
+                ou bien réduire la périodicité de la saisie.
             `,
         },
         {
@@ -367,7 +428,97 @@ module.exports = {
                 sans annuler la seconde le rendrait incohérent.`,
         },
 
-        // Data entry
+        // Usage
+        {
+            prefixes: ['project.usage.home'],
+            question: `Comment modifier ma photo dans la liste des participants?`,
+            answer: /* html */ `
+                La photo provient du compte que vous avez utilisé pour vous connecter!<br/>
+                Rendez-vous dans votre profil Google ou Microsoft pour la modifier.
+                La nouvelle photo sera mise à jour automatiquement dans Monitool
+            `,
+        },
+        {
+            prefixes: ['project.usage.home'],
+            question: `Comment afficher les rôles des différents participants à mon projet`,
+            answer: /* html */ `
+                Sauf pour le propriétaire du projet (le premier participant dans la liste), les rôles de chacun ne sont pas publics!<br/>
+                Si vous êtes le propriétaire, vous pouvez vous rendre dans la page "Invitations" dans la configuration de votre projet
+                pour y avoir accès.
+            `,
+        },
+        {
+            prefixes: ['project.usage.home'],
+            question: `
+                Toutes les saisies que j'ai faites étaient "réalisées" (vert) mais sont maintenant "incomplètes" (jaune). Que s'est-il passé?
+            `,
+            answer: /* html */ `
+                Le propriétaire du projet a probablement rajouté des variables dans des formulaires que
+                vous aviez déjà saisi, rendant toutes vos saisies passées incomplètes.<br/>
+                Consultez le afin de savoir si il est nécessaire de re-saisir rétroactivement les données manquantes.
+            `,
+        },
+        {
+            prefixes: ['project.usage.downloads'],
+            question: `Quel est l'usage des cadres logiques en PDF?`,
+            answer: /* html */ `
+                Lorsque vous communiquez sur votre projet, il est souvent plus pratique d'envoyer votre
+                cadre logique par email, plutôt que de demander à un bailleur ou un partenaire se se connecter
+                à une plateforme en ligne pour y avoir accès.<br/>
+
+                Pouvoir les télécharger vous évitera ainsi un double travail: concevez votre cadre logique directement
+                sur l'outil, et disposez d'une version toujours à jour prette à être transmise.
+            `,
+        },
+        {
+            prefixes: ['project.usage.downloads'],
+            question: `Quel est l'usage des fiches de saisie en format PDF et Excel?`,
+            answer: /* html */ `
+                Dans de nombreux contextes, la mise en place d'outil de collecte de donnée électroniques 
+                demande du temps et des ressources en formation.
+                <ul>
+                    <li>
+                        La version PDF des fiches de saisies est facilement imprimable, ne demande aucune formation
+                        pour être utilisée, et peut être opérationelle dès le premier jour de votre projet.
+                    </li>
+                    <li>
+                        La version Excel est une alternative pour les lieux de collecte où l'accès à l'informatique est
+                        possible, mais qui ne disposent pas d'internet.<br/>
+                        Une fois remplies, elles sont conçues pour pouvoir être copiées-collées dans les fiches de saisies
+                        de Monitool en quelques secondes.
+                    </li>
+                </ul>
+            `,
+        },
+        {
+            prefixes: ['project.usage.downloads'],
+            question: `Sur mes fiches de saisie, les tableaux sont trop larges et dépassent de la page`,
+            answer: /* html */ `
+                Deux possibilitées s'offrent à vous:
+                <ul>
+                    <li>
+                        Une version "paysage" de la même fiche de saisie est disponible en cliquant sur 
+                        <span class="btn btn-default btn-xs"><span class="caret"></span></span>
+                        puis sur
+                        <span class="btn btn-default btn-xs">
+                            <i class="fa fa-file-pdf-o"></i>
+                            Télécharger PDF (paysage)                    
+                        </span>.
+                    </li>
+                    <li>
+                        Vous pouvez demander au propriétaire du projet de modifier la présentation du tableau
+                        afin qu'il soit moins large, mais plus haut.
+                    </li>
+                </ul>
+            `,
+        },
+        {
+            prefixes: ['project.usage.downloads'],
+            question: `J'aimerai télécharger mes rapports`,
+            answer: /* html */ `
+                Des liens de téléchargement sont disponibles sur les pages associées aux rapports
+            `,
+        },
         {
             prefixes: ['project.usage.edit'],
             question: `Comment passer rapidement d'une case à l'autre?`,
@@ -382,6 +533,13 @@ module.exports = {
             answer: /* html */ `
                 Si vous disposez de plusieurs formulaires papier à saisir par lieu (par exemple, un par travailleur social),
                 et que désirez les additioner, vous pouvez rentrer des sommes dans les cases de saisies: "1+2+3".<br/>
+            `,
+        },
+        {
+            prefixes: ['project.usage.list'],
+            question: `À quoi correspondent les pourcentages indiqués sur chaque fiche?`,
+            answer: /* html */ `
+                Il s'agit du pourcentage de variables qui ont été au moins partiellement saisies.
             `,
         },
         {
@@ -446,6 +604,13 @@ module.exports = {
             prefixes: ['project.usage.general', 'project.usage.olap'],
             question: `Que signifie le symbole <i class="fa fa-question-circle-o"></i> qui s'affiche à la place de mes données?`,
             answer: /* html */ `Ce symbole signifie que la saisie des données que vous essayez de consulter n'a pas encore été réalisée.`,
+        },
+        {
+            prefixes: ['project.usage.general', 'project.usage.olap'],
+            question: `Que signifie le symbole <i class="fa fa fa-exclamation"></i> qui s'affiche à la place de mes données?`,
+            answer: /* html */ `
+                Ce symbole signifie qu'une division par zéro à eu lieu!
+            `,
         },
         {
             prefixes: ['project.usage.general', 'project.usage.olap'],
