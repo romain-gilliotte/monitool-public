@@ -1,5 +1,6 @@
 import angular from 'angular';
 import axios from 'axios';
+import TimeSlot from 'timeslot-dag';
 
 export default class Input {
     static async fetchFormShortStatus(project, dataSourceId, siteIds = null) {
@@ -23,17 +24,17 @@ export default class Input {
         const dataSource = project.forms.find(ds => ds.id === dataSourceId);
         const variables = dataSource.elements.filter(variable => variable.active);
 
+        const end = TimeSlot.fromDate(new Date(), dataSource.periodicity).previous();
         const sum = variables.map((v, i) => `not isNaN(variable_${i})`).join('+');
-        const formula = `(${sum})/${variables.length}`;
         const query = {
             renderer: 'json',
-            formula: formula,
+            formula: `(${sum})/${variables.length}`,
             parameters: {},
             dice: [
                 {
                     id: 'time',
-                    attribute: 'day',
-                    range: [null, new Date().toISOString().substring(0, 10)],
+                    attribute: dataSource.periodicity,
+                    range: [null, end.value],
                 },
                 {
                     id: 'location',

@@ -369,13 +369,6 @@ module.exports = {
 
         // Data entry
         {
-            prefixes: ['project.usage.list'],
-            question: `Pourquoi puis-je saisir les données du mois en cours, alors qu'il n'est pas terminé?`,
-            answer: /* html */ `
-                Car sur certains projets, des prédictions ou des objectifs sont utilisées comme variables et peuvent être saisies à l'avance!
-            `,
-        },
-        {
             prefixes: ['project.usage.edit'],
             question: `Comment passer rapidement d'une case à l'autre?`,
             answer: /* html */ `
