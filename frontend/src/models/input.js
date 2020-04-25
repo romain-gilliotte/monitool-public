@@ -138,7 +138,9 @@ export default class Input {
 
                     return {
                         variableId: variable.id,
-                        data: data.map(Math.round),
+                        data: data.map(value =>
+                            Number.isFinite(value) ? Math.round(value) : null
+                        ),
                         dimensions: dimensions,
                     };
                 })
