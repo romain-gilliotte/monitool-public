@@ -67,12 +67,11 @@ export function buildQueryFromIndicator(
     const dice = baseDice.slice();
 
     if (logicalFramework) {
-        if (logicalFramework.entities.length !== project.entities.length)
-            dice.push({
-                id: 'location',
-                attribute: 'entity',
-                items: logicalFramework.entities,
-            });
+        dice.push({
+            id: 'location',
+            attribute: 'entity',
+            items: logicalFramework.entities,
+        });
 
         if (logicalFramework.start || logicalFramework.end)
             dice.push({
@@ -103,13 +102,11 @@ export function buildQueryFromVariable(
     const dice = [];
 
     if (dataSource) {
-        if (dataSource.entities.length !== project.entities.length) {
-            dice.push({
-                id: 'location',
-                attribute: 'entity',
-                items: dataSource.entities,
-            });
-        }
+        dice.push({
+            id: 'location',
+            attribute: 'entity',
+            items: dataSource.entities,
+        });
     }
 
     return {
