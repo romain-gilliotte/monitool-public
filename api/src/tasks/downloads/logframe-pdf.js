@@ -82,6 +82,7 @@ function computeLogFrameDocDef(logFrame, pageOrientation, dataSources, language 
     var doc = {};
     doc.pageSize = 'A4';
     doc.pageOrientation = pageOrientation;
+    doc.pageMargins = [20, 20, 20, 20];
     doc.styles = {
         header: { fontSize: 16, bold: true, alignment: 'center', margin: [100, 0, 100, 0] },
         header3: { fontSize: 16, bold: true, alignment: 'center', margin: [0, 0, 0, 10] },

@@ -17,7 +17,7 @@ queue.process('generate-datasource-pdf', async job => {
     const title = dataSource.name || 'data-source';
 
     await updateFile(cacheId, cacheHash, `${title}.pdf`, 'application/pdf', async () => {
-        const docDef = createDataSourceDocDef(dataSource, orientation, language);
+        const docDef = createDataSourceDocDef(project._id, dataSource, orientation, language);
         const stream = printer.createPdfKitDocument(docDef);
         stream.end(); // work around bug in pdfkit never ending the stream.
 
@@ -50,56 +50,102 @@ const strings = Object.freeze({
     }),
 });
 
-function createDataSourceDocDef(dataSource, pageOrientation, language = 'en') {
+function createDataSourceDocDef(
+    projectId,
+    dataSource,
+    pageOrientation = 'portrait',
+    language = 'en'
+) {
     return {
         pageSize: 'A4',
         pageOrientation: pageOrientation,
+        pageMargins: [20, 105, 20, 30],
         styles: {
-            header: { fontSize: 16, bold: true, alignment: 'center', margin: [100, 0, 100, 0] },
+            header: { fontSize: 22, bold: true, margin: [0, 0, 0, 16] },
             variableName: { fontSize: 10, bold: true, margin: [0, 10, 0, 5] },
-            normal: { fontSize: 9 },
+            normal: { fontSize: 8, margin: [0, 0, 0, 0] },
+        },
+        header: function (currentPage) {
+            const packedPrjId = projectId.toHexString();
+            const packedDsId = dataSource.id.replace(/\-/g, '').substring(0, 8);
+            const packedPage = currentPage.toString(16).padStart(2, '0');
+            const buffer = Buffer.from(packedPrjId + packedDsId + packedPage, 'hex');
+
+            return [
+                {
+                    margin: [20, 20, 20, 0],
+                    columns: [
+                        [
+                            { text: dataSource.name, style: 'header', width: '*' },
+                            createMetadata(language),
+                        ],
+                        {
+                            width: 'auto',
+                            qr: buffer,
+                            eccLevel: 'L',
+                            mode: 'octet',
+                            fit: 90,
+                            margin: [20, 0, 0, 0],
+                        },
+                    ],
+                },
+            ];
+        },
+        footer: function (currentPage, pageCount) {
+            return {
+                text: `${currentPage} of ${pageCount}`,
+                alignment: 'center',
+                padding: [0, 0, 0, 20],
+            };
         },
         content: [
-            { text: dataSource.name, style: 'header' },
-            {
-                columns: [
-                    [
-                        { style: 'variableName', text: strings[language].collection_site },
-                        {
-                            table: {
-                                headerRows: 0,
-                                widths: ['*'],
-                                body: [[{ style: 'normal', text: ' ' }]],
-                            },
-                            margin: [0, 0, 10, 0],
-                        },
-                    ],
-                    [
-                        { style: 'variableName', text: strings[language].covered_period },
-                        {
-                            table: {
-                                headerRows: 0,
-                                widths: ['*'],
-                                body: [[{ style: 'normal', text: ' ' }]],
-                            },
-                            margin: [0, 0, 10, 0],
-                        },
-                    ],
-                    [
-                        { style: 'variableName', text: strings[language].collected_by },
-                        {
-                            table: {
-                                headerRows: 0,
-                                widths: ['*'],
-                                body: [[{ style: 'normal', text: ' ' }]],
-                            },
-                            margin: [0, 0, 0, 0],
-                        },
-                    ],
-                ],
-            },
-
             ...dataSource.elements.filter(variable => variable.active).map(createVariableDocDef),
+        ],
+    };
+}
+
+function createMetadata(language) {
+    return {
+        columns: [
+            [
+                {
+                    style: 'variableName',
+                    text: strings[language].collection_site,
+                },
+                {
+                    table: {
+                        headerRows: 0,
+                        widths: ['*'],
+                        body: [[{ style: 'normal', text: ' ' }]],
+                    },
+                    margin: [0, 0, 10, 0],
+                },
+            ],
+            [
+                {
+                    style: 'variableName',
+                    text: strings[language].covered_period,
+                },
+                {
+                    table: {
+                        headerRows: 0,
+                        widths: ['*'],
+                        body: [[{ style: 'normal', text: ' ' }]],
+                    },
+                    margin: [0, 0, 10, 0],
+                },
+            ],
+            [
+                { style: 'variableName', text: strings[language].collected_by },
+                {
+                    table: {
+                        headerRows: 0,
+                        widths: ['*'],
+                        body: [[{ style: 'normal', text: ' ' }]],
+                    },
+                    margin: [0, 0, 0, 0],
+                },
+            ],
         ],
     };
 }
@@ -127,14 +173,14 @@ function createVariableDocDef(variable) {
 
     // Add empty data fields to bodyRows
     bodyRows.forEach(function (bodyRow) {
-        for (var i = 0; i < dataColsPerRow; ++i) bodyRow.push(' ');
+        for (var i = 0; i < dataColsPerRow; ++i) bodyRow.push({ text: ' ', style: 'normal' });
     });
 
     // Add empty field in the top-left corner for topRows
     topRows.forEach(function (topRow, index) {
         for (var i = 0; i < rowPartitions.length; ++i)
             topRow.unshift({
-                text: ' ',
+                text: { text: ' ', style: 'normal' },
                 colSpan: i == rowPartitions.length - 1 ? rowPartitions.length : 1,
                 rowSpan: index == 0 ? topRows.length : 1,
             });
@@ -235,3 +281,5 @@ function makeLeftCols(partitions) {
 
     return result;
 }
+
+module.exports = { printer, createDataSourceDocDef };
