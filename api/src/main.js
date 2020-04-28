@@ -48,7 +48,10 @@ async function start(web = true, worker = true) {
         app = new Koa();
         app.use(cors());
         app.use(responseTime());
-        app.use(bodyParser({ jsonLimit: '1mb' }));
+        app.use(bodyParser({ enableTypes: ['json', 'xml', 'form', 'text'] }));
+
+        app.use(require('./routers/twilio').routes());
+
         app.use(require('./middlewares/error-handler'));
         app.use(require('./middlewares/load-profile'));
         app.use(require('./routers/invitations').routes());
@@ -62,6 +65,7 @@ async function start(web = true, worker = true) {
     }
 
     if (worker) {
+        require('./tasks/data-entry');
         require('./tasks/downloads');
         require('./tasks/reporting');
         require('./tasks/thumbnail');

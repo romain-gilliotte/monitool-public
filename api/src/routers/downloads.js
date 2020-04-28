@@ -52,7 +52,7 @@ router.get('/project/:prjId/data-source/:dsId.:format(png|xlsx|pdf)', async ctx 
 
         const result = await getGeneratedFile(
             `ds:${prjId}:${dsId}:${language}:${orientation}:${format}`,
-            hash({ dataSource, language, orientation }),
+            hash({ dataSource, language, orientation }) + Math.random(),
             `generate-datasource-${format}`,
             { prjId, dsId, language, orientation },
             thumbnail
