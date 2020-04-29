@@ -11,7 +11,6 @@ router.post('/twilio', async ctx => {
     ctx.response.type = 'application/xml';
     ctx.response.body = twiml.toString();
 
-    console.log(ctx.request.query);
     console.log(ctx.request.body);
 
     const options = { attempts: 1, removeOnComplete: true };

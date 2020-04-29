@@ -16,7 +16,8 @@ winston.add(new winston.transports.Console());
 // Catch the uncaught errors that weren't wrapped in a domain or try catch statement
 process.on('uncaughtException', e => {
     // This should never be called, as we handle all errors insides promises.
-    winston.log('error', e.message);
+    console.log('uncaughtException!!!', e);
+    // winston.log('error', e.message);
     process.exit(1);
 });
 

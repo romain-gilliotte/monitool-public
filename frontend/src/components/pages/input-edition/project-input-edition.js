@@ -6,6 +6,7 @@ import Input from '../../../models/input';
 import mtHelpPanel from '../../shared/misc/help-panel';
 import mtSaveBlock from '../../shared/project/save-block';
 import mtInputGrid from './input-grid';
+import axios from 'axios';
 require(__scssPath);
 
 const module = angular.module(__moduleName, [
@@ -18,7 +19,7 @@ const module = angular.module(__moduleName, [
 
 module.config($stateProvider => {
     $stateProvider.state('project.usage.edit', {
-        url: '/input/:dataSourceId/edit/:period/:entityId',
+        url: '/input/edit/:dataSourceId/:period/:entityId',
         component: __componentName,
         resolve: {
             dsId: $stateParams => $stateParams.dataSourceId,
@@ -45,6 +46,33 @@ module.config($stateProvider => {
     });
 });
 
+module.config($stateProvider => {
+    $stateProvider.state('project.usage.data_entry', {
+        url: '/data-entry/:fileId/:period/:entityId',
+        component: __componentName,
+        resolve: {
+            period: $stateParams => $stateParams.period,
+            siteId: $stateParams => $stateParams.entityId,
+            file: $stateParams =>
+                axios
+                    .get(`/project/${$stateParams.projectId}/scanned-forms/${$stateParams.fileId}`)
+                    .then(response => response.data),
+
+            dsId: file => file.dataSourceId,
+            input: (loadedProject, dsId, $stateParams) =>
+                Input.fetchInput(loadedProject, $stateParams.entityId, dsId, $stateParams.period),
+
+            previousInput: (loadedProject, dsId, $stateParams) =>
+                Input.fetchInput(
+                    loadedProject,
+                    $stateParams.entityId,
+                    dsId,
+                    new TimeSlot($stateParams.period).previous().value
+                ),
+        },
+    });
+});
+
 module.component(__componentName, {
     bindings: {
         project: '<',
@@ -54,6 +82,7 @@ module.component(__componentName, {
 
         input: '<',
         previousInput: '<',
+        file: '<',
     },
 
     template: require(__templatePath),

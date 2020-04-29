@@ -139,6 +139,37 @@ router.get('/project/:id/user', async ctx => {
     }
 });
 
+router.get('/project/:id/scanned-forms', async ctx => {
+    const forms = await database.collection('input_img').find(
+        { projectId: new ObjectId(ctx.params.id) },
+        {
+            projection: {
+                receivedAt: 1,
+                dataSourceId: 1,
+                from: 1,
+                body: 1,
+                'sections.site': 1,
+                'sections.period': 1,
+                'sections.collectedBy': 1,
+            },
+        }
+    );
+
+    ctx.response.type = 'application/json';
+    ctx.response.body = forms.pipe(JSONStream.stringify());
+});
+
+router.get('/project/:projectId/scanned-forms/:id', async ctx => {
+    try {
+        ctx.response.body = await database.collection('input_img').findOne({
+            _id: new ObjectId(ctx.params.id),
+            projectId: new ObjectId(ctx.params.projectId),
+        });
+    } catch (e) {
+        console.log(e);
+    }
+});
+
 router.get('/project/:id/report/:query([-_=a-z0-9]+)', async ctx => {
     const projectId = ctx.params.id;
     if (!(await ctx.state.profile.isInvitedTo(projectId))) {

@@ -1,25 +1,35 @@
-const { ObjectId } = require('mongodb');
+const cv = require('opencv4nodejs');
+const LayoutBuilder = require('pdfmake/src/layoutBuilder');
 const { printer, createDataSourceDocDef } = require('../../downloads/datasource-pdf');
-const TableProcessor = require('pdfmake/src/tableProcessor');
+
+const METADATA_MARGIN = 3;
+const VAR_MARGIN_TOP = -20;
+const VAR_MARGIN_OTHER = 5;
 
 /**
  * Retrieve variables tables from correctly aligned page image.
  */
-async function extractVariables(page, project, dataSource) {
-    const [height, width] = page.sizes;
-    const boundaries = getVariableBoundaries(project, dataSource, 'portrait', 'en', width, height);
+function extractVariables(project, dataSource, orientation, language, page, pageNo) {
+    // Extract boundaries of all tables.
+    const boundaries = getTableBoundaries(
+        project,
+        dataSource,
+        orientation,
+        language,
+        page.sizes[1],
+        page.sizes[0]
+    );
 
-    for (let [index, boundary] of boundaries.entries()) {
-        const rect = new cv.Rect(
-            boundary.x - 15,
-            boundary.y - 15,
-            boundary.w + 30,
-            boundary.h + 30
-        );
-        const table = page.getRegion(rect);
+    const result = {};
+    boundaries.forEach(bounds => {
+        if (bounds.pageNo === undefined || bounds.pageNo === pageNo) {
+            const rect = new cv.Rect(bounds.x, bounds.y, bounds.w, bounds.h);
 
-        cv.imwrite(`${index}.png`, table);
-    }
+            result[bounds.id] = page.getRegion(rect);
+        }
+    });
+
+    return result;
 }
 
 /**
@@ -28,65 +38,50 @@ async function extractVariables(page, project, dataSource) {
  * This works by hooking pdfmake's templating engine, and running the generation
  * in order to steal the positions of the items of interest.
  */
-function getVariableBoundaries(
-    project,
-    dataSource,
-    pageOrientation = 'portrait',
-    language = 'en',
-    width = 1050,
-    height = 1485
-) {
+function getTableBoundaries(project, dataSource, pageOrientation, language, width, height) {
+    const widthRatio = width / 595.28;
+    const heightRatio = height / 841.89;
     const boundaries = [];
-    const stack = [];
 
-    // Hook pdfmake
-    const hookedBegin = TableProcessor.prototype.beginTable;
-    TableProcessor.prototype.beginTable = function (writer) {
-        const { x, y, page, pages } = writer.context();
-        stack.push({
-            x,
-            y,
-            pageId: page,
-            numItems: pages[page].items.length,
-        });
+    const hookedProcessNode = LayoutBuilder.prototype.processNode;
+    let baseY = Infinity;
 
-        return hookedBegin.apply(this, arguments);
-    };
+    LayoutBuilder.prototype.processNode = function (node) {
+        let pageNo, x, y, w, h;
 
-    const hookedEnd = TableProcessor.prototype.endTable;
-    TableProcessor.prototype.endTable = function (writer) {
-        const result = hookedEnd.apply(this, arguments);
-        const item = stack.pop();
+        if (node._varId) {
+            const position = this.writer.writer.getCurrentPositionOnPage();
+            pageNo = position.pageNumber;
+            x = position.left;
+            y = position.top;
 
-        // Ignore nested tables
-        if (stack.length > 0) {
-            return;
-        }
-
-        const { page, pages } = writer.context();
-        const items = pages[page].items.slice(item.numItems);
-
-        let [minX, maxX, minY, maxY] = [Infinity, 0, Infinity, 0];
-        for (let item of items) {
-            if (item.type === 'vector') {
-                if (item.item.x1 && item.item.x1 < minX) minX = item.item.x1;
-                if (item.item.x2 && item.item.x2 > maxX) maxX = item.item.x2;
-                if (item.item.y1 && item.item.y1 < minY) minY = item.item.y1;
-                if (item.item.y2 && item.item.y2 > maxY) maxY = item.item.y2;
+            // Remember lowest y
+            if (y < baseY) {
+                baseY = y;
             }
         }
 
-        const widthRatio = width / 595.28;
-        const heightRatio = height / 841.89;
+        hookedProcessNode.apply(this, arguments);
 
-        boundaries.push({
-            x: minX * widthRatio,
-            y: minY * heightRatio,
-            w: (maxX - minX) * widthRatio,
-            h: (maxY - minY) * heightRatio,
-        });
+        if (node._varId) {
+            const position = this.writer.writer.getCurrentPositionOnPage();
+            if (pageNo !== position.pageNumber) {
+                pageNo = position.pageNumber;
+                y = baseY;
+            }
 
-        return result;
+            w = position.pageInnerWidth;
+            h = position.top - y;
+
+            boundaries.push({
+                id: node._varId,
+                pageNo,
+                x: (x - VAR_MARGIN_OTHER) * widthRatio,
+                y: (y - VAR_MARGIN_TOP) * heightRatio, // variable labels have 15 margin on top
+                w: (w + 2 * VAR_MARGIN_OTHER) * widthRatio,
+                h: (h + VAR_MARGIN_TOP + VAR_MARGIN_OTHER) * heightRatio,
+            });
+        }
     };
 
     // Render pdf
@@ -95,10 +90,33 @@ function getVariableBoundaries(
     stream.end(); // work around bug in pdfkit never ending the stream.
 
     // Fix pdfmake.
-    TableProcessor.prototype.beginTable = hookedBegin;
-    TableProcessor.prototype.endTable = hookedEnd;
+    LayoutBuilder.prototype.processNode = hookedProcessNode;
 
-    return boundaries;
+    return [
+        {
+            id: 'site',
+            x: (20 - METADATA_MARGIN) * widthRatio,
+            y: (88 - METADATA_MARGIN) * heightRatio,
+            w: (141 + 2 * METADATA_MARGIN) * widthRatio,
+            h: (16 + 2 * METADATA_MARGIN) * heightRatio,
+        },
+        {
+            id: 'period',
+            x: (170 - METADATA_MARGIN) * widthRatio,
+            y: (88 - METADATA_MARGIN) * heightRatio,
+            w: (141 + 2 * METADATA_MARGIN) * widthRatio,
+            h: (16 + 2 * METADATA_MARGIN) * heightRatio,
+        },
+        {
+            id: 'collectedBy',
+            x: (320 - METADATA_MARGIN) * widthRatio,
+            y: (88 - METADATA_MARGIN) * heightRatio,
+            w: (152 + 2 * METADATA_MARGIN) * widthRatio,
+            h: (16 + 2 * METADATA_MARGIN) * heightRatio,
+        },
+
+        ...boundaries,
+    ];
 }
 
-module.exports = { cutImage: extractVariables };
+module.exports = { extractVariables };

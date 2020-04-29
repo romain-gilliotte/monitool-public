@@ -6,7 +6,7 @@ const cv = require('opencv4nodejs');
  *
  * @see https://bretahajek.com/2017/01/scanning-documents-photos-opencv/
  */
-function extractPage(image, width = 1050, height = 1485) {
+function extractPage(image, width, height) {
     const edges = getEdges(image);
     const contourPoints = getPageContour(edges).getPoints();
 
@@ -21,13 +21,13 @@ function extractPage(image, width = 1050, height = 1485) {
     return image.warpPerspective(transform, new cv.Size(width, height));
 }
 
-function getEdges(img) {
-    return img
-        .bilateralFilter(9, 75, 75)
-        .adaptiveThreshold(255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 115, 4)
-        .medianBlur(11)
-        .copyMakeBorder(5, 5, 5, 5, cv.BORDER_CONSTANT, 0) // in example, last param is Vec3, but cause crash?
-        .canny(200, 250);
+function getEdges(image) {
+    image = image.cvtColor(cv.COLOR_BGR2GRAY);
+    image = image.bilateralFilter(9, 75, 75);
+    image = image.adaptiveThreshold(255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 115, 4);
+    image = image.medianBlur(11);
+    image = image.canny(200, 250);
+    return image;
 }
 
 function getPageContour(edges) {

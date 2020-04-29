@@ -75,10 +75,13 @@ function createDataSourceDocDef(
                 {
                     margin: [20, 20, 20, 0],
                     columns: [
-                        [
-                            { text: dataSource.name, style: 'header', width: '*' },
-                            createMetadata(language),
-                        ],
+                        {
+                            width: '*',
+                            stack: [
+                                { text: dataSource.name, style: 'header' },
+                                createMetadata(language),
+                            ],
+                        },
                         {
                             width: 'auto',
                             qr: buffer,
@@ -107,45 +110,51 @@ function createDataSourceDocDef(
 function createMetadata(language) {
     return {
         columns: [
-            [
-                {
-                    style: 'variableName',
-                    text: strings[language].collection_site,
-                },
-                {
-                    table: {
-                        headerRows: 0,
-                        widths: ['*'],
-                        body: [[{ style: 'normal', text: ' ' }]],
+            {
+                stack: [
+                    {
+                        style: 'variableName',
+                        text: strings[language].collection_site,
                     },
-                    margin: [0, 0, 10, 0],
-                },
-            ],
-            [
-                {
-                    style: 'variableName',
-                    text: strings[language].covered_period,
-                },
-                {
-                    table: {
-                        headerRows: 0,
-                        widths: ['*'],
-                        body: [[{ style: 'normal', text: ' ' }]],
+                    {
+                        table: {
+                            headerRows: 0,
+                            widths: ['*'],
+                            body: [[{ style: 'normal', text: ' ' }]],
+                        },
+                        margin: [0, 0, 10, 0],
                     },
-                    margin: [0, 0, 10, 0],
-                },
-            ],
-            [
-                { style: 'variableName', text: strings[language].collected_by },
-                {
-                    table: {
-                        headerRows: 0,
-                        widths: ['*'],
-                        body: [[{ style: 'normal', text: ' ' }]],
+                ],
+            },
+            {
+                stack: [
+                    {
+                        style: 'variableName',
+                        text: strings[language].covered_period,
                     },
-                    margin: [0, 0, 0, 0],
-                },
-            ],
+                    {
+                        table: {
+                            headerRows: 0,
+                            widths: ['*'],
+                            body: [[{ style: 'normal', text: ' ' }]],
+                        },
+                        margin: [0, 0, 10, 0],
+                    },
+                ],
+            },
+            {
+                stack: [
+                    { style: 'variableName', text: strings[language].collected_by },
+                    {
+                        table: {
+                            headerRows: 0,
+                            widths: ['*'],
+                            body: [[{ style: 'normal', text: ' ' }]],
+                        },
+                        margin: [0, 0, 0, 0],
+                    },
+                ],
+            },
         ],
     };
 }
@@ -193,7 +202,10 @@ function createVariableDocDef(variable) {
     for (var j = 0; j < dataColsPerRow; ++j) widths.push('*');
 
     // Create stack with label and table.
-    var result = {
+    return {
+        _varId: variable.id,
+        _varName: variable.name,
+        unbreakable: true,
         stack: [
             { style: 'variableName', text: variable.name },
             {
@@ -206,20 +218,6 @@ function createVariableDocDef(variable) {
             },
         ],
     };
-
-    // FIXME This is not ideal at all, but the best that can be done with current pdfmake API.
-    // if table is not very long, make sure it is not cut in the middle.
-    if (body.length < 20)
-        result = {
-            layout: 'noBorders',
-            table: {
-                dontBreakRows: true,
-                widths: ['*'],
-                body: [[result]],
-            },
-        };
-
-    return result;
 }
 
 function makeTopRows(partitions) {

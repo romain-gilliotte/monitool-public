@@ -69,10 +69,19 @@ module.component(__componentName, {
             );
 
             this.loading = true;
-            this.load();
+            this.loadCalendar();
+            this.loadImages();
         }
 
-        async load() {
+        async loadImages() {
+            console.log('eeee');
+            const axios = require('axios');
+            const response = await axios.get(`/project/${this.project._id}/scanned-forms`);
+            this.images = response.data;
+            this.$scope.$apply();
+        }
+
+        async loadCalendar() {
             const myInvitation = this.invitations.find(i => i.email === this.userEmail);
             const siteIds = myInvitation ? myInvitation.dataEntry.siteIds : null;
 
