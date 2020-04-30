@@ -127,7 +127,7 @@ module.component(__componentName, {
             this.variables = this.dataSource.elements.filter(variable => variable.active);
             if (this.mode !== 'manual') {
                 this.variables = this.variables.filter(
-                    variable => this.submission.sections[variable.id]
+                    variable => this.submission.file.coords[variable.id]
                 );
             }
 

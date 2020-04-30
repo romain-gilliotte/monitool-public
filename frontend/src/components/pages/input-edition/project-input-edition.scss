@@ -39,11 +39,12 @@ project-input-edition {
         display: flex;
         flex-direction: row;
 
-        img {
+        image-scroll {
             display: block;
-            height: 24px;
-            border-radius: 4px;
             margin-right: 10px;
+            width: 155px;
+            padding: 0;
+            border: none;
         }
 
         .form-control {

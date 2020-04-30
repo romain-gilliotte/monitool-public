@@ -4,14 +4,14 @@ const cv = require('opencv4nodejs');
 const client = require('twilio')();
 const { extractPage } = require('./cv/extract-page');
 const { readQrCode } = require('./cv/extract-context');
-const { extractVariables } = require('./cv/extract-variables');
+const { extractVarCoords } = require('./cv/extract-variables');
 
 const width = 1050;
 const height = 1485;
 
 queue.process('process-whatapp-msg', async job => {
     const projects = database.collection('project');
-    const dataentries = database.collection('input_img');
+    const dataentries = database.collection('input_upload');
     const { From, To, MediaUrl0, Body } = job.data;
 
     let reply;
@@ -32,15 +32,14 @@ queue.process('process-whatapp-msg', async job => {
         dataentries.insertOne({
             projectId: project._id,
             dataSourceId: dataSource.id,
+            inputId: null,
             receivedAt: new Date(),
             from: From,
-            to: To,
             body: Body,
-            page: toPNG(page),
-            sections: _.mapValues(
-                extractVariables(project, dataSource, orientation, language, page, pageNo),
-                toPNG
-            ),
+            file: {
+                data: toJPG(page),
+                coords: extractVarCoords(project, dataSource, orientation, language, page, pageNo),
+            },
         });
 
         reply = `J'ai recu une photo de la page ${pageNo} de ${dataSource.name} dans le project ${project.name}`;
@@ -63,7 +62,7 @@ queue.process('process-whatapp-msg', async job => {
     await client.messages.create({ from: To, to: From, body: reply });
 });
 
-function toPNG(image) {
+function toJPG(image) {
     const clean = image.cvtColor(cv.COLOR_BGR2GRAY).normalize(0, 255, cv.NORM_MINMAX);
-    return cv.imencode('.png', clean, [cv.IMWRITE_PNG_COMPRESSION, 9]);
+    return cv.imencode('.jpg', clean, [cv.IMWRITE_JPEG_QUALITY, 75]);
 }

@@ -7,6 +7,7 @@ const OUTPUT_MARGIN = 30;
 module.component(__componentName, {
     bindings: {
         data: '<',
+        coords: '<',
     },
 
     template: `
@@ -21,28 +22,54 @@ module.component(__componentName, {
         }
 
         $onChanges(changes) {
+            const url = `data:image/jpeg;base64,${this.data}`;
+
             const img = new Image();
             img.onload = () => {
                 this.w = img.naturalWidth;
                 this.h = img.naturalHeight;
-                this.smw = this.w - 2 * OUTPUT_MARGIN;
-                this.smh = this.h - 2 * OUTPUT_MARGIN;
                 this.onMouseLeave();
+
+                // Set image and transition properties in timeout, to avoid having the
+                // cells scrolling from zero on page load.
+                setTimeout(() => {
+                    this.$inner.css({
+                        'background-image': `url('${url}')`,
+                        'transition-property': `padding-top, background-size, background-position`,
+                    });
+                }, 0);
             };
 
-            img.src = `data:image/png;base64,${this.data}`;
-
-            this.$inner.css('background-image', `url('data:image/png;base64,${this.data}')`);
+            img.src = url;
         }
 
         onMouseEnter() {
-            this.$inner.css('background-size', `100%`);
-            this.$inner.css('padding-top', `${(100 * this.h) / this.w}%`);
+            this.setPosition({
+                x: this.coords.x - 20,
+                y: this.coords.y - 40,
+                w: this.coords.w + 40,
+                h: this.coords.h + 80,
+            });
         }
 
         onMouseLeave() {
-            this.$inner.css('background-size', `${(100 * this.w) / this.smw}%`);
-            this.$inner.css('padding-top', `${(100 * this.smh) / this.smw}%`);
+            this.setPosition(this.coords);
+        }
+
+        /**
+         * Spent hours writing this, and finally
+         */
+        setPosition(coords) {
+            const ratio = coords.h / coords.w;
+            const size_x = this.w / coords.w;
+            const pos_x = coords.x / (this.w - coords.w);
+            const pos_y = coords.y / (this.h - coords.h);
+
+            this.$inner.css({
+                'padding-top': `${100 * ratio}%`,
+                'background-position': `${100 * pos_x}% ${100 * pos_y}%`,
+                'background-size': `${100 * size_x}%`,
+            });
         }
     },
 });

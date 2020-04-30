@@ -140,20 +140,9 @@ router.get('/project/:id/user', async ctx => {
 });
 
 router.get('/project/:id/scanned-forms', async ctx => {
-    const forms = await database.collection('input_img').find(
-        { projectId: new ObjectId(ctx.params.id) },
-        {
-            projection: {
-                receivedAt: 1,
-                dataSourceId: 1,
-                from: 1,
-                body: 1,
-                'sections.site': 1,
-                'sections.period': 1,
-                'sections.collectedBy': 1,
-            },
-        }
-    );
+    const forms = await database
+        .collection('input_upload')
+        .find({ projectId: new ObjectId(ctx.params.id) });
 
     ctx.response.type = 'application/json';
     ctx.response.body = forms.pipe(JSONStream.stringify());
@@ -161,7 +150,7 @@ router.get('/project/:id/scanned-forms', async ctx => {
 
 router.get('/project/:projectId/scanned-forms/:id', async ctx => {
     try {
-        ctx.response.body = await database.collection('input_img').findOne({
+        ctx.response.body = await database.collection('input_upload').findOne({
             _id: new ObjectId(ctx.params.id),
             projectId: new ObjectId(ctx.params.projectId),
         });

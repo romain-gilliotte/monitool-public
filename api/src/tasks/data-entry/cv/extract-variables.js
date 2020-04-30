@@ -3,13 +3,13 @@ const LayoutBuilder = require('pdfmake/src/layoutBuilder');
 const { printer, createDataSourceDocDef } = require('../../downloads/datasource-pdf');
 
 const METADATA_MARGIN = 3;
-const VAR_MARGIN_TOP = -5;
-const VAR_MARGIN_OTHER = 20;
+const VAR_MARGIN_TOP = -20;
+const VAR_MARGIN_OTHER = 5;
 
 /**
  * Retrieve variables tables from correctly aligned page image.
  */
-function extractVariables(project, dataSource, orientation, language, page, pageNo) {
+function extractVarImgs(project, dataSource, orientation, language, page, pageNo) {
     // Extract boundaries of all tables.
     const boundaries = getTableBoundaries(
         project,
@@ -33,12 +33,42 @@ function extractVariables(project, dataSource, orientation, language, page, page
 }
 
 /**
+ * Retrieve variables tables from correctly aligned page image.
+ */
+function extractVarCoords(project, dataSource, orientation, language, page, pageNo) {
+    const imgs = extractVarImgs(project, dataSource, orientation, language, page, pageNo);
+    for (let key in imgs) {
+        cv.imwrite(`${key}.png`, imgs[key]);
+    }
+
+    // Extract boundaries of all tables.
+    const boundaries = getTableBoundaries(
+        project,
+        dataSource,
+        orientation,
+        language,
+        page.sizes[1],
+        page.sizes[0]
+    );
+
+    const result = {};
+    boundaries.forEach(bounds => {
+        if (bounds.pageNo === undefined || bounds.pageNo === pageNo) {
+            const { x, y, w, h } = bounds;
+            result[bounds.id] = { x, y, w, h };
+        }
+    });
+
+    return result;
+}
+
+/**
  * Retrieve the coordinates of all tables within a given paper form.
  *
  * This works by hooking pdfmake's templating engine, and running the generation
  * in order to steal the positions of the items of interest.
  */
-function getTableBoundaries(project, dataSource, pageOrientation, language, width, height) {
+function getTableBoundaries(project, dataSource, orientation, language, width, height) {
     const widthRatio = width / 595.28;
     const heightRatio = height / 841.89;
     const boundaries = [];
@@ -85,7 +115,7 @@ function getTableBoundaries(project, dataSource, pageOrientation, language, widt
     };
 
     // Render pdf
-    const docDef = createDataSourceDocDef(project._id, dataSource, pageOrientation, language);
+    const docDef = createDataSourceDocDef(project._id, dataSource, orientation, language);
     const stream = printer.createPdfKitDocument(docDef);
     stream.end(); // work around bug in pdfkit never ending the stream.
 
@@ -119,4 +149,4 @@ function getTableBoundaries(project, dataSource, pageOrientation, language, widt
     ];
 }
 
-module.exports = { extractVariables };
+module.exports = { extractVarImgs, extractVarCoords };
