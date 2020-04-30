@@ -80,25 +80,15 @@ module.component(__componentName, {
         }
 
         async $postLink() {
-            const withSum =
-                this.partitions.length > 0 && this.partitions.every(p => p.aggregation === 'sum');
-
-            this.withSumX = withSum && this.distribution !== this.partitions.length;
-            this.withSumY = withSum && this.distribution !== 0;
-
             const [colPartitions, rowPartitions] = [
                 this.partitions.slice(this.distribution),
                 this.partitions.slice(0, this.distribution),
             ];
 
             this._width =
-                colPartitions.reduce((m, p) => m * p.elements.length, 1) +
-                rowPartitions.length +
-                (this.withSumX ? 1 : 0);
+                colPartitions.reduce((m, p) => m * p.elements.length, 1) + rowPartitions.length;
             this._height =
-                rowPartitions.reduce((m, p) => m * p.elements.length, 1) +
-                colPartitions.length +
-                (this.withSumY ? 1 : 0);
+                rowPartitions.reduce((m, p) => m * p.elements.length, 1) + colPartitions.length;
 
             await loadHot();
             this.handsOnTable = new Handsontable(this.$element[0].firstElementChild, {
@@ -148,12 +138,7 @@ module.component(__componentName, {
          */
         selectLastCell() {
             this.handsOnTable.selectCells([
-                [
-                    this.withSumY ? this._height - 2 : this._height - 1,
-                    this.withSumX ? this._width - 2 : this._width - 1,
-                    this.withSumY ? this._height - 2 : this._height - 1,
-                    this.withSumX ? this._width - 2 : this._width - 1,
-                ],
+                [this._height - 1, this._width - 1, this._height - 1, this._width - 1],
             ]);
         }
 
@@ -166,14 +151,8 @@ module.component(__componentName, {
                 e.stopImmediatePropagation(); // do no let other instances of number-table to get the event.
                 e.preventDefault(); // do not let the browser use this event (ie: to select the address bar or something else).
 
-                const [minX, maxX] = [
-                    this.distribution,
-                    this.withSumX ? this._width - 1 : this._width,
-                ];
-                const [minY, maxY] = [
-                    this.partitions.length - this.distribution,
-                    this.withSumY ? this._height - 1 : this._height,
-                ];
+                const [minX, maxX] = [this.distribution, this._width];
+                const [minY, maxY] = [this.partitions.length - this.distribution, this._height];
 
                 // Select only one zone in the table
                 selection.length = 1;
@@ -239,9 +218,6 @@ module.component(__componentName, {
                             this.handsOnTable.setDataAtCell(y, x, newValue);
                     } catch (e) {}
                 }
-
-                // Update the totals on last columns and last row.
-                this._updateSums(y, x);
             });
 
             // tell this.ngModelCtrl that the data was changed from HandsOnTable.
@@ -264,12 +240,6 @@ module.component(__componentName, {
                         td.style.background = '#eee';
                     },
                 };
-            // total
-            else if (
-                (this.withSumX && col == this._width - 1) ||
-                (this.withSumY && row === this._height - 1)
-            )
-                return { type: 'numeric', readOnly: true };
             // editable field
             else
                 return {
@@ -278,42 +248,6 @@ module.component(__componentName, {
                         callback(value === null || Number.isFinite(value));
                     },
                 };
-        }
-
-        _updateSums(editedY, editedX) {
-            const numPartitions = this.partitions.length;
-            let sum;
-
-            const isSumX = this.withSumX && editedX === this._width - 1;
-            const isSumY = this.withSumY && editedY === this._height - 1;
-
-            // guard against infinite loop (the total update trigering another update etc...)
-            if (this.withSumX && !isSumX) {
-                sum = 0;
-                for (let x = this.distribution; x < this._width - 1; ++x) {
-                    const val = this.handsOnTable.getDataAtCell(editedY, x);
-                    if (typeof val === 'number') sum += val;
-                }
-                this.handsOnTable.setDataAtCell(editedY, this._width - 1, sum);
-            }
-
-            if (this.withSumY && !isSumY) {
-                sum = 0;
-                for (let y = numPartitions - this.distribution; y < this._height - 1; ++y) {
-                    const val = this.handsOnTable.getDataAtCell(y, editedX);
-                    if (typeof val === 'number') sum += val;
-                }
-                this.handsOnTable.setDataAtCell(this._height - 1, editedX, sum);
-            }
-
-            if (this.withSumX && this.withSumY && !isSumX && isSumY) {
-                sum = 0;
-                for (let x = this.distribution; x < this._width - 1; ++x) {
-                    const val = this.handsOnTable.getDataAtCell(this._height - 1, x);
-                    if (typeof val === 'number') sum += val;
-                }
-                this.handsOnTable.setDataAtCell(this._height - 1, this._width - 1, sum);
-            }
         }
 
         /**
@@ -333,39 +267,21 @@ module.component(__componentName, {
                 rowPartitions = this.partitions.slice(0, this.distribution);
 
             var topRows = this._makeHeaderRows(colPartitions);
-            // super ugly hack so that _makeHeaderCols add the sum row only if relevant
-            [this.withSumX, this.withSumY] = [this.withSumY, this.withSumX];
-
             var bodyRows = this._makeHeaderCols(rowPartitions);
-            [this.withSumX, this.withSumY] = [this.withSumY, this.withSumX]; // restore variable to their proper values.
 
             // when distribution == 0, rowPartitions = [], and there is nowhere to enter the data.
             if (!bodyRows.length) bodyRows.push([]);
 
             var dataColsPerRow = topRows.length ? topRows[0].length : 1;
-            if (this.withSumX) dataColsPerRow -= 1;
 
             // Add data fields to bodyRows
             let accumulator;
-            if (this.withSumY) {
-                accumulator = new Array(dataColsPerRow);
-                accumulator.fill(0);
-            }
 
             bodyRows.forEach(bodyRow => {
                 if (modelValue.length) {
                     const data = modelValue.splice(0, dataColsPerRow);
-                    if (this.withSumX) data.push(data.reduce((m, e) => m + e, 0));
 
                     bodyRow.push(...data);
-
-                    if (this.withSumY)
-                        for (var i = 0; i < dataColsPerRow; ++i) accumulator[i] += data[i];
-                } else {
-                    if (!this.withSumY) throw new Error('should not happen');
-
-                    bodyRow.push(...accumulator);
-                    if (this.withSumX) bodyRow.push(accumulator.reduce((m, e) => m + e, 0));
                 }
             });
 
@@ -387,8 +303,8 @@ module.component(__componentName, {
             const [minX, minY, maxX, maxY] = [
                 this.distribution,
                 this.partitions.length - this.distribution,
-                viewValue[0].length - (this.withSumX ? 1 : 0),
-                viewValue.length - (this.withSumY ? 1 : 0),
+                viewValue[0].length,
+                viewValue.length,
             ];
 
             var modelValue = [];
@@ -426,8 +342,6 @@ module.component(__componentName, {
                     var colLimit = colIndex + currentColSpan - 1;
                     for (; colIndex < colLimit; ++colIndex) row.push('');
                 }
-
-                if (this.withSumX) row.push('Total');
 
                 // push to body
                 body.push(row);
