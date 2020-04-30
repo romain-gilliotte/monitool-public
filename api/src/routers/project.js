@@ -140,9 +140,14 @@ router.get('/project/:id/user', async ctx => {
 });
 
 router.get('/project/:id/scanned-forms', async ctx => {
-    const forms = await database
-        .collection('input_upload')
-        .find({ projectId: new ObjectId(ctx.params.id) });
+    const forms = await database.collection('input_upload').find(
+        { projectId: new ObjectId(ctx.params.id) },
+        {
+            projection: {
+                'file.data': 0,
+            },
+        }
+    );
 
     ctx.response.type = 'application/json';
     ctx.response.body = forms.pipe(JSONStream.stringify());
@@ -150,13 +155,33 @@ router.get('/project/:id/scanned-forms', async ctx => {
 
 router.get('/project/:projectId/scanned-forms/:id', async ctx => {
     try {
-        ctx.response.body = await database.collection('input_upload').findOne({
-            _id: new ObjectId(ctx.params.id),
-            projectId: new ObjectId(ctx.params.projectId),
-        });
+        ctx.response.body = await database.collection('input_upload').findOne(
+            {
+                _id: new ObjectId(ctx.params.id),
+                projectId: new ObjectId(ctx.params.projectId),
+            },
+            {
+                projection: {
+                    'file.data': 0,
+                },
+            }
+        );
     } catch (e) {
         console.log(e);
     }
+});
+
+router.get('/project/:projectId/scanned-forms/:id/image', async ctx => {
+    const upload = await database.collection('input_upload').findOne(
+        {
+            _id: new ObjectId(ctx.params.id),
+            projectId: new ObjectId(ctx.params.projectId),
+        },
+        { projection: { 'file.data': 1 } }
+    );
+
+    ctx.response.type = 'image/jpeg';
+    ctx.response.body = upload.file.data.buffer;
 });
 
 router.get('/project/:id/report/:query([-_=a-z0-9]+)', async ctx => {

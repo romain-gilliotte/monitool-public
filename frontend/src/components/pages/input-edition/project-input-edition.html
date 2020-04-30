@@ -8,8 +8,8 @@
                 <div class="col-sm-10 metadata">
                     <image-scroll
                         ng-if="$ctrl.mode != 'manual'"
-                        data="$ctrl.submission.file.data"
-                        coords="$ctrl.submission.file.coords.site"
+                        submission="$ctrl.submission"
+                        region="site"
                     ></image-scroll>
 
                     <select
@@ -26,8 +26,8 @@
                 <div class="col-sm-10 metadata">
                     <image-scroll
                         ng-if="$ctrl.mode != 'manual'"
-                        data="$ctrl.submission.file.data"
-                        coords="$ctrl.submission.file.coords.period"
+                        submission="$ctrl.submission"
+                        region="period"
                     ></image-scroll>
                     <select
                         class="form-control"
@@ -79,8 +79,8 @@
                 <div class="col-sm-10">
                     <image-scroll
                         ng-if="$ctrl.mode != 'manual'"
-                        data="$ctrl.submission.file.data"
-                        coords="$ctrl.submission.file.coords[variable.id]"
+                        submission="$ctrl.submission"
+                        region="{{variable.id}}"
                     ></image-scroll>
 
                     <input-grid

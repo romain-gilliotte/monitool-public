@@ -5,8 +5,8 @@ const module = angular.module(__moduleName, []);
 
 module.component(__componentName, {
     bindings: {
-        data: '<',
-        coords: '<',
+        submission: '<',
+        region: '@',
     },
 
     template: `
@@ -21,7 +21,9 @@ module.component(__componentName, {
         }
 
         $onChanges(changes) {
-            const url = `data:image/jpeg;base64,${this.data}`;
+            const src = `/api/project/${this.submission.projectId}/scanned-forms/${this.submission._id}/image`;
+
+            this.coords = this.submission.file.coords[this.region];
 
             const img = new Image();
             img.onload = () => {
@@ -33,13 +35,12 @@ module.component(__componentName, {
                 // cells scrolling from zero on page load.
                 setTimeout(() => {
                     this.$inner.css({
-                        'background-image': `url('${url}')`,
+                        'background-image': `url('${src}')`,
                         'transition-property': `padding-top, background-size, background-position`,
                     });
-                }, 0);
+                }, 5);
             };
-
-            img.src = url;
+            img.src = src;
         }
 
         onClick() {
@@ -50,7 +51,6 @@ module.component(__componentName, {
         onMouseEnter() {
             const x = Math.max(0, this.coords.x - this.offset);
             const y = Math.max(0, this.coords.y - this.offset);
-
             const w = Math.min(this.w - x, this.coords.w + 2 * this.offset);
             const h = Math.min(this.h - y, this.coords.h + 2 * this.offset);
             this.setPosition({ x, y, w, h });
