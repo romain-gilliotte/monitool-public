@@ -6,4 +6,10 @@ project-input-menu {
         overflow-y: auto;
         padding: 10px 20px;
     }
+
+    .data-source-list-group-item {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
 }

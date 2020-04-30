@@ -23,12 +23,20 @@ module.component(__componentName, {
         $onChanges(changes) {
             const src = `/api/project/${this.submission.projectId}/scanned-forms/${this.submission._id}/image`;
 
-            this.coords = this.submission.file.coords[this.region];
-
             const img = new Image();
             img.onload = () => {
                 this.w = img.naturalWidth;
                 this.h = img.naturalHeight;
+
+                // if no region is enabled, display square with top of the page.
+                this.coords = this.submission.file.coords[this.region] || {
+                    x: 0,
+                    y: 0,
+                    w: Math.min(this.w, this.h),
+                    h: Math.min(this.w, this.h),
+                };
+
+                // Set initial values
                 this.onMouseLeave();
 
                 // Set image and transition properties in timeout, to avoid having the

@@ -1,7 +1,7 @@
-import angular from 'angular';
-import Input from '../../../models/input';
 import uiRouter from '@uirouter/angularjs';
+import angular from 'angular';
 import mtFilterTimeSlot from '../../../filters/time-slot';
+import Input from '../../../models/input';
 import mtHelpPanel from '../../shared/misc/help-panel';
 require(__scssPath);
 
@@ -70,15 +70,6 @@ module.component(__componentName, {
 
             this.loading = true;
             this.loadCalendar();
-            this.loadImages();
-        }
-
-        async loadImages() {
-            console.log('eeee');
-            const axios = require('axios');
-            const response = await axios.get(`/project/${this.project._id}/scanned-forms`);
-            this.images = response.data;
-            this.$scope.$apply();
         }
 
         async loadCalendar() {

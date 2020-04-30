@@ -19,6 +19,14 @@
             <div class="panel-collapse">
                 <div class="list-group">
                     <a
+                        ui-sref="project.usage.uploads"
+                        ui-sref-active="active"
+                        class="list-group-item"
+                    >
+                        <i class="fa fa-upload fa-fw"></i>
+                        <span translate="project.uploads"></span>
+                    </a>
+                    <a
                         ng-repeat="dataSource in $ctrl.activeDataSources"
                         ui-sref="project.usage.list({dataSourceId: dataSource.id})"
                         ng-class="{active: ($ctrl.$state.is('project.usage.list') || $ctrl.$state.is('project.usage.edit')) && $ctrl.$stateParams.dataSourceId == dataSource.id}"

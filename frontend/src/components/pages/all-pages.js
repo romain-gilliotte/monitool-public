@@ -20,6 +20,7 @@ import structInvitationList from './structure-invitation/project-invitation-list
 
 import inputMenu from './input-menu/project-input-menu';
 import inputHome from './input-home/project-input-home';
+import inputUploads from './input-uploads/project-input-uploads';
 import inputList from './input-list/project-input-list';
 import inputEdition from './input-edition/project-input-edition';
 
@@ -46,6 +47,7 @@ const module = angular.module(__moduleName, [
     structInvitationList,
     inputMenu,
     inputHome,
+    inputUploads,
     inputList,
     inputEdition,
     reportingGeneral,

@@ -2,7 +2,7 @@ const cv = require('opencv4nodejs');
 const LayoutBuilder = require('pdfmake/src/layoutBuilder');
 const { printer, createDataSourceDocDef } = require('../../downloads/datasource-pdf');
 
-const METADATA_MARGIN = 3;
+const METADATA_MARGIN = 1;
 const VAR_MARGIN_TOP = -20;
 const VAR_MARGIN_OTHER = 5;
 
@@ -36,11 +36,6 @@ function extractVarImgs(project, dataSource, orientation, language, page, pageNo
  * Retrieve variables tables from correctly aligned page image.
  */
 function extractVarCoords(project, dataSource, orientation, language, page, pageNo) {
-    const imgs = extractVarImgs(project, dataSource, orientation, language, page, pageNo);
-    for (let key in imgs) {
-        cv.imwrite(`${key}.png`, imgs[key]);
-    }
-
     // Extract boundaries of all tables.
     const boundaries = getTableBoundaries(
         project,

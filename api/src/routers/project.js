@@ -171,6 +171,16 @@ router.get('/project/:projectId/scanned-forms/:id', async ctx => {
     }
 });
 
+router.patch('/project/:projectId/scanned-forms/:id', async ctx => {
+    await database.collection('input_upload').updateOne(
+        {
+            _id: new ObjectId(ctx.params.id),
+            projectId: new ObjectId(ctx.params.projectId),
+        },
+        { $set: { inputId: ctx.body.inputId } }
+    );
+});
+
 router.get('/project/:projectId/scanned-forms/:id/image', async ctx => {
     const upload = await database.collection('input_upload').findOne(
         {
