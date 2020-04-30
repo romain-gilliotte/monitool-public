@@ -2,7 +2,6 @@ import angular from 'angular';
 require(__scssPath);
 
 const module = angular.module(__moduleName, []);
-const OUTPUT_MARGIN = 30;
 
 module.component(__componentName, {
     bindings: {
@@ -11,7 +10,7 @@ module.component(__componentName, {
     },
 
     template: `
-        <div ng-mouseenter="$ctrl.onMouseEnter()" ng-mouseleave="$ctrl.onMouseLeave()">
+        <div ng-mouseenter="$ctrl.onMouseEnter()" ng-mouseleave="$ctrl.onMouseLeave()" ng-click="$ctrl.onClick()">
         </div>
     `,
 
@@ -43,16 +42,22 @@ module.component(__componentName, {
             img.src = url;
         }
 
+        onClick() {
+            this.offset += 20;
+            this.onMouseEnter();
+        }
+
         onMouseEnter() {
-            this.setPosition({
-                x: this.coords.x - 20,
-                y: this.coords.y - 40,
-                w: this.coords.w + 40,
-                h: this.coords.h + 80,
-            });
+            const x = Math.max(0, this.coords.x - this.offset);
+            const y = Math.max(0, this.coords.y - this.offset);
+
+            const w = Math.min(this.w - x, this.coords.w + 2 * this.offset);
+            const h = Math.min(this.h - y, this.coords.h + 2 * this.offset);
+            this.setPosition({ x, y, w, h });
         }
 
         onMouseLeave() {
+            this.offset = 40;
             this.setPosition(this.coords);
         }
 
@@ -62,13 +67,14 @@ module.component(__componentName, {
         setPosition(coords) {
             const ratio = coords.h / coords.w;
             const size_x = this.w / coords.w;
+            const size_y = this.h / coords.h;
             const pos_x = coords.x / (this.w - coords.w);
             const pos_y = coords.y / (this.h - coords.h);
 
             this.$inner.css({
                 'padding-top': `${100 * ratio}%`,
                 'background-position': `${100 * pos_x}% ${100 * pos_y}%`,
-                'background-size': `${100 * size_x}%`,
+                'background-size': `${100 * size_x}% ${100 * size_y}%`,
             });
         }
     },
