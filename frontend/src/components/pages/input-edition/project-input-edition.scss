@@ -1,4 +1,5 @@
 project-input-edition {
+    /* Global sizing */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -10,5 +11,43 @@ project-input-edition {
         height: 100%;
         overflow: auto;
         padding: 10px 20px;
+        overflow-x: auto;
+
+        > form {
+            max-width: 1000px;
+            margin: auto;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 10px 20px;
+            border-radius: 4px;
+            min-width: 700px;
+        }
+    }
+
+    .form-section {
+        margin-bottom: 25px;
+    }
+
+    .data-section {
+        .form-group {
+            margin-bottom: 25px;
+        }
+    }
+
+    /* general information */
+    .metadata {
+        display: flex;
+        flex-direction: row;
+
+        img {
+            display: block;
+            height: 24px;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .form-control {
+            flex: 1;
+        }
     }
 }

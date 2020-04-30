@@ -50,7 +50,7 @@ module.component(__componentName, {
                 this.handsOnTable && this.handsOnTable.loadData(this.ngModelCtrl.$viewValue);
 
             this.ngModelCtrl.$validators.isNumber = modelValue =>
-                modelValue.every(v => typeof v === 'number' || v === null);
+                modelValue && modelValue.every(v => typeof v === 'number' || v === null);
         }
 
         async $onDestroy() {
@@ -259,8 +259,6 @@ module.component(__componentName, {
 
             // Clone modelValue to avoid detroying the original model
             modelValue = modelValue.slice();
-
-            var viewValue = [];
 
             // Start by creating the headers.
             var colPartitions = this.partitions.slice(this.distribution),

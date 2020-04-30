@@ -23,6 +23,7 @@ function extractPage(image, width, height) {
 
 function getEdges(image) {
     image = image.cvtColor(cv.COLOR_BGR2GRAY);
+    image = image.normalize(0, 255, cv.NORM_MINMAX);
     image = image.bilateralFilter(9, 75, 75);
     image = image.adaptiveThreshold(255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 115, 4);
     image = image.medianBlur(11);

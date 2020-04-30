@@ -3,8 +3,8 @@ const LayoutBuilder = require('pdfmake/src/layoutBuilder');
 const { printer, createDataSourceDocDef } = require('../../downloads/datasource-pdf');
 
 const METADATA_MARGIN = 3;
-const VAR_MARGIN_TOP = -20;
-const VAR_MARGIN_OTHER = 5;
+const VAR_MARGIN_TOP = -5;
+const VAR_MARGIN_OTHER = 20;
 
 /**
  * Retrieve variables tables from correctly aligned page image.

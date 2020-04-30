@@ -1,67 +1,89 @@
 <div>
-    {{}}
-
     <form class="form-horizontal" name="$ctrl.inputForm">
-        <legend translate="project.general_informations"></legend>
+        <div class="form-section">
+            <legend translate="project.general_informations"></legend>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label" translate="project.collection_form"></label>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" translate="project.collection_site"></label>
+                <div class="col-sm-10 metadata">
+                    <image
+                        ng-if="$ctrl.mode != 'manual'"
+                        ng-src="{{'data:image/png;base64,' + $ctrl.submission.sections.site}}"
+                    />
+                    <select
+                        class="form-control"
+                        ng-options="site.id as site.name for site in $ctrl.sites"
+                        ng-model="$ctrl.siteId"
+                        ng-disabled="!$ctrl.metadataEditable"
+                    ></select>
+                </div>
+            </div>
 
-            <div class="col-sm-10">
-                <input class="form-control disabled" disabled ng-value="::$ctrl.form.name" />
+            <div class="form-group">
+                <label class="col-sm-2 control-label" translate="project.covered_period"></label>
+                <div class="col-sm-10 metadata">
+                    <image
+                        ng-if="$ctrl.mode != 'manual'"
+                        ng-src="{{'data:image/png;base64,' + $ctrl.submission.sections.period}}"
+                    />
+                    <select
+                        class="form-control"
+                        ng-options="slot as slot|formatSlot for slot in $ctrl.periods"
+                        ng-model="$ctrl.period"
+                        ng-disabled="!$ctrl.metadataEditable"
+                    ></select>
+                </div>
             </div>
         </div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label" translate="project.collection_site"></label>
+        <div class="form-section data-section">
+            <legend>
+                <div class="btn-group pull-right" ng-if="!$ctrl.metadataEditable">
+                    <a ng-click="$ctrl.fillWithZeros()" class="btn btn-default btn-xs">
+                        <i class="fa fa-pencil"></i>
+                        {{'project.fill_with_zeros'|translate}}
+                    </a>
 
-            <div class="col-sm-10">
-                <input class="form-control disabled" disabled ng-value="::$ctrl.entity.name" />
-            </div>
-        </div>
+                    <a
+                        ng-if="$ctrl.previousInput"
+                        ng-click="$ctrl.copy()"
+                        class="btn btn-default btn-xs"
+                    >
+                        <i class="fa fa-clipboard"></i>
+                        {{'project.fill_with_last_input'|translate}}
+                    </a>
+                </div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label" translate="project.covered_period"></label>
+                {{'project.data'|translate}}
+            </legend>
 
-            <div class="col-sm-10">
-                <input
-                    class="form-control disabled"
-                    disabled
-                    ng-value="::$ctrl.period|formatSlotLong:$ctrl.project.start:$ctrl.project.end"
-                />
-            </div>
-        </div>
-
-        <legend>
-            <div class="btn-group pull-right">
-                <a ng-click="$ctrl.fillWithZeros()" class="btn btn-default btn-xs">
-                    <i class="fa fa-pencil"></i>
-                    {{'project.fill_with_zeros'|translate}}
-                </a>
-
-                <a
-                    ng-if="$ctrl.previousInput"
-                    ng-click="$ctrl.copy()"
-                    class="btn btn-default btn-xs"
-                >
-                    <i class="fa fa-clipboard"></i>
-                    {{'project.fill_with_last_input'|translate}}
-                </a>
-            </div>
-
-            {{'project.data'|translate}}
-        </legend>
-
-        <div class="form-group" ng-repeat="content in $ctrl.input.content">
-            <label class="col-sm-2 control-label"
-                >{{$ctrl.variablesById[content.variableId].name}}</label
+            <button
+                ng-if="$ctrl.metadataEditable"
+                ng-disabled="!$ctrl.siteId || !$ctrl.period"
+                ng-click="$ctrl.onMetadataSet()"
+                class="btn btn-default"
             >
+                Charger les données
+            </button>
 
-            <div class="col-sm-10">
-                <input-grid
-                    ng-model="content.data"
-                    variable="$ctrl.variablesById[content.variableId]"
-                ></input-grid>
+            <div
+                class="form-group"
+                ng-if="!$ctrl.metadataEditable"
+                ng-repeat="variable in $ctrl.variables"
+            >
+                <label class="col-sm-2 control-label">{{variable.name}}</label>
+
+                <div class="col-sm-10">
+                    <image-scroll
+                        ng-if="$ctrl.mode != 'manual'"
+                        data="$ctrl.submission.sections[variable.id]"
+                    ></image-scroll>
+
+                    <input-grid
+                        variable="variable"
+                        ng-model="$ctrl.contentByVariableId[variable.id].data"
+                    ></input-grid>
+                </div>
             </div>
         </div>
     </form>

@@ -22,6 +22,9 @@
             <td><img ng-src="{{'data:image/png;base64,' + image.sections.period}}" /></td>
             <td><img ng-src="{{'data:image/png;base64,' + image.sections.collectedBy}}" /></td>
             <td>{{image.body}}</td>
+            <td>
+                <a ui-sref="project.usage.data_entry({submissionId: image._id})">fait qqchose</a>
+            </td>
         </tr>
     </tbody>
 </table>
@@ -42,14 +45,14 @@
                         <a
                             class="btn btn-xs btn-default"
                             ng-if="$ctrl.inputsStatus[date][site.id] !== 0"
-                            ui-sref="project.usage.edit({dataSourceId: $ctrl.dataSource.id, period: date, entityId: site.id})"
+                            ui-sref="project.usage.edit({dataSourceId: $ctrl.dataSource.id, period: date, siteId: site.id})"
                             translate="project.input_status.done"
                             translate-values="::{value: $ctrl.inputsStatus[date][site.id]}"
                         ></a>
 
                         <a
                             class="btn btn-xs btn-primary"
-                            ui-sref="project.usage.edit({dataSourceId: $ctrl.dataSource.id, period: date, entityId: site.id})"
+                            ui-sref="project.usage.edit({dataSourceId: $ctrl.dataSource.id, period: date, siteId: site.id})"
                             ng-if="$ctrl.inputsStatus[date][site.id] === 0"
                             translate="project.input_status.expected"
                         ></a>

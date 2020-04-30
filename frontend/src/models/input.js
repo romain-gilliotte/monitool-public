@@ -78,9 +78,12 @@ export default class Input {
     }
 
     /** Fetch specific data entry by calling the reporting service. */
-    static async fetchInput(project, siteId, dataSourceId, period) {
+    static async fetchInput(project, siteId, dataSourceId, period, variableIds = null) {
         const dataSource = project.forms.find(ds => ds.id === dataSourceId);
-        const variables = dataSource.elements.filter(variable => variable.active);
+        const variables = dataSource.elements.filter(
+            variable =>
+                (variableIds === null || variableIds.includes(variable.id)) && variable.active
+        );
 
         return new Input({
             projectId: project._id,
@@ -119,6 +122,8 @@ export default class Input {
                             attribute: 'element',
                         })),
                     };
+
+                    // fixme use utility method
                     const b64Query = btoa(JSON.stringify(query))
                         .replace('+', '-')
                         .replace('/', '_')

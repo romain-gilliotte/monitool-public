@@ -107,6 +107,10 @@ module.exports = {
             title: `Édition d'une saisie`,
             paragraph: /* html */ `Vérifiez bien le lieu de collecte et la période couverte de la fiche de saisie avant de rentrer vos données`,
         },
+        'project.usage.data_entry': {
+            title: `Édition d'une saisie`,
+            paragraph: /* html */ `Permet de saisir des formulaires papier`,
+        },
         'project.usage.general': {
             title: `Rapport général`,
             paragraph: /* html */ `Cette page vous permet d'explorer vos données hierarchiquement en partant d'une vision général de votre projet.`,
@@ -520,7 +524,7 @@ module.exports = {
             `,
         },
         {
-            prefixes: ['project.usage.edit'],
+            prefixes: ['project.usage.edit', 'project.usage.data_entry'],
             question: `Comment passer rapidement d'une case à l'autre?`,
             answer: /* html */ `
                 Lors de la saisie de données, la touch Tab de votre clavier vous permet de naviguer entre les cases.<br/>
@@ -528,7 +532,7 @@ module.exports = {
             `,
         },
         {
-            prefixes: ['project.usage.edit'],
+            prefixes: ['project.usage.edit', 'project.usage.data_entry'],
             question: `Je saisie à partir de fiches papier remontées par plusieurs intervenants par lieu de collecte. Comment saisir plus rapidement?`,
             answer: /* html */ `
                 Si vous disposez de plusieurs formulaires papier à saisir par lieu (par exemple, un par travailleur social),
@@ -543,7 +547,7 @@ module.exports = {
             `,
         },
         {
-            prefixes: ['project.usage.edit'],
+            prefixes: ['project.usage.edit', 'project.usage.data_entry'],
             question: `À quoi sert le bouton "Remplir avec les données de la période précédente"`,
             answer: /* html */ `
                 À gagner du temps dans certains cas particuliers!<br/>
@@ -553,7 +557,7 @@ module.exports = {
             `,
         },
         {
-            prefixes: ['project.usage.edit'],
+            prefixes: ['project.usage.edit', 'project.usage.data_entry'],
             question: `À quoi sert le bouton "Remplacer les valeurs manquantes par zéro"`,
             answer: /* html */ `
                 À gagner du temps dans certains cas particuliers!<br/>
@@ -562,7 +566,7 @@ module.exports = {
             `,
         },
         {
-            prefixes: ['project.usage.edit'],
+            prefixes: ['project.usage.edit', 'project.usage.data_entry'],
             question: `Que se passe-t'il si je laisse certaines cases en blanc?`,
             answer: /* html */ `
                 Attention!<br/>

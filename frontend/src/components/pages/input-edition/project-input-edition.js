@@ -1,12 +1,14 @@
 import uiRouter from '@uirouter/angularjs';
 import angular from 'angular';
+import axios from 'axios';
 import TimeSlot from 'timeslot-dag';
 import mtTimeSlot from '../../../filters/time-slot';
 import Input from '../../../models/input';
 import mtHelpPanel from '../../shared/misc/help-panel';
 import mtSaveBlock from '../../shared/project/save-block';
+import mtImageScroll from './image-scroll';
 import mtInputGrid from './input-grid';
-import axios from 'axios';
+import { TimeDimension } from 'olap-in-memory';
 require(__scssPath);
 
 const module = angular.module(__moduleName, [
@@ -15,74 +17,73 @@ const module = angular.module(__moduleName, [
     mtInputGrid,
     mtSaveBlock,
     mtHelpPanel,
+    mtImageScroll,
 ]);
 
 module.config($stateProvider => {
     $stateProvider.state('project.usage.edit', {
-        url: '/input/edit/:dataSourceId/:period/:entityId',
+        url: '/input/manual/:dataSourceId/:period/:siteId',
         component: __componentName,
         resolve: {
-            dsId: $stateParams => $stateParams.dataSourceId,
-            period: $stateParams => $stateParams.period,
-            siteId: $stateParams => $stateParams.entityId,
-            input: (loadedProject, $stateParams) => {
-                return Input.fetchInput(
-                    loadedProject,
-                    $stateParams.entityId,
-                    $stateParams.dataSourceId,
-                    $stateParams.period
-                );
-            },
-            previousInput: (loadedProject, $stateParams) => {
-                const previousPeriod = new TimeSlot($stateParams.period).previous().value;
-                return Input.fetchInput(
-                    loadedProject,
-                    $stateParams.entityId,
-                    $stateParams.dataSourceId,
-                    previousPeriod
-                );
-            },
+            mode: () => 'manual',
+            metadata: $stateParams => ({
+                dataSourceId: $stateParams.dataSourceId,
+                period: $stateParams.period,
+                siteId: $stateParams.siteId,
+            }),
         },
     });
-});
 
-module.config($stateProvider => {
     $stateProvider.state('project.usage.data_entry', {
-        url: '/data-entry/:fileId/:period/:entityId',
+        url: '/input/submission/:submissionId',
         component: __componentName,
         resolve: {
-            period: $stateParams => $stateParams.period,
-            siteId: $stateParams => $stateParams.entityId,
-            file: $stateParams =>
+            mode: () => 'submission',
+            submission: $stateParams =>
                 axios
-                    .get(`/project/${$stateParams.projectId}/scanned-forms/${$stateParams.fileId}`)
+                    .get(
+                        `/project/${$stateParams.projectId}/scanned-forms/${$stateParams.submissionId}`
+                    )
                     .then(response => response.data),
 
-            dsId: file => file.dataSourceId,
-            input: (loadedProject, dsId, $stateParams) =>
-                Input.fetchInput(loadedProject, $stateParams.entityId, dsId, $stateParams.period),
-
-            previousInput: (loadedProject, dsId, $stateParams) =>
-                Input.fetchInput(
-                    loadedProject,
-                    $stateParams.entityId,
-                    dsId,
-                    new TimeSlot($stateParams.period).previous().value
-                ),
+            metadata: submission => ({
+                dataSourceId: submission.dataSourceId,
+                period: null,
+                siteId: null,
+            }),
         },
     });
 });
+
+// dsId: $stateParams => $stateParams.dataSourceId,
+// period: $stateParams => $stateParams.period,
+// siteId: $stateParams => $stateParams.entityId,
+// input: (loadedProject, $stateParams) => {
+//     return Input.fetchInput(
+//         loadedProject,
+//         $stateParams.entityId,
+//         $stateParams.dataSourceId,
+//         $stateParams.period
+//     );
+// },
+// previousInput: (loadedProject, $stateParams) => {
+//     const previousPeriod = new TimeSlot($stateParams.period).previous().value;
+//     return Input.fetchInput(
+//         loadedProject,
+//         $stateParams.entityId,
+//         $stateParams.dataSourceId,
+//         previousPeriod
+//     );
+// },
 
 module.component(__componentName, {
     bindings: {
         project: '<',
-        dsId: '<',
-        period: '<',
-        siteId: '<',
+        invitations: '<',
 
-        input: '<',
-        previousInput: '<',
-        file: '<',
+        mode: '<',
+        metadata: '<',
+        submission: '<',
     },
 
     template: require(__templatePath),
@@ -92,10 +93,11 @@ module.component(__componentName, {
             return angular.equals(this.master, this.input);
         }
 
-        constructor($scope, $state, $transitions, $filter) {
+        constructor($rootScope, $scope, $state, $transitions, $filter) {
             'ngInject';
 
             this.$scope = $scope;
+            this.userEmail = $rootScope.userEmail;
             this.$state = $state;
             this.$transitions = $transitions;
             this.translate = $filter('translate');
@@ -120,15 +122,49 @@ module.component(__componentName, {
         }
 
         $onChanges(changes) {
-            this.form = this.project.forms.find(f => f.id === this.dsId);
-            this.entity = this.project.entities.find(f => f.id === this.siteId);
+            // Convenience getters
+            this.dataSource = this.project.forms.find(ds => ds.id === this.metadata.dataSourceId);
+            this.variables = this.dataSource.elements.filter(variable => variable.active);
+            if (this.mode !== 'manual') {
+                this.variables = this.variables.filter(
+                    variable => this.submission.sections[variable.id]
+                );
+            }
+
+            // Compute choices.
+            this._initChoices();
+
+            // If manual mode, lock choices.
+            if (this.mode === 'manual') {
+                this.period = this.metadata.period;
+                this.siteId = this.metadata.siteId;
+                this.metadataEditable = false;
+                this.onMetadataSet();
+            } else {
+                this.period = TimeSlot.fromDate(new Date(), this.dataSource.periodicity).value;
+                this.metadataEditable = true;
+            }
+        }
+
+        async onMetadataSet() {
+            if (!this.period || !this.siteId) {
+                return;
+            }
+
+            this.metadataEditable = false;
+
+            // Load input
+            this.input = await Input.fetchInput(
+                this.project,
+                this.siteId,
+                this.dataSource.id,
+                this.period,
+                this.variables.map(v => v.id)
+            );
 
             this.master = angular.copy(this.input);
-
-            this.variablesById = {};
-            this.project.forms.forEach(form => {
-                form.elements.forEach(variable => (this.variablesById[variable.id] = variable));
-            });
+            this._buildContentMapping();
+            this.$scope.$apply();
         }
 
         fillWithZeros() {
@@ -151,6 +187,7 @@ module.component(__componentName, {
                 this.inputSaving = true;
                 await this.input.save();
                 angular.copy(this.input, this.master);
+                this._buildContentMapping();
             } catch (error) {
                 alert(this.translate('project.saving_failed'));
             } finally {
@@ -161,6 +198,36 @@ module.component(__componentName, {
 
         reset() {
             angular.copy(this.master, this.input);
+            this._buildContentMapping();
+        }
+
+        _buildContentMapping() {
+            this.contentByVariableId = {};
+            this.input.content.forEach(content => {
+                this.contentByVariableId[content.variableId] = content;
+            });
+        }
+
+        _initChoices() {
+            // Sites depend on invitation.
+            const myInvitation = this.invitations.find(i => i.email === this.userEmail);
+
+            this.sites = this.project.entities.filter(
+                e =>
+                    e.active &&
+                    this.dataSource.entities.includes(e.id) &&
+                    (!myInvitation || myInvitation.dataEntry.siteIds.includes(e.id))
+            );
+
+            // Periods only on current date.
+            const periodicity = this.dataSource.periodicity;
+            let end = TimeSlot.fromDate(new Date(), periodicity).value;
+            if (this.project.end < end) {
+                end = this.project.end;
+            }
+
+            const dimension = new TimeDimension('time', periodicity, this.project.start, end);
+            this.periods = dimension.getItems().reverse();
         }
     },
 });
