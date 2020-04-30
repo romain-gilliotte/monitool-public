@@ -58,4 +58,4 @@ function getPageContour(edges) {
     return pageContour;
 }
 
-module.exports = { extractPage };
+module.exports = { extractPage, getEdges, getPageContour };
