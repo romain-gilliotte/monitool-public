@@ -29,8 +29,8 @@ function findQrCode(image) {
     for (let scale = 1; scale < 4; ++scale) {
         const slWinSizeW = image.sizes[1] / scale;
         const slWinSizeH = image.sizes[0] / scale;
-        const slWinStepW = 0.1 * slWinSizeW;
-        const slWinStepH = 0.1 * slWinSizeH;
+        const slWinStepW = 0.25 * slWinSizeW;
+        const slWinStepH = 0.25 * slWinSizeH;
         for (let y = 0; y <= image.sizes[0] - slWinSizeH; y += slWinStepH) {
             for (let x = 0; x <= image.sizes[1] - slWinSizeW; x += slWinStepW) {
                 const qrZone = new cv.Rect(x, y, slWinSizeW, slWinSizeH);
@@ -41,6 +41,13 @@ function findQrCode(image) {
 
                 const value = jsQR(qrCode.getData(), qrCode.sizes[1], qrCode.sizes[0]);
                 if (value) {
+                    // Correct sliding window
+                    for (let key in value.location) {
+                        const location = value.location[key];
+                        location.x = x + location.x;
+                        location.y = y + location.y;
+                    }
+
                     return value;
                 }
             }
@@ -51,25 +58,41 @@ function findQrCode(image) {
 }
 
 function reprojectFromCode(image, width, height) {
-    const wRatio = width / 595;
-    const hRatio = height / 842;
-    const code = findQrCode(image);
-
-    const contourPoints = [
-        new cv.Point(code.location.topLeftCorner.x, code.location.topLeftCorner.y),
-        new cv.Point(code.location.bottomLeftCorner.x, code.location.bottomLeftCorner.y),
-        new cv.Point(code.location.bottomRightCorner.x, code.location.bottomRightCorner.y),
-        new cv.Point(code.location.bottomRightCorner.x, code.location.bottomRightCorner.y),
+    // Find QR code
+    let code = findQrCode(image);
+    let contourPoints = [
+        new cv.Point2(code.location.topLeftCorner.x, code.location.topLeftCorner.y),
+        new cv.Point2(code.location.bottomLeftCorner.x, code.location.bottomLeftCorner.y),
+        new cv.Point2(code.location.bottomRightCorner.x, code.location.bottomRightCorner.y),
+        new cv.Point2(code.location.topRightCorner.x, code.location.topRightCorner.y),
     ];
 
-    const targetPoints = [
-        new cv.Point(493 * wRatio, 35 * hRatio),
-        new cv.Point(493 * wRatio, 119 * hRatio),
-        new cv.Point(577 * wRatio, 119 * hRatio),
-        new cv.Point(577 * wRatio, 35 * hRatio),
+    // Add a 30% border on the original image, to avoid black borders on perspective transform.
+    let borderW = Math.floor(image.sizes[1] * 0.3);
+    let borderH = Math.floor(image.sizes[0] * 0.3);
+    image = image.copyMakeBorder(borderH, borderH, borderW, borderW, cv.BORDER_REPLICATE);
+    contourPoints = contourPoints.map(p => p.add(new cv.Point2(borderW, borderH)));
+
+    // Reproject image so that the QR code is in a known position on the top-right
+    let margin = 0.15;
+    let wRatio = width / 595;
+    let hRatio = height / 842;
+    let targetPoints = [
+        new cv.Point2(493 * wRatio, 35 * hRatio),
+        new cv.Point2(493 * wRatio, 119 * hRatio),
+        new cv.Point2(577 * wRatio, 119 * hRatio),
+        new cv.Point2(577 * wRatio, 35 * hRatio),
     ];
 
-    const transform = cv.getPerspectiveTransform(contourPoints, targetPoints);
+    targetPoints = targetPoints.map(
+        p =>
+            new Point2(
+                (1 - 2 * margin) * p.x + margin * width,
+                (1 - 2 * margin) * p.y + margin * height
+            )
+    );
+
+    let transform = cv.getPerspectiveTransform(contourPoints, targetPoints);
     return image.warpPerspective(transform, new cv.Size(width, height));
 }
 
