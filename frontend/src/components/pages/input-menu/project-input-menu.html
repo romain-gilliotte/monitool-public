@@ -30,9 +30,8 @@
                         ng-repeat="dataSource in $ctrl.activeDataSources"
                         ui-sref="project.usage.list({dataSourceId: dataSource.id})"
                         ng-class="{active: ($ctrl.$state.is('project.usage.list') || $ctrl.$state.is('project.usage.edit')) && $ctrl.$stateParams.dataSourceId == dataSource.id}"
-                        class="list-group-item"
+                        class="list-group-item data-source-list-group-item"
                         title="{{dataSource.name}}"
-                        style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"
                     >
                         <i class="fa fa-pencil fa-fw"></i>
                         <span>{{dataSource.name}}</span>
