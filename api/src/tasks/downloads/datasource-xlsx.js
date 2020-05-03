@@ -18,7 +18,7 @@ queue.process('generate-datasource-xlsx', async job => {
         const dataSource = project.forms[0];
         const title = dataSource.name || 'data-source';
 
-        await updateFile(cacheId, cacheHash, `${title}.xlsx`, mime, async () => {
+        await updateFile(cacheId, cacheHash, `${title}.xlsx`, async () => {
             const wb = await getWorkbook(dataSource);
             const buffer = await wb.writeToBuffer();
 
@@ -26,7 +26,7 @@ queue.process('generate-datasource-xlsx', async job => {
             passThrough.write(buffer);
             passThrough.end();
 
-            return passThrough;
+            return [passThrough, { mimeType: mime }];
         });
     }
 });

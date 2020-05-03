@@ -1,7 +1,8 @@
+const ArucoMarker = require('aruco-marker');
 const { ObjectId } = require('mongodb');
 const PdfPrinter = require('pdfmake');
+const LayoutBuilder = require('pdfmake/src/layoutBuilder');
 const { updateFile } = require('../../storage/gridfs');
-const ArucoMarker = require('aruco-marker');
 
 queue.process('generate-datasource-pdf', async job => {
     const { cacheId, cacheHash, prjId, dsId, language, orientation } = job.data;
@@ -17,12 +18,12 @@ queue.process('generate-datasource-pdf', async job => {
     const dataSource = project.forms[0];
     const title = dataSource.name || 'data-source';
 
-    await updateFile(cacheId, cacheHash, `${title}.pdf`, 'application/pdf', async () => {
+    await updateFile(cacheId, cacheHash, `${title}.pdf`, async () => {
         const docDef = createDataSourceDocDef(project._id, dataSource, orientation, language);
-        const stream = printer.createPdfKitDocument(docDef);
-        stream.end(); // work around bug in pdfkit never ending the stream.
+        const [stream, boundaries] = createPdfStream(docDef);
+        const metadata = { hash: cacheHash, mimeType: 'application/pdf', boundaries };
 
-        return stream;
+        return [stream, metadata];
     });
 });
 
@@ -51,12 +52,100 @@ const strings = Object.freeze({
     }),
 });
 
-function createDataSourceDocDef(
-    projectId,
-    dataSource,
-    pageOrientation = 'portrait',
-    language = 'en'
-) {
+/**
+ * Retrieve the coordinates of all tables within a given paper form.
+ *
+ * This works by hooking pdfmake's templating engine, and running the generation
+ * in order to steal the positions of the items of interest.
+ *
+ * We do this to be able to retrieve table locations to deal with uploads of form pictures / scans
+ */
+function createPdfStream(docDef) {
+    const METADATA_MARGIN = 1;
+    const VAR_MARGIN_TOP = -20;
+    const VAR_MARGIN_OTHER = 5;
+    const WR = 1 / 595.28; // "width ratio"
+    const HR = 1 / 841.89;
+
+    // Those we can just hardcode, they are always the same.
+    const boundaries = [
+        {
+            id: 'site',
+            x: (20 - METADATA_MARGIN) * WR,
+            y: (88 - METADATA_MARGIN) * HR,
+            w: (141 + 2 * METADATA_MARGIN) * WR,
+            h: (16 + 2 * METADATA_MARGIN) * HR,
+        },
+        {
+            id: 'period',
+            x: (170 - METADATA_MARGIN) * WR,
+            y: (88 - METADATA_MARGIN) * HR,
+            w: (141 + 2 * METADATA_MARGIN) * WR,
+            h: (16 + 2 * METADATA_MARGIN) * HR,
+        },
+        {
+            id: 'collectedBy',
+            x: (320 - METADATA_MARGIN) * WR,
+            y: (88 - METADATA_MARGIN) * HR,
+            w: (152 + 2 * METADATA_MARGIN) * WR,
+            h: (16 + 2 * METADATA_MARGIN) * HR,
+        },
+    ];
+
+    let baseY = Infinity; // We need the baseY to deal with the first table of page 2 and more.
+
+    const hookedProcessNode = LayoutBuilder.prototype.processNode;
+    LayoutBuilder.prototype.processNode = function (node) {
+        let pageNo, x, y, w, h;
+
+        if (node._varId) {
+            // Save position before rendering table
+            const position = this.writer.writer.getCurrentPositionOnPage();
+            pageNo = position.pageNumber;
+            x = position.left;
+            y = position.top;
+
+            if (y < baseY) {
+                baseY = y; // Remember lowest y
+            }
+        }
+
+        hookedProcessNode.apply(this, arguments);
+
+        if (node._varId) {
+            // Compare new position on document with previously saved one.
+            // This will tell us where the table is.
+            const position = this.writer.writer.getCurrentPositionOnPage();
+            if (pageNo !== position.pageNumber) {
+                pageNo = position.pageNumber;
+                y = baseY;
+            }
+
+            w = position.pageInnerWidth;
+            h = position.top - y;
+
+            boundaries.push({
+                id: node._varId,
+                pageNo,
+                x: (x - VAR_MARGIN_OTHER) * WR,
+                y: (y - VAR_MARGIN_TOP) * HR, // variable labels have 15 margin on top
+                w: (w + 2 * VAR_MARGIN_OTHER) * WR,
+                h: (h + VAR_MARGIN_TOP + VAR_MARGIN_OTHER) * HR,
+            });
+        }
+    };
+
+    // Render pdf
+    const stream = printer.createPdfKitDocument(docDef);
+    stream.end(); // work around bug in pdfkit never ending the stream.
+
+    // Fix pdfmake.
+    LayoutBuilder.prototype.processNode = hookedProcessNode;
+
+    return [stream, boundaries];
+}
+
+function createDataSourceDocDef(projectId, dataSource, pageOrientation, language) {
     return {
         pageSize: 'A4',
         pageOrientation: pageOrientation,
@@ -84,12 +173,18 @@ function createDataSourceDocDef(
                             ],
                         },
                         {
+                            // Styling
                             width: 'auto',
+                            margin: [20, 0, 0, 0],
+
+                            // Version 1 (21x21) will be used
                             qr: buffer,
                             eccLevel: 'L',
                             mode: 'octet',
+
+                            // This is approximative: the generator rounds each block size to be an integer
+                            // number of pixels
                             fit: 90,
-                            margin: [20, 0, 0, 0],
                         },
                     ],
                 },
@@ -103,6 +198,7 @@ function createDataSourceDocDef(
                         alignment: 'left',
                         svg: new ArucoMarker(62).toSVG('25px'),
                     },
+                    // FIXME: putting the page counter somewhere else, and adding a marker would certainly not hurt detection
                     {
                         alignment: 'center',
                         text: `${currentPage} of ${pageCount}`,
@@ -173,6 +269,8 @@ function createMetadata(language) {
     };
 }
 
+// FIXME this is messy, rewrite with recursive functions like reporting-xlsx
+// This should be 30 lignes of code
 function createVariableDocDef(variable) {
     var body, widths;
 

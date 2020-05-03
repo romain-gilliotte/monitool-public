@@ -15,7 +15,7 @@ queue.process('generate-reporting-xlsx', async job => {
     if (project) {
         const filename = `${project.name || 'report'}.xlsx`;
 
-        await updateFile(cacheId, cacheHash, filename, mime, async () => {
+        await updateFile(cacheId, cacheHash, filename, async () => {
             const wb = await getWorkbook(project, periodicity);
             const buffer = await wb.writeToBuffer();
 
@@ -23,7 +23,7 @@ queue.process('generate-reporting-xlsx', async job => {
             passThrough.write(buffer);
             passThrough.end();
 
-            return passThrough;
+            return [passThrough, { mimeType: mime }];
         });
     }
 });

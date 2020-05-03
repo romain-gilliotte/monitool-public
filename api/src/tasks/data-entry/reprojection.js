@@ -46,10 +46,6 @@ function getReferencePoints(w, h) {
 
 function findKnownPoints(image) {
     const [qr, data] = findQrCode(image);
-    if (!qr) {
-        throw new Error('Failed to find QR code.');
-    }
-
     const aruco = findArucoMarkers(image);
     const points = { ...aruco, ...qr };
 
@@ -75,62 +71,6 @@ function findKnownPoints(image) {
     return points;
 }
 
-const image = cv.imread('data/WhatsApp Image 2020-05-02 at 16.23.05.jpeg').resize(1600, 1200);
-const newImage = reproject(image, 600, 800);
-cv.imshowWait('toto', newImage);
-
-// function reprojectFromCode(image, width, height) {
-//     // Find QR code
-//     let code = findQrCode(image);
-//     let contourPoints = [
-//         new cv.Point2(code.location.topLeftCorner.x, code.location.topLeftCorner.y),
-//         new cv.Point2(code.location.bottomLeftCorner.x, code.location.bottomLeftCorner.y),
-//         new cv.Point2(code.location.bottomRightCorner.x, code.location.bottomRightCorner.y),
-//         new cv.Point2(code.location.topRightCorner.x, code.location.topRightCorner.y),
-//     ];
-
-//     // Add a 30% border on the original image, to avoid black borders on perspective transform.
-//     let borderW = Math.floor(image.sizes[1] * 0.5);
-//     let borderH = Math.floor(image.sizes[0] * 0.5);
-//     image = image.copyMakeBorder(borderH, borderH, borderW, borderW, cv.BORDER_REPLICATE);
-//     contourPoints = contourPoints.map(p => p.add(new cv.Point2(borderW, borderH)));
-
-//     // Reproject image so that the QR code is in a known position on the top-right, with
-//     // some margin to spare
-//     const qrWidth = 0.1 * width;
-//     let targetPoints = [
-//         new cv.Point2(0.8 * width, 0.1 * height),
-//         new cv.Point2(0.8 * width, 0.1 * height + qrWidth),
-//         new cv.Point2(0.8 * width + qrWidth, 0.1 * height + qrWidth),
-//         new cv.Point2(0.8 * width + qrWidth, 0.1 * height),
-//     ];
-
-//     let transform = cv.getPerspectiveTransform(contourPoints, targetPoints);
-//     return image.warpPerspective(transform, new cv.Size(width, height));
-// }
-
-// /**
-//  * Use Edge detection to find something big and with four sides on a picture.
-//  * This allows finding a form in a simple background with reasonable accuracy.
-//  *
-//  * @see https://bretahajek.com/2017/01/scanning-documents-photos-opencv/
-//  * @see https://stackoverflow.com/questions/43009923/how-to-complete-close-a-contour-in-python-opencv
-//  * @see https://stackoverflow.com/questions/8667818/opencv-c-obj-c-detecting-a-sheet-of-paper-square-detection
-//  */
-// function extractPage(image, width, height, prefix = 'test-') {
-//     const contourPoints = getPageContour(image).getPoints();
-//     const targetPoints = [
-//         new cv.Point2(0, 0),
-//         new cv.Point2(0, height),
-//         new cv.Point2(width, height),
-//         new cv.Point2(width, 0),
-//     ];
-
-//     const transform = cv.getPerspectiveTransform(contourPoints, targetPoints);
-//     return image.warpPerspective(transform, new cv.Size(width, height));
-// }
-
-// module.exports = { reprojectFromCode, slideOnImage };
 function decodeQrCode(image) {
     const value = findQrCodes(image, 1)[0];
 

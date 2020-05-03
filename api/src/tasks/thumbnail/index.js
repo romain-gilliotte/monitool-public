@@ -7,8 +7,8 @@ const { getFile, updateFile } = require('../../storage/gridfs');
 
 // fixme exception handling
 queue.process('generate-thumbnail', async job => {
-    const { sourceId, sourceHash, thumbnailId, bucketName } = job.data;
-    const original = await getFile(sourceId, sourceHash, bucketName);
+    const { sourceId, sourceHash: fromHash, thumbnailId: thumbId } = job.data;
+    const original = await getFile(sourceId, fromHash);
 
     let document = {
         stream: original.stream,
@@ -54,12 +54,8 @@ queue.process('generate-thumbnail', async job => {
         };
     }
 
-    await updateFile(
-        thumbnailId,
-        sourceHash,
-        document.filename,
-        document.mimeType,
-        () => document.stream,
-        bucketName
-    );
+    await updateFile(thumbId, fromHash, document.filename, () => [
+        document.stream,
+        { mimeType: document.mimeType },
+    ]);
 });

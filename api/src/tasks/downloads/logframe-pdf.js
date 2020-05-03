@@ -19,7 +19,7 @@ queue.process('generate-logframe-pdf', async job => {
     const logicalFramework = project.logicalFrames[0];
     const title = logicalFramework.name || 'logical-framework';
 
-    await updateFile(cacheId, cacheHash, `${title}.pdf`, 'application/pdf', async () => {
+    await updateFile(cacheId, cacheHash, `${title}.pdf`, async () => {
         const docDef = computeLogFrameDocDef(
             logicalFramework,
             orientation,
@@ -29,7 +29,7 @@ queue.process('generate-logframe-pdf', async job => {
         const stream = printer.createPdfKitDocument(docDef);
         stream.end(); // work around bug in pdfkit never ending the stream.
 
-        return stream;
+        return [stream, { mimeType: 'application/pdf' }];
     });
 });
 

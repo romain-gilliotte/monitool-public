@@ -2,91 +2,77 @@ const { GridFSBucket } = require('mongodb');
 const stream = require('stream');
 const util = require('util');
 
-async function getFile(cacheId, cacheHash, bucketName = 'fs') {
-    const bucket = new GridFSBucket(database, { bucketName });
-    const collection = database.collection(`${bucketName}.files`);
-    const file = await collection.findOne({ _id: cacheId });
+async function getFile(id, hash) {
+    const bucket = new GridFSBucket(database);
+    const collection = database.collection(`fs.files`);
+    const file = await collection.findOne({ _id: id });
 
-    if (file && file.metadata.hash === cacheHash) {
-        return { file, stream: bucket.openDownloadStream(cacheId) };
+    if (file && file.metadata.hash === hash) {
+        return { file, stream: bucket.openDownloadStream(id) };
     }
 }
 
-async function updateFile(cacheId, cacheHash, filename, mimeType, createStream, bucketName = 'fs') {
-    const bucket = new GridFSBucket(database, { bucketName });
-    const collection = database.collection(`${bucketName}.files`);
-    const file = await collection.findOne({ _id: cacheId });
+async function updateFile(id, hash, filename, createFile) {
+    const bucket = new GridFSBucket(database);
+    const collection = database.collection(`fs.files`);
+    const file = await collection.findOne({ _id: id });
 
-    if (!file || file.metadata.hash !== cacheHash) {
-        if (file) await bucket.delete(cacheId);
+    if (!file || file.metadata.hash !== hash) {
+        if (file) await bucket.delete(id);
 
-        const readStream = await createStream();
-        const writeStream = bucket.openUploadStreamWithId(cacheId, filename, {
-            metadata: { hash: cacheHash, mimeType: mimeType },
+        const [readStream, metadata] = await createFile();
+        const writeStream = bucket.openUploadStreamWithId(id, filename, {
+            metadata: { ...metadata, hash },
         });
 
         await util.promisify(stream.pipeline)(readStream, writeStream);
     }
 }
 
-async function deleteFiles(cacheIdPrefix, bucketName = 'fs') {
-    const bucket = new GridFSBucket(database, { bucketName });
-    const collection = database.collection(`${bucketName}.files`);
+async function deleteFiles(idPrefix) {
+    const bucket = new GridFSBucket(database);
+    const collection = database.collection(`fs.files`);
     const files = await collection
-        .find({ _id: { $regex: new RegExp(`^${cacheIdPrefix}`) } }, { projection: { _id: 1 } })
+        .find({ _id: { $regex: new RegExp(`^${idPrefix}`) } }, { projection: { _id: 1 } })
         .toArray();
 
     await Promise.all(files.map(file => bucket.delete(file._id)));
 }
 
-async function getGeneratedFile(
-    sourceId,
-    sourceHash,
-    task,
-    taskAttr,
-    thumbnail = false,
-    bucketName = 'fs'
-) {
+async function getGeneratedFile(fromId, fromHash, task, taskAttr, thumb = false) {
     let result;
 
-    if (thumbnail) {
-        const thumbnailId = `${sourceId}:thumb`;
+    if (thumb) {
+        const thumbId = `${fromId}:thumb`;
 
-        result = await getFile(thumbnailId, sourceHash, bucketName);
+        result = await getFile(thumbId, fromHash);
         if (!result) {
             // Make sure original is cached by recursing.
-            const original = await getGeneratedFile(
-                sourceId,
-                sourceHash,
-                task,
-                taskAttr,
-                false,
-                bucketName
-            );
+            const original = await getGeneratedFile(fromId, fromHash, task, taskAttr, false);
             original.stream.destroy();
 
             const thumbnailJob = await queue.add(
                 'generate-thumbnail',
-                { sourceId, sourceHash, thumbnailId, bucketName },
+                { sourceId: fromId, sourceHash: fromHash, thumbnailId: thumbId },
                 { attempts: 1, removeOnComplete: true }
             );
 
             await thumbnailJob.finished();
 
-            result = getFile(thumbnailId, sourceHash, bucketName);
+            result = getFile(thumbId, fromHash);
         }
     } else {
-        result = await getFile(sourceId, sourceHash, bucketName);
+        result = await getFile(fromId, fromHash);
         if (!result) {
             const documentJob = await queue.add(
                 task,
-                { cacheId: sourceId, cacheHash: sourceHash, ...taskAttr },
+                { cacheId: fromId, cacheHash: fromHash, ...taskAttr },
                 { attempts: 1, removeOnComplete: true }
             );
 
             await documentJob.finished();
 
-            result = await getFile(sourceId, sourceHash, bucketName);
+            result = await getFile(fromId, fromHash);
         }
     }
 
