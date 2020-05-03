@@ -1,6 +1,7 @@
 const { ObjectId } = require('mongodb');
 const PdfPrinter = require('pdfmake');
 const { updateFile } = require('../../storage/gridfs');
+const ArucoMarker = require('aruco-marker');
 
 queue.process('generate-datasource-pdf', async job => {
     const { cacheId, cacheHash, prjId, dsId, language, orientation } = job.data;
@@ -59,7 +60,7 @@ function createDataSourceDocDef(
     return {
         pageSize: 'A4',
         pageOrientation: pageOrientation,
-        pageMargins: [20, 105, 20, 30],
+        pageMargins: [20, 105, 20, 45],
         styles: {
             header: { fontSize: 22, bold: true, margin: [0, 0, 0, 16] },
             variableName: { fontSize: 10, bold: true, margin: [0, 10, 0, 5] },
@@ -96,9 +97,22 @@ function createDataSourceDocDef(
         },
         footer: function (currentPage, pageCount) {
             return {
-                text: `${currentPage} of ${pageCount}`,
-                alignment: 'center',
-                padding: [0, 0, 0, 20],
+                margin: [20, 0, 20, 0],
+                columns: [
+                    {
+                        alignment: 'left',
+                        svg: new ArucoMarker(62).toSVG('25px'),
+                    },
+                    {
+                        alignment: 'center',
+                        text: `${currentPage} of ${pageCount}`,
+                        margin: [0, 10, 0, 0],
+                    },
+                    {
+                        alignment: 'right',
+                        svg: new ArucoMarker(207).toSVG('25px'),
+                    },
+                ],
             };
         },
         content: [

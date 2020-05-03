@@ -6,8 +6,9 @@ const { extractPage } = require('./cv/extract-page');
 const { readQrCode } = require('./cv/extract-context');
 const { extractVarCoords } = require('./cv/extract-variables');
 
-const width = 1050;
-const height = 1485;
+// 100px / mm2
+const width = 210 * 10;
+const height = 297 * 10;
 
 queue.process('process-whatapp-msg', async job => {
     const projects = database.collection('project');

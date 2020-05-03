@@ -66,7 +66,7 @@ async function start(web = true, worker = true) {
     }
 
     if (worker) {
-        require('./tasks/data-entry');
+        // require('./tasks/data-entry');
         require('./tasks/downloads');
         require('./tasks/reporting');
         require('./tasks/thumbnail');
