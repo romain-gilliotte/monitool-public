@@ -8,12 +8,11 @@ function findArucoMarkers(image) {
 
     // Search in the image.
     slideOnImage(image, (region, rectangle) => {
-        for (let i = 0; i < 2; ++i) {
+        for (let i = 0; i < 3; ++i) {
             let local = region;
 
+            // Try different ways to improve detection rate (otsu & adaptative threshold, or with the color image)
             if (i == 0) {
-                // Otsu threshold the image before giving to detector.
-                // It seems to help it a lot with bad images.
                 local = local.cvtColor(cv.COLOR_BGR2GRAY);
                 local = local.threshold(0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU);
                 local = local.cvtColor(cv.COLOR_GRAY2RGBA);
