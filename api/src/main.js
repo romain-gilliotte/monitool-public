@@ -39,7 +39,7 @@ async function start(web = true, worker = true) {
     global.database.collection('input').createIndex({ sequenceId: 1, 'content.variableId': 1 });
     global.database.collection('user').createIndex({ subs: 1 });
 
-    // move this somewhere else
+    // FIXME move this somewhere else
 
     global.redis = new Redis(config.redis.uri);
     global.redisLock = new Redlock([redis]);
@@ -49,10 +49,7 @@ async function start(web = true, worker = true) {
         app = new Koa();
         app.use(cors());
         app.use(responseTime());
-        app.use(bodyParser({ enableTypes: ['json', 'xml', 'form', 'text'] }));
-
-        app.use(require('./routers/twilio').routes());
-
+        app.use(bodyParser({ enableTypes: ['json'] }));
         app.use(require('./middlewares/error-handler'));
         app.use(require('./middlewares/load-profile'));
         app.use(require('./routers/invitations').routes());
@@ -60,6 +57,7 @@ async function start(web = true, worker = true) {
         app.use(require('./routers/downloads').routes());
         app.use(require('./routers/project').routes());
         app.use(require('./routers/rpc').routes());
+        app.use(require('./routers/uploads').routes());
 
         global.server = app.listen(config.port);
         winston.log('info', `Listening on ${config.port}.`);
@@ -70,6 +68,7 @@ async function start(web = true, worker = true) {
         require('./tasks/downloads');
         require('./tasks/reporting');
         require('./tasks/thumbnail');
+        require('./tasks/uploads');
         winston.log('info', `All tasks registered.`);
     }
 }
@@ -89,4 +88,6 @@ async function stop() {
 if (require.main === module) {
     if (config.cluster && cluster.isMaster) for (let i = 0; i < numCPUs; i++) cluster.fork();
     else start();
-} else module.exports = { start, stop };
+} else {
+    module.exports = { start, stop };
+}

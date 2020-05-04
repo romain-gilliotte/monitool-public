@@ -10,9 +10,6 @@ module.config($stateProvider => {
         url: '/input-home',
         component: __componentName,
         resolve: {
-            uploads: $stateParams =>
-                axios.get(`/project/${$stateParams.projectId}/scanned-forms`).then(r => r.data),
-
             users: $stateParams =>
                 axios.get(`/project/${$stateParams.projectId}/user`).then(r => r.data),
         },

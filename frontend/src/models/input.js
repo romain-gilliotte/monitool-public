@@ -78,12 +78,10 @@ export default class Input {
     }
 
     /** Fetch specific data entry by calling the reporting service. */
-    static async fetchInput(project, siteId, dataSourceId, period, variableIds = null) {
-        const dataSource = project.forms.find(ds => ds.id === dataSourceId);
-        const variables = dataSource.elements.filter(
-            variable =>
-                (variableIds === null || variableIds.includes(variable.id)) && variable.active
-        );
+    static async fetchInput(project, siteId, period, variableIds) {
+        const variables = project.forms
+            .reduce((vars, ds) => [...vars, ...ds.elements], [])
+            .filter(v => variableIds.includes(v.id));
 
         return new Input({
             projectId: project._id,

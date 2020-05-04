@@ -1,47 +1,20 @@
-<!-- <table class="table table-bordered table-condensed">
-    <thead>
-        <tr>
-            <th style="width: 100px;">Reçu le</th>
-            <th style="width: 100px;">de</th>
-            <th style="width: 178px;">Site</th>
-            <th style="width: 178px;">Date</th>
-            <th>Notes</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr ng-repeat="image in $ctrl.uploads">
-            <td>{{image.receivedAt|date:'short'}}</td>
-            <td>{{image.from}}</td>
-            <td>
-                <image-scroll submission="image" region="site"></image-scroll>
-            </td>
-            <td>
-                <image-scroll submission="image" region="period"></image-scroll>
-            </td>
-            <td>{{image.body}}</td>
-            <td>
-                <a ui-sref="project.usage.data_entry({submissionId: image._id})">fait qqchose</a>
-            </td>
-        </tr>
-    </tbody>
-</table> -->
+<div dropzone>Drop Files Here</div>
 
 <div
-    ng-repeat="image in $ctrl.uploads"
+    ng-repeat="upload in $ctrl.uploads"
     class="thumbnail"
     style="width: 200px; margin-right: 10px; display: inline-block;"
 >
-    <image-scroll submission="image"></image-scroll>
+    <image-scroll upload="upload"></image-scroll>
     <div class="caption">
         <b>Site:</b><br />
-        <image-scroll submission="image" region="site"></image-scroll>
+        <image-scroll upload="upload" region="site"></image-scroll>
         <b>Periode:</b><br />
-        <image-scroll submission="image" region="period"></image-scroll>
+        <image-scroll upload="upload" region="period"></image-scroll>
         <br />
         <a
             class="btn btn-default pull-right btn-xs"
-            ui-sref="project.usage.data_entry({submissionId: image._id})"
+            ui-sref="project.usage.data_entry({uploadId: upload._id})"
             >Saisir</a
         >
     </div>

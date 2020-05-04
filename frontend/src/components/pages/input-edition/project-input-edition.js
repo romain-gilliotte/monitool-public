@@ -26,55 +26,37 @@ module.config($stateProvider => {
         component: __componentName,
         resolve: {
             mode: () => 'manual',
-            metadata: $stateParams => ({
+            metadata: ($stateParams, project) => ({
                 dataSourceId: $stateParams.dataSourceId,
                 period: $stateParams.period,
                 siteId: $stateParams.siteId,
+                variableIds: project.forms
+                    .find(f => f.id === $stateParams.dataSourceId)
+                    .elements.map(v => v.id),
             }),
         },
     });
 
     $stateProvider.state('project.usage.data_entry', {
-        url: '/input/submission/:submissionId',
+        url: '/input/upload/:uploadId',
         component: __componentName,
         resolve: {
-            mode: () => 'submission',
-            submission: $stateParams =>
+            mode: () => 'upload',
+            upload: $stateParams =>
                 axios
-                    .get(
-                        `/project/${$stateParams.projectId}/scanned-forms/${$stateParams.submissionId}`
-                    )
+                    .get(`/project/${$stateParams.projectId}/upload/${$stateParams.uploadId}`)
                     .then(response => response.data),
 
-            metadata: submission => ({
-                dataSourceId: submission.dataSourceId,
+            metadata: upload => ({
                 period: null,
                 siteId: null,
+                variableIds: Object.keys(upload.reprojected.regions).filter(id =>
+                    /^[-0-9a-f]+$/.test(id)
+                ),
             }),
         },
     });
 });
-
-// dsId: $stateParams => $stateParams.dataSourceId,
-// period: $stateParams => $stateParams.period,
-// siteId: $stateParams => $stateParams.entityId,
-// input: (loadedProject, $stateParams) => {
-//     return Input.fetchInput(
-//         loadedProject,
-//         $stateParams.entityId,
-//         $stateParams.dataSourceId,
-//         $stateParams.period
-//     );
-// },
-// previousInput: (loadedProject, $stateParams) => {
-//     const previousPeriod = new TimeSlot($stateParams.period).previous().value;
-//     return Input.fetchInput(
-//         loadedProject,
-//         $stateParams.entityId,
-//         $stateParams.dataSourceId,
-//         previousPeriod
-//     );
-// },
 
 module.component(__componentName, {
     bindings: {
@@ -83,7 +65,7 @@ module.component(__componentName, {
 
         mode: '<',
         metadata: '<',
-        submission: '<',
+        upload: '<',
     },
 
     template: require(__templatePath),
@@ -123,13 +105,9 @@ module.component(__componentName, {
 
         $onChanges(changes) {
             // Convenience getters
-            this.dataSource = this.project.forms.find(ds => ds.id === this.metadata.dataSourceId);
-            this.variables = this.dataSource.elements.filter(variable => variable.active);
-            if (this.mode !== 'manual') {
-                this.variables = this.variables.filter(
-                    variable => this.submission.file.coords[variable.id]
-                );
-            }
+            this.variables = this.project.forms
+                .reduce((vars, ds) => [...vars, ...ds.elements], [])
+                .filter(v => v.active && this.metadata.variableIds.includes(v.id));
 
             // Compute choices.
             this._initChoices();
@@ -157,7 +135,6 @@ module.component(__componentName, {
             this.input = await Input.fetchInput(
                 this.project,
                 this.siteId,
-                this.dataSource.id,
                 this.period,
                 this.variables.map(v => v.id)
             );
@@ -211,6 +188,7 @@ module.component(__componentName, {
         _initChoices() {
             // Sites depend on invitation.
             const myInvitation = this.invitations.find(i => i.email === this.userEmail);
+            const dataSource = this.project.forms.find(ds => ds.id === this.metadata.dataSourceId);
 
             this.sites = this.project.entities.filter(
                 e =>

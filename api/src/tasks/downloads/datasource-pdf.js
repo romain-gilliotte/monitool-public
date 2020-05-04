@@ -19,9 +19,16 @@ queue.process('generate-datasource-pdf', async job => {
     const title = dataSource.name || 'data-source';
 
     await updateFile(cacheId, cacheHash, `${title}.pdf`, async () => {
-        const docDef = createDataSourceDocDef(project._id, dataSource, orientation, language);
+        const id = createId();
+        const docDef = createDataSourceDocDef(id, dataSource, orientation, language);
         const [stream, boundaries] = createPdfStream(docDef);
-        const metadata = { hash: cacheHash, mimeType: 'application/pdf', boundaries };
+        const metadata = {
+            id,
+            mimeType: 'application/pdf',
+            dataSourceId: dsId,
+            orientation: docDef.pageOrientation,
+            boundaries,
+        };
 
         return [stream, metadata];
     });
@@ -61,36 +68,11 @@ const strings = Object.freeze({
  * We do this to be able to retrieve table locations to deal with uploads of form pictures / scans
  */
 function createPdfStream(docDef) {
-    const METADATA_MARGIN = 1;
-    const VAR_MARGIN_TOP = -20;
-    const VAR_MARGIN_OTHER = 5;
+    const boundaries = getFixedBoundaries(docDef.pageOrientation);
     const WR = 1 / 595.28; // "width ratio"
     const HR = 1 / 841.89;
-
-    // Those we can just hardcode, they are always the same.
-    const boundaries = [
-        {
-            id: 'site',
-            x: (20 - METADATA_MARGIN) * WR,
-            y: (88 - METADATA_MARGIN) * HR,
-            w: (141 + 2 * METADATA_MARGIN) * WR,
-            h: (16 + 2 * METADATA_MARGIN) * HR,
-        },
-        {
-            id: 'period',
-            x: (170 - METADATA_MARGIN) * WR,
-            y: (88 - METADATA_MARGIN) * HR,
-            w: (141 + 2 * METADATA_MARGIN) * WR,
-            h: (16 + 2 * METADATA_MARGIN) * HR,
-        },
-        {
-            id: 'collectedBy',
-            x: (320 - METADATA_MARGIN) * WR,
-            y: (88 - METADATA_MARGIN) * HR,
-            w: (152 + 2 * METADATA_MARGIN) * WR,
-            h: (16 + 2 * METADATA_MARGIN) * HR,
-        },
-    ];
+    const VAR_MARGIN_TOP = -20;
+    const VAR_MARGIN_OTHER = 5;
 
     let baseY = Infinity; // We need the baseY to deal with the first table of page 2 and more.
 
@@ -124,14 +106,13 @@ function createPdfStream(docDef) {
             w = position.pageInnerWidth;
             h = position.top - y;
 
-            boundaries.push({
-                id: node._varId,
+            boundaries[node._varId] = {
                 pageNo,
                 x: (x - VAR_MARGIN_OTHER) * WR,
                 y: (y - VAR_MARGIN_TOP) * HR, // variable labels have 15 margin on top
                 w: (w + 2 * VAR_MARGIN_OTHER) * WR,
                 h: (h + VAR_MARGIN_TOP + VAR_MARGIN_OTHER) * HR,
-            });
+            };
         }
     };
 
@@ -139,77 +120,119 @@ function createPdfStream(docDef) {
     const stream = printer.createPdfKitDocument(docDef);
     stream.end(); // work around bug in pdfkit never ending the stream.
 
-    // Fix pdfmake.
+    // Restore pdfmake.
     LayoutBuilder.prototype.processNode = hookedProcessNode;
 
     return [stream, boundaries];
 }
 
-function createDataSourceDocDef(projectId, dataSource, pageOrientation, language) {
+function createId() {
+    const bytes = Buffer.alloc(6);
+    for (let i = 0; i < 6; ++i) {
+        bytes[i] = 256 * Math.random();
+    }
+    return bytes;
+}
+
+/**
+ * Compute boundaries of elements which never move.
+ * Instead of hooking pdfmake, we simply hardcode those.
+ *
+ * @param {*} orientation
+ */
+function getFixedBoundaries(orientation) {
+    const METADATA_MARGIN = 1;
+    const WR = 1 / 595.28; // "width ratio"
+    const HR = 1 / 841.89;
+
+    return {
+        corner: { x: 0, y: 0, w: 1, h: 1 },
+        qr: { x: 491 * WR, y: 20 * HR, w: 83 * WR, h: 84 * HR },
+        'aruco-62': { x: 20 * WR, y: 797 * HR, w: 25 * WR, h: 25 * HR },
+        'aruco-112': { x: 285 * WR, y: 797 * HR, w: 25 * WR, h: 25 * HR },
+        'aruco-207': { x: 550 * WR, y: 797 * HR, w: 25 * WR, h: 25 * HR },
+        site: {
+            x: (20 - METADATA_MARGIN) * WR,
+            y: (88 - METADATA_MARGIN) * HR,
+            w: (141 + 2 * METADATA_MARGIN) * WR,
+            h: (16 + 2 * METADATA_MARGIN) * HR,
+        },
+        period: {
+            x: (170 - METADATA_MARGIN) * WR,
+            y: (88 - METADATA_MARGIN) * HR,
+            w: (141 + 2 * METADATA_MARGIN) * WR,
+            h: (16 + 2 * METADATA_MARGIN) * HR,
+        },
+        collectedBy: {
+            x: (320 - METADATA_MARGIN) * WR,
+            y: (88 - METADATA_MARGIN) * HR,
+            w: (152 + 2 * METADATA_MARGIN) * WR,
+            h: (16 + 2 * METADATA_MARGIN) * HR,
+        },
+    };
+}
+
+function createDataSourceDocDef(id, dataSource, pageOrientation, language) {
     return {
         pageSize: 'A4',
         pageOrientation: pageOrientation,
         pageMargins: [20, 105, 20, 45],
         styles: {
-            header: { fontSize: 22, bold: true, margin: [0, 0, 0, 16] },
             variableName: { fontSize: 10, bold: true, margin: [0, 10, 0, 5] },
             normal: { fontSize: 8, margin: [0, 0, 0, 0] },
         },
-        header: function (currentPage) {
-            const packedPrjId = projectId.toHexString();
-            const packedDsId = dataSource.id.replace(/\-/g, '').substring(0, 8);
-            const packedPage = currentPage.toString(16).padStart(2, '0');
-            const buffer = Buffer.from(packedPrjId + packedDsId + packedPage, 'hex');
-
-            return [
+        header: (currentPage, pageCount) => ({
+            margin: [20, 20, 20, 0],
+            columns: [
                 {
-                    margin: [20, 20, 20, 0],
-                    columns: [
+                    width: '*',
+                    stack: [
                         {
-                            width: '*',
-                            stack: [
-                                { text: dataSource.name, style: 'header' },
-                                createMetadata(language),
-                            ],
+                            text: dataSource.name,
+                            fontSize: 22,
+                            bold: true,
+                            margin: [0, 0, 0, 0],
                         },
                         {
-                            // Styling
-                            width: 'auto',
-                            margin: [20, 0, 0, 0],
-
-                            // Version 1 (21x21) will be used
-                            qr: buffer,
-                            eccLevel: 'L',
-                            mode: 'octet',
-
-                            // This is approximative: the generator rounds each block size to be an integer
-                            // number of pixels
-                            fit: 90,
+                            text: pageCount > 1 ? `${currentPage} / ${pageCount}` : ' ',
+                            margin: [0, 0, 0, 2],
                         },
+                        createMetadata(language),
                     ],
                 },
-            ];
-        },
-        footer: function (currentPage, pageCount) {
-            return {
-                margin: [20, 0, 20, 0],
-                columns: [
-                    {
-                        alignment: 'left',
-                        svg: new ArucoMarker(62).toSVG('25px'),
-                    },
-                    // FIXME: putting the page counter somewhere else, and adding a marker would certainly not hurt detection
-                    {
-                        alignment: 'center',
-                        text: `${currentPage} of ${pageCount}`,
-                        margin: [0, 10, 0, 0],
-                    },
-                    {
-                        alignment: 'right',
-                        svg: new ArucoMarker(207).toSVG('25px'),
-                    },
-                ],
-            };
+                {
+                    // Styling
+                    width: 'auto',
+                    margin: [20, 0, 0, 0],
+
+                    // Version 1 (21x21) will be used with high ECC correction
+                    // to ensure that we find it on crappy pictures.
+                    qr: Buffer.concat([id, Buffer.from([currentPage])]),
+                    eccLevel: 'H',
+                    mode: 'octet',
+
+                    // This is approximative: the generator rounds each block size to be an integer
+                    // number of pixels
+                    fit: 90,
+                },
+            ],
+        }),
+        footer: {
+            margin: [20, 0, 20, 0],
+            columns: [
+                {
+                    alignment: 'left',
+                    svg: new ArucoMarker(62).toSVG('25px'),
+                },
+                {
+                    alignment: 'center',
+                    svg: new ArucoMarker(112).toSVG('25px'),
+                },
+                {
+                    alignment: 'right',
+                    svg: new ArucoMarker(207).toSVG('25px'),
+                },
+            ],
         },
         content: [
             ...dataSource.elements.filter(variable => variable.active).map(createVariableDocDef),

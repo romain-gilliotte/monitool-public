@@ -1,44 +1,45 @@
 const cv = require('opencv4nodejs');
 
 /**
- * Use Edge detection to find something big and with four sides on a picture.
- * This allows finding a form in a simple background with reasonable accuracy.
+ * Use Edge detection to find something white-ish, square-ish and using at least 30% of the pixels.
+ *
+ * This allows finding a form in a contrasted background with reasonable accuracy when we can't find
+ * the aruco markers (or miss some of them).
  *
  * @see https://bretahajek.com/2017/01/scanning-documents-photos-opencv/
  * @see https://stackoverflow.com/questions/43009923/how-to-complete-close-a-contour-in-python-opencv
  * @see https://stackoverflow.com/questions/8667818/opencv-c-obj-c-detecting-a-sheet-of-paper-square-detection
+
+ * @param {cv.Mat} image
+ * @returns {cv.Contour}
  */
 function getPageContour(image) {
     const minArea = 0.3 * image.sizes[0] * image.sizes[1];
-
     let bestArea = minArea;
     let bestContour = null;
 
-    const [r, g, b] = image.split();
-    const l = image.cvtColor(cv.COLOR_BGR2GRAY);
-
+    // Try detection on each color channel + the luminence one.
+    const channels = [...image.split(), image.cvtColor(cv.COLOR_BGR2GRAY)];
     for (let sensibility = 1; sensibility < 3; ++sensibility) {
-        const channels = [r, g, b, l];
         for (let channel of channels) {
             const edges = getEdges(channel, sensibility);
             const contours = edges.findContours(cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
 
             for (let contour of contours) {
-                // FIXME assuming size is around the standard one we've be using...
-                // => express this as a % of width + height
+                // FIXME assuming size is around the standard one we've be using... (1600*1200)
+                // => we should express this as a % of (w + h) in case we change our minds
+                // => Note to self: DO NOT express this as a percentage of contour perimeter.
                 const approx = contour.approxPolyDPContour(30, true);
 
-                if (approx.numPoints == 4 && approx.isConvex && minArea < approx.area) {
+                if (approx.numPoints == 4 && approx.isConvex && bestArea < approx.area) {
                     bestContour = approx;
                     bestArea = approx.area;
                 }
             }
         }
-
-        if (bestContour) {
-            return bestContour;
-        }
     }
+
+    return bestContour;
 }
 
 function getEdges(image, sensibility = 1) {
