@@ -5,17 +5,37 @@
     class="thumbnail"
     style="width: 200px; margin-right: 10px; display: inline-block;"
 >
-    <image-scroll upload="upload"></image-scroll>
-    <div class="caption">
-        <b>Site:</b><br />
-        <image-scroll upload="upload" region="site"></image-scroll>
-        <b>Periode:</b><br />
-        <image-scroll upload="upload" region="period"></image-scroll>
-        <br />
-        <a
-            class="btn btn-default pull-right btn-xs"
-            ui-sref="project.usage.data_entry({uploadId: upload._id})"
-            >Saisir</a
-        >
+    <image
+        ng-if="upload.status == 'pending_dataentry'"
+        ng-src="/api/project/{{upload.projectId}}/upload/{{upload._id}}/thumbnail"
+    />
+
+    <div class="caption"><b>Nom:</b> {{upload.original.name}}<br /></div>
+
+    <div ng-if="upload.status == 'pending_processing'">
+        En attente de traitement
+    </div>
+
+    <div ng-if="upload.status == 'pending_dataentry'">
+        <div class="caption">
+            <b>Site:</b><br />
+            <image-scroll upload="upload" region="site"></image-scroll>
+            <b>Periode:</b><br />
+            <image-scroll upload="upload" region="period"></image-scroll>
+            <br />
+            <a
+                class="btn btn-default pull-right btn-xs"
+                ui-sref="project.usage.data_entry({uploadId: upload._id})"
+                >Saisir</a
+            >
+        </div>
+    </div>
+
+    <div ng-if="upload.status == 'done'">
+        This file was entered on X
+    </div>
+
+    <div ng-if="upload.status == 'failed'">
+        Le traitement à échoué: {{upload.reason}}
     </div>
 </div>

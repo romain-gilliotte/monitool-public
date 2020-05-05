@@ -1,5 +1,11 @@
 const cv = require('opencv4nodejs');
 
+/**
+ *
+ * @param {cv.Mat} image
+ * @param {(region: cv.Mat, rect: cv.Rectangle) => void} handler
+ * @returns {void}
+ */
 function slideOnImage(image, handler) {
     for (let scale = 1; scale < 6; ++scale) {
         const slWinSizeW = Math.floor(image.sizes[1] / scale);

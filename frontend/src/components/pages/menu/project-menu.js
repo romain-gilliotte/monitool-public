@@ -11,9 +11,8 @@ module.config($stateProvider => {
         abstract: true,
         url: '/projects/:projectId',
         component: __componentName,
-
         resolve: {
-            loadedProject: ($rootScope, $stateParams, $q) => {
+            project: ($rootScope, $stateParams, $q) => {
                 const projectId = $stateParams.projectId;
 
                 return projectId === 'new'
@@ -32,19 +31,13 @@ module.config($stateProvider => {
 
 module.component(__componentName, {
     bindings: {
-        loadedProject: '<',
+        project: '<',
         invitations: '<',
     },
     transclude: true,
     template: require(__templatePath),
 
     controller: class {
-        $onChanges(changes) {
-            // fixme why rename?
-            // do we need the pointer to the original project for something?
-            this.project = this.loadedProject;
-        }
-
         onProjectSaveSuccess(newProject) {
             this.project = newProject;
         }

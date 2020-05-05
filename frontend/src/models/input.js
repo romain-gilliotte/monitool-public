@@ -91,7 +91,7 @@ export default class Input {
                     const dimensions = [
                         {
                             id: 'time',
-                            attribute: dataSource.periodicity,
+                            attribute: new TimeSlot(period).periodicity,
                             items: [period],
                         },
                         {

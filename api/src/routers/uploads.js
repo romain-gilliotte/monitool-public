@@ -1,5 +1,6 @@
 const Router = require('@koa/router');
 const multer = require('@koa/multer');
+const { Hash } = require('crypto');
 const { ObjectId } = require('mongodb');
 const JSONStream = require('JSONStream');
 
@@ -27,7 +28,7 @@ router.get('/project/:projectId/upload/:id', async ctx => {
     );
 });
 
-router.get('/project/:projectId/upload/:id/:name(original|reprojected)', async ctx => {
+router.get('/project/:projectId/upload/:id/:name(original|reprojected|thumbnail)', async ctx => {
     const upload = await database
         .collection('input_upload')
         .findOne(
@@ -48,6 +49,7 @@ router.post('/project/:projectId/upload', multer().single('file'), async ctx => 
         status: 'pending_processing',
         projectId: new ObjectId(ctx.params.projectId),
         original: {
+            sha1: new Hash('sha1').update(file.buffer).digest(),
             name: file.originalname,
             size: file.size,
             mimeType: file.mimetype,

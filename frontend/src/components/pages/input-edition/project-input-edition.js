@@ -21,39 +21,50 @@ const module = angular.module(__moduleName, [
 ]);
 
 module.config($stateProvider => {
+    // Data entry from calendar
     $stateProvider.state('project.usage.edit', {
         url: '/input/manual/:dataSourceId/:period/:siteId',
         component: __componentName,
         resolve: {
-            mode: () => 'manual',
-            metadata: ($stateParams, project) => ({
-                dataSourceId: $stateParams.dataSourceId,
-                period: $stateParams.period,
-                siteId: $stateParams.siteId,
-                variableIds: project.forms
-                    .find(f => f.id === $stateParams.dataSourceId)
-                    .elements.map(v => v.id),
-            }),
+            period: $stateParams => $stateParams.period,
+            siteId: $stateParams => $stateParams.siteId,
+            variables: ($stateParams, project) => {
+                const ds = project.forms.find(f => f.id === $stateParams.dataSourceId);
+                return ds.elements.filter(v => ds.active && v.active);
+            },
+            periodicity: ($stateParams, project) =>
+                project.forms.find(f => f.id === $stateParams.dataSourceId).periodicity,
+            entityIds: ($stateParams, project) =>
+                project.forms.find(f => f.id === $stateParams.dataSourceId).entities,
         },
     });
 
+    // Data entry from paper form.
     $stateProvider.state('project.usage.data_entry', {
         url: '/input/upload/:uploadId',
         component: __componentName,
         resolve: {
-            mode: () => 'upload',
             upload: $stateParams =>
                 axios
                     .get(`/project/${$stateParams.projectId}/upload/${$stateParams.uploadId}`)
                     .then(response => response.data),
 
-            metadata: upload => ({
-                period: null,
-                siteId: null,
-                variableIds: Object.keys(upload.reprojected.regions).filter(id =>
-                    /^[-0-9a-f]+$/.test(id)
-                ),
-            }),
+            period: () => null,
+            siteId: () => null,
+            variables: (project, upload) => {
+                const ds = project.forms.find(f => f.id === upload.dataSourceId);
+                return ds.elements.filter(
+                    v => ds.active && v.active && upload.reprojected.regions[v.id]
+                );
+            },
+            periodicity: (project, upload) => {
+                const ds = project.forms.find(f => f.id === upload.dataSourceId);
+                return ds.periodicity;
+            },
+            entityIds: (project, upload) => {
+                const ds = project.forms.find(f => f.id === upload.dataSourceId);
+                return ds.entities;
+            },
         },
     });
 });
@@ -63,9 +74,12 @@ module.component(__componentName, {
         project: '<',
         invitations: '<',
 
-        mode: '<',
-        metadata: '<',
         upload: '<',
+        period: '<',
+        siteId: '<',
+        variables: '<',
+        periodicity: '<',
+        entityIds: '<',
     },
 
     template: require(__templatePath),
@@ -104,22 +118,15 @@ module.component(__componentName, {
         }
 
         $onChanges(changes) {
-            // Convenience getters
-            this.variables = this.project.forms
-                .reduce((vars, ds) => [...vars, ...ds.elements], [])
-                .filter(v => v.active && this.metadata.variableIds.includes(v.id));
-
             // Compute choices.
             this._initChoices();
 
-            // If manual mode, lock choices.
-            if (this.mode === 'manual') {
-                this.period = this.metadata.period;
-                this.siteId = this.metadata.siteId;
+            // If metadata is already set, we load the file.
+            if (this.period && this.siteId) {
                 this.metadataEditable = false;
                 this.onMetadataSet();
             } else {
-                this.period = TimeSlot.fromDate(new Date(), this.dataSource.periodicity).value;
+                this.period = TimeSlot.fromDate(new Date(), this.periodicity).value;
                 this.metadataEditable = true;
             }
         }
@@ -188,23 +195,21 @@ module.component(__componentName, {
         _initChoices() {
             // Sites depend on invitation.
             const myInvitation = this.invitations.find(i => i.email === this.userEmail);
-            const dataSource = this.project.forms.find(ds => ds.id === this.metadata.dataSourceId);
 
             this.sites = this.project.entities.filter(
                 e =>
                     e.active &&
-                    this.dataSource.entities.includes(e.id) &&
+                    this.entityIds.includes(e.id) &&
                     (!myInvitation || myInvitation.dataEntry.siteIds.includes(e.id))
             );
 
             // Periods only on current date.
-            const periodicity = this.dataSource.periodicity;
-            let end = TimeSlot.fromDate(new Date(), periodicity).value;
+            let end = TimeSlot.fromDate(new Date(), this.periodicity).value;
             if (this.project.end < end) {
                 end = this.project.end;
             }
 
-            const dimension = new TimeDimension('time', periodicity, this.project.start, end);
+            const dimension = new TimeDimension('time', this.periodicity, this.project.start, end);
             this.periods = dimension.getItems().reverse();
         }
     },

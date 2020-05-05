@@ -3,39 +3,21 @@ const { findArucoMarkers } = require('./landmarks/aruco');
 const { getPageContour } = require('./landmarks/page-contours');
 const { findQrCode } = require('./landmarks/qr-code');
 
-// {
-//     _id: 'jsdklfjklsjfdkl',
-//     status: 'pending_processing',
-//     original: {
-//         size: 234234324,
-//         mimeType: 'image/png',
-//         data: 'sdkljslkdfj',
-//     },
-//     reprojected: {
-//         size: 23424324,
-//         mimeType: 'image/jpg',
-//         data: 'sdfkjsdlkjflksf',
-//         regions: {
-//         }
-//     },
-//     data: [
-//         {
-//             // Use null to say we don't know
-//             variableId: 'jsdklfjskdfl'
-//             dimensions: [{ id, attribute, items}, ...],
-//             data: [...],
-//         }
-//     ]
-// }
+const MAX_PROCESSING_SIZE = 2560;
+const THUMBNAIL_SIZE = 200;
 
 async function processImageUpload(upload) {
-    let original = cv.imdecode(upload.original.data.buffer);
+    let original = cv.imdecode(upload.original.data.buffer, cv.IMREAD_COLOR);
 
     // Resize source image if too big. This hurts feature detection, but otherwise it takes ages.
-    if (1600 < original.sizes[0] || 1600 < original.sizes[1]) {
-        const scale = Math.min(1600 / original.sizes[0], 1600 / original.sizes[1]);
+    if (MAX_PROCESSING_SIZE < original.sizes[0] || MAX_PROCESSING_SIZE < original.sizes[1]) {
+        const scale = Math.min(
+            MAX_PROCESSING_SIZE / original.sizes[0],
+            MAX_PROCESSING_SIZE / original.sizes[1]
+        );
+
         const sizes = original.sizes.map(l => Math.floor(l * scale));
-        original = original.resize(sizes[0], sizes[1]);
+        original = original.resize(sizes[0], sizes[1], 0, 0, cv.INTER_CUBIC);
     }
 
     // Find reference from the QR code.
@@ -77,12 +59,13 @@ async function processImageUpload(upload) {
     // Reproject and hope for the best.
     const homography = cv.findHomography(landmarks, target);
     const document = original.warpPerspective(homography.homography, new cv.Size(width, height));
-    const jpeg = cv.imencode('.jpg', document, [cv.IMWRITE_JPEG_QUALITY, 75]);
+    const jpeg = cv.imencode('.jpg', document, [cv.IMWRITE_JPEG_QUALITY, 60]);
 
     return {
         $set: {
             status: 'pending_dataentry',
             dataSourceId: template.metadata.dataSourceId,
+            thumbnail: getThumbnail(original),
             reprojected: {
                 size: jpeg.byteLength,
                 mimeType: 'image/jpeg',
@@ -151,6 +134,25 @@ function computeTargets(file, pageNo, w, h) {
     }
 
     return targets;
+}
+
+/**
+ *
+ * @param {cv.Mat} image
+ */
+function getThumbnail(image) {
+    const [h, w] = image.sizes;
+    const minLength = Math.min(w, h);
+    const rect = new cv.Rect(Math.floor(0.5 * (w - minLength)), 0, minLength, minLength);
+    const thumbnail = image.getRegion(rect).resize(THUMBNAIL_SIZE, THUMBNAIL_SIZE);
+
+    const jpeg = cv.imencode('.jpg', thumbnail, [cv.IMWRITE_JPEG_QUALITY, 60]);
+
+    return {
+        size: jpeg.byteLength,
+        mimeType: 'image/jpeg',
+        data: jpeg,
+    };
 }
 
 module.exports = { processImageUpload, findLandmarks, computeTargets };
