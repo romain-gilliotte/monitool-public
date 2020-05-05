@@ -8,17 +8,20 @@ const { slideOnImage } = require('./_helper');
  * @param {cv.Mat} image
  * @returns {[Record<string, {x: number, y: number, w: number, h: number}>, Buffer]}
  */
-function findQrCode(image) {
+async function findQrCode(image) {
     let value;
 
+    image = await image.cvtColorAsync(cv.COLOR_BGR2GRAY);
+
     // Otsu threshold the image before giving to detector.
-    // It seems to help it a lot with bad images.
-    image = image.cvtColor(cv.COLOR_BGR2GRAY);
+    // It seems to help with bad images.
+    // image = region.threshold(0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU);
 
-    slideOnImage(image, (region, rect) => {
-        // region = region.threshold(0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU);
+    await slideOnImage(image, async (region, rect) => {
+        region = await region.cvtColorAsync(cv.COLOR_GRAY2RGBA);
 
-        let code = jsQR(region.cvtColor(cv.COLOR_GRAY2RGBA).getData(), rect.width, rect.height);
+        let data = await region.getDataAsync();
+        let code = jsQR(data, rect.width, rect.height);
 
         // reject empty codes, which this lib detects sometimes
         if (code && code.binaryData.length) {

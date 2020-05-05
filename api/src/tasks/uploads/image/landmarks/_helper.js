@@ -3,10 +3,10 @@ const cv = require('opencv4nodejs');
 /**
  *
  * @param {cv.Mat} image
- * @param {(region: cv.Mat, rect: cv.Rectangle) => void} handler
+ * @param {(region: cv.Mat, rect: cv.Rectangle) => Promise<void>} handler
  * @returns {void}
  */
-function slideOnImage(image, handler) {
+async function slideOnImage(image, handler) {
     for (let scale = 1; scale < 6; ++scale) {
         const slWinSizeW = Math.floor(image.sizes[1] / scale);
         const slWinSizeH = Math.floor(image.sizes[0] / scale);
@@ -17,7 +17,7 @@ function slideOnImage(image, handler) {
                 const rectangle = new cv.Rect(x, y, slWinSizeW, slWinSizeH);
                 const region = image.getRegion(rectangle);
 
-                if (handler(region, rectangle)) {
+                if (await handler(region, rectangle)) {
                     return;
                 }
             }

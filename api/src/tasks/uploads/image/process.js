@@ -3,25 +3,21 @@ const { findArucoMarkers } = require('./landmarks/aruco');
 const { getPageContour } = require('./landmarks/page-contours');
 const { findQrCode } = require('./landmarks/qr-code');
 
-const MAX_PROCESSING_SIZE = 2560;
+const MAX_SIZE = 2560;
 const THUMBNAIL_SIZE = 200;
 
 async function processImageUpload(upload) {
     let original = cv.imdecode(upload.original.data.buffer, cv.IMREAD_COLOR);
 
     // Resize source image if too big. This hurts feature detection, but otherwise it takes ages.
-    if (MAX_PROCESSING_SIZE < original.sizes[0] || MAX_PROCESSING_SIZE < original.sizes[1]) {
-        const scale = Math.min(
-            MAX_PROCESSING_SIZE / original.sizes[0],
-            MAX_PROCESSING_SIZE / original.sizes[1]
-        );
-
+    if (MAX_SIZE < original.sizes[0] || MAX_SIZE < original.sizes[1]) {
+        const scale = Math.min(MAX_SIZE / original.sizes[0], MAX_SIZE / original.sizes[1]);
         const sizes = original.sizes.map(l => Math.floor(l * scale));
-        original = original.resize(sizes[0], sizes[1], 0, 0, cv.INTER_CUBIC);
+        original = await original.resizeAsync(sizes[0], sizes[1], 0, 0, cv.INTER_CUBIC);
     }
 
     // Find reference from the QR code.
-    const [qrLandmarks, data] = findQrCode(original);
+    const [qrLandmarks, data] = await findQrCode(original);
     const [templateId, pageNo] = [data.slice(0, 6), data[6]];
     const template = await database.collection('fs.files').findOne({ 'metadata.id': templateId });
     if (!template) throw Error('Could not find associated form');
@@ -45,7 +41,7 @@ async function processImageUpload(upload) {
     }
 
     // Find points in common
-    const landmarksObj = findLandmarks(original, qrLandmarks);
+    const landmarksObj = await findLandmarks(original, qrLandmarks);
     const targetObj = computeTargets(template, pageNo, width, height);
     const landmarks = [];
     const target = [];
@@ -58,14 +54,18 @@ async function processImageUpload(upload) {
 
     // Reproject and hope for the best.
     const homography = cv.findHomography(landmarks, target);
-    const document = original.warpPerspective(homography.homography, new cv.Size(width, height));
-    const jpeg = cv.imencode('.jpg', document, [cv.IMWRITE_JPEG_QUALITY, 60]);
+    const document = await original.warpPerspectiveAsync(
+        homography.homography,
+        new cv.Size(width, height)
+    );
+
+    const jpeg = await cv.imencodeAsync('.jpg', document, [cv.IMWRITE_JPEG_QUALITY, 60]);
 
     return {
         $set: {
             status: 'pending_dataentry',
             dataSourceId: template.metadata.dataSourceId,
-            thumbnail: getThumbnail(original),
+            thumbnail: await getThumbnail(original),
             reprojected: {
                 size: jpeg.byteLength,
                 mimeType: 'image/jpeg',
@@ -76,8 +76,8 @@ async function processImageUpload(upload) {
     };
 }
 
-function findLandmarks(image, qrLandmarks) {
-    const aruco = findArucoMarkers(image);
+async function findLandmarks(image, qrLandmarks) {
+    const aruco = await findArucoMarkers(image);
     const points = { ...aruco, ...qrLandmarks };
 
     if (Object.keys(points).length < 12) {
@@ -140,13 +140,13 @@ function computeTargets(file, pageNo, w, h) {
  *
  * @param {cv.Mat} image
  */
-function getThumbnail(image) {
+async function getThumbnail(image) {
     const [h, w] = image.sizes;
     const minLength = Math.min(w, h);
     const rect = new cv.Rect(Math.floor(0.5 * (w - minLength)), 0, minLength, minLength);
-    const thumbnail = image.getRegion(rect).resize(THUMBNAIL_SIZE, THUMBNAIL_SIZE);
+    const thumbnail = await image.getRegion(rect).resizeAsync(THUMBNAIL_SIZE, THUMBNAIL_SIZE);
 
-    const jpeg = cv.imencode('.jpg', thumbnail, [cv.IMWRITE_JPEG_QUALITY, 60]);
+    const jpeg = await cv.imencodeAsync('.jpg', thumbnail, [cv.IMWRITE_JPEG_QUALITY, 60]);
 
     return {
         size: jpeg.byteLength,

@@ -13,17 +13,17 @@ const cv = require('opencv4nodejs');
  * @param {cv.Mat} image
  * @returns {cv.Contour}
  */
-function getPageContour(image) {
+async function getPageContour(image) {
     const minArea = 0.3 * image.sizes[0] * image.sizes[1];
     let bestArea = minArea;
     let bestContour = null;
 
     // Try detection on each color channel + the luminence one.
-    const channels = [...image.split(), image.cvtColor(cv.COLOR_BGR2GRAY)];
+    const channels = [...(await image.splitAsync()), await image.cvtColorAsync(cv.COLOR_BGR2GRAY)];
     for (let sensibility = 1; sensibility < 3; ++sensibility) {
         for (let channel of channels) {
-            const edges = getEdges(channel, sensibility);
-            const contours = edges.findContours(cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
+            const edges = await getEdges(channel, sensibility);
+            const contours = await edges.findContoursAsync(cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
 
             for (let contour of contours) {
                 // FIXME assuming size is around the standard one we've be using... (1600*1200)
@@ -42,13 +42,18 @@ function getPageContour(image) {
     return bestContour;
 }
 
-function getEdges(image, sensibility = 1) {
-    image = image.normalize(0, 255, cv.NORM_MINMAX);
-    // image = image.bilateralFilter(9, 75, 75); // noise removal
-    // image = image.adaptiveThreshold(255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 115, -10);
-    image = image.medianBlur(9);
-    image = image.canny(5 / sensibility, 30 / sensibility, 3);
-    image = image.dilate(new cv.Mat(), new cv.Point2(-1, -1), 1);
+/**
+ *
+ * @param {cv.Mat} image
+ * @param {number} sensibility
+ */
+async function getEdges(image, sensibility = 1) {
+    image = await image.normalizeAsync(0, 255, cv.NORM_MINMAX);
+    // image = await image.bilateralFilterAsync(9, 75, 75); // noise removal
+    // image = await image.adaptiveThresholdAsync(255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 115, -10);
+    image = await image.medianBlurAsync(9);
+    image = await image.cannyAsync(5 / sensibility, 30 / sensibility, 3);
+    image = await image.dilateAsync(new cv.Mat(), new cv.Point2(-1, -1), 1);
 
     return image;
 }

@@ -7,24 +7,33 @@ const { slideOnImage } = require('./_helper');
  * @param {cv.Mat} image
  * @returns {Record<string, cv.Point2>}
  */
-function findArucoMarkers(image) {
+async function findArucoMarkers(image) {
     const detector = new AR.Detector();
     const points = {};
 
     // Search in the image.
-    slideOnImage(image, (region, rect) => {
-        const gray = region.cvtColor(cv.COLOR_BGR2GRAY);
-        const attempts = [
-            region.cvtColor(cv.COLOR_BGR2RGBA),
-            gray.threshold(0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU).cvtColor(cv.COLOR_GRAY2RGBA),
-            gray
-                .adaptiveThreshold(255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 21, 0)
-                .cvtColor(cv.COLOR_GRAY2RGBA),
-        ];
+    await slideOnImage(image, async (region, rect) => {
+        const gray = await region.cvtColorAsync(cv.COLOR_BGR2GRAY);
+        const [threshold, adaptative] = await Promise.all([
+            gray.thresholdAsync(0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU),
+            gray.adaptiveThresholdAsync(
+                255,
+                cv.ADAPTIVE_THRESH_GAUSSIAN_C,
+                cv.THRESH_BINARY,
+                21,
+                0
+            ),
+        ]);
+
+        const attempts = await Promise.all([
+            region.cvtColorAsync(cv.COLOR_BGR2RGBA),
+            threshold.cvtColorAsync(cv.COLOR_GRAY2RGBA),
+            adaptative.cvtColorAsync(cv.COLOR_GRAY2RGBA),
+        ]);
 
         for (let attempt of attempts) {
             const detected = detector.detect({
-                data: attempt.getData(),
+                data: await attempt.getDataAsync(),
                 width: rect.width,
                 height: rect.height,
             });
