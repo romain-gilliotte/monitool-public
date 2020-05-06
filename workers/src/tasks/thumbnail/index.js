@@ -3,7 +3,7 @@ const fs = require('fs');
 const gm = require('gm');
 const FormData = require('form-data');
 const config = require('../../config');
-const { getFile, updateFile } = require('../../storage/gridfs');
+const { getFile, updateFile } = require('../../../../api/src/storage/gridfs');
 
 // fixme exception handling
 queue.process('generate-thumbnail', async job => {

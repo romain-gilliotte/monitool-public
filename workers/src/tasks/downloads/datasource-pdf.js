@@ -2,7 +2,7 @@ const ArucoMarker = require('aruco-marker');
 const { ObjectId } = require('mongodb');
 const PdfPrinter = require('pdfmake');
 const LayoutBuilder = require('pdfmake/src/layoutBuilder');
-const { updateFile } = require('../../storage/gridfs');
+const { updateFile } = require('../../../../api/src/storage/gridfs');
 
 queue.process('generate-datasource-pdf', async job => {
     const { cacheId, cacheHash, prjId, dsId, language, orientation } = job.data;

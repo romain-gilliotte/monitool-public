@@ -29,7 +29,7 @@ global.redisLock = null;
 global.queue = null;
 global.server = null;
 
-async function start(web = true, worker = true) {
+async function start() {
     global.mongo = await MongoClient.connect(config.mongo.uri, { useUnifiedTopology: true });
 
     global.database = global.mongo.db(config.mongo.database);
@@ -45,32 +45,21 @@ async function start(web = true, worker = true) {
     global.redisLock = new Redlock([redis]);
     global.queue = new Bull('workers', config.redis.uri);
 
-    if (web) {
-        app = new Koa();
-        app.use(cors());
-        app.use(responseTime());
-        app.use(bodyParser({ enableTypes: ['json'] }));
-        app.use(require('./middlewares/error-handler'));
-        app.use(require('./middlewares/load-profile'));
-        app.use(require('./routers/invitations').routes());
-        app.use(require('./routers/input').routes());
-        app.use(require('./routers/downloads').routes());
-        app.use(require('./routers/project').routes());
-        app.use(require('./routers/rpc').routes());
-        app.use(require('./routers/uploads').routes());
+    app = new Koa();
+    app.use(cors());
+    app.use(responseTime());
+    app.use(bodyParser({ enableTypes: ['json'] }));
+    app.use(require('./middlewares/error-handler'));
+    app.use(require('./middlewares/load-profile'));
+    app.use(require('./routers/invitations').routes());
+    app.use(require('./routers/input').routes());
+    app.use(require('./routers/downloads').routes());
+    app.use(require('./routers/project').routes());
+    app.use(require('./routers/rpc').routes());
+    app.use(require('./routers/uploads').routes());
 
-        global.server = app.listen(config.port);
-        winston.log('info', `Listening on ${config.port}.`);
-    }
-
-    if (worker) {
-        // require('./tasks/data-entry');
-        require('./tasks/downloads');
-        require('./tasks/reporting');
-        require('./tasks/thumbnail');
-        require('./tasks/uploads');
-        winston.log('info', `All tasks registered.`);
-    }
+    global.server = app.listen(config.port);
+    winston.log('info', `Listening on ${config.port}.`);
 }
 
 async function stop() {

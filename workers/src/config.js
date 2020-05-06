@@ -31,14 +31,7 @@ const readEnv = function (key, defaultValue = undefined) {
 
 const config = {
     debug: toBool(readEnv('MONITOOL_DEBUG', 'FALSE')),
-    port: parseInt(readEnv('MONITOOL_PORT', '8000')),
     cluster: toBool(readEnv('MONITOOL_CLUSTER', 'TRUE')),
-
-    jwt: {
-        jwksHost: readEnv('MONITOOL_JWKS_HOST'),
-        audience: readEnv('MONITOOL_AUDIENCE'),
-        issuer: readEnv('MONITOOL_ISSUER'),
-    },
 
     mongo: {
         uri: readEnv('MONITOOL_MONGO_URI'),
@@ -47,6 +40,10 @@ const config = {
 
     redis: {
         uri: readEnv('MONITOOL_REDIS_URI'),
+    },
+
+    unoconv: {
+        uri: readEnv('MONITOOL_UNOCONV_URI', null),
     },
 };
 

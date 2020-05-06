@@ -1,7 +1,7 @@
 const xl = require('excel4node');
 const { ObjectId } = require('mongodb');
 const stream = require('stream');
-const { updateFile } = require('../../storage/gridfs');
+const { updateFile } = require('../../../../api/src/storage/gridfs');
 
 const mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 

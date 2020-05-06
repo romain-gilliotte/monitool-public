@@ -4,7 +4,7 @@ const { TimeDimension } = require('olap-in-memory');
 const stream = require('stream');
 const { getVariableCube } = require('../reporting/loader/cube-variable');
 const { getQueryCube } = require('../reporting/loader/cube-query');
-const { updateFile } = require('../../storage/gridfs');
+const { updateFile } = require('../../../../api/src/storage/gridfs');
 
 const mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 

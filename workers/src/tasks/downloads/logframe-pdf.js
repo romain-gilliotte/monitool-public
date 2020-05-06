@@ -1,6 +1,6 @@
 const { ObjectId } = require('mongodb');
 const PdfPrinter = require('pdfmake');
-const { updateFile } = require('../../storage/gridfs');
+const { updateFile } = require('../../../../api/src/storage/gridfs');
 
 queue.process('generate-logframe-pdf', async job => {
     const { cacheId, cacheHash, prjId, lfId, language, orientation } = job.data;
