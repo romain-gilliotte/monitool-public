@@ -10,7 +10,7 @@ const { createVariableDimensions, createVariableRules } = require('./helper');
  * interpolated, and which was not (it won't work in boundaries), we perform the query
  * two time, on cubes which have the same dimensions, but different aggregation levels.
  */
-async function getVariableCube(project, variableId, aggregate, dices) {
+async function getVariableCube(io, project, variableId, aggregate, dices) {
     const form = project.forms.find(f => f.elements.find(v => v.id === variableId));
     const variable = form.elements.find(v => v.id === variableId);
     const dimensions = createVariableDimensions(project, form, variable, 'day');
@@ -18,8 +18,8 @@ async function getVariableCube(project, variableId, aggregate, dices) {
 
     // Compute both pre and post aggregated cubes.
     const [preAggregatedCube, postAggregatedCube] = await Promise.all([
-        getPreAggregatedCube(dimensions, project._id, variable.id, rules, aggregate, dices),
-        getPostAggregatedCube(dimensions, project._id, variable.id, rules, aggregate, dices),
+        getPreAggregated(io, dimensions, project._id, variable.id, rules, aggregate, dices),
+        getPostAggregated(io, dimensions, project._id, variable.id, rules, aggregate, dices),
     ]);
 
     // Steal interpolation status from the preAggregatedCube.
@@ -42,13 +42,13 @@ async function getVariableCube(project, variableId, aggregate, dices) {
  * Dicing beforehand improves performance a lot, but does not change the final result.
  * If we wanted, we could move the dice afterwards, and load the prefilled cube from from cache.
  */
-async function getPostAggregatedCube(dimensions, projectId, variableId, rules, aggregate, dices) {
+async function getPostAggregated(io, dimensions, projectId, variableId, rules, aggregate, dices) {
     let cube = new Cube(dimensions);
     cube = cube.drillUp('time', 'all');
     cube = dice(cube, dices);
 
     cube.createStoredMeasure('main', rules);
-    await iterateCubes(projectId, variableId, rules, inputCube => {
+    await iterateCubes(io, projectId, variableId, rules, inputCube => {
         const myAttribute = cube.getDimension('time').rootAttribute;
         const inputAttribute = inputCube.getDimension('time').rootAttribute;
         const attr = greatestCommonDivisor(inputAttribute, myAttribute);
@@ -65,13 +65,13 @@ async function getPostAggregatedCube(dimensions, projectId, variableId, rules, a
  * The data will be wrong, because loading cubes will overwrite previously entered data.
  * However, we need this to approximate interpolation status of fields.
  */
-async function getPreAggregatedCube(dimensions, projectId, variableId, rules, aggregate, dices) {
+async function getPreAggregated(io, dimensions, projectId, variableId, rules, aggregate, dices) {
     let cube = new Cube(dimensions);
     cube = dice(cube, dices);
     cube = projection(cube, aggregate);
 
     cube.createStoredMeasure('main', rules);
-    await iterateCubes(projectId, variableId, rules, cube.hydrateFromCube.bind(cube));
+    await iterateCubes(io, projectId, variableId, rules, cube.hydrateFromCube.bind(cube));
 
     return cube;
 }

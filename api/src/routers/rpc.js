@@ -7,7 +7,7 @@ const router = new Router();
 router.post('/rpc/clone-project', async ctx => {
     try {
         // Load old project
-        const oldProject = await database.collection('project').findOne({
+        const oldProject = await ctx.io.database.collection('project').findOne({
             _id: new ObjectId(ctx.request.body.projectId),
             $or: [{ owner: ctx.state.profile.email }, { 'users.email': ctx.state.profile.email }],
         });
@@ -18,19 +18,21 @@ router.post('/rpc/clone-project', async ctx => {
         const newProject = _.cloneDeep(oldProject);
         delete newProject._id;
         newProject.name = `Copy of ${newProject.name}`;
-        await database.collection('project').insertOne(newProject);
-        await database.collection('input_seq').insertOne({ projectIds: [newProject._id] });
+        await ctx.io.database.collection('project').insertOne(newProject);
+        await ctx.io.database.collection('input_seq').insertOne({ projectIds: [newProject._id] });
 
         // Update input sequences if requested.
         if (ctx.request.body.withInputs) {
-            await database
+            await ctx.io.database
                 .collection('input_seq')
                 .updateMany(
                     { projectIds: oldProject._id },
                     { $addToSet: { projectIds: newProject._id } }
                 );
 
-            await database.collection('input_seq').insertOne({ projectIds: [oldProject._id] });
+            await ctx.io.database
+                .collection('input_seq')
+                .insertOne({ projectIds: [oldProject._id] });
         }
 
         ctx.response.body = newProject;
@@ -45,7 +47,7 @@ router.post('/rpc/clone-project', async ctx => {
 router.get('/rpc/get-last-inputs', async ctx => {
     const userEmail = ctx.state.profile.email;
 
-    ctx.response.body = await database
+    ctx.response.body = await ctx.io.database
         .collection('project')
         .aggregate([
             {

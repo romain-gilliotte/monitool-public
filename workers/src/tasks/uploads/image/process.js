@@ -2,11 +2,16 @@ const cv = require('opencv4nodejs');
 const { findArucoMarkers } = require('./landmarks/aruco');
 const { getPageContour } = require('./landmarks/page-contours');
 const { findQrCode } = require('./landmarks/qr-code');
+const { InputOutput } = require('../../../io');
 
 const MAX_SIZE = 2560;
 const THUMBNAIL_SIZE = 200;
 
-async function processImageUpload(upload) {
+/**
+ * @param {InputOutput} io
+ * @param {any} upload
+ */
+async function processImageUpload(io, upload) {
     let original = cv.imdecode(upload.original.data.buffer, cv.IMREAD_COLOR);
 
     // Resize source image if too big. This hurts feature detection, but otherwise it takes ages.
@@ -19,8 +24,13 @@ async function processImageUpload(upload) {
     // Find reference from the QR code.
     const [qrLandmarks, data] = await findQrCode(original);
     const [templateId, pageNo] = [data.slice(0, 6), data[6]];
-    const template = await database.collection('fs.files').findOne({ 'metadata.id': templateId });
-    if (!template) throw Error('Could not find associated form');
+    const template = await io.database
+        .collection('fs.files')
+        .findOne({ 'metadata.id': templateId });
+
+    if (!template) {
+        throw Error('Could not find associated form');
+    }
 
     // Depending on file orientation, chose final size of our image (50px/cm is ~ 125dpi).
     let width, height;

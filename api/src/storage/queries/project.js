@@ -3,7 +3,7 @@ const TimeSlot = require('timeslot-dag');
 const demoProject = require('../../../data/demo-project/project.json');
 const demoInputs = require('../../../data/demo-project/inputs.json');
 
-function listProjects(userEmail, projection = null) {
+function listProjects(io, userEmail, projection = null) {
     const pipeline = [
         {
             $lookup: {
@@ -25,10 +25,10 @@ function listProjects(userEmail, projection = null) {
         ...(projection ? [{ $project: projection }] : []),
     ];
 
-    return database.collection('project').aggregate(pipeline);
+    return io.database.collection('project').aggregate(pipeline);
 }
 
-async function getProject(userEmail, projectId, projection = null) {
+async function getProject(io, userEmail, projectId, projection = null) {
     const pipeline = [
         { $match: { _id: new ObjectId(projectId) } },
         {
@@ -51,13 +51,13 @@ async function getProject(userEmail, projectId, projection = null) {
         ...(projection ? [{ $project: projection }] : []),
     ];
 
-    const project = await database.collection('project').aggregate(pipeline).next();
+    const project = await io.database.collection('project').aggregate(pipeline).next();
     if (!project) throw new Error('not found');
 
     return project;
 }
 
-async function insertDemoProject(email) {
+async function insertDemoProject(io, email) {
     function _offsetProject(project, offset) {
         return {
             ...project,
@@ -105,15 +105,15 @@ async function insertDemoProject(email) {
         15; // we have 16 months of data in the demo project
 
     const project = _offsetProject({ owner: email, ...demoProject }, monthOffset);
-    await database.collection('project').insertOne(project);
+    await io.database.collection('project').insertOne(project);
 
     const sequence = { projectIds: [project._id] };
-    await database.collection('input_seq').insertOne(sequence);
+    await io.database.collection('input_seq').insertOne(sequence);
 
     const inputs = demoInputs.map(input =>
         _offsetInput({ sequenceId: sequence._id, ...input }, monthOffset)
     );
-    await database.collection('input').insertMany(inputs);
+    await io.database.collection('input').insertMany(inputs);
 }
 
 module.exports = { listProjects, getProject, insertDemoProject };

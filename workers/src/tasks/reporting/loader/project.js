@@ -1,6 +1,11 @@
 const { ObjectId } = require('mongodb');
+const { InputOutput } = require('../../../io');
 
-function loadProject(projectId) {
+/**
+ * @param {InputOutput} io
+ * @param {string} projectId
+ */
+function loadProject(io, projectId) {
     // The names are needed for Excel file generation
     const filter = { _id: new ObjectId(projectId) };
     const options = {
@@ -25,7 +30,7 @@ function loadProject(projectId) {
         },
     };
 
-    return database.collection('project').findOne(filter, options);
+    return io.database.collection('project').findOne(filter, options);
 }
 
 module.exports = { loadProject };

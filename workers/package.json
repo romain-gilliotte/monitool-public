@@ -12,12 +12,15 @@
         "bull": "^3.13.0",
         "dotenv": "^8.2.0",
         "excel4node": "^1.7.2",
+        "form-data": "^3.0.0",
         "gm": "^1.23.1",
         "js-aruco": "^0.1.0",
         "jsqr": "^1.3.1",
         "mongodb": "^3.5.7",
         "olap-in-memory": "^7.0.9",
+        "opencv4nodejs": "^5.5.0",
         "pdfmake": "^0.1.65",
+        "roboto-fontface": "^0.10.0",
         "timeslot-dag": "^2.1.3",
         "winston": "^3.2.1"
     },
@@ -26,7 +29,7 @@
         "nodemon": "^2.0.3"
     },
     "scripts": {
-        "start": "nodemon --unhandled-rejections=strict --inspect src/main.js",
+        "start": "nodemon --unhandled-rejections=strict --inspect=9230 src/main.js",
         "serve": "node src/main.js",
         "test": "NODE_ENV=test mocha"
     }

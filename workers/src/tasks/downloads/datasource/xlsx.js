@@ -1,35 +1,9 @@
 const xl = require('excel4node');
-const { ObjectId } = require('mongodb');
-const stream = require('stream');
-const { updateFile } = require('../../../../api/src/storage/gridfs');
 
-const mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-
-queue.process('generate-datasource-xlsx', async job => {
-    const { cacheId, cacheHash, prjId, dsId } = job.data;
-    const project = await database
-        .collection('project')
-        .findOne(
-            { _id: new ObjectId(prjId) },
-            { projection: { forms: { $elemMatch: { id: dsId } } } }
-        );
-
-    if (project && project.forms.length) {
-        const dataSource = project.forms[0];
-        const title = dataSource.name || 'data-source';
-
-        await updateFile(cacheId, cacheHash, `${title}.xlsx`, async () => {
-            const wb = await getWorkbook(dataSource);
-            const buffer = await wb.writeToBuffer();
-
-            const passThrough = new stream.PassThrough();
-            passThrough.write(buffer);
-            passThrough.end();
-
-            return [passThrough, { mimeType: mime }];
-        });
-    }
-});
+function createXlsx(id, dataSource, language) {
+    const wb = getWorkbook(dataSource);
+    return wb.writeToBuffer();
+}
 
 function getWorkbook(dataSource) {
     const wb = new xl.Workbook();
@@ -119,3 +93,5 @@ function addTitlesOnLeft(ws, partitions, startRow, startCol, index = 0) {
         addTitlesOnLeft(ws, partitions, itemStartRow, startCol + 1, index + 1);
     }
 }
+
+module.exports = { createXlsx };

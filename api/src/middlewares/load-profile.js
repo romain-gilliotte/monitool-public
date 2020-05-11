@@ -27,7 +27,7 @@ module.exports = koaCompose([
 
     // Load profile
     async (ctx, next) => {
-        const collection = database.collection('user');
+        const collection = ctx.io.database.collection('user');
         const subcriber = ctx.state.user.sub;
 
         // Find or create user
@@ -44,7 +44,7 @@ module.exports = koaCompose([
                 .catch(e => {});
         }
 
-        ctx.state.profile = new Profile(user);
+        ctx.state.profile = new Profile(ctx.io, user);
 
         await next();
     },
@@ -55,8 +55,8 @@ module.exports = koaCompose([
  */
 async function createUser(ctx) {
     const subcriber = ctx.state.user.sub;
-    const collection = database.collection('user');
-    const lock = await redisLock.lock(`profile:${subcriber}`, 10000);
+    const collection = ctx.io.database.collection('user');
+    const lock = await ctx.io.redisLock.lock(`profile:${subcriber}`, 10000);
 
     // Search user again, now that we own the lock.
     let user = await collection.findOne({ subs: subcriber });
@@ -97,7 +97,8 @@ async function createUser(ctx) {
 }
 
 class Profile {
-    constructor(user) {
+    constructor(io, user) {
+        this.io = io;
         this.email = user._id;
         this.name = user.name;
         this.picture = user.picture;
@@ -107,7 +108,7 @@ class Profile {
 
     async isInvitedTo(projectId) {
         try {
-            await getProject(this.email, projectId, { _id: true });
+            await getProject(this.io, this.email, projectId, { _id: true });
             return true;
         } catch (e) {
             return false;
@@ -115,7 +116,7 @@ class Profile {
     }
 
     async isOwnerOf(projectId) {
-        const numProjects = await database.collection('project').countDocuments({
+        const numProjects = await this.io.database.collection('project').countDocuments({
             _id: new ObjectId(projectId),
             owner: this.email,
         });

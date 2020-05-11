@@ -7,7 +7,7 @@ const JSONStream = require('JSONStream');
 const router = new Router();
 
 router.get('/project/:id/upload', async ctx => {
-    const forms = await database
+    const forms = await ctx.io.database
         .collection('input_upload')
         .find(
             { projectId: new ObjectId(ctx.params.id) },
@@ -19,7 +19,7 @@ router.get('/project/:id/upload', async ctx => {
 });
 
 router.get('/project/:projectId/upload/:id', async ctx => {
-    ctx.response.body = await database.collection('input_upload').findOne(
+    ctx.response.body = await ctx.io.database.collection('input_upload').findOne(
         { _id: new ObjectId(ctx.params.id), projectId: new ObjectId(ctx.params.projectId) },
         {
             'original.data': 0,
@@ -29,7 +29,7 @@ router.get('/project/:projectId/upload/:id', async ctx => {
 });
 
 router.get('/project/:projectId/upload/:id/:name(original|reprojected|thumbnail)', async ctx => {
-    const upload = await database
+    const upload = await ctx.io.database
         .collection('input_upload')
         .findOne(
             { _id: new ObjectId(ctx.params.id), projectId: new ObjectId(ctx.params.projectId) },
@@ -45,7 +45,7 @@ router.get('/project/:projectId/upload/:id/:name(original|reprojected|thumbnail)
 router.post('/project/:projectId/upload', multer().single('file'), async ctx => {
     const file = ctx.request.file;
 
-    const insertion = await database.collection('input_upload').insertOne({
+    const insertion = await ctx.io.database.collection('input_upload').insertOne({
         status: 'pending_processing',
         projectId: new ObjectId(ctx.params.projectId),
         original: {
@@ -57,7 +57,7 @@ router.post('/project/:projectId/upload', multer().single('file'), async ctx => 
         },
     });
 
-    await queue.add(
+    await ctx.io.queue.add(
         'process-upload',
         { uploadId: insertion.insertedId },
         { attempts: 1, removeOnComplete: true }
@@ -67,7 +67,7 @@ router.post('/project/:projectId/upload', multer().single('file'), async ctx => 
 });
 
 // router.patch('/project/:projectId/upload/:id', async ctx => {
-//     await database.collection('input_upload').updateOne(
+//     await ctx.io.database.collection('input_upload').updateOne(
 //         {
 //             _id: new ObjectId(ctx.params.id),
 //             projectId: new ObjectId(ctx.params.projectId),

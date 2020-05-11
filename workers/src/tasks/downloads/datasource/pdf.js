@@ -1,38 +1,6 @@
 const ArucoMarker = require('aruco-marker');
-const { ObjectId } = require('mongodb');
 const PdfPrinter = require('pdfmake');
 const LayoutBuilder = require('pdfmake/src/layoutBuilder');
-const { updateFile } = require('../../../../api/src/storage/gridfs');
-
-queue.process('generate-datasource-pdf', async job => {
-    const { cacheId, cacheHash, prjId, dsId, language, orientation } = job.data;
-    const project = await database
-        .collection('project')
-        .findOne(
-            { _id: new ObjectId(prjId) },
-            { projection: { forms: { $elemMatch: { id: dsId } } } }
-        );
-
-    if (!project && !project.forms.length) throw new Error('Not found');
-
-    const dataSource = project.forms[0];
-    const title = dataSource.name || 'data-source';
-
-    await updateFile(cacheId, cacheHash, `${title}.pdf`, async () => {
-        const id = createId();
-        const docDef = createDataSourceDocDef(id, dataSource, orientation, language);
-        const [stream, boundaries] = createPdfStream(docDef);
-        const metadata = {
-            id,
-            mimeType: 'application/pdf',
-            dataSourceId: dsId,
-            orientation: docDef.pageOrientation,
-            boundaries,
-        };
-
-        return [stream, metadata];
-    });
-});
 
 const printer = new PdfPrinter({
     Roboto: {
@@ -60,12 +28,34 @@ const strings = Object.freeze({
 });
 
 /**
+ * Create a paper form from a datasource
+ *
+ * @param {string} randomId
+ * @param {any} dataSource
+ * @param {'portrait'|'landscape'} orientation
+ * @param {'en'|'es'|'fr'} language
+ */
+async function createPdf(randomId, dataSource, orientation, language) {
+    const docDef = createDataSourceDocDef(randomId, dataSource, orientation, language);
+    const [stream, boundaries] = createPdfStream(docDef);
+    const buffer = await new Promise(resolve => {
+        const buffers = [];
+        stream.on('data', data => void buffers.push(data));
+        stream.on('end', () => void resolve(Buffer.concat(buffers)));
+    });
+
+    return [buffer, boundaries];
+}
+
+/**
  * Retrieve the coordinates of all tables within a given paper form.
  *
  * This works by hooking pdfmake's templating engine, and running the generation
  * in order to steal the positions of the items of interest.
  *
  * We do this to be able to retrieve table locations to deal with uploads of form pictures / scans
+ *
+ * @returns {[PDFKit.PDFDocument, Array<{x: number, y: number, w: number, h: number}>]}
  */
 function createPdfStream(docDef) {
     const boundaries = getFixedBoundaries(docDef.pageOrientation);
@@ -126,19 +116,11 @@ function createPdfStream(docDef) {
     return [stream, boundaries];
 }
 
-function createId() {
-    const bytes = Buffer.alloc(6);
-    for (let i = 0; i < 6; ++i) {
-        bytes[i] = 256 * Math.random();
-    }
-    return bytes;
-}
-
 /**
  * Compute boundaries of elements which never move.
  * Instead of hooking pdfmake, we simply hardcode those.
  *
- * @param {*} orientation
+ * @param {'portrait'|'landscape'} orientation
  */
 function getFixedBoundaries(orientation) {
     const METADATA_MARGIN = 1;
@@ -172,7 +154,7 @@ function getFixedBoundaries(orientation) {
     };
 }
 
-function createDataSourceDocDef(id, dataSource, pageOrientation, language) {
+function createDataSourceDocDef(qrCode, dataSource, pageOrientation, language) {
     return {
         pageSize: 'A4',
         pageOrientation: pageOrientation,
@@ -207,7 +189,7 @@ function createDataSourceDocDef(id, dataSource, pageOrientation, language) {
 
                     // Version 1 (21x21) will be used with high ECC correction
                     // to ensure that we find it on crappy pictures.
-                    qr: Buffer.concat([id, Buffer.from([currentPage])]),
+                    qr: Buffer.concat([qrCode, Buffer.from([currentPage])]),
                     eccLevel: 'H',
                     mode: 'octet',
 
@@ -415,4 +397,4 @@ function makeLeftCols(partitions) {
     return result;
 }
 
-module.exports = { printer, createDataSourceDocDef };
+module.exports = { createPdf, createDataSourceDocDef };

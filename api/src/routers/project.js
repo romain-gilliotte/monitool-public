@@ -5,7 +5,6 @@ const Router = require('@koa/router');
 const ObjectId = require('mongodb').ObjectID;
 const JSONStream = require('JSONStream');
 const validateBody = require('../middlewares/validate-body');
-const { deleteFiles } = require('../storage/gridfs');
 const { listProjects, getProject } = require('../storage/queries/project');
 const { listProjectInvitations } = require('../storage/queries/invitations');
 const reportingSchema = require('../storage/schema/reporting');
@@ -13,7 +12,7 @@ const reportingSchema = require('../storage/schema/reporting');
 const router = new Router();
 
 router.get('/project', async ctx => {
-    const projects = listProjects(ctx.state.profile.email);
+    const projects = listProjects(ctx.io, ctx.state.profile.email);
 
     ctx.response.type = 'application/json';
     ctx.response.body = projects.pipe(JSONStream.stringify());
@@ -24,7 +23,7 @@ router.get('/project', async ctx => {
  */
 router.get('/project/:id', async ctx => {
     try {
-        ctx.response.body = await getProject(ctx.state.profile.email, ctx.params.id);
+        ctx.response.body = await getProject(ctx.io, ctx.state.profile.email, ctx.params.id);
     } catch (e) {
         if (e.message === 'not found' || /must be .* 24 hex characters/.test(e.message)) {
             ctx.response.status = 404;
@@ -43,8 +42,8 @@ router.post('/project', validateBody('project'), async ctx => {
         return;
     }
 
-    await database.collection('project').insertOne(project);
-    await database.collection('input_seq').insertOne({ projectIds: [project._id] });
+    await ctx.io.database.collection('project').insertOne(project);
+    await ctx.io.database.collection('input_seq').insertOne({ projectIds: [project._id] });
 
     ctx.response.body = project;
 });
@@ -55,10 +54,10 @@ router.post('/project', validateBody('project'), async ctx => {
 router.put('/project/:id', validateBody('project'), async ctx => {
     const newProject = ctx.request.body;
 
-    // Update database and fetch previous version.
+    // Update ctx.io.database and fetch previous version.
     const filter = { _id: new ObjectId(ctx.params.id), owner: ctx.state.profile.email };
     const projection = { projection: { _id: false } };
-    const { value: oldProject } = await database
+    const { value: oldProject } = await ctx.io.database
         .collection('project')
         .findOneAndReplace(filter, newProject, projection);
 
@@ -67,8 +66,8 @@ router.put('/project/:id', validateBody('project'), async ctx => {
         return;
     }
 
-    // Insert patch in database.
-    await database.collection('revision').insertOne({
+    // Insert patch in ctx.io.database.
+    await ctx.io.database.collection('revision').insertOne({
         projectId: new ObjectId(ctx.params.id),
         user: ctx.state.profile.email,
         time: new Date(),
@@ -79,10 +78,7 @@ router.put('/project/:id', validateBody('project'), async ctx => {
     });
 
     // Clear reporting cache
-    await Promise.all([
-        redis.del(`reporting:${ctx.params.id}`),
-        deleteFiles(`reporting:${ctx.params.id}`),
-    ]);
+    ctx.io.redis.del(`reporting:${ctx.params.id}`);
 
     ctx.response.body = { _id: ctx.params.id, ...newProject };
 });
@@ -92,7 +88,7 @@ router.put('/project/:id', validateBody('project'), async ctx => {
  */
 router.get('/project/:id/revisions', async ctx => {
     if (await ctx.state.profile.isOwnerOf(ctx.params.id)) {
-        const revisions = database.collection('revision').find(
+        const revisions = ctx.io.database.collection('revision').find(
             { projectId: new ObjectId(ctx.params.id) },
             {
                 skip: +ctx.request.query.offset || 0,
@@ -110,17 +106,17 @@ router.get('/project/:id/revisions', async ctx => {
 // liste les invitations du projet
 // si pas owner, ne contiendra que celle de l'utilisateur.
 router.get('/project/:id/invitation', async ctx => {
-    const invitations = listProjectInvitations(ctx.state.profile.email, ctx.params.id);
+    const invitations = listProjectInvitations(ctx.io, ctx.state.profile.email, ctx.params.id);
 
     ctx.response.type = 'application/json';
     ctx.response.body = invitations.pipe(JSONStream.stringify());
 });
 
 router.get('/project/:id/user', async ctx => {
-    const project = await getProject(ctx.state.profile.email, ctx.params.id, { owner: 1 });
+    const project = await getProject(ctx.io, ctx.state.profile.email, ctx.params.id, { owner: 1 });
 
     if (project) {
-        const invitations = await database
+        const invitations = await ctx.io.database
             .collection('invitation')
             .find(
                 {
@@ -132,7 +128,7 @@ router.get('/project/:id/user', async ctx => {
             .toArray();
 
         const emails = [project.owner, ...invitations.map(i => i.email)];
-        const users = database.collection('user').find({ _id: { $in: emails } });
+        const users = ctx.io.database.collection('user').find({ _id: { $in: emails } });
 
         ctx.response.type = 'application/json';
         ctx.response.body = users.pipe(JSONStream.stringify());
@@ -147,7 +143,7 @@ router.get('/project/:id/report/:query([-_=a-z0-9]+)', async ctx => {
     }
 
     const sha1 = crypto.createHash('sha1').update(ctx.params.query).digest('hex');
-    let result = await redis.hget(`reporting:${projectId}`, sha1);
+    let result = await ctx.io.redis.hget(`reporting:${projectId}`, sha1);
     if (!result) {
         try {
             // Decode and validate query
@@ -160,14 +156,14 @@ router.get('/project/:id/report/:query([-_=a-z0-9]+)', async ctx => {
 
             // Submit reporting job to workers
             const jobParams = { ...query, projectId };
-            const job = await queue.add('compute-report', jobParams, {
+            const job = await ctx.io.queue.add('compute-report', jobParams, {
                 attempts: 1,
                 removeOnComplete: true,
             });
             result = await job.finished();
 
             // Update cache
-            await redis.hset(`reporting:${projectId}`, sha1, result);
+            await ctx.io.redis.hset(`reporting:${projectId}`, sha1, result);
         } catch (e) {
             ctx.response.status = 400;
             return;

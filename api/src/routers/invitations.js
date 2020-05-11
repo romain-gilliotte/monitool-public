@@ -8,7 +8,7 @@ const router = new Router();
 
 // liste mes invitations.
 router.get('/invitation', async ctx => {
-    const invitations = listWaitingInvitations(ctx.state.profile.email);
+    const invitations = listWaitingInvitations(ctx.io, ctx.state.profile.email);
 
     ctx.response.type = 'application/json';
     ctx.response.body = invitations.pipe(JSONStream.stringify());
@@ -26,13 +26,13 @@ router.post('/invitation', validateBody('invitation'), async ctx => {
         projectId: new ObjectId(ctx.request.body.projectId),
     };
 
-    await database.collection('invitation').insertOne(newIvt);
+    await ctx.io.database.collection('invitation').insertOne(newIvt);
     ctx.response.body = newIvt;
 });
 
 // modifie / accepte une invitation
 router.put('/invitation/:id', validateBody('invitation'), async ctx => {
-    const oldIvt = await getInvitation(ctx.state.profile.email, ctx.params.id);
+    const oldIvt = await getInvitation(ctx.io, ctx.state.profile.email, ctx.params.id);
     const newIvt = {
         ...ctx.request.body,
         projectId: new ObjectId(ctx.request.body.projectId),
@@ -48,7 +48,7 @@ router.put('/invitation/:id', validateBody('invitation'), async ctx => {
         return;
     }
 
-    await database.collection('invitation').replaceOne({ _id: oldIvt._id }, newIvt);
+    await ctx.io.database.collection('invitation').replaceOne({ _id: oldIvt._id }, newIvt);
 
     ctx.response.body = newIvt;
 });
@@ -58,7 +58,7 @@ router.delete('/invitation/:id', async ctx => {
     const oldIvt = await getInvitation(ctx.state.profile.email, ctx.params.id);
 
     if (oldIvt) {
-        await database.collection('invitation').deleteOne({ _id: oldIvt._id });
+        await ctx.io.database.collection('invitation').deleteOne({ _id: oldIvt._id });
         ctx.response.status = 204;
     }
 });

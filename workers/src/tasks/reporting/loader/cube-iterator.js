@@ -11,13 +11,14 @@ const { Cube, GenericDimension, TimeDimension } = require('olap-in-memory');
 
 const waiting = {};
 
-async function queueIterate(projectId, variableId, rules, itemHandler) {
+async function iterateCube(io, projectId, variableId, rules, itemHandler) {
     return new Promise(resolve => {
         const key = `${projectId}:${variableId}`;
 
         if (!waiting[key]) {
-            const handler = runIterate.bind(null, key);
+            const handler = onTimerEnd.bind(null, key);
             waiting[key] = {
+                io,
                 projectId,
                 variableId,
                 rules,
@@ -32,17 +33,17 @@ async function queueIterate(projectId, variableId, rules, itemHandler) {
     });
 }
 
-async function runIterate(key) {
-    const { projectId, variableId, rules, callers } = waiting[key];
+async function onTimerEnd(key) {
+    const { io, projectId, variableId, rules, callers } = waiting[key];
     delete waiting[key];
 
-    const sequenceIds = await database
+    const sequenceIds = await io.database
         .collection('input_seq')
         .find({ projectIds: projectId }, { projection: { _id: true } })
         .map(s => s._id)
         .toArray();
 
-    await database
+    await io.database
         .collection('input')
         .find(
             { sequenceId: { $in: sequenceIds }, 'content.variableId': variableId },
@@ -86,4 +87,4 @@ function createInputDimensions(content) {
     });
 }
 
-module.exports = queueIterate;
+module.exports = iterateCube;

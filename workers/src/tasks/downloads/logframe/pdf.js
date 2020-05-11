@@ -1,37 +1,5 @@
-const { ObjectId } = require('mongodb');
 const PdfPrinter = require('pdfmake');
-const { updateFile } = require('../../../../api/src/storage/gridfs');
-
-queue.process('generate-logframe-pdf', async job => {
-    const { cacheId, cacheHash, prjId, lfId, language, orientation } = job.data;
-    const project = await database.collection('project').findOne(
-        { _id: new ObjectId(prjId) },
-        {
-            projection: {
-                logicalFrames: { $elemMatch: { id: lfId } },
-                forms: 1,
-            },
-        }
-    );
-
-    if (!project && !project.logicalFrames.length) throw new Error('Not found');
-
-    const logicalFramework = project.logicalFrames[0];
-    const title = logicalFramework.name || 'logical-framework';
-
-    await updateFile(cacheId, cacheHash, `${title}.pdf`, async () => {
-        const docDef = computeLogFrameDocDef(
-            logicalFramework,
-            orientation,
-            project.forms,
-            language
-        );
-        const stream = printer.createPdfKitDocument(docDef);
-        stream.end(); // work around bug in pdfkit never ending the stream.
-
-        return [stream, { mimeType: 'application/pdf' }];
-    });
-});
+const { generateThumbnail } = require('../../../helpers/thumbnail');
 
 /**
  * Create preconfigured printer
@@ -78,7 +46,28 @@ const strings = Object.freeze({
     }),
 });
 
-function computeLogFrameDocDef(logFrame, pageOrientation, dataSources, language = 'en') {
+async function generateLogFramePdf(io, id, logFrame, dataSources, language, orientation) {
+    const docDef = computeLogFrameDocDef(logFrame, dataSources, orientation, language);
+
+    const stream = printer.createPdfKitDocument(docDef);
+    stream.end(); // work around bug in pdfkit never ending the stream.
+
+    const content = await new Promise(resolve => {
+        const buffers = [];
+        stream.on('data', data => void buffers.push(data));
+        stream.on('end', () => void resolve(Buffer.concat(buffers)));
+    });
+
+    await io.database.collection('forms').insertOne({
+        _id: id,
+        filename: `${logFrame.name || 'logical-framework'}.pdf`,
+        mimeType: 'application/pdf',
+        content,
+        thumbnail: await generateThumbnail(content, 'application/pdf'),
+    });
+}
+
+function computeLogFrameDocDef(logFrame, dataSources, pageOrientation, language = 'en') {
     var doc = {};
     doc.pageSize = 'A4';
     doc.pageOrientation = pageOrientation;
@@ -237,3 +226,5 @@ function computeIndicatorsSourcesDocDef(indicators, dataSources) {
         },
     ];
 }
+
+module.exports = { generateLogFramePdf, computeLogFrameDocDef };

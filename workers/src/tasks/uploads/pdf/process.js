@@ -1,12 +1,18 @@
 const { Hash } = require('crypto');
 const gm = require('gm');
 const { promisify } = require('util');
+const { InputOutput } = require('../../../io');
 
 /**
  * Screenshot every page with ~200dpi and queue for image processing.
  * @see https://stackoverflow.com/questions/6605006/convert-pdf-to-image-with-high-resolution
+ *
+ * @param {InputOutput} io
+ * @param {any} upload
  */
-async function processPdfUpload(upload) {
+async function processPdfUpload(io, upload) {
+    const collection = io.database.collection('input_upload');
+
     const pdf = gm(upload.original.data.buffer, 'file.pdf');
     const identify = promisify(pdf.identify.bind(pdf));
     const toBuffer = promisify(pdf.toBuffer.bind(pdf));
@@ -18,7 +24,7 @@ async function processPdfUpload(upload) {
         pdf.selectFrame(i).in('-density', '200');
 
         const buffer = await toBuffer('JPG');
-        const insertion = await database.collection('input_upload').insertOne({
+        const insertion = await collection.insertOne({
             status: 'pending_processing',
             projectId: upload.projectId,
             original: {
@@ -30,7 +36,7 @@ async function processPdfUpload(upload) {
             },
         });
 
-        await queue.add(
+        await io.queue.add(
             'process-upload',
             { uploadId: insertion.insertedId },
             { attempts: 1, removeOnComplete: true }

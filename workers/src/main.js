@@ -1,9 +1,11 @@
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
-const Bull = require('bull');
 const winston = require('winston');
 const config = require('./config');
-const MongoClient = require('mongodb').MongoClient;
+const { InputOutput } = require('./io');
+const { initDownloads } = require('./tasks/downloads');
+const { initReporting } = require('./tasks/reporting');
+const { initUploads } = require('./tasks/uploads');
 
 winston.add(new winston.transports.Console());
 
@@ -15,42 +17,31 @@ process.on('uncaughtException', e => {
     process.exit(1);
 });
 
-// Init global variables
-global.mongo = null;
-global.database = null;
-global.redis = null;
-global.redisLock = null;
-global.queue = null;
-global.server = null;
-
 async function start() {
-    global.mongo = await MongoClient.connect(config.mongo.uri, {
-        useUnifiedTopology: true,
-    });
+    const io = new InputOutput();
+    await io.connect();
 
-    global.database = global.mongo.db(config.mongo.database);
-    global.queue = new Bull('workers', config.redis.uri);
+    initDownloads(io);
+    initReporting(io);
+    initUploads(io);
 
-    require('./tasks/downloads');
-    require('./tasks/reporting');
-    require('./tasks/thumbnail');
-    require('./tasks/uploads');
     winston.log('info', `All tasks registered.`);
-}
 
-async function stop() {
-    if (global.mongo) global.mongo.close(true);
-
-    if (global.queue) global.queue.close();
-
-    if (global.server) global.server.close();
+    return async () => {
+        await io.disconnect();
+    };
 }
 
 // Start application only if this file is executed.
 // Otherwise just export the start/stop functions
 if (require.main === module) {
-    if (config.cluster && cluster.isMaster) for (let i = 0; i < numCPUs; i++) cluster.fork();
-    else start();
+    if (config.cluster && cluster.isMaster) {
+        for (let i = 0; i < numCPUs; i++) {
+            cluster.fork();
+        }
+    } else {
+        start();
+    }
 } else {
-    module.exports = { start, stop };
+    module.exports = { start };
 }

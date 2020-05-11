@@ -1,34 +1,30 @@
 const xl = require('excel4node');
 const { ObjectId } = require('mongodb');
 const { TimeDimension } = require('olap-in-memory');
-const stream = require('stream');
-const { getVariableCube } = require('../reporting/loader/cube-variable');
-const { getQueryCube } = require('../reporting/loader/cube-query');
-const { updateFile } = require('../../../../api/src/storage/gridfs');
+const { getVariableCube } = require('../../reporting/loader/cube-variable');
+const { getQueryCube } = require('../../reporting/loader/cube-query');
+const { generateThumbnail } = require('../../../helpers/thumbnail');
 
-const mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+const mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
-queue.process('generate-reporting-xlsx', async job => {
-    const { cacheId, cacheHash, prjId, periodicity } = job.data;
+async function generateReportingXlsx(io, id, projectId, periodicity) {
+    const objProjectId = new ObjectId(projectId);
+    const project = await io.database.collection('project').findOne({ _id: objProjectId });
+    if (!project) throw new Error('Project not found');
 
-    const project = await database.collection('project').findOne({ _id: new ObjectId(prjId) });
-    if (project) {
-        const filename = `${project.name || 'report'}.xlsx`;
+    const wb = await getWorkbook(io, project, periodicity);
+    const content = await wb.writeToBuffer();
 
-        await updateFile(cacheId, cacheHash, filename, async () => {
-            const wb = await getWorkbook(project, periodicity);
-            const buffer = await wb.writeToBuffer();
+    await io.database.collection('forms').insertOne({
+        _id: id,
+        filename: `${project.name || 'report'}.xlsx`,
+        mimeType,
+        content,
+        thumbnail: generateThumbnail(content, mimeType),
+    });
+}
 
-            const passThrough = new stream.PassThrough();
-            passThrough.write(buffer);
-            passThrough.end();
-
-            return [passThrough, { mimeType: mime }];
-        });
-    }
-});
-
-async function getWorkbook(project, periodicity = 'month') {
+async function getWorkbook(io, project, periodicity = 'month') {
     const wb = new xl.Workbook();
     wb.myStyles = createStyles(wb);
 
@@ -52,6 +48,7 @@ async function getWorkbook(project, periodicity = 'month') {
 
             const { formula, parameters, dice } = query;
             const cube = await getQueryCube(
+                io,
                 project,
                 formula,
                 parameters,
@@ -84,6 +81,7 @@ async function getWorkbook(project, periodicity = 'month') {
         // Variables
         for (let variable of dataSource.elements) {
             const cube = await getVariableCube(
+                io,
                 project,
                 variable.id,
                 [
@@ -270,3 +268,5 @@ function appendDataRowRec(ws, cube, partitions, partitionElsIdxs, total) {
         ws.currentRow++;
     }
 }
+
+module.exports = { generateReportingXlsx, getWorkbook };

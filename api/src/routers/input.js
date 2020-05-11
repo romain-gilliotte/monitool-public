@@ -3,14 +3,13 @@ const ObjectId = require('mongodb').ObjectID;
 const _ = require('lodash');
 const validateBody = require('../middlewares/validate-body');
 const { getProject } = require('../storage/queries/project');
-const { deleteFiles } = require('../storage/gridfs');
 
 const router = new Router();
 
 router.post('/project/:id/input', validateBody('input'), async ctx => {
     let project;
     try {
-        project = await getProject(ctx.state.profile.email, ctx.params.id);
+        project = await getProject(ctx.io, ctx.state.profile.email, ctx.params.id);
     } catch (e) {
         ctx.response.status = 404;
     }
@@ -19,7 +18,7 @@ router.post('/project/:id/input', validateBody('input'), async ctx => {
     if (!project) allowed = false;
     else if (project.owner === ctx.state.profile.email) allowed = true;
     else {
-        const invitation = await database
+        const invitation = await ctx.io.database
             .collection('invitation')
             .findOne({ projectId: project._id, email: ctx.state.profile.email, accepted: true });
 
@@ -41,7 +40,7 @@ router.post('/project/:id/input', validateBody('input'), async ctx => {
 
     if (allowed) {
         // Save input on last sequence of the project.
-        const sequence = await database
+        const sequence = await ctx.io.database
             .collection('input_seq')
             .findOne(
                 { projectIds: new ObjectId(project._id) },
@@ -57,13 +56,10 @@ router.post('/project/:id/input', validateBody('input'), async ctx => {
             })),
         };
 
-        await database.collection('input').insertOne(input);
+        await ctx.io.database.collection('input').insertOne(input);
 
         // Clear reporting cache
-        await Promise.all([
-            redis.del(`reporting:${project._id}`),
-            deleteFiles(`reporting:${project._id}`),
-        ]);
+        ctx.io.redis.del(`reporting:${project._id}`);
 
         delete input._id;
         delete input.sequenceId;
