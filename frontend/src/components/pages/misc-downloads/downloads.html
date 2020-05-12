@@ -1,44 +1,27 @@
-<div class="row">
-    <div
-        class="clearfix visible-sm-block"
-        ng-if="!$first && $index % 2 == 0"
-        ng-repeat-start="file in $ctrl.files track by file.id"
-    ></div>
-    <div class="clearfix visible-md-block" ng-if="!$first && $index % 3 == 0"></div>
-    <div class="clearfix visible-lg-block" ng-if="!$first && $index % 4 == 0"></div>
-
-    <div class="col-sm-6 col-md-4 col-lg-3" ng-repeat-end>
-        <div class="thumbnail">
-            <img
-                ng-src="{{file.thumbnail}}"
-                class="img-thumbnail"
-                style="width: 100%;"
-                width="595"
-                height="400"
-            />
-            <div class="caption">
-                <h3 style="margin-top: 5px;">{{file.category|translate}}</h3>
-                <p>{{file.name}}</p>
-                <div class="btn-group pull-right">
-                    <a href="{{file.main.url}}" download class="btn btn-default btn-xs">
-                        <i class="fa" ng-class="file.main.icon"></i>
-                        <span translate="{{file.main.key}}"></span>
+<div class="grid-container">
+    <div class="thumbnail" ng-repeat="file in $ctrl.files track by file.id">
+        <img ng-src="{{file.thumbnail}}" class="img-thumbnail" width="300" height="200" />
+        <div class="caption">
+            <h3>{{file.category|translate}}</h3>
+            <p>{{file.name}}</p>
+            <div class="btn-group pull-right">
+                <a href="{{file.main.url}}" download class="btn btn-default btn-xs">
+                    <i class="fa" ng-class="file.main.icon"></i>
+                    <span translate="{{file.main.key}}"></span>
+                </a>
+                <div class="btn-group" uib-dropdown ng-if="file.dropdown">
+                    <a class="btn btn-default btn-xs" uib-dropdown-toggle>
+                        <span class="caret"></span>
                     </a>
-                    <div class="btn-group" uib-dropdown ng-if="file.dropdown">
-                        <a class="btn btn-default btn-xs" uib-dropdown-toggle>
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li ng-repeat="link in file.dropdown">
-                                <a href="{{link.url}}" download>
-                                    <i class="fa" ng-class="link.icon"></i>
-                                    <span translate="{{link.key}}"></span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="link in file.dropdown">
+                            <a href="{{link.url}}" download>
+                                <i class="fa" ng-class="link.icon"></i>
+                                <span translate="{{link.key}}"></span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-                <div style="clear: both;"></div>
             </div>
         </div>
     </div>

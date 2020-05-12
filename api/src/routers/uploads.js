@@ -1,6 +1,8 @@
+const { Hash } = require('crypto');
+const { readFile } = require('fs');
+const { promisify } = require('util');
 const Router = require('@koa/router');
 const multer = require('@koa/multer');
-const { Hash } = require('crypto');
 const { ObjectId } = require('mongodb');
 const JSONStream = require('JSONStream');
 
@@ -39,6 +41,9 @@ router.get('/project/:projectId/upload/:id/:name(original|reprojected|thumbnail)
     if (upload[ctx.params.name]) {
         ctx.response.type = upload[ctx.params.name].mimeType;
         ctx.response.body = upload[ctx.params.name].data.buffer;
+    } else if (ctx.params.name === 'thumbnail') {
+        ctx.response.type = 'image/png';
+        ctx.response.body = await promisify(readFile)('data/placeholder.png');
     }
 });
 

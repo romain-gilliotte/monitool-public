@@ -13,9 +13,9 @@ router.use('/project/:projectId', async (ctx, next) => {
 });
 
 /** Logical framework */
-router.get('/logical-frame/:logFrameId.:format(png|pdf)', async ctx => {
-    const { projectId, logFrameId } = ctx.params;
-    const { language, orientation, format, thumbnail } = validateDownloadParams(ctx, 'pdf');
+router.get('/logical-frame/:logFrameId.:format(pdf):thumbnail(.png)?', async ctx => {
+    const { projectId, logFrameId, thumbnail } = ctx.params;
+    const { language, orientation, format } = validateDownloadParams(ctx, 'pdf');
 
     const projects = ctx.io.database.collection('project');
     const project = await projects.findOne(
@@ -40,9 +40,9 @@ router.get('/logical-frame/:logFrameId.:format(png|pdf)', async ctx => {
 });
 
 /** Paper & Excel forms */
-router.get('/data-source/:dataSourceId.:format(xlsx|pdf|png)', async ctx => {
-    const { projectId, dataSourceId } = ctx.params;
-    const { language, orientation, format, thumbnail } = validateDownloadParams(ctx, 'pdf');
+router.get('/data-source/:dataSourceId.:format(xlsx|pdf):thumbnail(.png)?', async ctx => {
+    const { projectId, dataSourceId, thumbnail } = ctx.params;
+    const { language, orientation, format } = validateDownloadParams(ctx, 'pdf');
 
     const projects = ctx.io.database.collection('project');
     const project = await projects.findOne(
@@ -61,9 +61,9 @@ router.get('/data-source/:dataSourceId.:format(xlsx|pdf|png)', async ctx => {
 });
 
 /** Render file containing all data entry up to a given date */
-router.get('/export/:periodicity.:format(png|xlsx)', async ctx => {
-    const { projectId } = ctx.params;
-    const { language, format, thumbnail, periodicity } = validateDownloadParams(ctx, 'xlsx');
+router.get('/export/:periodicity.:format(xlsx):thumbnail(.png)?', async ctx => {
+    const { projectId, thumbnail } = ctx.params;
+    const { language, format, periodicity } = validateDownloadParams(ctx, 'xlsx');
 
     // We need the project and last input id for the invalidation
     const objProjectId = new ObjectId(projectId);
@@ -94,7 +94,7 @@ router.get('/export/:periodicity.:format(png|xlsx)', async ctx => {
     }
 });
 
-function validateDownloadParams(ctx, thumbnailFormat) {
+function validateDownloadParams(ctx) {
     let { format, periodicity } = ctx.params;
     let { language, orientation } = ctx.request.query;
     const periodicities = [
@@ -111,13 +111,12 @@ function validateDownloadParams(ctx, thumbnailFormat) {
         'year',
     ];
 
-    const thumbnail = format === 'png';
-    if (!['xlsx', 'pdf'].includes(format)) format = thumbnailFormat;
+    if (!['xlsx', 'pdf'].includes(format)) format = 'pdf';
     if (!['en', 'es', 'fr'].includes(language)) language = 'en';
     if (!['portrait', 'landscape'].includes(orientation)) orientation = 'portrait';
     if (!periodicities.includes(periodicity)) periodicity = 'month';
 
-    return { format, language, orientation, periodicity, thumbnail };
+    return { format, language, orientation, periodicity };
 }
 
 async function sendFile(ctx, thumbnail, jobName, jobParams, invalidationParams = {}) {

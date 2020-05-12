@@ -19,7 +19,7 @@ const gmMimes = {
  * @param {Buffer} buffer
  * @param {string} mimeType
  */
-async function generateThumbnail(buffer, mimeType) {
+async function generateThumbnail(buffer, mimeType, targetRatio = 1.5) {
     if (config.unoconv.uri && unoconvMimes[mimeType] && !gmMimes[mimeType]) {
         const form = new FormData();
         form.append('file', buffer, `file.${unoconvMimes[mimeType]}`);
@@ -34,10 +34,19 @@ async function generateThumbnail(buffer, mimeType) {
     }
 
     if (gmMimes[mimeType]) {
-        const thumbnail = gm(buffer, 'file.pdf').crop(595, 400);
-        const toBuffer = util.promisify(thumbnail.toBuffer.bind(thumbnail));
+        let image = gm(buffer, `file.${gmMimes[mimeType]}`);
+        const { width, height } = await util.promisify(image.size.bind(image))();
 
-        buffer = await toBuffer('PNG');
+        const ratio = width / height;
+        if (targetRatio < ratio) {
+            image = image.crop(height * targetRatio, height);
+        } else {
+            image = image.crop(width, width / targetRatio);
+        }
+
+        image = image.resize(300, 200);
+
+        buffer = await util.promisify(image.toBuffer.bind(image))('PNG');
         mimeType = 'image/png';
     } else {
         buffer = fs.readFileSync('data/placeholder.png');

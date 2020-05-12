@@ -2,85 +2,95 @@ const cv = require('opencv4nodejs');
 const { findArucoMarkers } = require('./landmarks/aruco');
 const { getPageContour } = require('./landmarks/page-contours');
 const { findQrCode } = require('./landmarks/qr-code');
+const { generateThumbnail } = require('../../../helpers/thumbnail');
 const { InputOutput } = require('../../../io');
 
 const MAX_SIZE = 2560;
-const THUMBNAIL_SIZE = 200;
 
 /**
  * @param {InputOutput} io
  * @param {any} upload
  */
 async function processImageUpload(io, upload) {
+    const update = { $set: {} };
     let original = cv.imdecode(upload.original.data.buffer, cv.IMREAD_COLOR);
 
-    // Resize source image if too big. This hurts feature detection, but otherwise it takes ages.
-    if (MAX_SIZE < original.sizes[0] || MAX_SIZE < original.sizes[1]) {
-        const scale = Math.min(MAX_SIZE / original.sizes[0], MAX_SIZE / original.sizes[1]);
-        const sizes = original.sizes.map(l => Math.floor(l * scale));
-        original = await original.resizeAsync(sizes[0], sizes[1], 0, 0, cv.INTER_CUBIC);
+    // Start by computing thumbnail
+    try {
+        update.$set.thumbnail = await getThumbnail(original);
+    } catch (e) {
+        // This is not critical
     }
 
-    // Find reference from the QR code.
-    const [qrLandmarks, data] = await findQrCode(original);
-    const [templateId, pageNo] = [data.slice(0, 6), data[6]];
-    const template = await io.database.collection('forms').findOne({ randomId: templateId });
-    if (!template) {
-        throw Error('Could not find associated form');
-    }
-
-    // Depending on file orientation, chose final size of our image (50px/cm is ~ 125dpi).
-    let width, height;
-    if (template.orientation === 'portrait') {
-        [width, height] = [21.0 * 50, 29.7 * 50];
-    } else {
-        [width, height] = [29.7 * 50, 21.0 * 50];
-    }
-
-    // Compute regions from template
-    const regions = {};
-    for (let r in template.boundaries) {
-        const { x, y, w, h, pageNo: boundaryPageNo } = template.boundaries[r];
-        if (r === 'corner' || r === 'qr' || r.startsWith('aruco')) continue;
-        if (Number.isFinite(boundaryPageNo) && pageNo !== boundaryPageNo) continue;
-
-        regions[r] = { x: x * width, y: y * height, w: w * width, h: h * height };
-    }
-
-    // Find points in common
-    const landmarksObj = await findLandmarks(original, qrLandmarks);
-    const targetObj = computeTargets(template, pageNo, width, height);
-    const landmarks = [];
-    const target = [];
-    for (let key in targetObj) {
-        if (landmarksObj[key]) {
-            landmarks.push(landmarksObj[key]);
-            target.push(targetObj[key]);
+    try {
+        // Resize source image if too big. This hurts feature detection, but otherwise it takes ages.
+        if (MAX_SIZE < original.sizes[0] || MAX_SIZE < original.sizes[1]) {
+            const scale = Math.min(MAX_SIZE / original.sizes[0], MAX_SIZE / original.sizes[1]);
+            const sizes = original.sizes.map(l => Math.floor(l * scale));
+            original = await original.resizeAsync(sizes[0], sizes[1], 0, 0, cv.INTER_CUBIC);
         }
+
+        // Find reference from the QR code.
+        const [qrLandmarks, data] = await findQrCode(original);
+        const [templateId, pageNo] = [data.slice(0, 6), data[6]];
+        const template = await io.database.collection('forms').findOne({ randomId: templateId });
+        if (!template) {
+            throw Error('Could not find associated form');
+        }
+
+        // Depending on file orientation, chose final size of our image (50px/cm is ~ 125dpi).
+        let width, height;
+        if (template.orientation === 'portrait') {
+            [width, height] = [21.0 * 50, 29.7 * 50];
+        } else {
+            [width, height] = [29.7 * 50, 21.0 * 50];
+        }
+
+        // Compute regions from template
+        const regions = {};
+        for (let r in template.boundaries) {
+            const { x, y, w, h, pageNo: boundaryPageNo } = template.boundaries[r];
+            if (r === 'corner' || r === 'qr' || r.startsWith('aruco')) continue;
+            if (Number.isFinite(boundaryPageNo) && pageNo !== boundaryPageNo) continue;
+
+            regions[r] = { x: x * width, y: y * height, w: w * width, h: h * height };
+        }
+
+        // Find points in common
+        const landmarksObj = await findLandmarks(original, qrLandmarks);
+        const targetObj = computeTargets(template, pageNo, width, height);
+        const landmarks = [];
+        const target = [];
+        for (let key in targetObj) {
+            if (landmarksObj[key]) {
+                landmarks.push(landmarksObj[key]);
+                target.push(targetObj[key]);
+            }
+        }
+
+        // Reproject and hope for the best.
+        const homography = cv.findHomography(landmarks, target);
+        const document = await original.warpPerspectiveAsync(
+            homography.homography,
+            new cv.Size(width, height)
+        );
+
+        const jpeg = await cv.imencodeAsync('.jpg', document, [cv.IMWRITE_JPEG_QUALITY, 60]);
+
+        update.$set.status = 'pending_dataentry';
+        update.$set.dataSourceId = template.dataSourceId;
+        update.$set.reprojected = {
+            size: jpeg.byteLength,
+            mimeType: 'image/jpeg',
+            data: jpeg,
+            regions,
+        };
+    } catch (e) {
+        update.$set.status = 'failed';
+        update.$set.reason = e.message;
     }
 
-    // Reproject and hope for the best.
-    const homography = cv.findHomography(landmarks, target);
-    const document = await original.warpPerspectiveAsync(
-        homography.homography,
-        new cv.Size(width, height)
-    );
-
-    const jpeg = await cv.imencodeAsync('.jpg', document, [cv.IMWRITE_JPEG_QUALITY, 60]);
-
-    return {
-        $set: {
-            status: 'pending_dataentry',
-            dataSourceId: template.dataSourceId,
-            thumbnail: await getThumbnail(original),
-            reprojected: {
-                size: jpeg.byteLength,
-                mimeType: 'image/jpeg',
-                data: jpeg,
-                regions,
-            },
-        },
-    };
+    return update;
 }
 
 async function findLandmarks(image, qrLandmarks) {
@@ -148,17 +158,13 @@ function computeTargets(file, pageNo, w, h) {
  * @param {cv.Mat} image
  */
 async function getThumbnail(image) {
-    const [h, w] = image.sizes;
-    const minLength = Math.min(w, h);
-    const rect = new cv.Rect(Math.floor(0.5 * (w - minLength)), 0, minLength, minLength);
-    const thumbnail = await image.getRegion(rect).resizeAsync(THUMBNAIL_SIZE, THUMBNAIL_SIZE);
-
-    const jpeg = await cv.imencodeAsync('.jpg', thumbnail, [cv.IMWRITE_JPEG_QUALITY, 60]);
+    const imagePng = cv.imencode('.png', image);
+    const thumbPng = await generateThumbnail(imagePng, 'image/png');
 
     return {
-        size: jpeg.byteLength,
-        mimeType: 'image/jpeg',
-        data: jpeg,
+        size: thumbPng.byteLength,
+        mimeType: 'image/png',
+        data: thumbPng,
     };
 }
 

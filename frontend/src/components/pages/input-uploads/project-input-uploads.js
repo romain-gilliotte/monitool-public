@@ -23,7 +23,13 @@ module.component(__componentName, {
     },
     template: require(__templatePath),
     controller: class {
-        //
+        constructor($state, $timeout) {
+            // fixme: reload controller every 5 seconds.
+            // Should be an event source, but convenient for testing.
+            this.stopInterval = $timeout(() => {
+                $state.reload('project.usage.uploads');
+            }, 3000);
+        }
     },
 });
 
@@ -49,16 +55,6 @@ module.directive('dropzone', function () {
                     axios.post(`/project/${scope.$ctrl.project._id}/upload`, formData, {
                         headers: { 'Content-Type': 'multipart/form-data' },
                     });
-
-                    // const file = files[i];
-                    // const reader = new FileReader();
-                    // reader.readAsArrayBuffer(file);
-                    // reader.onload = progressEvent => {
-
-                    //     axios.post(`/project/${scope.$ctrl.project._id}/uploads`, )
-                    //     console.log(file);
-                    //     console.log(reader);
-                    // };
                 }
             });
         },

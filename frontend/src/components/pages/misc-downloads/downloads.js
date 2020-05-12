@@ -1,5 +1,6 @@
 import uiRouter from '@uirouter/angularjs';
 import angular from 'angular';
+require(__scssPath);
 
 const module = angular.module(__moduleName, [uiRouter]);
 
@@ -38,7 +39,7 @@ module.component(__componentName, {
                         id: lf.id,
                         category: 'project.logical_frame',
                         name: lf.name,
-                        thumbnail: `${url}.png?language=${language}`,
+                        thumbnail: `${url}.pdf.png?language=${language}`,
                         main: {
                             icon: 'fa-file-pdf-o',
                             key: 'project.download_portrait',
@@ -60,7 +61,7 @@ module.component(__componentName, {
                         id: ds.id,
                         category: 'project.collection_form2',
                         name: ds.name,
-                        thumbnail: `${url}.png?language=${language}`,
+                        thumbnail: `${url}.pdf.png?language=${language}`,
                         main: {
                             key: 'project.download_portrait',
                             icon: 'fa-file-pdf-o',
@@ -72,12 +73,22 @@ module.component(__componentName, {
                                 key: 'project.download_landscape',
                                 url: `${url}.pdf?language=${language}&orientation=landscape`,
                             },
-                            {
-                                icon: 'fa-file-excel-o',
-                                key: 'project.download_excel',
-                                url: `${url}.xlsx?language=${language}&orientation=landscape`,
-                            },
                         ],
+                    };
+                }),
+                ...this.project.forms.map(ds => {
+                    const url = `${serviceUrl}/project/${projectId}/data-source/${ds.id}`;
+
+                    return {
+                        id: ds.id + 'xls',
+                        category: 'project.collection_form2',
+                        name: ds.name,
+                        thumbnail: `${url}.xlsx.png?language=${language}`,
+                        main: {
+                            key: 'project.download_excel',
+                            icon: 'fa-file-excel-o',
+                            url: `${url}.xlsx?language=${language}`,
+                        },
                     };
                 }),
             ];

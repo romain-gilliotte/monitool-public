@@ -30,9 +30,7 @@ async function processUpload(io, uploadId) {
         } else throw new Error('Unsupported');
     } catch (e) {
         console.log(e);
-        update = {
-            $set: { status: 'failed', reason: e.message },
-        };
+        update = { $set: { status: 'failed', reason: e.message } };
     }
 
     if (update) {

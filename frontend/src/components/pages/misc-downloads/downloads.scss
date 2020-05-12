@@ -1,0 +1,15 @@
+downloads {
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 10px;
+
+        .thumbnail {
+            margin-bottom: 0;
+        }
+
+        img {
+            width: 100%;
+        }
+    }
+}
