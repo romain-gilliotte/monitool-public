@@ -24,17 +24,14 @@ async function processImageUpload(io, upload) {
     // Find reference from the QR code.
     const [qrLandmarks, data] = await findQrCode(original);
     const [templateId, pageNo] = [data.slice(0, 6), data[6]];
-    const template = await io.database
-        .collection('fs.files')
-        .findOne({ 'metadata.id': templateId });
-
+    const template = await io.database.collection('forms').findOne({ randomId: templateId });
     if (!template) {
         throw Error('Could not find associated form');
     }
 
     // Depending on file orientation, chose final size of our image (50px/cm is ~ 125dpi).
     let width, height;
-    if (template.metadata.orientation === 'portrait') {
+    if (template.orientation === 'portrait') {
         [width, height] = [21.0 * 50, 29.7 * 50];
     } else {
         [width, height] = [29.7 * 50, 21.0 * 50];
@@ -42,8 +39,8 @@ async function processImageUpload(io, upload) {
 
     // Compute regions from template
     const regions = {};
-    for (let r in template.metadata.boundaries) {
-        const { x, y, w, h, pageNo: boundaryPageNo } = template.metadata.boundaries[r];
+    for (let r in template.boundaries) {
+        const { x, y, w, h, pageNo: boundaryPageNo } = template.boundaries[r];
         if (r === 'corner' || r === 'qr' || r.startsWith('aruco')) continue;
         if (Number.isFinite(boundaryPageNo) && pageNo !== boundaryPageNo) continue;
 
@@ -74,7 +71,7 @@ async function processImageUpload(io, upload) {
     return {
         $set: {
             status: 'pending_dataentry',
-            dataSourceId: template.metadata.dataSourceId,
+            dataSourceId: template.dataSourceId,
             thumbnail: await getThumbnail(original),
             reprojected: {
                 size: jpeg.byteLength,
@@ -129,7 +126,7 @@ async function findLandmarks(image, qrLandmarks) {
 }
 
 function computeTargets(file, pageNo, w, h) {
-    const boundaries = file.metadata.boundaries;
+    const boundaries = file.boundaries;
     const targets = {};
     for (let key in boundaries) {
         const rect = boundaries[key];
