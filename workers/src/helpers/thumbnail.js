@@ -12,17 +12,24 @@ const unoconvMimes = {
 const gmMimes = {
     'image/jpeg': 'jpg',
     'image/png': 'png',
+    'image/tiff': 'tiff',
     'application/pdf': 'pdf',
+};
+
+const otherTypes = {
+    'application/zip': 'zip',
 };
 
 const defaultThumbnail = fs.readFileSync('data/thumbnail.png');
 
 /**
+ * Make a 300x200 thumbnail
+ *
  * @param {Buffer} buffer
  * @param {string} mimeType
  */
-async function generateThumbnail(buffer, mimeType, targetRatio = 1.5) {
-    const ext = unoconvMimes[mimeType] || gmMimes[mimeType];
+async function generateThumbnail(buffer, mimeType) {
+    const ext = unoconvMimes[mimeType] || gmMimes[mimeType] || otherTypes[mimeType];
 
     if (config.unoconv.uri && unoconvMimes[mimeType] && !gmMimes[mimeType]) {
         const form = new FormData();
@@ -46,10 +53,10 @@ async function generateThumbnail(buffer, mimeType, targetRatio = 1.5) {
         const { width, height } = await util.promisify(image.size.bind(image))();
 
         const ratio = width / height;
-        if (targetRatio < ratio) {
-            image = image.crop(height * targetRatio, height);
+        if (ratio < 1.5) {
+            image = image.crop(width, width / 1.5);
         } else {
-            image = image.crop(width, width / targetRatio);
+            image = image.crop(height * 1.5, height);
         }
 
         image = image.resize(300, 200);

@@ -33,6 +33,7 @@ async function queueFile(io, projectId, filename, buffer) {
     }
 
     if (!type) {
+        // Skip the file if not in one of the supported types
         return;
     }
 
