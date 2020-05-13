@@ -28,6 +28,12 @@ async function queueFile(io, projectId, filename, buffer) {
         if (filename.endsWith('.jpg')) type = { mime: 'image/jpeg' };
         if (filename.endsWith('.tiff')) type = { mime: 'image/tiff' };
         if (filename.endsWith('.zip')) type = { mime: 'application/zip' };
+        if (filename.endsWith('.xlsx'))
+            type = { mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' };
+    }
+
+    if (!type) {
+        return;
     }
 
     try {

@@ -2,7 +2,6 @@ const cv = require('opencv4nodejs');
 const { findArucoMarkers } = require('./landmarks/aruco');
 const { getPageContour } = require('./landmarks/page-contours');
 const { findQrCode } = require('./landmarks/qr-code');
-const { generateThumbnail } = require('../../../helpers/thumbnail');
 const { InputOutput } = require('../../../io');
 
 const MAX_SIZE = 2560;
@@ -140,21 +139,6 @@ function computeTargets(file, pageNo, w, h) {
     }
 
     return targets;
-}
-
-/**
- *
- * @param {cv.Mat} image
- */
-async function getThumbnail(image) {
-    const imagePng = cv.imencode('.png', image);
-    const thumbPng = await generateThumbnail(imagePng, 'image/png');
-
-    return {
-        size: thumbPng.byteLength,
-        mimeType: 'image/png',
-        data: thumbPng,
-    };
 }
 
 module.exports = { processImageUpload, findLandmarks, computeTargets };

@@ -15,11 +15,15 @@ const gmMimes = {
     'application/pdf': 'pdf',
 };
 
+const defaultThumbnail = fs.readFileSync('data/thumbnail.png');
+
 /**
  * @param {Buffer} buffer
  * @param {string} mimeType
  */
 async function generateThumbnail(buffer, mimeType, targetRatio = 1.5) {
+    const ext = unoconvMimes[mimeType] || gmMimes[mimeType];
+
     if (config.unoconv.uri && unoconvMimes[mimeType] && !gmMimes[mimeType]) {
         const form = new FormData();
         form.append('file', buffer, `file.${unoconvMimes[mimeType]}`);
@@ -33,7 +37,11 @@ async function generateThumbnail(buffer, mimeType, targetRatio = 1.5) {
         mimeType = 'application/pdf';
     }
 
-    if (gmMimes[mimeType]) {
+    try {
+        if (!gmMimes[mimeType]) {
+            throw new Error('Invalid type');
+        }
+
         let image = gm(buffer, `file.${gmMimes[mimeType]}`);
         const { width, height } = await util.promisify(image.size.bind(image))();
 
@@ -48,11 +56,13 @@ async function generateThumbnail(buffer, mimeType, targetRatio = 1.5) {
 
         buffer = await util.promisify(image.toBuffer.bind(image))('PNG');
         mimeType = 'image/png';
-    } else if (mimeType === 'application/zip') {
-        buffer = fs.readFileSync('data/thumbnails/zipfile.png');
-        mimeType = 'image/png';
-    } else {
-        buffer = fs.readFileSync('data/thumbnails/placeholder.png');
+    } catch (e) {
+        const image = gm(defaultThumbnail, 'file.png')
+            .fill('#000000')
+            .font('Arial-Bold', 30)
+            .drawText(90, 135, ext.slice(0, 3).toLocaleUpperCase());
+
+        buffer = await util.promisify(image.toBuffer.bind(image))('PNG');
         mimeType = 'image/png';
     }
 
