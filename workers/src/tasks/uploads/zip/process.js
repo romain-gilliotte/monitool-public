@@ -12,8 +12,7 @@ async function processZipUpload(io, upload) {
     for (let entry of zip.getEntries()) {
         const buffer = entry.getData();
 
-        console.log(buffer);
-        // FIXME: protect against zip bombs!
+        // FIXME: guard against zip bombs!
 
         await queueFile(io, upload.projectId, entry.name, buffer);
     }
@@ -22,7 +21,14 @@ async function processZipUpload(io, upload) {
 }
 
 async function queueFile(io, projectId, filename, buffer) {
-    const { ext, mime } = await FileType.fromBuffer(buffer);
+    let type = await FileType.fromBuffer(buffer);
+    if (!type) {
+        if (filename.endsWith('.pdf')) type = { mime: 'application/pdf' };
+        if (filename.endsWith('.png')) type = { mime: 'image/png' };
+        if (filename.endsWith('.jpg')) type = { mime: 'image/jpeg' };
+        if (filename.endsWith('.tiff')) type = { mime: 'image/tiff' };
+        if (filename.endsWith('.zip')) type = { mime: 'application/zip' };
+    }
 
     try {
         const insertion = await io.database.collection('input_upload').insertOne({
@@ -32,7 +38,7 @@ async function queueFile(io, projectId, filename, buffer) {
                 sha1: new Hash('sha1').update(buffer).digest(),
                 name: filename,
                 size: buffer.byteLength,
-                mimeType: mime,
+                mimeType: type.mime,
                 data: buffer,
             },
         });
