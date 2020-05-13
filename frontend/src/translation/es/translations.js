@@ -121,6 +121,8 @@ export default {
         update_invitation: 'Actualizar invitación',
     },
     project: {
+        original_file: 'Fichero original',
+        uploads: 'Formularios en papel & Excel',
         no_logframe_yet: 'Aún no ha creado ningún marco logico en este proyecto',
         show_all_projects: 'Display all projects ({{count}})',
         no_projects: 'No tiene ningún proyecto',
@@ -498,7 +500,8 @@ export default {
 
         collection_site: 'Lugar de colecta',
         collection_form: 'Fuente de datos',
-        collection_form2: 'Formulario',
+        collection_form_paper: 'Formulario en papel',
+        collection_form_excel: 'Formulario en Excel',
 
         collection_form_planning: 'Calendario',
         collection_form_structure: 'Estructura',

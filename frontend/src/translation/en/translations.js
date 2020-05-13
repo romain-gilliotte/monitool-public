@@ -121,6 +121,8 @@ export default {
         update_invitation: 'Update invitation',
     },
     project: {
+        original_file: 'Original file',
+        uploads: 'Paper & Excel forms',
         no_logframe_yet: 'This project does not have logical frameworks yet',
         show_all_projects: 'Mostrar todos los proyectos',
         no_projects: "You don't have any project",
@@ -497,7 +499,8 @@ export default {
 
         collection_site: 'Collection site',
         collection_form: 'Data source',
-        collection_form2: 'Data entry sheet',
+        collection_form_paper: 'Paper forms',
+        collection_form_excel: 'Excel forms',
 
         collection_form_planning: 'Calendar',
         collection_form_structure: 'Structure',

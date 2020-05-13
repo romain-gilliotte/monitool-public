@@ -28,14 +28,7 @@ module.config($stateProvider => {
         resolve: {
             period: $stateParams => $stateParams.period,
             siteId: $stateParams => $stateParams.siteId,
-            variables: ($stateParams, project) => {
-                const ds = project.forms.find(f => f.id === $stateParams.dataSourceId);
-                return ds.elements.filter(v => ds.active && v.active);
-            },
-            periodicity: ($stateParams, project) =>
-                project.forms.find(f => f.id === $stateParams.dataSourceId).periodicity,
-            entityIds: ($stateParams, project) =>
-                project.forms.find(f => f.id === $stateParams.dataSourceId).entities,
+            dataSourceId: $stateParams => $stateParams.dataSourceId,
         },
     });
 
@@ -49,22 +42,9 @@ module.config($stateProvider => {
                     .get(`/project/${$stateParams.projectId}/upload/${$stateParams.uploadId}`)
                     .then(response => response.data),
 
+            dataSourceId: upload => upload.dataSourceId,
             period: () => null,
             siteId: () => null,
-            variables: (project, upload) => {
-                const ds = project.forms.find(f => f.id === upload.dataSourceId);
-                return ds.elements.filter(
-                    v => ds.active && v.active && upload.reprojected.regions[v.id]
-                );
-            },
-            periodicity: (project, upload) => {
-                const ds = project.forms.find(f => f.id === upload.dataSourceId);
-                return ds.periodicity;
-            },
-            entityIds: (project, upload) => {
-                const ds = project.forms.find(f => f.id === upload.dataSourceId);
-                return ds.entities;
-            },
         },
     });
 });
@@ -75,6 +55,7 @@ module.component(__componentName, {
         invitations: '<',
 
         upload: '<',
+        dataSourceId: '<',
         period: '<',
         siteId: '<',
         variables: '<',
@@ -118,17 +99,34 @@ module.component(__componentName, {
         }
 
         $onChanges(changes) {
+            this.dataSourceEditable = true;
+            this.metadataEditable = true;
+
+            this.onDataSourceSet();
+            this.onMetadataSet();
+        }
+
+        async onDataSourceSet() {
+            if (!this.dataSourceId) {
+                return;
+            }
+
+            this.dataSourceEditable = false;
+
+            const dataSource = this.project.forms.find(f => f.id === this.dataSourceId);
+            this.periodicity = dataSource.periodicity;
+            this.entityIds = dataSource.entities;
+            this.variables = dataSource.elements.filter(v => {
+                if (this.upload && this.upload.reprojected) {
+                    return v.active && this.upload.reprojected.regions[v.id];
+                } else {
+                    return v.active;
+                }
+            });
+
             // Compute choices.
             this._initChoices();
-
-            // If metadata is already set, we load the file.
-            if (this.period && this.siteId) {
-                this.metadataEditable = false;
-                this.onMetadataSet();
-            } else {
-                this.period = TimeSlot.fromDate(new Date(), this.periodicity).value;
-                this.metadataEditable = true;
-            }
+            this.period = TimeSlot.fromDate(new Date(), this.periodicity).value;
         }
 
         async onMetadataSet() {

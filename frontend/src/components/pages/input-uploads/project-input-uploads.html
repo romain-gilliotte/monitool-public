@@ -1,37 +1,51 @@
-<div dropzone>Drop Files Here</div>
+<dropzone project="$ctrl.project"></dropzone>
 
 <div class="card-container">
     <div ng-repeat="upload in $ctrl.uploads" class="card thumbnail">
-        <image
+        <!-- Image when ready -->
+        <img
             class="img-thumbnail"
+            ng-if="upload.thumbnail"
             ng-src="/api/project/{{upload.projectId}}/upload/{{upload._id}}/thumbnail"
         />
 
+        <!-- Image placeholder -->
+        <div ng-if="!upload.thumbnail" class="img-thumbnail loading-img">
+            <i class="fa fa-circle-o-notch fa-spin"></i>
+        </div>
+
         <div class="caption">
-            <b>Nom:</b>
-            {{upload.original.name}}<br />
+            {{upload.original.name}}
 
-            <b>Date:</b>
-            {{upload.createdAt}}
-
-            <div ng-if="upload.status == 'pending_processing'">
-                En attente de traitement
-            </div>
-
-            <div ng-if="upload.status == 'done'">
-                This file was entered on X
-            </div>
-
-            <div ng-if="upload.status == 'failed'">
-                Le traitement à échoué: {{upload.reason}}
-            </div>
-
-            <a
-                class="btn btn-default pull-right btn-xs"
-                ng-disabled="upload.status != 'pending_dataentry'"
-                ui-sref="project.usage.data_entry({uploadId: upload._id})"
-                >Saisir</a
+            <span
+                class="btn btn-default btn-xxs disabled"
+                ng-if="upload.status == 'pending_processing'"
             >
+                <i class="fa fa-circle-o-notch fa-spin"></i>
+                Traitement en cours
+            </span>
+
+            <div class="btn-group" uib-dropdown ng-if="upload.status != 'pending_processing'">
+                <a
+                    class="btn btn-default btn-xxs"
+                    ui-sref="project.usage.data_entry({uploadId: upload._id})"
+                >
+                    <i class="fa fa-pencil"></i>
+                    Saisir
+                </a>
+                <a class="btn btn-default btn-xxs" uib-dropdown-toggle>
+                    <span class="caret"></span>
+                </a>
+
+                <ul class="dropdown-menu">
+                    <li>
+                        <a ng-click="$ctrl.delete(upload)">
+                            <i class="fa fa-trash text-danger"></i>
+                            <span class="text-danger" translate="shared.delete"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

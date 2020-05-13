@@ -11,7 +11,7 @@ module.exports = {
     devServer: {
         contentBase: path.resolve('public'),
         port: 8080,
-        compress: true,
+        compress: false,
         disableHostCheck: true,
         host: '0.0.0.0',
         proxy: {

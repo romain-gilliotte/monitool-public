@@ -31,66 +31,75 @@ module.component(__componentName, {
             const language = this.$rootScope.language;
             const serviceUrl = this.$rootScope.serviceUrl;
 
-            this.files = [
-                ...this.project.logicalFrames.map(lf => {
-                    const url = `${serviceUrl}/project/${projectId}/logical-frame/${lf.id}`;
+            this.sections = [
+                {
+                    id: 'logframes',
+                    name: 'shared.logical_frames',
+                    files: this.project.logicalFrames.map(lf => {
+                        const url = `${serviceUrl}/project/${projectId}/logical-frame/${lf.id}`;
 
-                    return {
-                        id: lf.id,
-                        category: 'project.logical_frame',
-                        name: lf.name,
-                        thumbnail: `${url}.pdf.png?language=${language}`,
-                        main: {
-                            icon: 'fa-file-pdf-o',
-                            key: 'project.download_portrait',
-                            url: `${url}.pdf?language=${language}&orientation=portrait`,
-                        },
-                        dropdown: [
-                            {
+                        return {
+                            id: lf.id,
+                            name: lf.name,
+                            thumbnail: `${url}.pdf.png?language=${language}`,
+                            main: {
                                 icon: 'fa-file-pdf-o',
-                                key: 'project.download_landscape',
-                                url: `${url}.pdf?language=${language}&orientation=landscape`,
+                                key: 'project.download_portrait',
+                                url: `${url}.pdf?language=${language}&orientation=portrait`,
                             },
-                        ],
-                    };
-                }),
-                ...this.project.forms.map(ds => {
-                    const url = `${serviceUrl}/project/${projectId}/data-source/${ds.id}`;
+                            dropdown: [
+                                {
+                                    icon: 'fa-file-pdf-o',
+                                    key: 'project.download_landscape',
+                                    url: `${url}.pdf?language=${language}&orientation=landscape`,
+                                },
+                            ],
+                        };
+                    }),
+                },
+                {
+                    id: 'paper',
+                    name: 'project.collection_form_paper',
+                    files: this.project.forms.map(ds => {
+                        const url = `${serviceUrl}/project/${projectId}/data-source/${ds.id}`;
 
-                    return {
-                        id: ds.id,
-                        category: 'project.collection_form2',
-                        name: ds.name,
-                        thumbnail: `${url}.pdf.png?language=${language}`,
-                        main: {
-                            key: 'project.download_portrait',
-                            icon: 'fa-file-pdf-o',
-                            url: `${url}.pdf?language=${language}&orientation=portrait`,
-                        },
-                        dropdown: [
-                            {
+                        return {
+                            id: ds.id,
+                            name: ds.name,
+                            thumbnail: `${url}.pdf.png?language=${language}`,
+                            main: {
+                                key: 'project.download_portrait',
                                 icon: 'fa-file-pdf-o',
-                                key: 'project.download_landscape',
-                                url: `${url}.pdf?language=${language}&orientation=landscape`,
+                                url: `${url}.pdf?language=${language}&orientation=portrait`,
                             },
-                        ],
-                    };
-                }),
-                ...this.project.forms.map(ds => {
-                    const url = `${serviceUrl}/project/${projectId}/data-source/${ds.id}`;
+                            dropdown: [
+                                {
+                                    icon: 'fa-file-pdf-o',
+                                    key: 'project.download_landscape',
+                                    url: `${url}.pdf?language=${language}&orientation=landscape`,
+                                },
+                            ],
+                        };
+                    }),
+                },
+                {
+                    id: 'excel',
+                    name: 'project.collection_form_excel',
+                    files: this.project.forms.map(ds => {
+                        const url = `${serviceUrl}/project/${projectId}/data-source/${ds.id}`;
 
-                    return {
-                        id: ds.id + 'xls',
-                        category: 'project.collection_form2',
-                        name: ds.name,
-                        thumbnail: `${url}.xlsx.png?language=${language}`,
-                        main: {
-                            key: 'project.download_excel',
-                            icon: 'fa-file-excel-o',
-                            url: `${url}.xlsx?language=${language}`,
-                        },
-                    };
-                }),
+                        return {
+                            id: ds.id + 'xls',
+                            name: ds.name,
+                            thumbnail: `${url}.xlsx.png?language=${language}`,
+                            main: {
+                                key: 'project.download_excel',
+                                icon: 'fa-file-excel-o',
+                                url: `${url}.xlsx?language=${language}`,
+                            },
+                        };
+                    }),
+                },
             ];
         }
     },

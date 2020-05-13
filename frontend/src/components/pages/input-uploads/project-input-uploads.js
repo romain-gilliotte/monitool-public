@@ -1,9 +1,10 @@
 import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
 import axios from 'axios';
+import dropzone from './dropzone';
 require(__scssPath);
 
-const module = angular.module(__moduleName, [uiRouter]);
+const module = angular.module(__moduleName, [uiRouter, dropzone]);
 
 module.config($stateProvider => {
     $stateProvider.state('project.usage.uploads', {
@@ -11,7 +12,11 @@ module.config($stateProvider => {
         component: __componentName,
         resolve: {
             uploads: $stateParams =>
-                axios.get(`/project/${$stateParams.projectId}/upload`).then(r => r.data),
+                axios
+                    .get(`/project/${$stateParams.projectId}/upload`, {
+                        headers: { accept: 'application/json' },
+                    })
+                    .then(r => r.data),
         },
     });
 });
@@ -23,42 +28,41 @@ module.component(__componentName, {
     },
     template: require(__templatePath),
     controller: class {
-        constructor($state, $timeout) {
-            // fixme: reload controller every 5 seconds.
-            // Should be an event source, but convenient for testing.
-            this.stopInterval = $timeout(() => {
-                $state.reload('project.usage.uploads');
-            }, 3000);
+        constructor($scope) {
+            this.$scope = $scope;
+        }
+
+        $onChanges() {
+            this.eventSource = new EventSource(`/api/project/${this.project._id}/upload`);
+            this.eventSource.onmessage = this.onMessage.bind(this);
+        }
+
+        $onDestroy() {
+            this.eventSource.close();
+        }
+
+        onMessage(message) {
+            const action = JSON.parse(message.data);
+
+            if (action.type === 'insert') {
+                this.uploads.unshift(action.document);
+            } else if (action.type === 'update') {
+                // Update document.
+                const index = this.uploads.findIndex(u => u._id == action.id);
+                const upload = this.uploads[index];
+                for (let key in action.update) {
+                    upload[key] = action.update[key];
+                }
+
+                // Remove if done
+                if (upload.status === 'done') {
+                    this.uploads.splice(index, 1);
+                }
+            }
+
+            this.$scope.$apply();
         }
     },
-});
-
-module.directive('dropzone', function () {
-    return {
-        restrict: 'A',
-        scope: false,
-        link: function (scope, element) {
-            element.bind('dragover', e => {
-                e.preventDefault();
-                e.stopPropagation();
-            });
-
-            element.bind('drop', e => {
-                e.stopPropagation();
-                e.preventDefault();
-
-                var files = e.dataTransfer.files;
-                for (var i = 0; i < files.length; ++i) {
-                    const formData = new FormData();
-                    formData.append('file', files[i]);
-
-                    axios.post(`/project/${scope.$ctrl.project._id}/upload`, formData, {
-                        headers: { 'Content-Type': 'multipart/form-data' },
-                    });
-                }
-            });
-        },
-    };
 });
 
 export default module.name;

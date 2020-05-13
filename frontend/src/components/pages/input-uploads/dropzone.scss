@@ -1,0 +1,32 @@
+dropzone {
+    & .highlight {
+        background-color: yellow;
+    }
+
+    > div {
+        border: 1px dashed #666;
+        border-radius: 5px;
+        padding: 20px;
+        text-align: center;
+        font: 16pt bold;
+        color: #666;
+        margin-bottom: 20px;
+
+        * {
+            pointer-events: none;
+        }
+
+        label {
+            pointer-events: auto;
+            color: #66f;
+            font-weight: normal;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        input[type='file'] {
+            position: fixed;
+            top: -100px;
+        }
+    }
+}

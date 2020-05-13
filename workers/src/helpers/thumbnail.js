@@ -48,8 +48,11 @@ async function generateThumbnail(buffer, mimeType, targetRatio = 1.5) {
 
         buffer = await util.promisify(image.toBuffer.bind(image))('PNG');
         mimeType = 'image/png';
+    } else if (mimeType === 'application/zip') {
+        buffer = fs.readFileSync('data/thumbnails/zipfile.png');
+        mimeType = 'image/png';
     } else {
-        buffer = fs.readFileSync('data/placeholder.png');
+        buffer = fs.readFileSync('data/thumbnails/placeholder.png');
         mimeType = 'image/png';
     }
 

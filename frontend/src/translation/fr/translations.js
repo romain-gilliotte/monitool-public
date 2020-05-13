@@ -122,6 +122,8 @@ export default {
         update_invitation: "Mettre à jour l'invitation",
     },
     project: {
+        original_file: 'Fichier original',
+        uploads: 'Formulaires papier & Excel',
         no_logframe_yet: "Vous n'avez pas encore créé de cadre logique sur ce projet",
         show_all_projects: 'Afficher tous les projets ({{count}})',
         no_projects: "Vous n'avez aucun projet",
@@ -492,7 +494,8 @@ export default {
 
         collection_site: 'Lieu de collecte',
         collection_form: 'Source de données',
-        collection_form2: 'Fiche de saisie',
+        collection_form_paper: 'Fiches de saisie papier',
+        collection_form_excel: 'Fiches de saisie Excel',
 
         collection_form_planning: 'Calendrier',
         collection_form_structure: 'Structure',

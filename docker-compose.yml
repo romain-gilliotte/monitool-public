@@ -10,12 +10,13 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: admin
     volumes:
       - mongo_data:/data/db
+    command: --replSet rs0
 
   redis:
     image: redis
     ports:
       - "6379:6379"
-  
+
   unoconv:
     image: zrrrzzt/docker-unoconv-webservice
     ports:

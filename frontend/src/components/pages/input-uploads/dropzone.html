@@ -1,0 +1,22 @@
+<div
+    ng-on-dragover="$ctrl.onDragOver($event)"
+    ng-on-dragleave="$ctrl.onDragLeave($event)"
+    ng-on-drop="$ctrl.onDrop($event)"
+    ng-class="{highlight: $ctrl.highlight}"
+>
+    <p>
+        Déposez ici vos fiches de saisies remplies ou
+        <label for="file-input">choisissez des fichier</label>
+        <input
+            type="file"
+            id="file-input"
+            accept="{{$ctrl.inputTypes}}"
+            multiple
+            ng-on-change="$ctrl.onInputChange($event)"
+        />
+    </p>
+    <p style="font-size: 70%;">
+        Formats supportés: Photos, scans ou fax (pdf, jpg, png, tiff), excel (xlsx) ou archives
+        (zip).
+    </p>
+</div>
