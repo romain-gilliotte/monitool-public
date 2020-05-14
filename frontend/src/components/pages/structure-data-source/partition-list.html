@@ -2,7 +2,7 @@
     <ul style="list-style-type: none; padding-left: 5px;">
         <li ng-if="$ctrl.partitions.length == 0" translate="project.no_partitions"></li>
 
-        <li ng-repeat="partition in $ctrl.partitions">
+        <li ng-repeat="partition in $ctrl.partitions track by partition.id">
             <a ng-click="$ctrl.editPartition(partition)" ng-class="{disabled: !partition.active}">
                 <i class="fa fa-pencil"></i>
                 <strong>{{partition.name}}:</strong>

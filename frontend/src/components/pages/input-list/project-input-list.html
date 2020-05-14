@@ -1,32 +1,32 @@
-<div ng-if="!$ctrl.dataSource.entities.length">
+<div ng-if="::!$ctrl.dataSource.entities.length">
     <span translate="project.form_is_not_associated_with_site"></span>
 </div>
 
-<div class="input-table-container" ng-if="$ctrl.dataSource.entities.length">
+<div class="input-table-container" ng-if="::$ctrl.dataSource.entities.length">
     <table class="table table-bordered table-condensed">
         <tbody>
-            <tr ng-repeat="date in $ctrl.visibleStatus">
+            <tr ng-repeat="date in $ctrl.visibleStatus track by $index">
                 <td
                     title="{{::date|formatSlotRange:$ctrl.project.start:$ctrl.project.end}}"
                     ng-style="$ctrl.firstColStyle"
                 >
                     <div class="bodyField">{{::date|formatSlot}}</div>
                 </td>
-                <td ng-repeat="site in ::$ctrl.sites">
-                    <div class="bodyField" ng-if="$ctrl.inputsStatus[date][site.id] !== undefined">
+                <td ng-repeat="site in ::$ctrl.sites track by site.id">
+                    <div ng-switch="::$ctrl.inputsStatus[date][site.id]" class="bodyField">
                         <a
-                            class="btn btn-xs btn-default"
-                            ng-if="$ctrl.inputsStatus[date][site.id] !== 0"
+                            ng-switch-when="0"
                             ui-sref="project.usage.edit({dataSourceId: $ctrl.dataSource.id, period: date, siteId: site.id})"
-                            translate="project.input_status.done"
-                            translate-values="::{value: $ctrl.inputsStatus[date][site.id]}"
+                            class="btn btn-xs btn-primary"
+                            translate="project.input_status.expected"
                         ></a>
 
                         <a
-                            class="btn btn-xs btn-primary"
+                            ng-switch-default
                             ui-sref="project.usage.edit({dataSourceId: $ctrl.dataSource.id, period: date, siteId: site.id})"
-                            ng-if="$ctrl.inputsStatus[date][site.id] === 0"
-                            translate="project.input_status.expected"
+                            class="btn btn-xs btn-default"
+                            translate="project.input_status.done"
+                            translate-values="::{value: $ctrl.inputsStatus[date][site.id]}"
                         ></a>
                     </div>
                 </td>
@@ -65,7 +65,7 @@
                 <th ng-style="$ctrl.firstColStyle">
                     <div class="headerField" translate="shared.date"></div>
                 </th>
-                <th ng-repeat="site in ::$ctrl.sites">
+                <th ng-repeat="site in ::$ctrl.sites track by site.id">
                     <div class="headerField">
                         <div>{{::site.name}}</div>
                     </div>

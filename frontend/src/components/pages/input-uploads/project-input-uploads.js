@@ -49,7 +49,6 @@ module.component(__componentName, {
 
         onMessage(message) {
             const action = JSON.parse(message.data);
-            console.log(action);
 
             if (action.type === 'insert') {
                 this.uploads.unshift(action.document);

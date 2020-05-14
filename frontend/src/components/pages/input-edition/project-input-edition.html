@@ -111,20 +111,20 @@
             <div
                 class="form-group"
                 ng-if="$ctrl.contentByVariableId"
-                ng-repeat="variable in $ctrl.variables"
+                ng-repeat="variable in ::$ctrl.variables track by variable.id"
             >
-                <label class="col-sm-2 control-label">{{variable.name}}</label>
+                <label class="col-sm-2 control-label">{{::variable.name}}</label>
 
                 <div class="col-sm-10">
                     <image-scroll
-                        ng-if="$ctrl.upload && $ctrl.upload.reprojected.regions[variable.id]"
+                        ng-if="::$ctrl.upload && $ctrl.upload.reprojected.regions[variable.id]"
                         class="img-thumbnail"
                         upload="$ctrl.upload"
-                        region="{{variable.id}}"
+                        region="{{::variable.id}}"
                     ></image-scroll>
 
                     <input-grid
-                        variable="variable"
+                        variable="::variable"
                         ng-model="$ctrl.contentByVariableId[variable.id].data"
                     ></input-grid>
                 </div>

@@ -62,39 +62,36 @@
     <columns-panel ng-repeat="p in $ctrl.displayedProjects track by p._id" variant="p.variant">
         <pane-title>
             <i
-                class="fa fa-fw fa-star pull-right"
-                ng-if="p.favorite"
-                ng-click="$ctrl.toggleFavorite(p)"
-            ></i>
-            <i
-                class="fa fa-fw fa-star-o pull-right"
-                ng-if="!p.favorite"
+                class="fa fa-fw pull-right"
+                ng-class="{'fa-star': p.favorite, 'fa-star-o': !p.favorite}"
                 ng-click="$ctrl.toggleFavorite(p)"
             ></i>
 
-            <i class="fa fa-fw fa-user" ng-if="$root.profile.email == p.owner"></i>
-            <i class="fa fa-fw fa-share-alt" ng-if="$root.profile.email != p.owner"></i>
+            <span ng-switch="$root.profile.email == p.owner">
+                <i class="fa fa-fw fa-user" ng-switch-when="true"></i>
+                <i class="fa fa-fw fa-share-alt" ng-switch-when="false"></i>
+            </span>
 
-            {{p.country}}
+            {{::p.country}}
         </pane-title>
         <pane-body>
             <div>
                 <strong translate="shared.name"></strong>
-                {{p.name}}
+                {{::p.name}}
             </div>
             <div>
                 <strong translate="shared.date"></strong>
-                {{p.start|date}} - {{p.end|date}}
+                {{::p.start|date}} - {{::p.end|date}}
             </div>
             <div>
                 <strong translate="project.owner"></strong>
-                {{p.owner}}
+                {{::p.owner}}
             </div>
 
-            <div>
+            <div ng-switch="::!!$ctrl.lastInputDate[p._id]">
                 <strong translate="project.last_entry"></strong>
-                <span ng-if="$ctrl.lastInputDate[p._id]">{{$ctrl.lastInputDate[p._id]|date}}</span>
-                <span ng-if="!$ctrl.lastInputDate[p._id]" translate="shared.none"></span>
+                <span ng-switch-when="true">{{::$ctrl.lastInputDate[p._id]|date}}</span>
+                <span ng-switch-when="false" translate="shared.none"></span>
             </div>
 
             <div ng-if="!p.active" class="text-warning">
@@ -108,7 +105,7 @@
 
             <div class="panel-buttons btn-group">
                 <a
-                    ng-if="p.active"
+                    ng-if="::p.active"
                     class="btn btn-default btn-xxs"
                     ui-sref="project.usage.home({projectId: p._id})"
                 >
@@ -117,7 +114,7 @@
                 </a>
 
                 <a
-                    ng-if="!p.active && p.owner == $root.profile.email"
+                    ng-if="::!p.active && p.owner == $root.profile.email"
                     class="btn btn-default btn-xxs"
                     ng-click="$ctrl.onRestoreClicked(p)"
                 >
@@ -126,7 +123,7 @@
                 </a>
 
                 <a
-                    ng-if="!p.active && p.owner != $root.profile.email"
+                    ng-if="::!p.active && p.owner != $root.profile.email"
                     class="btn btn-default btn-xxs"
                     ng-click="$ctrl.unInvite(p)"
                 >
@@ -139,32 +136,32 @@
                         <span class="caret"></span>
                     </a>
 
-                    <ul class="dropdown-menu">
-                        <li ng-if="p.owner != $root.profile.email">
+                    <ul class="dropdown-menu" ng-switch="p.owner == $root.profile.email">
+                        <li ng-switch-when="false">
                             <a ng-click="$ctrl.unInvite(p)">
                                 <i class="fa fa-fw fa-trash text-danger"></i>
                                 <span class="text-danger" translate="shared.uninvite"></span>
                             </a>
                         </li>
-                        <li ng-if="p.owner == $root.profile.email">
+                        <li ng-switch-when="true">
                             <a ui-sref="project.config.home({projectId: p._id})">
                                 <i class="fa fa-fw fa-cogs"></i>
                                 <span translate="shared.configure"></span>
                             </a>
                         </li>
-                        <li ng-if="p.owner == $root.profile.email">
+                        <li ng-switch-when="true">
                             <a ng-click="$ctrl.onCloneClicked(p, false)">
                                 <i class="fa fa-fw fa-clone"></i>
                                 <span translate="shared.clone_structure"></span>
                             </a>
                         </li>
-                        <li ng-if="p.owner == $root.profile.email">
+                        <li ng-switch-when="true">
                             <a ng-click="$ctrl.onCloneClicked(p, true)">
                                 <i class="fa fa-fw fa-clone"></i>
                                 <span translate="shared.clone_all"></span>
                             </a>
                         </li>
-                        <li ng-if="p.owner == $root.profile.email">
+                        <li ng-switch-when="true">
                             <a ng-click="$ctrl.onArchiveClicked(p)">
                                 <i class="text-warning fa fa-fw fa-archive"></i>
                                 <span class="text-warning" translate="shared.archive"></span>

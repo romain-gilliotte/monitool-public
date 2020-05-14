@@ -17,6 +17,12 @@ module.config(function ($sceDelegateProvider) {
     $sceDelegateProvider.resourceUrlWhitelist(['self', SERVICE_URL + '/**']);
 });
 
+module.config(function ($compileProvider) {
+    // $compileProvider.debugInfoEnabled(false);
+    $compileProvider.commentDirectivesEnabled(false);
+    $compileProvider.cssClassDirectivesEnabled(false);
+});
+
 // Hook angular-ui-router transitions.
 module.run(function ($window, $transitions) {
     $transitions.onBefore({}, function (transition) {});

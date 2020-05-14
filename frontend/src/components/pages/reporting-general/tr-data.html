@@ -6,21 +6,21 @@
     ></i>
 </td>
 
-<td class="row-title" title="{{$ctrl.label}}">
-    <div>{{$ctrl.label|formatSlot}}</div>
+<td class="row-title" title="{{::$ctrl.label}}">
+    <div>{{::$ctrl.label|formatSlot}}</div>
 </td>
 
 <td class="row-dimension">
-    <div ng-if="$ctrl.aggregations.length">
+    <div ng-if="::$ctrl.aggregations.length" ng-switch="$ctrl.disagregated">
         <button
+            ng-switch-when="true"
             class="btn btn-default btn-xs"
-            ng-if="$ctrl.disagregated"
             ng-click="$ctrl.onDisagregateClicked({})"
         >
             <i class="fa fa-minus"></i>
         </button>
 
-        <div class="btn-group" uib-dropdown dropdown-append-to-body ng-if="!$ctrl.disagregated">
+        <div ng-switch-when="false" class="btn-group" uib-dropdown dropdown-append-to-body>
             <button class="btn btn-default btn-xs" uib-dropdown-toggle>
                 <i class="fa fa-plus"></i>
             </button>
@@ -38,11 +38,11 @@
     </div>
 </td>
 
-<td class="row-baseline" ng-class="{empty: $ctrl.baseline === null}">
-    <span>{{$ctrl.baseline}}{{$ctrl.query.formula|indicatorUnit}}</span>
+<td class="row-baseline" ng-class="::{empty: $ctrl.baseline === null}">
+    <span>{{::$ctrl.baseline}}{{::$ctrl.query.formula|indicatorUnit}}</span>
 </td>
-<td class="row-target" ng-class="{empty: $ctrl.target === null}">
-    <span>{{$ctrl.target}}{{$ctrl.query.formula|indicatorUnit}}</span>
+<td class="row-target" ng-class="::{empty: $ctrl.target === null}">
+    <span>{{::$ctrl.target}}{{::$ctrl.query.formula|indicatorUnit}}</span>
 </td>
 
 <td colspan="{{$ctrl.columns.length + 1}}" ng-if="!$ctrl.tableCells" class="error-td">
@@ -53,8 +53,8 @@
     ng-repeat="cell in $ctrl.tableCells track by $index"
     td-reporting-field
     value="cell"
-    baseline="$ctrl.baseline"
-    target="$ctrl.target"
-    colorize="$ctrl.colorize"
-    unit="$ctrl.query.formula|indicatorUnit"
+    baseline="::$ctrl.baseline"
+    target="::$ctrl.target"
+    colorize="::$ctrl.colorize"
+    unit="::$ctrl.query.formula|indicatorUnit"
 ></td>

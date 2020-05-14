@@ -2,7 +2,10 @@
     <span class="input-group-addon"><i class="fa fa-columns"></i></span>
 
     <select class="form-control" ng-model="$ctrl.groupBy" ng-change="$ctrl.onValueChange()">
-        <option value="{{periodicity}}" ng-repeat="periodicity in $ctrl.periodicities">
+        <option
+            value="{{periodicity}}"
+            ng-repeat="periodicity in $ctrl.periodicities track by $index"
+        >
             {{('project.dimensions.' + periodicity)|translate}}
         </option>
         <option value="entity" translate="project.collection_site_list"></option>

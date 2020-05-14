@@ -5,7 +5,7 @@
 
 <div ng-sortable="$ctrl.dataSourceSortOptions">
     <columns-panel
-        ng-repeat="dataSource in $ctrl.editableProject.forms"
+        ng-repeat="dataSource in $ctrl.editableProject.forms track by dataSource.id"
         sortable="true"
         handle-class="ds-handle"
         variant="dataSource.active ? 'default' : 'dashed'"

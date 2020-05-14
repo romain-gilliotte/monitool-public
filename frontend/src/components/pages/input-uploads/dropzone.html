@@ -1,7 +1,7 @@
 <input
     type="file"
     id="file-input"
-    accept="{{$ctrl.inputTypes}}"
+    accept="{{::$ctrl.inputTypes}}"
     multiple
     ng-on-change="$ctrl.onInputChange($event)"
 />
@@ -19,4 +19,8 @@
     <p style="font-size: 70%;">
         Formats supportés: Photo, scan, fax (pdf, jpg, png, tiff), excel (xlsx) ou archive (zip).
     </p>
+
+    <div class="progress" ng-if="$ctrl.uploading">
+        <div class="progress-bar" ng-style="{width: $ctrl.progressWidth}"></div>
+    </div>
 </div>

@@ -93,11 +93,15 @@
                 ng-click="$ctrl.onToggleVariableClicked(variable.id)"
                 style="cursor: pointer;"
             >
-                <div class="pull-right" ng-click="$event.stopPropagation()">
+                <div
+                    ng-switch="variable.active"
+                    class="pull-right"
+                    ng-click="$event.stopPropagation()"
+                >
                     <div class="btn-group" uib-dropdown>
                         <a
+                            ng-switch-when="true"
                             class="btn btn-default btn-xs"
-                            ng-if="variable.active"
                             ng-click="$ctrl.onChangeVariableStatus(variable, false)"
                         >
                             <i class="fa fa-fw fa-pause-circle-o"></i>
@@ -106,7 +110,7 @@
 
                         <a
                             class="btn btn-default btn-xs"
-                            ng-if="!variable.active"
+                            ng-switch-when="false"
                             ng-click="$ctrl.onChangeVariableStatus(variable, true)"
                         >
                             <i class="fa fa-fw fa-play-circle-o"></i>
@@ -133,7 +137,7 @@
 
                 <div class="panel-title">
                     <fa-open value="$ctrl.visibleVariableId == variable.id"></fa-open>
-                    <strong>{{'project.variable'|translate}} {{index + 1}}:</strong>
+                    <strong><span translate="project.variable"></span> {{index + 1}}:</strong>
                     {{variable.name}}
                 </div>
             </div>
@@ -144,13 +148,13 @@
                 ng-form="variableForm"
             >
                 <form-group
-                    input-id="variable-name-input-{{variable.id}}"
+                    input-id="variable-name-input-{{::variable.id}}"
                     label="project.variable_name_label"
                     help="project.collection_edit_help_varname"
                     help-values="{name: $ctrl.editableDataSource.name}"
                 >
                     <input
-                        id="variable-name-input-{{variable.id}}"
+                        id="variable-name-input-{{::variable.id}}"
                         type="text"
                         class="form-control"
                         ng-model="variable.name"
@@ -162,7 +166,7 @@
                 </form-group>
 
                 <form-group
-                    input-id="variable-siteagg-input-{{variable.id}}"
+                    input-id="variable-siteagg-input-{{::variable.id}}"
                     label="project.site_agg_label"
                     help="project.collection_edit_help_geoagg"
                     help-values="{name: variable.name}"
@@ -183,13 +187,13 @@
                 </form-group>
 
                 <form-group
-                    input-id="variable-timeagg-input-{{variable.id}}"
+                    input-id="variable-timeagg-input-{{::variable.id}}"
                     label="project.time_agg_label"
                     help="project.collection_edit_help_timeagg"
                     help-values="{name: variable.name}"
                 >
                     <select
-                        id="variable-timeagg-input-{{variable.id}}"
+                        id="variable-timeagg-input-{{::variable.id}}"
                         class="form-control"
                         ng-model="variable.timeAgg"
                         ng-change="$ctrl.onFieldChange()"

@@ -4,6 +4,15 @@ require(__scssPath);
 
 const module = angular.module(__moduleName, []);
 
+const types = [
+    'application/pdf',
+    'image/jpeg',
+    'image/png',
+    'image/tiff',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/zip',
+];
+
 /**
  * The highlight counters works around dragenter/leave behaviour w/ child elements
  *
@@ -15,17 +24,18 @@ module.component(__componentName, {
     },
     template: require(__templatePath),
     controller: class {
-        constructor() {
-            this.types = [
-                'application/pdf',
-                'image/jpeg',
-                'image/png',
-                'image/tiff',
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'application/zip',
-            ];
+        constructor($scope) {
+            this.$scope = $scope;
+        }
 
-            this.inputTypes = this.types.join(', ');
+        $onInit() {
+            // Used by the file input
+            this.inputTypes = types.join(', ');
+
+            // Used by the progress bar
+            this.lastEvtPerFile = {};
+            this.loaded = 0;
+            this.total = 0;
         }
 
         onDragOver(e) {
@@ -58,15 +68,34 @@ module.component(__componentName, {
 
         _handleFiles(files) {
             const url = `/project/${this.project._id}/upload`;
-            const options = { headers: { 'Content-Type': 'multipart/form-data' } };
 
             for (var i = 0; i < files.length; ++i) {
-                if (this.types.includes(files[i].type)) {
+                if (types.includes(files[i].type)) {
                     const formData = new FormData();
                     formData.append('file', files[i]);
-                    axios.post(url, formData, options);
+
+                    axios.post(url, formData, {
+                        headers: { 'Content-Type': 'multipart/form-data' },
+                        onUploadProgress: this._onProgress.bind(this, files[i]),
+                    });
+
+                    this._onProgress(files[i], { loaded: 0, total: files[i].size }, false);
                 }
             }
+        }
+
+        _onProgress(file, evt, apply = true) {
+            let lastEvt = this.lastEvtPerFile[file.name] || { loaded: 0, total: 0 };
+            this.lastEvtPerFile[file.name] = evt;
+
+            this.loaded += evt.loaded - lastEvt.loaded;
+            this.total += evt.total - lastEvt.total; // size correction
+
+            const progress = this.loaded / this.total;
+            this.uploading = progress < 1;
+            this.progressWidth = `${100 * progress}%`;
+
+            if (apply) this.$scope.$apply();
         }
     },
 });
