@@ -1,0 +1,51 @@
+<!-- Image when ready -->
+<a
+    href="/api/project/{{$ctrl.upload.projectId}}/upload/{{$ctrl.upload._id}}/original"
+    target="_blank"
+>
+    <img
+        class="img-thumbnail"
+        ng-if="$ctrl.upload.thumbnail"
+        ng-src="/api/project/{{$ctrl.upload.projectId}}/upload/{{$ctrl.upload._id}}/thumbnail"
+    />
+</a>
+
+<!-- Image placeholder -->
+<div ng-if="!$ctrl.upload.thumbnail" class="img-thumbnail loading-img">
+    <i class="fa fa-circle-o-notch fa-spin"></i>
+</div>
+
+<div class="caption">
+    {{$ctrl.upload.original.name}}
+
+    <div ng-if="$ctrl.upload.status == 'failed'" class="text-danger">
+        <i class="fa fa-fw fa-warning"></i>
+        <span translate="project.processing_failed"></span>
+    </div>
+
+    <span
+        class="btn btn-default btn-xxs disabled"
+        ng-if="$ctrl.upload.status == 'pending_processing'"
+    >
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <span translate="project.processing"></span>
+    </span>
+
+    <a
+        class="btn btn-default btn-xxs"
+        ui-sref="project.usage.data_entry({uploadId: $ctrl.upload._id})"
+        ng-if="$ctrl.upload.status == 'pending_dataentry' || $ctrl.upload.status == 'done'"
+    >
+        <i class="fa fa-pencil"></i>
+        <span translate="project.input_status.expected"></span>
+    </a>
+
+    <a
+        class="btn btn-danger btn-xxs"
+        ng-click="$ctrl.onDelete()"
+        ng-if="$ctrl.upload.status == 'failed'"
+    >
+        <i class="fa fa-trash"></i>
+        <span translate="shared.delete"></span>
+    </a>
+</div>

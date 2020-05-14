@@ -1,51 +1,45 @@
 <dropzone project="$ctrl.project"></dropzone>
 
+<legend>En attente de saisie</legend>
+
+<p ng-if="$ctrl.uploads.length == 0">
+    Aucun fichier en attente de saisie
+</p>
+
 <div class="card-container">
-    <div ng-repeat="upload in $ctrl.uploads" class="card thumbnail">
-        <!-- Image when ready -->
-        <img
-            class="img-thumbnail"
-            ng-if="upload.thumbnail"
-            ng-src="/api/project/{{upload.projectId}}/upload/{{upload._id}}/thumbnail"
-        />
-
-        <!-- Image placeholder -->
-        <div ng-if="!upload.thumbnail" class="img-thumbnail loading-img">
-            <i class="fa fa-circle-o-notch fa-spin"></i>
-        </div>
-
-        <div class="caption">
-            {{upload.original.name}}
-
-            <span
-                class="btn btn-default btn-xxs disabled"
-                ng-if="upload.status == 'pending_processing'"
-            >
-                <i class="fa fa-circle-o-notch fa-spin"></i>
-                Traitement en cours
-            </span>
-
-            <div class="btn-group" uib-dropdown ng-if="upload.status != 'pending_processing'">
-                <a
-                    class="btn btn-default btn-xxs"
-                    ui-sref="project.usage.data_entry({uploadId: upload._id})"
-                >
-                    <i class="fa fa-pencil"></i>
-                    Saisir
-                </a>
-                <a class="btn btn-default btn-xxs" uib-dropdown-toggle>
-                    <span class="caret"></span>
-                </a>
-
-                <ul class="dropdown-menu">
-                    <li>
-                        <a ng-click="$ctrl.delete(upload)">
-                            <i class="fa fa-trash text-danger"></i>
-                            <span class="text-danger" translate="shared.delete"></span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    <upload
+        ng-repeat="upload in $ctrl.uploads track by upload._id"
+        upload="upload"
+        on-delete="$ctrl.deleteUpload(upload, $ctrl.uploads)"
+    ></upload>
 </div>
+
+<legend>Historique</legend>
+
+<p ng-if="$ctrl.history.length == 0 && !$ctrl.hasMoreHistory">
+    Aucun fichier dans l'historique
+</p>
+
+<a
+    class="btn btn-default"
+    ng-if="$ctrl.history.length == 0 && $ctrl.hasMoreHistory"
+    ng-click="$ctrl.loadMore()"
+>
+    Charger les fichiers déjà traités
+</a>
+
+<div class="card-container">
+    <upload
+        ng-repeat="upload in $ctrl.history track by upload._id"
+        upload="upload"
+        on-delete="$ctrl.deleteUpload(upload, $ctrl.history)"
+    ></upload>
+</div>
+
+<a
+    class="btn btn-default"
+    ng-if="$ctrl.history.length > 0 && $ctrl.hasMoreHistory"
+    ng-click="$ctrl.loadMore()"
+>
+    Charger plus
+</a>

@@ -24,7 +24,7 @@ async function processPdfUpload(io, upload) {
     );
 
     for (let i = numPages - 1; i >= 0; --i) {
-        pdf.selectFrame(i).in('-density', '200');
+        pdf.selectFrame(i).in('-density', '140');
 
         await queueJpg(
             io,
@@ -34,7 +34,7 @@ async function processPdfUpload(io, upload) {
         );
     }
 
-    return { $set: { status: 'done' } };
+    return { $set: { status: 'hidden' } };
 }
 
 async function queueJpg(io, projectId, filename, buffer) {

@@ -17,7 +17,7 @@ async function processZipUpload(io, upload) {
         await queueFile(io, upload.projectId, entry.name, buffer);
     }
 
-    return { $set: { status: 'done' } };
+    return { $set: { status: 'hidden' } };
 }
 
 async function queueFile(io, projectId, filename, buffer) {

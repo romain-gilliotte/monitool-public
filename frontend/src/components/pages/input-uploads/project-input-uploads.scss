@@ -3,38 +3,6 @@ project-input-uploads {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 10px;
-
-        .thumbnail {
-            position: relative;
-            margin-bottom: 0;
-            padding-bottom: 20px;
-
-            img {
-                width: 100%;
-            }
-
-            .loading-img {
-                width: 100%;
-                padding-top: 66.66666%;
-                position: relative;
-
-                i {
-                    position: absolute;
-                    left: 50%;
-                    top: 50%;
-                    margin-left: -5px;
-                    margin-top: -5px;
-                }
-            }
-
-            .caption {
-                > .btn-group,
-                > .btn {
-                    position: absolute;
-                    right: 5px;
-                    bottom: 5px;
-                }
-            }
-        }
+        margin-bottom: 20px;
     }
 }

@@ -10,11 +10,22 @@ downloads {
         margin-bottom: 30px;
 
         .thumbnail {
+            position: relative;
             margin-bottom: 0;
-        }
+            padding-bottom: 20px;
 
-        img {
-            width: 100%;
+            img {
+                width: 100%;
+            }
+
+            .caption {
+                > .btn-group,
+                > .btn {
+                    position: absolute;
+                    right: 5px;
+                    bottom: 5px;
+                }
+            }
         }
     }
 }

@@ -16,7 +16,7 @@ router.get('/project/:id/upload', async ctx => {
         const filter = { projectId: new ObjectId(ctx.params.id) };
         const projection = { 'original.data': 0, 'thumbnail.data': 0, 'reprojected.data': 0 };
         const forms = collection.find(
-            { ...filter, status: { $ne: 'done' } },
+            { ...filter, status: { $nin: ['done', 'hidden'] } },
             { projection, sort: [['_id', -1]] }
         );
 
@@ -37,26 +37,9 @@ router.get('/project/:id/upload', async ctx => {
             },
         ];
 
+        // Close changelog on all errors (most notably, client disconnects are an error).
         const changeLog = collection.watch(wpipeline, options);
-        const transform = new Transform({
-            objectMode: true,
-            highWaterMark: 1,
-            transform: (chunk, encoding, callback) => {
-                if (['insert', 'update'].includes(chunk.operationType)) {
-                    let action = { type: chunk.operationType, id: chunk.documentKey._id };
-
-                    if (action.type === 'insert') {
-                        action.document = chunk.fullDocument;
-                    } else if (action.type === 'update') {
-                        action.update = chunk.updateDescription.updatedFields;
-                    }
-
-                    callback(null, `data: ${JSON.stringify(action)}\n\n`);
-                }
-            },
-        });
-
-        // Close changelog on all errors (most notably, client disconnect when leaving the page).
+        const transform = mongoWatchToEventStream();
         pipeline(changeLog, transform, error => void changeLog.close());
 
         ctx.response.type = 'text/event-stream';
@@ -64,6 +47,19 @@ router.get('/project/:id/upload', async ctx => {
     } else {
         ctx.response.status = 406;
     }
+});
+
+router.get('/project/:id/upload-history', async ctx => {
+    const collection = ctx.io.database.collection('input_upload');
+    const projection = { 'original.data': 0, 'thumbnail.data': 0, 'reprojected.data': 0 };
+    const filter = { projectId: new ObjectId(ctx.params.id), status: 'done' };
+    if (ctx.query.before) {
+        filter._id = { $lt: new ObjectId(ctx.query.before) };
+    }
+
+    const forms = collection.find(filter, { projection, sort: [['_id', -1]], limit: 20 });
+    ctx.response.type = 'application/json';
+    ctx.response.body = forms.pipe(JSONStream.stringify());
 });
 
 router.get('/project/:projectId/upload/:id', async ctx => {
@@ -120,17 +116,17 @@ router.post('/project/:projectId/upload', multer().single('file'), async ctx => 
     ctx.response.status = 204;
 });
 
-// router.patch('/project/:projectId/upload/:id', async ctx => {
-//     await ctx.io.database.collection('input_upload').updateOne(
-//         {
-//             _id: new ObjectId(ctx.params.id),
-//             projectId: new ObjectId(ctx.params.projectId),
-//         },
-//         { $set: { status: 'done' } }
-//     );
+router.patch('/project/:projectId/upload/:id', async ctx => {
+    await ctx.io.database.collection('input_upload').updateOne(
+        {
+            _id: new ObjectId(ctx.params.id),
+            projectId: new ObjectId(ctx.params.projectId),
+        },
+        { $set: { status: 'done' } }
+    );
 
-// ctx.response.status = 204;
-// });
+    ctx.response.status = 204;
+});
 
 router.delete('/project/:projectId/upload/:id', async ctx => {
     await ctx.io.database.collection('input_upload').deleteOne({
@@ -142,3 +138,23 @@ router.delete('/project/:projectId/upload/:id', async ctx => {
 });
 
 module.exports = router;
+
+function mongoWatchToEventStream() {
+    return new Transform({
+        objectMode: true,
+        highWaterMark: 1,
+        transform: (chunk, encoding, callback) => {
+            if (['insert', 'update'].includes(chunk.operationType)) {
+                let action = { type: chunk.operationType, id: chunk.documentKey._id };
+
+                if (action.type === 'insert') {
+                    action.document = chunk.fullDocument;
+                } else if (action.type === 'update') {
+                    action.update = chunk.updateDescription.updatedFields;
+                }
+
+                callback(null, `data: ${JSON.stringify(action)}\n\n`);
+            }
+        },
+    });
+}

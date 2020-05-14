@@ -167,7 +167,15 @@ module.component(__componentName, {
 
             try {
                 this.inputSaving = true;
-                await this.input.save();
+                if (this.upload && this.upload.status !== 'done') {
+                    await Promise.all([
+                        this.input.save(),
+                        axios.patch(`/project/${this.project._id}/upload/${this.upload._id}`),
+                    ]);
+                } else {
+                    await this.input.save();
+                }
+
                 angular.copy(this.input, this.master);
                 this._buildContentMapping();
             } catch (error) {

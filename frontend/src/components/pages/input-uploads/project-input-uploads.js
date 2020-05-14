@@ -1,10 +1,11 @@
-import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
+import angular from 'angular';
 import axios from 'axios';
 import dropzone from './dropzone';
+import upload from './upload';
 require(__scssPath);
 
-const module = angular.module(__moduleName, [uiRouter, dropzone]);
+const module = angular.module(__moduleName, [uiRouter, dropzone, upload]);
 
 module.config($stateProvider => {
     $stateProvider.state('project.usage.uploads', {
@@ -32,6 +33,11 @@ module.component(__componentName, {
             this.$scope = $scope;
         }
 
+        $onInit() {
+            this.history = [];
+            this.hasMoreHistory = true;
+        }
+
         $onChanges() {
             this.eventSource = new EventSource(`/api/project/${this.project._id}/upload`);
             this.eventSource.onmessage = this.onMessage.bind(this);
@@ -43,21 +49,40 @@ module.component(__componentName, {
 
         onMessage(message) {
             const action = JSON.parse(message.data);
+            console.log(action);
 
             if (action.type === 'insert') {
                 this.uploads.unshift(action.document);
             } else if (action.type === 'update') {
                 // Update document.
                 const index = this.uploads.findIndex(u => u._id == action.id);
-                const upload = this.uploads[index];
-                for (let key in action.update) {
-                    upload[key] = action.update[key];
-                }
+                this.uploads[index] = Object.assign({}, this.uploads[index], action.update);
 
                 // Remove if done
-                if (upload.status === 'done') {
+                if (this.uploads[index].status === 'hidden') {
                     this.uploads.splice(index, 1);
                 }
+            }
+
+            this.$scope.$apply();
+        }
+
+        deleteUpload(upload, list) {
+            axios.delete(`/project/${this.project._id}/upload/${upload._id}`);
+            list.splice(list.indexOf(upload), 1);
+        }
+
+        async loadMore() {
+            let url = `/project/${this.project._id}/upload-history`;
+            if (this.history.length) {
+                url += `?before=${this.history[this.history.length - 1]._id}`;
+            }
+
+            const response = await axios.get(url, { headers: { accept: 'application/json' } });
+            this.history.push(...response.data);
+
+            if (response.data.length < 20) {
+                this.hasMoreHistory = false;
             }
 
             this.$scope.$apply();

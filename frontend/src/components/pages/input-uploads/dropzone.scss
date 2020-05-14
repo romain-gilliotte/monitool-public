@@ -1,6 +1,9 @@
 dropzone {
-    & .highlight {
-        background-color: yellow;
+    input[type='file'] {
+        // Move input file off-screen.
+        // Using "display: none" breaks functionality in Safari
+        position: fixed;
+        top: -100px;
     }
 
     > div {
@@ -12,6 +15,12 @@ dropzone {
         color: #666;
         margin-bottom: 20px;
 
+        // ondragover (see controller)
+        &.highlight {
+            background-color: yellow;
+        }
+
+        // Avoid blinking for dragover/dragleave
         * {
             pointer-events: none;
         }
@@ -22,11 +31,6 @@ dropzone {
             font-weight: normal;
             text-decoration: underline;
             cursor: pointer;
-        }
-
-        input[type='file'] {
-            position: fixed;
-            top: -100px;
         }
     }
 }

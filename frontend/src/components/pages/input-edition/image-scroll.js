@@ -65,7 +65,7 @@ module.component(__componentName, {
         }
 
         onMouseLeave() {
-            this.offset = 40;
+            this.offset = 10;
             this.setPosition(this.coords);
         }
 
