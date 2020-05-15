@@ -30,7 +30,7 @@ const strings = Object.freeze({
 /**
  * Create a paper form from a datasource
  *
- * @param {string} randomId
+ * @param {Buffer} randomId
  * @param {any} dataSource
  * @param {'portrait'|'landscape'} orientation
  * @param {'en'|'es'|'fr'} language

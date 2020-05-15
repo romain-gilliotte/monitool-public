@@ -47,11 +47,21 @@ router.get('/data-source/:dataSourceId.:format(xlsx|pdf):thumbnail(.png)?', asyn
     const projects = ctx.io.database.collection('project');
     const project = await projects.findOne(
         { _id: new ObjectId(projectId) },
-        { projection: { forms: { $elemMatch: { id: dataSourceId } } } }
+        {
+            projection: {
+                start: 1,
+                end: 1,
+                entities: 1,
+                forms: { $elemMatch: { id: dataSourceId } },
+            },
+        }
     );
 
     if (project && project.forms[0]) {
         await sendFile(ctx, thumbnail, 'generate-form', {
+            start: project.start,
+            end: project.end,
+            sites: project.entities,
             dataSource: project.forms[0],
             language,
             orientation,

@@ -8,8 +8,8 @@ const { InputOutput } = require('../../io');
  */
 function initDownloads(io) {
     io.queue.process('generate-form', job => {
-        const { id, dataSource, language, orientation, format } = job.data;
-        return generateForm(io, id, dataSource, language, orientation, format);
+        const { id, start, end, sites, dataSource, language, orientation, format } = job.data;
+        return generateForm(io, id, start, end, sites, dataSource, language, orientation, format);
     });
 
     io.queue.process('generate-logframe', job => {

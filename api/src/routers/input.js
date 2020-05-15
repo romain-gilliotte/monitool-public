@@ -38,6 +38,8 @@ router.post('/project/:id/input', validateBody('input'), async ctx => {
             });
     }
 
+    // FIXME do not allow data entry in the future
+
     if (allowed) {
         // Save input on last sequence of the project.
         const sequence = await ctx.io.database

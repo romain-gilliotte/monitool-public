@@ -21,7 +21,7 @@ module.component(__componentName, {
         }
 
         $onChanges(changes) {
-            const src = `/api/project/${this.upload.projectId}/upload/${this.upload._id}/reprojected`;
+            const src = `/api/project/${this.upload.projectId}/upload/${this.upload._id}/processed`;
 
             const img = new Image();
             img.onload = () => {
@@ -29,7 +29,7 @@ module.component(__componentName, {
                 this.h = img.naturalHeight;
 
                 // if no region is enabled, display square with top of the page.
-                this.coords = this.upload.reprojected.regions[this.region] || {
+                this.coords = this.upload.processed.regions[this.region] || {
                     x: 0,
                     y: 0,
                     w: Math.min(this.w, this.h),

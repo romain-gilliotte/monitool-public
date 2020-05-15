@@ -5,7 +5,7 @@ const { slideOnImage } = require('./_helper');
 /**
  *
  * @param {cv.Mat} image
- * @returns {Record<string, cv.Point2>}
+ * @returns {Promise<Record<string, cv.Point2>>}
  */
 async function findArucoMarkers(image) {
     const detector = new AR.Detector();

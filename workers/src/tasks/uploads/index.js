@@ -2,6 +2,7 @@ const { ObjectId } = require('mongodb');
 const { InputOutput } = require('../../io');
 const { processImageUpload } = require('./image/process');
 const { processPdfUpload } = require('./pdf/process');
+const { processXlsxUpload } = require('./xlsx/process');
 const { processZipUpload } = require('./zip/process');
 const { generateThumbnail } = require('../../helpers/thumbnail');
 
@@ -33,6 +34,10 @@ async function processUpload(io, uploadId) {
             update = await processPdfUpload(io, upload);
         } else if (mimeType == 'application/zip') {
             update = await processZipUpload(io, upload);
+        } else if (
+            mimeType == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ) {
+            update = await processXlsxUpload(io, upload);
         } else {
             throw new Error('Unsupported');
         }

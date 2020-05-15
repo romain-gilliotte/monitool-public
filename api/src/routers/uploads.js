@@ -14,7 +14,7 @@ router.get('/project/:id/upload', async ctx => {
 
     if (ctx.request.accepts('application/json')) {
         const filter = { projectId: new ObjectId(ctx.params.id) };
-        const projection = { 'original.data': 0, 'thumbnail.data': 0, 'reprojected.data': 0 };
+        const projection = { 'original.data': 0, 'thumbnail.data': 0, 'processed.data': 0 };
         const forms = collection.find(
             { ...filter, status: { $nin: ['done', 'hidden'] } },
             { projection, sort: [['_id', -1]] }
@@ -30,9 +30,9 @@ router.get('/project/:id/upload', async ctx => {
                 $project: {
                     'fullDocument.original.data': 0,
                     'fullDocument.thumbnail.data': 0,
-                    'fullDocument.reprojected.data': 0,
+                    'fullDocument.processed.data': 0,
                     'updateDescription.updatedFields.thumbnail.data': 0,
-                    'updateDescription.updatedFields.reprojected.data': 0,
+                    'updateDescription.updatedFields.processed.data': 0,
                 },
             },
         ];
@@ -51,7 +51,7 @@ router.get('/project/:id/upload', async ctx => {
 
 router.get('/project/:id/upload-history', async ctx => {
     const collection = ctx.io.database.collection('input_upload');
-    const projection = { 'original.data': 0, 'thumbnail.data': 0, 'reprojected.data': 0 };
+    const projection = { 'original.data': 0, 'thumbnail.data': 0, 'processed.data': 0 };
     const filter = { projectId: new ObjectId(ctx.params.id), status: 'done' };
     if (ctx.query.before) {
         filter._id = { $lt: new ObjectId(ctx.query.before) };
@@ -63,16 +63,15 @@ router.get('/project/:id/upload-history', async ctx => {
 });
 
 router.get('/project/:projectId/upload/:id', async ctx => {
-    ctx.response.body = await ctx.io.database.collection('input_upload').findOne(
-        { _id: new ObjectId(ctx.params.id), projectId: new ObjectId(ctx.params.projectId) },
-        {
-            'original.data': 0,
-            'reprojected.data': 0,
-        }
-    );
+    ctx.response.body = await ctx.io.database
+        .collection('input_upload')
+        .findOne(
+            { _id: new ObjectId(ctx.params.id), projectId: new ObjectId(ctx.params.projectId) },
+            { 'original.data': 0, 'thumbnail.data': 0, 'processed.data': 0 }
+        );
 });
 
-router.get('/project/:projectId/upload/:id/:name(original|reprojected|thumbnail)', async ctx => {
+router.get('/project/:projectId/upload/:id/:name(original|processed|thumbnail)', async ctx => {
     const upload = await ctx.io.database
         .collection('input_upload')
         .findOne(
@@ -83,6 +82,9 @@ router.get('/project/:projectId/upload/:id/:name(original|reprojected|thumbnail)
     if (upload[ctx.params.name]) {
         ctx.response.type = upload[ctx.params.name].mimeType;
         ctx.response.body = upload[ctx.params.name].data.buffer;
+        if (upload[ctx.params.name].name) {
+            ctx.response.attachment(upload[ctx.params.name].name, { type: 'inline' });
+        }
     }
 });
 

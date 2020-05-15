@@ -85,8 +85,9 @@ module.component(__componentName, {
         }
 
         _onProgress(file, evt, apply = true) {
-            let lastEvt = this.lastEvtPerFile[file.name] || { loaded: 0, total: 0 };
-            this.lastEvtPerFile[file.name] = evt;
+            const key = `${file.name}${file.size}`;
+            const lastEvt = this.lastEvtPerFile[key] || { loaded: 0, total: 0 };
+            this.lastEvtPerFile[key] = evt;
 
             this.loaded += evt.loaded - lastEvt.loaded;
             this.total += evt.total - lastEvt.total; // size correction

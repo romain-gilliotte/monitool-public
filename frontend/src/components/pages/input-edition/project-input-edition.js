@@ -42,9 +42,27 @@ module.config($stateProvider => {
                     .get(`/project/${$stateParams.projectId}/upload/${$stateParams.uploadId}`)
                     .then(response => response.data),
 
-            dataSourceId: upload => upload.dataSourceId,
-            period: () => null,
-            siteId: () => null,
+            dataSourceId: upload => {
+                try {
+                    return upload.processed.dataSourceId;
+                } catch (e) {
+                    return null;
+                }
+            },
+            period: upload => {
+                try {
+                    return upload.processed.extracted.period;
+                } catch (e) {
+                    return null;
+                }
+            },
+            siteId: upload => {
+                try {
+                    return upload.processed.extracted.site;
+                } catch (e) {
+                    return null;
+                }
+            },
         },
     });
 });
@@ -103,7 +121,9 @@ module.component(__componentName, {
             this.metadataEditable = true;
 
             this.onDataSourceSet();
-            this.onMetadataSet();
+            if (!this.upload) {
+                this.onMetadataSet();
+            }
         }
 
         async onDataSourceSet() {
@@ -117,16 +137,23 @@ module.component(__componentName, {
             this.periodicity = dataSource.periodicity;
             this.entityIds = dataSource.entities;
             this.variables = dataSource.elements.filter(v => {
-                if (this.upload && this.upload.reprojected) {
-                    return v.active && this.upload.reprojected.regions[v.id];
-                } else {
-                    return v.active;
+                let ok = v.active;
+
+                if (this.upload && this.upload.processed && this.upload.processed.regions) {
+                    // For images, hide the variables which are not in this page of the form.
+                    ok = ok && this.upload.processed.regions[v.id];
                 }
+
+                return ok;
             });
 
             // Compute choices.
             this._initChoices();
-            this.period = TimeSlot.fromDate(new Date(), this.periodicity).value;
+
+            // Init period if needed
+            if (!this.period || !this.periods.includes(this.period)) {
+                this.period = TimeSlot.fromDate(new Date(), this.periodicity).value;
+            }
         }
 
         async onMetadataSet() {
@@ -151,15 +178,46 @@ module.component(__componentName, {
 
         fillWithZeros() {
             this.input.content.forEach(content => {
-                content.data = content.data.map(d => (d ? d : 0));
+                content.data = content.data.map(d => 0);
             });
         }
 
-        copy() {
-            // bad naming.
-            this.previousInput.content.forEach((content, index) => {
+        fillFromUpload() {
+            this.input.content.forEach(content => {
+                const dimensions = content.dimensions.slice(2);
+                const newData = new Array(content.data.length);
+
+                for (let i = 0; i < newData.length; ++i) {
+                    let key = '',
+                        index = i;
+
+                    for (let j = dimensions.length - 1; j >= 0; --j) {
+                        const itemIndex = index % dimensions[j].items.length;
+                        key = `[${dimensions[j].id}=${dimensions[j].items[itemIndex]}]${key}`;
+                        index = Math.floor(index / dimensions[j].items.length);
+                    }
+
+                    const value = this.upload.processed.extracted[`${content.variableId}${key}`];
+                    newData[i] = value !== undefined ? value : null;
+                }
+
+                content.data = newData;
+            });
+        }
+
+        async fillFromLast() {
+            const previousInput = await Input.fetchInput(
+                this.project,
+                this.siteId,
+                new TimeSlot(this.period).previous().value,
+                this.variables.map(v => v.id)
+            );
+
+            previousInput.content.forEach((content, index) => {
                 this.input.content[index].data = content.data;
             });
+
+            this.$scope.$apply();
         }
 
         async save() {
@@ -210,10 +268,10 @@ module.component(__componentName, {
             );
 
             // Periods only on current date.
-            let end = TimeSlot.fromDate(new Date(), this.periodicity).value;
-            if (this.project.end < end) {
-                end = this.project.end;
-            }
+            const end1 = TimeSlot.fromDate(new Date(), this.periodicity).value;
+            const end2 = TimeSlot.fromValue(this.project.end).toParentPeriodicity(this.periodicity)
+                .value;
+            const end = end1 < end2 ? end1 : end2;
 
             const dimension = new TimeDimension('time', this.periodicity, this.project.start, end);
             this.periods = dimension.getItems().reverse();

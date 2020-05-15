@@ -6,23 +6,12 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label" translate="project.collection_form"></label>
                 <div class="col-sm-10 metadata">
-                    <div class="input-group" style="width: 100%;">
-                        <select
-                            class="form-control"
-                            ng-options="ds.id as ds.name for ds in $ctrl.project.forms"
-                            ng-model="$ctrl.dataSourceId"
-                            ng-disabled="!$ctrl.dataSourceEditable"
-                        ></select>
-                        <span class="input-group-btn">
-                            <button
-                                ng-disabled="!$ctrl.dataSourceId || !$ctrl.dataSourceEditable"
-                                ng-click="$ctrl.onDataSourceSet()"
-                                class="btn btn-default"
-                            >
-                                Valider la source
-                            </button>
-                        </span>
-                    </div>
+                    <select
+                        class="form-control"
+                        ng-options="ds.id as ds.name for ds in $ctrl.project.forms"
+                        ng-model="$ctrl.dataSourceId"
+                        ng-disabled="!$ctrl.dataSourceEditable"
+                    ></select>
                 </div>
             </div>
 
@@ -30,7 +19,7 @@
                 <label class="col-sm-2 control-label" translate="project.collection_site"></label>
                 <div class="col-sm-10 metadata">
                     <image-scroll
-                        ng-if="$ctrl.upload.reprojected.regions.site"
+                        ng-if="$ctrl.upload.processed.regions.site"
                         upload="$ctrl.upload"
                         region="site"
                     ></image-scroll>
@@ -48,14 +37,14 @@
                 <label class="col-sm-2 control-label" translate="project.covered_period"></label>
                 <div class="col-sm-10 metadata">
                     <image-scroll
-                        ng-if="$ctrl.upload.reprojected.regions.period"
+                        ng-if="$ctrl.upload.processed.regions.period"
                         upload="$ctrl.upload"
                         region="period"
                     ></image-scroll>
 
                     <select
                         class="form-control"
-                        ng-options="slot as slot|formatSlot for slot in $ctrl.periods"
+                        ng-options="slot as slot|formatSlotLong for slot in $ctrl.periods"
                         ng-model="$ctrl.period"
                         ng-disabled="!$ctrl.metadataEditable"
                     ></select>
@@ -80,20 +69,23 @@
 
         <div class="form-section data-section">
             <legend>
-                <div class="btn-group pull-right" ng-if="!$ctrl.metadataEditable">
-                    <a ng-click="$ctrl.fillWithZeros()" class="btn btn-default btn-xs">
-                        <i class="fa fa-pencil"></i>
-                        {{'project.fill_with_zeros'|translate}}
-                    </a>
+                <div class="pull-right" ng-if="!$ctrl.metadataEditable" style="font-size: 12px;">
+                    <span translate="project.prefill_with"></span>
 
-                    <a
-                        ng-if="$ctrl.previousInput"
-                        ng-click="$ctrl.copy()"
-                        class="btn btn-default btn-xs"
-                    >
-                        <i class="fa fa-clipboard"></i>
-                        {{'project.fill_with_last_input'|translate}}
-                    </a>
+                    <div class="btn-group">
+                        <a ng-click="$ctrl.fillWithZeros()" class="btn btn-default btn-xs">
+                            <i class="fa fa-pencil"></i>
+                            {{'project.fill_with_zeros'|translate}}
+                        </a>
+                        <a ng-click="$ctrl.fillFromLast()" class="btn btn-default btn-xs">
+                            <i class="fa fa-clipboard"></i>
+                            {{'project.fill_from_last'|translate}}
+                        </a>
+                        <a ng-click="$ctrl.fillFromUpload()" class="btn btn-default btn-xs">
+                            <i class="fa fa-upload"></i>
+                            {{'project.fill_from_upload'|translate}}
+                        </a>
+                    </div>
                 </div>
 
                 {{'project.data'|translate}}
@@ -117,7 +109,7 @@
 
                 <div class="col-sm-10">
                     <image-scroll
-                        ng-if="::$ctrl.upload && $ctrl.upload.reprojected.regions[variable.id]"
+                        ng-if="::$ctrl.upload && $ctrl.upload.processed.regions[variable.id]"
                         class="img-thumbnail"
                         upload="$ctrl.upload"
                         region="{{::variable.id}}"

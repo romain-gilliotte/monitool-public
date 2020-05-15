@@ -14,6 +14,7 @@ async function processImageUpload(io, upload) {
     let original = cv.imdecode(upload.original.data.buffer, cv.IMREAD_COLOR);
 
     // Resize source image if too big. This hurts feature detection, but otherwise it takes ages.
+    // FIXME I suspect opencv to ignore the "INTER_CUBIC" flag
     if (MAX_SIZE < original.sizes[0] || MAX_SIZE < original.sizes[1]) {
         const scale = Math.min(MAX_SIZE / original.sizes[0], MAX_SIZE / original.sizes[1]);
         const sizes = original.sizes.map(l => Math.floor(l * scale));
@@ -24,6 +25,7 @@ async function processImageUpload(io, upload) {
     const [qrLandmarks, data] = await findQrCode(original);
     const [templateId, pageNo] = [data.slice(0, 6), data[6]];
     const template = await io.database.collection('forms').findOne({ randomId: templateId });
+
     if (!template) {
         throw Error('Could not find associated form');
     }
@@ -70,11 +72,11 @@ async function processImageUpload(io, upload) {
     return {
         $set: {
             status: 'pending_dataentry',
-            dataSourceId: template.dataSourceId,
-            reprojected: {
+            processed: {
                 size: jpeg.byteLength,
                 mimeType: 'image/jpeg',
                 data: jpeg,
+                dataSourceId: template.dataSourceId,
                 regions,
             },
         },

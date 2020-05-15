@@ -634,8 +634,9 @@ export default {
         titles: 'Intitulés',
         data: 'Données',
         general_informations: 'Informations génerales',
-        fill_with_last_input: 'Remplir avec les données de la période précédente',
-        fill_with_zeros: 'Remplacer les valeurs manquantes par zéro',
+        fill_from_last: 'La saisie précédente',
+        fill_from_upload: 'Le fichier téléchargé',
+        fill_with_zeros: 'Zéro',
 
         variable_name_label: 'Que mesurez-vous?',
         variable_name_ph: 'ex: Nombre de diagnostics effectués',

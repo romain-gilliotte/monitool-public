@@ -1,4 +1,3 @@
-const { ObjectId } = require('mongodb');
 const { createPdf } = require('./pdf');
 const { createXlsx } = require('./xlsx');
 const { generateThumbnail } = require('../../../helpers/thumbnail');
@@ -11,7 +10,7 @@ const { InputOutput } = require('../../../io');
  * @param {'en'|'es'|'fr'} language
  * @param {'portrait'|'landscape'} orientation
  */
-async function generateForm(io, id, dataSource, language, orientation, format) {
+async function generateForm(io, id, start, end, sites, dataSource, language, orientation, format) {
     const randomId = createRandomId(6);
 
     let content, mimeType, metadata;
@@ -21,9 +20,10 @@ async function generateForm(io, id, dataSource, language, orientation, format) {
         mimeType = 'application/pdf';
         metadata = { boundaries: result[1], orientation };
     } else if (format === 'xlsx') {
-        content = await createXlsx(randomId, dataSource, language);
+        const result = await createXlsx(randomId, start, end, sites, dataSource, language);
+        content = result[0];
         mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-        metadata = {};
+        metadata = { boundaries: result[1] };
     } else {
         throw new Error('Unsupported format');
     }

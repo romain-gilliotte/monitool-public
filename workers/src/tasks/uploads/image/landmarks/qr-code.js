@@ -6,7 +6,7 @@ const { slideOnImage } = require('./_helper');
  * Find QR code in a Matrix, and return its data and corner positions.
  *
  * @param {cv.Mat} image
- * @returns {[Record<string, {x: number, y: number, w: number, h: number}>, Buffer]}
+ * @returns {Promise<[Record<string, {x: number, y: number, w: number, h: number}>, Buffer]>}
  */
 async function findQrCode(image) {
     let value;
