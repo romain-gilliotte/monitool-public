@@ -3,15 +3,18 @@
 ###################################
 
 # Switch to a clean image
-FROM node:12-alpine
+FROM node:12 as build
 WORKDIR /app
 
 # Install prod dependencies only
 COPY package.json package-lock.json ./
-RUN npm install --production
+RUN npm ci --only=production
 COPY src src
 COPY data data
 
 # Run monitool API
+FROM node:12-alpine
+
+COPY --from=build /app /app
 EXPOSE 8000
 CMD node ./src/main.js
