@@ -69,7 +69,7 @@
 
         <div class="form-section data-section">
             <legend>
-                <div class="pull-right" ng-if="!$ctrl.metadataEditable" style="font-size: 12px;">
+                <div class="pull-right" ng-if="!$ctrl.metadataEditable">
                     <span translate="project.prefill_with"></span>
 
                     <div class="btn-group">
@@ -81,7 +81,11 @@
                             <i class="fa fa-clipboard"></i>
                             <span translate="project.fill_from_last"></span>
                         </a>
-                        <a ng-click="$ctrl.fillFromUpload()" class="btn btn-default btn-xs">
+                        <a
+                            ng-click="$ctrl.fillFromUpload()"
+                            class="btn btn-default btn-xs"
+                            ng-disabled="!$ctrl.upload.processed.extracted"
+                        >
                             <i class="fa fa-upload"></i>
                             <span translate="project.fill_from_upload"></span>
                         </a>
