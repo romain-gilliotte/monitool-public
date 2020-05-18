@@ -8,7 +8,7 @@
                 <div class="col-sm-10 metadata">
                     <select
                         class="form-control"
-                        ng-options="ds.id as ds.name for ds in $ctrl.project.forms"
+                        ng-options="ds.id as ds.name for ds in ::$ctrl.project.forms"
                         ng-model="$ctrl.dataSourceId"
                         ng-disabled="!$ctrl.dataSourceEditable"
                     ></select>
@@ -56,11 +56,11 @@
                 <div class="col-sm-10 metadata">
                     <a
                         target="_blank"
-                        href="/api/project/{{$ctrl.upload.projectId}}/upload/{{$ctrl.upload._id}}/original"
+                        href="{{$root.serviceUrl}}/project/{{$ctrl.upload.projectId}}/upload/{{$ctrl.upload._id}}/original"
                     >
                         <img
                             class="img-thumbnail"
-                            ng-src="/api/project/{{$ctrl.upload.projectId}}/upload/{{$ctrl.upload._id}}/thumbnail"
+                            ng-src="{{$root.serviceUrl}}/project/{{$ctrl.upload.projectId}}/upload/{{$ctrl.upload._id}}/thumbnail"
                         />
                     </a>
                 </div>
@@ -75,20 +75,20 @@
                     <div class="btn-group">
                         <a ng-click="$ctrl.fillWithZeros()" class="btn btn-default btn-xs">
                             <i class="fa fa-pencil"></i>
-                            {{'project.fill_with_zeros'|translate}}
+                            <span translate="project.fill_with_zeros"></span>
                         </a>
                         <a ng-click="$ctrl.fillFromLast()" class="btn btn-default btn-xs">
                             <i class="fa fa-clipboard"></i>
-                            {{'project.fill_from_last'|translate}}
+                            <span translate="project.fill_from_last"></span>
                         </a>
                         <a ng-click="$ctrl.fillFromUpload()" class="btn btn-default btn-xs">
                             <i class="fa fa-upload"></i>
-                            {{'project.fill_from_upload'|translate}}
+                            <span translate="project.fill_from_upload"></span>
                         </a>
                     </div>
                 </div>
 
-                {{'project.data'|translate}}
+                <span translate="project.data"></span>
             </legend>
 
             <button
@@ -96,9 +96,8 @@
                 ng-disabled="!$ctrl.siteId || !$ctrl.period"
                 ng-click="$ctrl.onMetadataSet()"
                 class="btn btn-default"
-            >
-                Charger les données
-            </button>
+                translate="project.load_data"
+            ></button>
 
             <div
                 class="form-group"

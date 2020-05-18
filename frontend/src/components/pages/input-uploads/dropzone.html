@@ -12,13 +12,8 @@
     ng-on-drop="$ctrl.onDrop($event)"
     ng-class="{highlight: $ctrl.highlight}"
 >
-    <p>
-        Déposez ici vos fiches de saisies remplies ou
-        <label for="file-input">choisissez des fichier</label>
-    </p>
-    <p style="font-size: 70%;">
-        Formats supportés: Photo, scan, fax (pdf, jpg, png, tiff), excel (xlsx) ou archive (zip).
-    </p>
+    <p translate="input_uploads.drop_file_here"></p>
+    <p style="font-size: 70%;" translate="input_uploads.drop_file_here_formats"></p>
 
     <div class="progress" ng-if="$ctrl.uploading">
         <div class="progress-bar" ng-style="{width: $ctrl.progressWidth}"></div>

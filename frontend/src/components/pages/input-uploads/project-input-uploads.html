@@ -1,10 +1,8 @@
 <dropzone project="::$ctrl.project"></dropzone>
 
-<legend>En attente de saisie</legend>
+<legend translate="input_uploads.waiting_dataentry">En attente de saisie</legend>
 
-<p ng-if="$ctrl.uploads.length == 0">
-    Aucun fichier en attente de saisie
-</p>
+<p ng-if="$ctrl.uploads.length == 0" translate="input_uploads.waiting_dataentry_none"></p>
 
 <div class="card-container">
     <upload
@@ -14,19 +12,19 @@
     ></upload>
 </div>
 
-<legend>Historique</legend>
+<legend translate="input_uploads.history"></legend>
 
-<p ng-if="$ctrl.history.length == 0 && !$ctrl.hasMoreHistory">
-    Aucun fichier dans l'historique
-</p>
+<p
+    ng-if="$ctrl.history.length == 0 && !$ctrl.hasMoreHistory"
+    translate="input_uploads.history_none"
+></p>
 
 <a
     class="btn btn-default"
     ng-if="$ctrl.history.length == 0 && $ctrl.hasMoreHistory"
     ng-click="$ctrl.loadMore()"
->
-    Charger les fichiers déjà traités
-</a>
+    translate="input_uploads.history_load"
+></a>
 
 <div class="card-container">
     <upload
@@ -40,6 +38,5 @@
     class="btn btn-default"
     ng-if="$ctrl.history.length > 0 && $ctrl.hasMoreHistory"
     ng-click="$ctrl.loadMore()"
->
-    Charger plus
-</a>
+    translate="input_uploads.history_load_more"
+></a>

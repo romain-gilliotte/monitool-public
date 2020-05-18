@@ -13,17 +13,17 @@
                     <div class="bodyField">{{::date|formatSlot}}</div>
                 </td>
                 <td ng-repeat="site in ::$ctrl.sites track by site.id">
-                    <div ng-switch="::$ctrl.inputsStatus[date][site.id]" class="bodyField">
+                    <div ng-switch="::$ctrl.inputsStatus[date][site.id] == 0" class="bodyField">
                         <a
-                            ng-switch-when="0"
-                            ui-sref="project.usage.edit({dataSourceId: $ctrl.dataSource.id, period: date, siteId: site.id})"
+                            ng-switch-when="true"
+                            ui-sref="project.usage.edit(::{dataSourceId: $ctrl.dataSource.id, period: date, siteId: site.id})"
                             class="btn btn-xs btn-primary"
                             translate="project.input_status.expected"
                         ></a>
 
                         <a
-                            ng-switch-default
-                            ui-sref="project.usage.edit({dataSourceId: $ctrl.dataSource.id, period: date, siteId: site.id})"
+                            ng-switch-when="false"
+                            ui-sref="project.usage.edit(::{dataSourceId: $ctrl.dataSource.id, period: date, siteId: site.id})"
                             class="btn btn-xs btn-default"
                             translate="project.input_status.done"
                             translate-values="::{value: $ctrl.inputsStatus[date][site.id]}"

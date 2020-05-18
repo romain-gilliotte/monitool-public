@@ -5,12 +5,12 @@
 
     <a
         ng-switch-default
-        href="/api/project/{{::$ctrl.upload.projectId}}/upload/{{::$ctrl.upload._id}}/original"
+        href="{{::$root.serviceUrl}}/project/{{::$ctrl.upload.projectId}}/upload/{{::$ctrl.upload._id}}/original"
         target="_blank"
     >
         <img
             class="img-thumbnail"
-            ng-src="/api/project/{{::$ctrl.upload.projectId}}/upload/{{::$ctrl.upload._id}}/thumbnail"
+            ng-src="{{::$root.serviceUrl}}/project/{{::$ctrl.upload.projectId}}/upload/{{::$ctrl.upload._id}}/thumbnail"
         />
     </a>
 </div>
@@ -21,12 +21,12 @@
     <div ng-switch="$ctrl.upload.status">
         <div ng-switch-when="failed" class="text-danger">
             <i class="fa fa-fw fa-warning"></i>
-            <span translate="project.processing_failed"></span>
+            <span translate="input_uploads.processing_failed"></span>
         </div>
 
         <span ng-switch-when="pending_processing" class="btn btn-default btn-xxs disabled">
             <i class="fa fa-circle-o-notch fa-spin"></i>
-            <span translate="project.processing"></span>
+            <span translate="input_uploads.processing"></span>
         </span>
 
         <a

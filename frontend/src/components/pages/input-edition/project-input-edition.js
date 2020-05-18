@@ -152,7 +152,7 @@ module.component(__componentName, {
 
             // Init period if needed
             if (!this.period || !this.periods.includes(this.period)) {
-                this.period = TimeSlot.fromDate(new Date(), this.periodicity).value;
+                this.period = this.periods[0];
             }
         }
 
@@ -275,6 +275,7 @@ module.component(__componentName, {
 
             const dimension = new TimeDimension('time', this.periodicity, this.project.start, end);
             this.periods = dimension.getItems().reverse();
+            this.periods.shift();
         }
     },
 });

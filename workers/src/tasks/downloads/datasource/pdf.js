@@ -59,8 +59,9 @@ async function createPdf(randomId, dataSource, orientation, language) {
  */
 function createPdfStream(docDef) {
     const boundaries = getFixedBoundaries(docDef.pageOrientation);
-    const WR = 1 / 595.28; // "width ratio"
-    const HR = 1 / 841.89;
+    const [W, H] = docDef.pageOrientation === 'portrait' ? [595.28, 841.89] : [841.89, 595.28];
+    const WR = 1 / W; // "width ratio"
+    const HR = 1 / H;
     const VAR_MARGIN_TOP = -20;
     const VAR_MARGIN_OTHER = 5;
 
@@ -123,33 +124,53 @@ function createPdfStream(docDef) {
  * @param {'portrait'|'landscape'} orientation
  */
 function getFixedBoundaries(orientation) {
-    const METADATA_MARGIN = 1;
-    const WR = 1 / 595.28; // "width ratio"
-    const HR = 1 / 841.89;
+    const [W, H] = orientation === 'portrait' ? [595.28, 841.89] : [841.89, 595.28];
+    const WR = 1 / W;
+    const HR = 1 / H;
 
     return {
         corner: { x: 0, y: 0, w: 1, h: 1 },
-        qr: { x: 491 * WR, y: 20 * HR, w: 83 * WR, h: 84 * HR },
-        'aruco-62': { x: 20 * WR, y: 797 * HR, w: 25 * WR, h: 25 * HR },
-        'aruco-112': { x: 285 * WR, y: 797 * HR, w: 25 * WR, h: 25 * HR },
-        'aruco-207': { x: 550 * WR, y: 797 * HR, w: 25 * WR, h: 25 * HR },
+        qr: {
+            x: (W - 20 - 84) * WR, // 84 = 4px * 21 modules
+            y: 20 * HR,
+            w: 84 * WR,
+            h: 84 * HR,
+        },
+        'aruco-62': {
+            x: 20 * WR,
+            y: (H - 20 - 25) * HR,
+            w: 25 * WR,
+            h: 25 * HR,
+        },
+        'aruco-112': {
+            x: 0.5 * (W - 25) * WR,
+            y: (H - 20 - 25) * HR,
+            w: 25 * WR,
+            h: 25 * HR,
+        },
+        'aruco-207': {
+            x: (W - 20 - 25) * WR,
+            y: (H - 20 - 25) * HR,
+            w: 25 * WR,
+            h: 25 * HR,
+        },
         site: {
-            x: (20 - METADATA_MARGIN) * WR,
-            y: (88 - METADATA_MARGIN) * HR,
-            w: (141 + 2 * METADATA_MARGIN) * WR,
-            h: (16 + 2 * METADATA_MARGIN) * HR,
+            x: 20 * WR,
+            y: 88 * HR,
+            w: (orientation === 'portrait' ? 141 : 222) * WR,
+            h: 16 * HR,
         },
         period: {
-            x: (170 - METADATA_MARGIN) * WR,
-            y: (88 - METADATA_MARGIN) * HR,
-            w: (141 + 2 * METADATA_MARGIN) * WR,
-            h: (16 + 2 * METADATA_MARGIN) * HR,
+            x: (orientation === 'portrait' ? 170 : 252) * WR,
+            y: 88 * HR,
+            w: (orientation === 'portrait' ? 141 : 222) * WR,
+            h: 16 * HR,
         },
         collectedBy: {
-            x: (320 - METADATA_MARGIN) * WR,
-            y: (88 - METADATA_MARGIN) * HR,
-            w: (152 + 2 * METADATA_MARGIN) * WR,
-            h: (16 + 2 * METADATA_MARGIN) * HR,
+            x: (orientation === 'portrait' ? 320 : 485) * WR,
+            y: 88 * HR,
+            w: (orientation === 'portrait' ? 152 : 233) * WR,
+            h: 16 * HR,
         },
     };
 }

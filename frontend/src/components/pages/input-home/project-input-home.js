@@ -2,6 +2,7 @@ import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
 import Input from '../../../models/input';
 import axios from 'axios';
+require(__scssPath);
 
 const module = angular.module(__moduleName, [uiRouter]);
 

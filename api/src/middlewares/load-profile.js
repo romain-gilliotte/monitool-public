@@ -82,7 +82,7 @@ async function createUser(ctx) {
 
             // insert test project _first_, so that other parallel queries
             // don't find the user, and also get stuck on the shared lock.
-            await insertDemoProject(profile.email);
+            await insertDemoProject(ctx.io, profile.email);
 
             // One this is done, other queries won't try to get the lock
             // Default retry in redlock is 200ms + 200ms * Math.random()
