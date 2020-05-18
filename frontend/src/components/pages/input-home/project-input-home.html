@@ -1,14 +1,16 @@
 <legend>Participants</legend>
 
-<div ng-repeat="user in $ctrl.users track by user._id" class="thumbnail">
-    <img ng-src="{{::user.picture}}" referrerpolicy="no-referrer" />
-    <div class="caption">
-        <b>Nom:</b><br />
-        {{user.name}}<br />
-        <b>Email:</b><br />
-        <a href="mailto:{{ user._id }}" target="_blank">{{ user._id }}</a><br />
-        <b>Dernière connexion:</b><br />
-        {{user.lastSeen|date}}
+<div class="users">
+    <div ng-repeat="user in $ctrl.users track by user._id" class="thumbnail">
+        <img ng-src="{{::user.picture}}" referrerpolicy="no-referrer" />
+        <div class="caption">
+            <b>Nom:</b><br />
+            {{user.name}}<br />
+            <b>Email:</b><br />
+            <a href="mailto:{{ user._id }}" target="_blank">{{ user._id }}</a><br />
+            <b>Dernière connexion:</b><br />
+            {{user.lastSeen|date}}
+        </div>
     </div>
 </div>
 
