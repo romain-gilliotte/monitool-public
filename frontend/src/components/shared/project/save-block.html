@@ -7,7 +7,7 @@
         <i class="fa fa-floppy-o" ng-if="!$ctrl.isSaving"></i>
         <i class="fa fa-circle-o-notch fa-spin" ng-if="$ctrl.isSaving"></i>
 
-        <span translate="shared.save"></span>
+        <span translate="{{$ctrl.saveLabel || 'shared.save'}}"></span>
     </a>
 
     <a

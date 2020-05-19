@@ -84,6 +84,7 @@
                         <a
                             ng-click="$ctrl.fillFromUpload()"
                             class="btn btn-default btn-xs"
+                            ng-if="$ctrl.upload"
                             ng-disabled="!$ctrl.upload.processed.extracted"
                         >
                             <i class="fa fa-upload"></i>
@@ -133,6 +134,7 @@
     is-changed="!$ctrl.isUnchanged"
     is-persisted="false"
     is-saving="$ctrl.inputSaving"
+    save-label="{{$ctrl.upload ? 'shared.save_and_archive_doc' : 'shared.save'}}"
     on-save-clicked="$ctrl.save()"
     on-reset-clicked="$ctrl.reset()"
 ></save-block>

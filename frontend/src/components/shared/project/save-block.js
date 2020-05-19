@@ -9,6 +9,7 @@ module.component(__componentName, {
         isChanged: '<',
         isPersisted: '<',
         isSaving: '<',
+        saveLabel: '@',
 
         onSaveClicked: '&',
         onResetClicked: '&',
