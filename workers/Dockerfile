@@ -1,8 +1,7 @@
 ###################################
-# Production stage
+# Build stage
 ###################################
 
-# Switch to a clean image
 FROM node:12-alpine as build
 
 WORKDIR /app
@@ -85,6 +84,10 @@ RUN OPENCV4NODEJS_DISABLE_AUTOBUILD=1 \
 
 COPY src src
 COPY data data
+
+###################################
+# Production stage
+###################################
 
 FROM node:12-alpine
 

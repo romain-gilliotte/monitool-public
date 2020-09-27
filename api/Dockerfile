@@ -14,6 +14,7 @@ COPY data data
 
 # Run monitool API
 FROM node:12-alpine
+WORKDIR /app
 
 COPY --from=build /app /app
 EXPOSE 8000
