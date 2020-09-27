@@ -11,6 +11,8 @@ module.component(__componentName, {
     template: require(__templatePath),
     controller: class {
         constructor($element) {
+            'ngInject';
+
             this.$element = $element;
         }
 

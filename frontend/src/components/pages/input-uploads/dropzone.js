@@ -25,6 +25,8 @@ module.component(__componentName, {
     template: require(__templatePath),
     controller: class {
         constructor($scope) {
+            'ngInject';
+
             this.$scope = $scope;
         }
 
