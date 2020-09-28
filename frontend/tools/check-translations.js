@@ -79,14 +79,14 @@ function printUnusedKeys() {
 
     const ignoredPrefixes = ['project.dimensions', 'project.history', 'project.formula'];
     for (let key of keys) {
-        if (ignoredPrefixes.some((prefix) => key.startsWith(prefix))) continue;
+        if (ignoredPrefixes.some(prefix => key.startsWith(prefix))) continue;
 
         if (!templates.includes(key)) console.log(key);
     }
 }
 
 function printMissingKeys() {
-    const keys = listKeys('fr');
+    const keys = listKeys('en');
     const templates = loadTemplates();
     const translationCalls = getTranslationCalls(templates);
 
