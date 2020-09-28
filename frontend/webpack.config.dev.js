@@ -20,6 +20,9 @@ module.exports = {
                 pathRewrite: { '^/api': '' },
             },
         },
+        watchOptions: {
+            ignored: /node_modules/,
+        },
     },
 
     plugins: [
