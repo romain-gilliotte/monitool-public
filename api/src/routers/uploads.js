@@ -67,7 +67,7 @@ router.get('/project/:projectId/upload/:id', async ctx => {
         .collection('input_upload')
         .findOne(
             { _id: new ObjectId(ctx.params.id), projectId: new ObjectId(ctx.params.projectId) },
-            { 'original.data': 0, 'thumbnail.data': 0, 'processed.data': 0 }
+            { projection: { 'original.data': 0, 'thumbnail.data': 0, 'processed.data': 0 } }
         );
 });
 
