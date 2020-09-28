@@ -38,12 +38,15 @@ module.run(function ($window, $transitions) {
     });
 });
 
+// Set globals in $rootScope
 module.run(function ($rootScope) {
-    // Set api url in $rootScope (needed to download pdfs)
+    // Set api url (needed to download pdfs)
     $rootScope.serviceUrl = SERVICE_URL;
 
-    // Put user email in $rootScope
+    // Set user profile
     $rootScope.profile = window.profile;
 });
 
+// Export a function which bootstraps the app instead of the module name.
+// This is done so that when splitting the bundle, we can load AngularJS later.
 export default () => angular.bootstrap(document, [module.name]);
