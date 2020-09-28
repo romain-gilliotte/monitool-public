@@ -45,6 +45,7 @@ export default {
 
         add: 'Ajouter',
         save: 'Sauvegarder',
+        save_and_archive_doc: 'Sauvegarder et archiver le formulaire',
         remove: 'Retirer',
         remove_changes: 'Annuler les modifications',
         edit: 'Modifier',
@@ -121,9 +122,30 @@ export default {
         create_invitation: "Envoyer l'invitation",
         update_invitation: "Mettre à jour l'invitation",
     },
-    project: {
-        original_file: 'Fichier original',
+
+    input_uploads: {
         uploads: 'Formulaires papier & Excel',
+
+        drop_file_here:
+            'Déposez ici vos fiches de saisies remplies ou <label for="file-input">choisissez des fichier</label>',
+        drop_file_here_formats:
+            'Formats supportés: Photo, scan, fax (pdf, jpg, png, tiff), excel (xlsx) ou archive (zip).',
+        waiting_dataentry: 'En attente de saisie',
+        waiting_dataentry_none: 'Aucun fichier en attente de saisie',
+
+        history: 'Historique',
+        history_none: "Aucun fichier dans l'historique",
+        history_load: 'Charger les fichiers déjà traités',
+        history_load_more: 'Charger plus',
+
+        processing: 'Traitement en cours',
+        processing_failed: 'Le traitement a échoué',
+    },
+
+    project: {
+        prefill_with: 'Pré-remplir avec: ',
+        original_file: 'Fichier original',
+        load_data: 'Charger les données',
         no_logframe_yet: "Vous n'avez pas encore créé de cadre logique sur ce projet",
         show_all_projects: 'Afficher tous les projets ({{count}})',
         no_projects: "Vous n'avez aucun projet",

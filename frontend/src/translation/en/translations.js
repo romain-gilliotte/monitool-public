@@ -45,6 +45,7 @@ export default {
 
         add: 'Add',
         save: 'Save',
+        save_and_archive_doc: 'Save and archive form',
         remove: 'Remove',
         remove_changes: 'Reset changes',
         edit: 'Edit',
@@ -120,9 +121,29 @@ export default {
         create_invitation: 'Send invitation',
         update_invitation: 'Update invitation',
     },
-    project: {
-        original_file: 'Original file',
+
+    input_uploads: {
         uploads: 'Paper & Excel forms',
+
+        drop_file_here: 'Drop filled forms here or <label for="file-input">choose files</label>',
+        drop_file_here_formats:
+            'Supported formats: Photo, scan, fax (pdf, jpg, png, tiff), excel (xlsx) or archive (zip).',
+        waiting_dataentry: 'Awaiting data entry',
+        waiting_dataentry_none: 'No files are awaiting data entry',
+
+        history: 'History',
+        history_none: 'No files in history',
+        history_load: 'Load files already processed',
+        history_load_more: 'Load more',
+
+        processing: 'Processing',
+        processing_failed: 'Processing failed',
+    },
+
+    project: {
+        prefill_with: 'Prefill with',
+        original_file: 'Original file',
+        load_data: 'Load data',
         no_logframe_yet: 'This project does not have logical frameworks yet',
         show_all_projects: 'Mostrar todos los proyectos',
         no_projects: "You don't have any project",
@@ -133,10 +154,6 @@ export default {
         time_to_fill: 'Estimated time to fill',
         confirm_delete_site: `If you delete this collection site, you won't be able to access its data in reporting. Confirm to delete.`,
         confirm_delete_datasource: `If you delete this data source, you won't be able to access its data in reporting anymore, nor any indicator which depended on it. Confirm to delete.`,
-        no_invitations_yet: 'You have not invited other person to your project yet',
-        add_invitation: 'Invite a new person',
-        email: 'Email',
-        user_help_email: 'What is the email of the person that you wish to invite?',
         total: 'Total',
         variables: 'Variables',
         owner: 'Owner',
@@ -635,8 +652,9 @@ export default {
         titles: 'Titles',
         data: 'Data',
         general_informations: 'General informations',
-        fill_with_last_input: 'Fill with data from the previous entry',
-        fill_with_zeros: 'Fill missing data with zeros',
+        fill_from_last: 'Previous entry',
+        fill_from_upload: 'Uploaded file',
+        fill_with_zeros: 'Zeros',
 
         variable_name_label: 'What are your measuring?',
         variable_name_ph: 'ex: Number of diagnostics',
