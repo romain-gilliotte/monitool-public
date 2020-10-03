@@ -16,6 +16,8 @@ module.component(__componentName, {
 
     controller: class {
         constructor($element) {
+            'ngInject';
+
             this.$outer = $element;
             this.$inner = $element.children();
         }
