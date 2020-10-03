@@ -39,20 +39,29 @@ async function start() {
     winston.log('info', `Listening on ${config.port}.`);
 
     return async () => {
-        server.close();
+        winston.log('info', `Closing gracefully.`);
+
+        server.close(); // should listen to the event handler
         await app.context.io.disconnect();
+        process.exit(0);
     };
 }
 
-// Start application only if this file is executed.
-// Otherwise just export the start/stop functions
 if (require.main === module) {
+    // This file was executed: Start application.
     if (config.cluster && cluster.isMaster) {
         for (let i = 0; i < numCPUs; i++) {
             cluster.fork();
         }
     } else {
-        start();
+        start()
+            .then(stop => {
+                process.on('SIGINT', stop);
+            })
+            .catch(e => {
+                winston.log('error', e.message);
+                process.exit(1);
+            });
     }
 } else {
     module.exports = { start };
