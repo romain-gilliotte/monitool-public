@@ -553,8 +553,8 @@ export default {
             year: 'Tous les ans',
         },
 
-        no_input_entities: "Aucun lieu d'activité n'a encore été créé!",
-        no_input_groups: "Aucun groupe d'activité n'a encore été créé!",
+        no_input_entities: "Aucun lieu de collecte n'a encore été créé!",
+        no_input_groups: "Aucun groupe de collecte n'a encore été créé!",
 
         input: 'Saisir',
 
