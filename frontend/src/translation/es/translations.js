@@ -45,6 +45,7 @@ export default {
 
         add: 'Añadir',
         save: 'Guardar',
+        save_and_archive_doc: 'Guardar e archivar el formulario',
         remove: 'Quitar',
         remove_changes: 'Cancelar los cambios',
         edit: 'Modificar',
@@ -120,9 +121,30 @@ export default {
         create_invitation: 'Enviar invitación',
         update_invitation: 'Actualizar invitación',
     },
+
+    input_uploads: {
+        uploads: 'Formularios en papel y Excel',
+
+        drop_file_here:
+            'Solte sus formularios completados aquí o <label for="file-input">elija archivos</label>',
+        drop_file_here_formats:
+            'Formatos admitidos: foto, escaneo, fax (pdf, jpg, png, tiff), excel (xlsx) o archivo (zip).',
+        waiting_dataentry: 'Esperando entrada',
+        waiting_dataentry_none: 'Ningún archivo esperando ser ingresado',
+
+        history: 'Historial',
+        history_none: 'No hay archivos en el historial',
+        history_load: 'Cargar archivos ya procesados',
+        history_load_more: 'Cargar más archivos',
+
+        processing: 'Tratamiento en curso',
+        processing_failed: 'El tratamiento falló',
+    },
+
     project: {
+        prefill_with: 'Rellenar con: ',
         original_file: 'Fichero original',
-        uploads: 'Formularios en papel & Excel',
+        load_data: 'Cargar datos',
         no_logframe_yet: 'Aún no ha creado ningún marco logico en este proyecto',
         show_all_projects: 'Display all projects ({{count}})',
         no_projects: 'No tiene ningún proyecto',
@@ -133,11 +155,6 @@ export default {
         time_to_fill: 'Tiempo de ingreso estimado',
         confirm_delete_site: `Si elimina este sitio, ya no podrá acceder a sus datos en los informes. Confirme para eliminar.`,
         confirm_delete_datasource: `Si elimina esta fuente de datos, ya no podrá acceder a sus datos en informes o a los indicadores que dependen de ella. Confirme para eliminar.`,
-        no_invitations_yet: 'Todavía no ha invitado a otras personas a participar en su proyecto',
-        add_invitation: 'Invitar a una persona',
-        email: 'Correo electrónico',
-        user_help_email:
-            '¿Cuál es la dirección de correo electrónico del usuario que desea invitar?',
         total: 'Total',
         variables: 'Variables',
         owner: 'Proprietario',
@@ -445,11 +462,6 @@ export default {
             partition_group: 'Desagregación: {{name}} / {{groupName}}',
         },
 
-        edit_user: 'Editar usuario',
-        update_user: 'Actualizar el usuario',
-
-        user: 'Usuario',
-
         parameter: 'Parametro',
         unnamed_logframe: 'Marco lógico sin nombre',
 
@@ -637,8 +649,10 @@ export default {
         titles: 'Título',
         data: 'Datos',
         general_informations: 'Informaciones generales',
-        fill_with_last_input: 'Rellenar con los datos de la última entrada',
-        fill_with_zeros: 'Reemplazar valores faltantes con cero',
+
+        fill_from_last: 'Última entrada',
+        fill_from_upload: 'Formulario cargado',
+        fill_with_zeros: 'Cero',
 
         variable_name_label: 'Qué esta midiendo?',
         variable_name_ph: 'ej: Número de diagnosticos',
