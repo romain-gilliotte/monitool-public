@@ -16,7 +16,7 @@ module.exports = {
         }),
 
         new CompressionPlugin({
-            filename: '[path].gz[query]',
+            filename: '[name].gz[query]',
             minRatio: 0.8,
             algorithm: zopfli.gzip,
             compressionOptions: {
@@ -25,7 +25,7 @@ module.exports = {
         }),
 
         new CompressionPlugin({
-            filename: '[path].br[query]',
+            filename: '[name].br[query]',
             minRatio: 0.8,
             algorithm: 'brotliCompress',
         }),

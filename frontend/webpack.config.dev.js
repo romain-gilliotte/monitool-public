@@ -20,8 +20,9 @@ module.exports = {
                 pathRewrite: { '^/api': '' },
             },
         },
+        publicPath: '/', // @see https://github.com/webpack/webpack-dev-server/issues/2745
         watchOptions: {
-            ignored: /node_modules/,
+            ignored: /node_modules/, // Reduce inotify watches usages
         },
     },
 
