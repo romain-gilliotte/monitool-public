@@ -1,4 +1,8 @@
 project-input-home {
+    .thumbnail > img {
+        min-width: 100%;
+    }
+
     .users {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
