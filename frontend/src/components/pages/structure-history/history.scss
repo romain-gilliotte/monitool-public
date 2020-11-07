@@ -1,4 +1,6 @@
 history {
+    display: block;
+
     .revtbody .restore {
         display: none;
     }
@@ -10,5 +12,36 @@ history {
 
     .table > tbody.revtbody + tbody.revtbody {
         border-top-width: 1px;
+    }
+
+    th:first-child {
+        width: 15%;
+    }
+
+    td[colspan='3'] {
+        text-align: center;
+    }
+
+    // copy pasted from input-log/log.scss, needs factorization
+    .table-bordered {
+        border-collapse: separate; /* Don't collapse */
+        border-spacing: 0;
+
+        > thead > tr > th {
+            position: sticky;
+            top: -10px;
+            background-color: white;
+        }
+
+        > tbody > tr > td,
+        > thead > tr > th {
+            border-top-width: 0;
+            border-left-width: 0;
+        }
+
+        > tbody > tr > td:last-child,
+        > thead > tr > th:last-child {
+            border-right-width: 0;
+        }
     }
 }

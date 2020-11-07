@@ -74,16 +74,19 @@ module.component(__componentName, {
         }
 
         async loadMore() {
-            let url = `/project/${this.project._id}/upload-history`;
+            const limit = 20;
+            this.infiniteScrollDisabled = true;
+
+            let url = `/project/${this.project._id}/upload-history?limit=${limit}`;
             if (this.history.length) {
-                url += `?before=${this.history[this.history.length - 1]._id}`;
+                url += `&before=${this.history[this.history.length - 1]._id}`;
             }
 
             const response = await axios.get(url, { headers: { accept: 'application/json' } });
             this.history.push(...response.data);
 
-            if (response.data.length < 20) {
-                this.hasMoreHistory = false;
+            if (response.data.length === limit) {
+                this.infiniteScrollDisabled = false;
             }
 
             this.$scope.$apply();

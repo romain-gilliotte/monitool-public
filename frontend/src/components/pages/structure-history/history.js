@@ -1,12 +1,18 @@
-import angular from 'angular';
-import Revision from '../../../models/revision';
-import Project from '../../../models/project';
 import uiRouter from '@uirouter/angularjs';
-import mtRevisionSummary from './revision-summary';
+import angular from 'angular';
+import infiniteScroll from 'ng-infinite-scroll';
+import Project from '../../../models/project';
+import Revision from '../../../models/revision';
 import mtHelpPanel from '../../shared/misc/help-panel';
+import mtRevisionSummary from './revision-summary';
 require(__scssPath);
 
-const module = angular.module(__moduleName, [uiRouter, mtRevisionSummary, mtHelpPanel]);
+const module = angular.module(__moduleName, [
+    uiRouter,
+    infiniteScroll,
+    mtRevisionSummary,
+    mtHelpPanel,
+]);
 
 module.config($stateProvider => {
     $stateProvider.state('project.config.history', {
@@ -33,17 +39,8 @@ module.component(__componentName, {
         $onChanges(changes) {
             if (changes.project) {
                 this.selectedIndex = -1;
-
-                // If the project was saved, or this is the first call, we reload everything.
-                // Otherwise, the user just clicked on reset.
-                // if (changes.project.isFirstChange()) {
-                this.loading = false;
-                this.finished = false;
                 this.revisions = [];
-                this._pageSize = 10;
-                this._currentOffset = 0;
-                this.onShowMoreClicked();
-                // }
+                this.loadMore();
             }
         }
 
@@ -55,21 +52,22 @@ module.component(__componentName, {
             });
         }
 
-        async onShowMoreClicked() {
-            if (this.loading) return;
-
-            this.loading = true;
+        async loadMore() {
+            const pageSize = 20;
+            this.infiniteScrollDisabled = true;
 
             const newRevisions = await Revision.fetch(
                 this.project._id,
-                this._currentOffset,
-                this._pageSize
+                this.revisions.length,
+                pageSize
             );
-            this._currentOffset += this._pageSize;
-            this.loading = false;
-            this.finished = newRevisions.length < this._pageSize;
-            this.revisions = [...this.revisions, ...newRevisions];
+
+            this.revisions.push(...newRevisions);
             Revision.enrich(this.project, this.revisions);
+            if (newRevisions.length === pageSize) {
+                this.infiniteScrollDisabled = false;
+            }
+
             this.$scope.$apply();
         }
     },

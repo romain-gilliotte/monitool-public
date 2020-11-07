@@ -1,9 +1,25 @@
 log {
     display: block;
 
-    th {
-        position: sticky;
-        top: 0px;
-        background-color: white;
+    .table-bordered {
+        border-collapse: separate; /* Don't collapse */
+        border-spacing: 0;
+
+        > thead > tr > th {
+            position: sticky;
+            top: -10px;
+            background-color: white;
+        }
+
+        > tbody > tr > td,
+        > thead > tr > th {
+            border-top-width: 0;
+            border-left-width: 0;
+        }
+
+        > tbody > tr > td:last-child,
+        > thead > tr > th:last-child {
+            border-right-width: 0;
+        }
     }
 }

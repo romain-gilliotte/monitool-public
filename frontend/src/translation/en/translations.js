@@ -141,6 +141,7 @@ export default {
     },
 
     project: {
+        author: 'Author',
         prefill_with: 'Prefill with',
         original_file: 'Original file',
         load_data: 'Load data',

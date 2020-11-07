@@ -32,7 +32,6 @@ module.component(__componentName, {
         }
 
         async loadMore() {
-            console.log('loading');
             const pageSize = 20;
             this.infiniteScrollDisabled = true;
 

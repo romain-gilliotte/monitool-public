@@ -14,29 +14,16 @@
 
 <legend translate="input_uploads.history"></legend>
 
-<p
-    ng-if="$ctrl.history.length == 0 && !$ctrl.hasMoreHistory"
-    translate="input_uploads.history_none"
-></p>
-
-<a
-    class="btn btn-default"
-    ng-if="$ctrl.history.length == 0 && $ctrl.hasMoreHistory"
-    ng-click="$ctrl.loadMore()"
-    translate="input_uploads.history_load"
-></a>
-
-<div class="card-container">
+<div
+    class="card-container"
+    infinite-scroll="$ctrl.loadMore()"
+    infinite-scroll-distance="1"
+    infinite-scroll-container="'content'"
+    infinite-scroll-disabled="$ctrl.infiniteScrollDisabled"
+>
     <upload
         ng-repeat="upload in $ctrl.history track by upload._id"
         upload="upload"
         on-delete="$ctrl.deleteUpload(upload, $ctrl.history)"
     ></upload>
 </div>
-
-<a
-    class="btn btn-default"
-    ng-if="$ctrl.history.length > 0 && $ctrl.hasMoreHistory"
-    ng-click="$ctrl.loadMore()"
-    translate="input_uploads.history_load_more"
-></a>

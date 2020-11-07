@@ -57,7 +57,12 @@ router.get('/project/:id/upload-history', async ctx => {
         filter._id = { $lt: new ObjectId(ctx.query.before) };
     }
 
-    const forms = collection.find(filter, { projection, sort: [['_id', -1]], limit: 20 });
+    const forms = collection.find(filter, {
+        projection,
+        sort: [['_id', -1]],
+        limit: +ctx.query.limit,
+    });
+
     ctx.response.type = 'application/json';
     ctx.response.body = forms.pipe(JSONStream.stringify());
 });
