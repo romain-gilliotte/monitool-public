@@ -4,6 +4,7 @@ module.exports = {
     additionalProperties: false,
     required: ['content'],
     properties: {
+        author: { type: 'string', format: 'email' },
         content: {
             type: 'array',
             items: {

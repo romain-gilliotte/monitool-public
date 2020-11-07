@@ -157,6 +157,7 @@ export default class Input {
 
     async save() {
         const data = JSON.parse(angular.toJson(this));
+        delete data._id;
         delete data.projectId;
 
         let response;
