@@ -7,10 +7,10 @@ const { getVariableCube } = require('./cube-variable');
  * This delegates most of the work to single variable cube generator, and
  * then compose the results and add the relevant computed measure.
  */
-async function getQueryCube(io, project, formula, parameters, aggregate, dice) {
+async function getQueryCube(io, project, upto, formula, parameters, aggregate, dice) {
     const cubes = await Promise.all(
         _.toPairs(parameters).map(async ([paramName, parameter]) => {
-            let cube = await getVariableCube(io, project, parameter.variableId, aggregate, [
+            let cube = await getVariableCube(io, project, upto, parameter.variableId, aggregate, [
                 ...dice,
                 ...parameter.dice,
             ]);

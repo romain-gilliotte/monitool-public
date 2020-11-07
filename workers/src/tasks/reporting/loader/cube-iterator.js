@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const { Cube, GenericDimension, TimeDimension } = require('olap-in-memory');
 
 /**
@@ -11,14 +12,15 @@ const { Cube, GenericDimension, TimeDimension } = require('olap-in-memory');
 
 const waiting = {};
 
-async function iterateCube(io, projectId, variableId, rules, itemHandler) {
+async function iterateCube(io, upto, projectId, variableId, rules, itemHandler) {
     return new Promise(resolve => {
-        const key = `${projectId}:${variableId}`;
+        const key = `${projectId}:${variableId}:${upto}`;
 
         if (!waiting[key]) {
             const handler = onTimerEnd.bind(null, key);
             waiting[key] = {
                 io,
+                upto,
                 projectId,
                 variableId,
                 rules,
@@ -34,7 +36,7 @@ async function iterateCube(io, projectId, variableId, rules, itemHandler) {
 }
 
 async function onTimerEnd(key) {
-    const { io, projectId, variableId, rules, callers } = waiting[key];
+    const { io, upto, projectId, variableId, rules, callers } = waiting[key];
     delete waiting[key];
 
     const sequenceIds = await io.database
@@ -43,12 +45,12 @@ async function onTimerEnd(key) {
         .map(s => s._id)
         .toArray();
 
+    const filter = { sequenceId: { $in: sequenceIds }, 'content.variableId': variableId };
+    if (upto) filter._id = { $lt: new ObjectId(`${upto}0000000000000000`) };
+
     await io.database
         .collection('input')
-        .find(
-            { sequenceId: { $in: sequenceIds }, 'content.variableId': variableId },
-            { projection: { 'content.$': true }, sort: [['_id', 1]] }
-        )
+        .find(filter, { projection: { 'content.$': true }, sort: [['_id', 1]] })
         .forEach(input => {
             input.content.forEach(content => {
                 const dimensions = createInputDimensions(content);

@@ -1,0 +1,24 @@
+preview-table {
+    td {
+        &.header {
+            background-color: #eee;
+            border-color: #ccc;
+        }
+
+        &.unchanged {
+            color: gray;
+        }
+
+        &.added {
+            color: green;
+        }
+
+        &.removed {
+            color: red;
+        }
+
+        &.changed {
+            color: blue;
+        }
+    }
+}

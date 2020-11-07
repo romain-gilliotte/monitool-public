@@ -9,6 +9,14 @@
                 <i class="fa fa-download fa-fw"></i>
                 <span translate="project.downloads"></span>
             </a>
+            <a
+                ui-sref="project.usage.log"
+                class="list-group-item"
+                ng-class="{active: $ctrl.$state.is('project.usage.log') || $ctrl.$state.is('project.usage.preview')}"
+            >
+                <i class="fa fa-history fa-fw"></i>
+                <span translate="project.revisions"></span>
+            </a>
         </div>
 
         <div class="panel panel-default" ng-if="::$ctrl.activeDataSources.length != 0">
@@ -20,7 +28,7 @@
                 <div class="list-group">
                     <a
                         ui-sref="project.usage.uploads"
-                        ng-class="{active: ($ctrl.$state.is('project.usage.uploads') || $ctrl.$state.is('project.usage.data_entry'))}"
+                        ng-class="{active: $ctrl.$state.is('project.usage.uploads') || $ctrl.$state.is('project.usage.data_entry')}"
                         class="list-group-item"
                     >
                         <i class="fa fa-upload fa-fw"></i>

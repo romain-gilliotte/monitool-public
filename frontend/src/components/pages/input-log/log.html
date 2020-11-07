@@ -1,0 +1,33 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th translate="shared.date"></th>
+            <th translate="project.author"></th>
+            <th translate="project.collection_form"></th>
+            <th translate="project.collection_site"></th>
+            <th translate="project.covered_period"></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody
+        infinite-scroll="$ctrl.loadMore()"
+        infinite-scroll-distance="1"
+        infinite-scroll-container="'content'"
+        infinite-scroll-disabled="$ctrl.infiniteScrollDisabled"
+    >
+        <tr ng-repeat="row in $ctrl.rows track by row._id">
+            <td>{{row.date|date:'medium'}}</td>
+            <td>{{row.author}}</td>
+            <td>{{row.dataSourceName}}</td>
+            <td>{{row.siteName}}</td>
+            <td>{{row.period|formatSlot}}</td>
+            <td>
+                <a
+                    class="btn btn-xs btn-default"
+                    ui-sref="project.usage.preview({inputId: row._id})"
+                    >Voir les modifications</a
+                >
+            </td>
+        </tr>
+    </tbody>
+</table>

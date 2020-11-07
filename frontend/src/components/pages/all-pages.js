@@ -23,6 +23,8 @@ import inputHome from './input-home/project-input-home';
 import inputUploads from './input-uploads/project-input-uploads';
 import inputList from './input-list/project-input-list';
 import inputEdition from './input-edition/project-input-edition';
+import inputLog from './input-log/log';
+import inputPreview from './input-preview/preview';
 
 import reportingGeneral from './reporting-general/general-reporting';
 import reportingOlap from './reporting-olap/olap-reporting';
@@ -50,6 +52,8 @@ const module = angular.module(__moduleName, [
     inputUploads,
     inputList,
     inputEdition,
+    inputLog,
+    inputPreview,
     reportingGeneral,
     reportingOlap,
 

@@ -5,11 +5,20 @@
                 <i class="fa fa-home fa-fw"></i>
                 <span translate="shared.home"></span>
             </a>
+            <a
+                ui-sref="project.config.history"
+                ui-sref-active="active"
+                class="list-group-item"
+                disable-if="!$ctrl.project._id"
+            >
+                <i class="fa fa-history fa-fw"></i>
+                <span translate="project.revisions"></span>
+            </a>
         </div>
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h4 class="panel-title" translate="shared.configure"></h4>
+                <h4 class="panel-title">Collecte</h4>
             </div>
 
             <div class="panel-collapse">
@@ -50,6 +59,29 @@
                     </a>
 
                     <a
+                        ui-sref="project.config.invitation_list"
+                        ui-sref-active="active"
+                        class="list-group-item"
+                        disable-if="!$ctrl.project._id"
+                    >
+                        <span class="label label-default pull-right"
+                            >{{$ctrl.invitations.length}}</span
+                        >
+                        <i class="fa fa-share-alt fa-fw"></i>
+                        <span translate="project.invitations"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">Rapports</h4>
+            </div>
+
+            <div class="panel-collapse">
+                <div class="list-group">
+                    <a
                         ui-sref="project.config.logical_frame_list"
                         ng-class="{active: $ctrl.$state.is('project.config.logical_frame_list') || $ctrl.$state.is('project.config.logical_frame_edition')}"
                         class="list-group-item"
@@ -73,29 +105,6 @@
                         >
                         <i class="fa fa-sign-out fa-fw"></i>
                         <span translate="indicator.extra"></span>
-                    </a>
-
-                    <a
-                        ui-sref="project.config.invitation_list"
-                        ui-sref-active="active"
-                        class="list-group-item"
-                        disable-if="!$ctrl.project._id"
-                    >
-                        <span class="label label-default pull-right"
-                            >{{$ctrl.invitations.length}}</span
-                        >
-                        <i class="fa fa-share-alt fa-fw"></i>
-                        <span translate="project.invitations"></span>
-                    </a>
-
-                    <a
-                        ui-sref="project.config.history"
-                        ui-sref-active="active"
-                        class="list-group-item"
-                        disable-if="!$ctrl.project._id"
-                    >
-                        <i class="fa fa-history fa-fw"></i>
-                        <span translate="project.revisions"></span>
                     </a>
                 </div>
             </div>

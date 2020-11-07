@@ -15,7 +15,7 @@ const cache = new Cache({ max: 25, maxAge: 10000 });
  */
 function initReporting(io) {
     io.queue.process('compute-report', async job => {
-        const { projectId, formula, parameters, aggregate, dice } = job.data;
+        const { projectId, formula, parameters, aggregate, dice, upto } = job.data;
         const { renderer, rendererOpts } = job.data;
 
         return computeReport(
@@ -25,6 +25,7 @@ function initReporting(io) {
             parameters,
             aggregate,
             dice,
+            upto,
             renderer,
             rendererOpts
         );
@@ -47,6 +48,7 @@ async function computeReport(
     parameters,
     aggregate,
     dice,
+    upto,
     renderer,
     rendererOpts
 ) {
@@ -57,7 +59,7 @@ async function computeReport(
         project = await promise;
     }
 
-    const cube = await getQueryCube(io, project, formula, parameters, aggregate, dice);
+    const cube = await getQueryCube(io, project, upto, formula, parameters, aggregate, dice);
     let result;
     if (renderer === 'json') result = await renderJson(cube, rendererOpts);
     else if (renderer === 'xlsx') result = await renderXlsx(cube, rendererOpts);

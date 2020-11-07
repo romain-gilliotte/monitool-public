@@ -1,7 +1,13 @@
 import axios from 'axios';
 import { TimeDimension, GenericDimension } from 'olap-in-memory';
 
-export async function executeQuery(projectId, query, renderer = 'json', rendererOpts = 'report') {
+export async function executeQuery(
+    projectId,
+    query,
+    renderer = 'json',
+    rendererOpts = 'report',
+    upto = null
+) {
     let dice = JSON.parse(JSON.stringify(query.dice));
     if (dice.length > 1) {
         // Deduplicate dices to avoid urls to be too long

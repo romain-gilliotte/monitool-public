@@ -8,6 +8,10 @@ module.exports = {
             enum: ['json', 'xlsx'],
         },
         rendererOpts: {},
+        upto: {
+            type: ['null', 'string'],
+            pattern: '^[0-9a-f]{8}$',
+        },
         formula: {
             type: 'string',
             match: '^[-\\(\\)\\|+*/_ 0-9a-z]+$',

@@ -1,0 +1,12 @@
+<table class="table table-bordered table-condensed">
+    <tr ng-repeat="row in $ctrl.table track by $index">
+        <td
+            ng-repeat="col in row track by $index"
+            colspan="{{col.colspan}}"
+            rowspan="{{col.rowspan}}"
+            ng-class="col.class"
+        >
+            {{col.content}}
+        </td>
+    </tr>
+</table>

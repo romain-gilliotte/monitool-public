@@ -118,13 +118,7 @@ router.get('/project/:id/user', async ctx => {
     if (project) {
         const invitations = await ctx.io.database
             .collection('invitation')
-            .find(
-                {
-                    projectId: new ObjectId(ctx.params.id),
-                    accepted: true,
-                },
-                { email: 1 }
-            )
+            .find({ projectId: new ObjectId(ctx.params.id), accepted: true }, { email: 1 })
             .toArray();
 
         const emails = [project.owner, ...invitations.map(i => i.email)];
@@ -142,6 +136,7 @@ router.get('/project/:id/report/:query([-_=a-z0-9]+)', async ctx => {
         return;
     }
 
+    // use object-hash!
     const sha1 = crypto.createHash('sha1').update(ctx.params.query).digest('hex');
     let result = await ctx.io.redis.hget(`reporting:${projectId}`, sha1);
     if (!result) {
