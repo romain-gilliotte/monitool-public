@@ -1,5 +1,7 @@
 log {
     display: block;
+    height: 100%;
+    overflow: auto;
 
     .table-bordered {
         border-collapse: separate; /* Don't collapse */
@@ -7,7 +9,7 @@ log {
 
         > thead > tr > th {
             position: sticky;
-            top: -10px;
+            top: 0;
             background-color: white;
         }
 

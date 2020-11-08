@@ -1,5 +1,7 @@
 history {
     display: block;
+    height: 100%;
+    overflow: auto;
 
     .revtbody .restore {
         display: none;
@@ -29,7 +31,7 @@ history {
 
         > thead > tr > th {
             position: sticky;
-            top: -10px;
+            top: 0;
             background-color: white;
         }
 
