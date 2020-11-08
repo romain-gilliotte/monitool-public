@@ -1,4 +1,4 @@
-<div style="margin-bottom: 10px;">
+<div style="margin-bottom: 10px">
     <input
         type="text"
         ng-change="$ctrl.filter()"
@@ -7,7 +7,7 @@
         placeholder="{{'project.filter_placeholder'|translate}}"
     />
 </div>
-<div style="margin-bottom: 10px;">
+<div style="margin-bottom: 10px">
     <div class="pull-right">
         <a class="btn btn-primary" ng-click="$ctrl.createProject()">
             <i class="fa fa-fw fa-plus"></i>
@@ -105,7 +105,7 @@
 
             <div class="panel-buttons btn-group">
                 <a
-                    ng-if="::p.active"
+                    ng-if="p.active"
                     class="btn btn-default btn-xxs"
                     ui-sref="project.usage.home({projectId: p._id})"
                 >
@@ -114,7 +114,7 @@
                 </a>
 
                 <a
-                    ng-if="::!p.active && p.owner == $root.profile.email"
+                    ng-if="!p.active && p.owner == $root.profile.email"
                     class="btn btn-default btn-xxs"
                     ng-click="$ctrl.onRestoreClicked(p)"
                 >
@@ -123,7 +123,7 @@
                 </a>
 
                 <a
-                    ng-if="::!p.active && p.owner != $root.profile.email"
+                    ng-if="!p.active && p.owner != $root.profile.email"
                     class="btn btn-default btn-xxs"
                     ng-click="$ctrl.unInvite(p)"
                 >
