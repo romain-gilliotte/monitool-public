@@ -20,7 +20,7 @@ export default class Input {
     }
 
     /** fixme The computed percentage is no precise enough: it is by variable, we need by cell */
-    static async fetchFormStatus(project, dataSourceId, siteIds = null) {
+    static async fetchFormStatus(project, dataSourceId, siteIds = null, periodsRange = null) {
         const dataSource = project.forms.find(ds => ds.id === dataSourceId);
         const variables = dataSource.elements.filter(variable => variable.active);
 
@@ -34,7 +34,7 @@ export default class Input {
                 {
                     id: 'time',
                     attribute: dataSource.periodicity,
-                    range: [null, end.value],
+                    range: periodsRange || [null, end.value],
                 },
                 {
                     id: 'location',
@@ -65,6 +65,7 @@ export default class Input {
             .replace('+', '-')
             .replace('/', '_')
             .replace(/=+$/g, '');
+
         const response = await axios.get(`/project/${project._id}/report/${b64Query}`);
         const result = response.data;
 

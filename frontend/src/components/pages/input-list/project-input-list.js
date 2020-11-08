@@ -1,10 +1,14 @@
 import uiRouter from '@uirouter/angularjs';
 import angular from 'angular';
+import infiniteScroll from 'ng-infinite-scroll';
+import TimeSlot from 'timeslot-dag';
 import mtFilterTimeSlot from '../../../filters/time-slot';
 import Input from '../../../models/input';
 require(__scssPath);
 
-const module = angular.module(__moduleName, [uiRouter, mtFilterTimeSlot]);
+const PAGE_SIZE = 50;
+
+const module = angular.module(__moduleName, [uiRouter, infiniteScroll, mtFilterTimeSlot]);
 
 module.config($stateProvider => {
     $stateProvider.state('project.usage.list', {
@@ -25,79 +29,79 @@ module.component(__componentName, {
     template: require(__templatePath),
 
     controller: class {
-        constructor($element, $rootScope, $state, $scope) {
+        constructor($rootScope, $state, $scope) {
             'ngInject';
 
             this.$state = $state;
             this.$scope = $scope;
-            this.userEmail = $rootScope.profile.email;
-            this._element = $element;
-        }
-
-        $onInit() {
-            this._binded = this._onScroll.bind(this);
-        }
-
-        $onDestroy() {
-            if (this._container) this._container.unbind('scroll', this._binded);
-        }
-
-        _onScroll() {
-            this.headerStyle = {
-                transform: 'translate(0, ' + this._container[0].scrollTop + 'px)',
-            };
-
-            this.firstColStyle = {
-                transform: 'translate(' + this._container[0].scrollLeft + 'px)',
-            };
-
-            this.$scope.$apply();
+            this.email = $rootScope.profile.email;
         }
 
         $onChanges(changes) {
-            // Define form
+            // Convenience
             this.dataSource = this.project.forms.find(ds => ds.id === this.dataSourceId);
+            this.periods = this.computePeriods(this.project, this.dataSource);
+            this.sites = this.computeSites(
+                this.project,
+                this.dataSource,
+                this.invitations,
+                this.email
+            );
 
-            // Define sites (depending on user permissions)
-            const myInvitation = this.invitations.find(i => i.email === this.userEmail);
-            this.sites = this.project.entities.filter(
+            // Containers for data which will be loaded.
+            this.loadedPeriods = [];
+            this.inputsStatus = {};
+        }
+
+        /** List all periods relevant to this datasource */
+        computePeriods(project, dataSource) {
+            const periodicity = dataSource.periodicity;
+            const start = TimeSlot.fromValue(project.start).toParentPeriodicity(periodicity);
+            const last = TimeSlot.fromValue(project.end).toParentPeriodicity(periodicity);
+
+            let current = TimeSlot.fromDate(new Date(), periodicity).previous();
+            if (current.value > last.value) {
+                current = last;
+            }
+
+            const periods = [];
+            while (current.value > start.value) {
+                periods.push(current.value);
+                current = current.previous();
+            }
+
+            return periods;
+        }
+
+        /** Define sites (depending on user permissions) */
+        computeSites(project, dataSource, invitations, userEmail) {
+            const myInvitation = invitations.find(i => i.email === userEmail);
+
+            return project.entities.filter(
                 e =>
                     e.active &&
-                    this.dataSource.entities.includes(e.id) &&
+                    dataSource.entities.includes(e.id) &&
                     (!myInvitation || myInvitation.dataEntry.siteIds.includes(e.id))
             );
-
-            this.loading = true;
-            this.loadCalendar();
         }
 
-        async loadCalendar() {
-            const myInvitation = this.invitations.find(i => i.email === this.userEmail);
-            const siteIds = myInvitation ? myInvitation.dataEntry.siteIds : null;
+        /** Load rows, called by the infinite-scroll plugin */
+        async loadMore() {
+            this.infiniteScrollDisabled = true;
 
-            this.inputsStatus = await Input.fetchFormStatus(
+            const newPeriods = this.periods.splice(0, PAGE_SIZE);
+            const newData = await Input.fetchFormStatus(
                 this.project,
                 this.dataSourceId,
-                siteIds
+                this.sites.map(s => s.id),
+                [newPeriods[newPeriods.length - 1], newPeriods[0]]
             );
 
-            // Those list tell which rows should be displayed.
-            this.visibleStatus = Object.keys(this.inputsStatus).slice(0, 20);
-            this.hiddenStatus = Object.keys(this.inputsStatus).slice(20);
+            this.loadedPeriods = [...this.loadedPeriods, ...newPeriods];
+            this.inputsStatus = { ...this.inputsStatus, ...newData };
+            this.infiniteScrollDisabled = this.periods.length == 0;
 
-            this.loading = false;
             this.$scope.$apply();
-
-            // if there are results, bind a scroll event to the div around the table.
-            // this is extremely hacky and will break when the template is changed. There must be a better way
-            if (this.visibleStatus.length) {
-                this._container = angular.element(this._element.children()[0]);
-                this._container.bind('scroll', this._binded);
-            }
-        }
-
-        showMore() {
-            this.visibleStatus.push(...this.hiddenStatus.splice(0, 10));
         }
 
         addInput(entityId) {

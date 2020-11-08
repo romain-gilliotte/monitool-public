@@ -1,76 +1,39 @@
-<div ng-if="::!$ctrl.dataSource.entities.length">
-    <span translate="project.form_is_not_associated_with_site"></span>
-</div>
+<table class="table-nocollapse">
+    <thead>
+        <tr>
+            <th translate="shared.date"></th>
+            <th ng-repeat="site in ::$ctrl.sites track by site.id">{{::site.name}}</th>
+        </tr>
+    </thead>
+    <tbody
+        infinite-scroll="$ctrl.loadMore()"
+        infinite-scroll-distance="0.2"
+        infinite-scroll-container="'project-input-list'"
+        infinite-scroll-disabled="$ctrl.infiniteScrollDisabled"
+    >
+        <tr ng-repeat="period in $ctrl.loadedPeriods track by $index">
+            <th title="{{::period|formatSlotRange:$ctrl.project.start:$ctrl.project.end}}">
+                {{::period|formatSlot}}
+            </th>
+            <td
+                ng-repeat="site in ::$ctrl.sites track by site.id"
+                ng-switch="::$ctrl.inputsStatus[period][site.id] == 0"
+            >
+                <a
+                    ng-switch-when="true"
+                    ui-sref="project.usage.edit(::{dataSourceId: $ctrl.dataSource.id, period: period, siteId: site.id})"
+                    class="btn btn-xs btn-primary"
+                    translate="project.input_status.expected"
+                ></a>
 
-<div class="input-table-container" ng-if="::$ctrl.dataSource.entities.length">
-    <table class="table table-bordered table-condensed">
-        <tbody>
-            <tr ng-repeat="date in $ctrl.visibleStatus track by $index">
-                <td
-                    title="{{::date|formatSlotRange:$ctrl.project.start:$ctrl.project.end}}"
-                    ng-style="$ctrl.firstColStyle"
-                >
-                    <div class="bodyField">{{::date|formatSlot}}</div>
-                </td>
-                <td ng-repeat="site in ::$ctrl.sites track by site.id">
-                    <div ng-switch="::$ctrl.inputsStatus[date][site.id] == 0" class="bodyField">
-                        <a
-                            ng-switch-when="true"
-                            ui-sref="project.usage.edit(::{dataSourceId: $ctrl.dataSource.id, period: date, siteId: site.id})"
-                            class="btn btn-xs btn-primary"
-                            translate="project.input_status.expected"
-                        ></a>
-
-                        <a
-                            ng-switch-when="false"
-                            ui-sref="project.usage.edit(::{dataSourceId: $ctrl.dataSource.id, period: date, siteId: site.id})"
-                            class="btn btn-xs btn-default"
-                            translate="project.input_status.done"
-                            translate-values="::{value: $ctrl.inputsStatus[date][site.id]}"
-                        ></a>
-                    </div>
-                </td>
-            </tr>
-            <tr ng-hide="$ctrl.visibleStatus.length || $ctrl.loading">
-                <td ng-style="$ctrl.firstColStyle">
-                    <div class="bodyField">&nbsp;</div>
-                </td>
-                <td colspan="{{::$ctrl.sites.length}}">
-                    <div class="bodyField" translate="project.no_inputs"></div>
-                </td>
-            </tr>
-            <tr ng-show="$ctrl.loading">
-                <td ng-style="$ctrl.firstColStyle">
-                    <div class="bodyField">&nbsp;</div>
-                </td>
-                <td colspan="{{::$ctrl.sites.length}}">
-                    <div class="bodyField" translate="shared.loading"></div>
-                </td>
-            </tr>
-            <tr ng-show="$ctrl.hiddenStatus.length">
-                <td ng-style="$ctrl.firstColStyle">
-                    <div class="bodyField">&nbsp;</div>
-                </td>
-                <td colspan="{{::$ctrl.sites.length}}" style="text-align: center;">
-                    <a
-                        class="btn btn-default btn-xs"
-                        ng-click="$ctrl.showMore()"
-                        translate="project.show_more_inputs"
-                    ></a>
-                </td>
-            </tr>
-        </tbody>
-        <thead ng-style="$ctrl.headerStyle">
-            <tr>
-                <th ng-style="$ctrl.firstColStyle">
-                    <div class="headerField" translate="shared.date"></div>
-                </th>
-                <th ng-repeat="site in ::$ctrl.sites track by site.id">
-                    <div class="headerField">
-                        <div>{{::site.name}}</div>
-                    </div>
-                </th>
-            </tr>
-        </thead>
-    </table>
-</div>
+                <a
+                    ng-switch-when="false"
+                    ui-sref="project.usage.edit(::{dataSourceId: $ctrl.dataSource.id, period: period, siteId: site.id})"
+                    class="btn btn-xs btn-default"
+                    translate="project.input_status.done"
+                    translate-values="::{value: $ctrl.inputsStatus[period][site.id]}"
+                ></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
