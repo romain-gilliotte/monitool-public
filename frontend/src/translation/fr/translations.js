@@ -124,7 +124,7 @@ export default {
     },
 
     input_uploads: {
-        uploads: 'Formulaires papier & Excel',
+        uploads: 'Papier & Excel',
 
         drop_file_here:
             'Déposez ici vos fiches de saisies remplies ou <label for="file-input">choisissez des fichier</label>',
