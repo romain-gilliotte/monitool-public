@@ -5,7 +5,6 @@ import mtQueryComputation from './query-computation';
 import mtIndicatorFilter from './indicator-filter';
 import mtDimensions from './olap-dimensions';
 import mtOlapGrid from './olap-grid';
-import mtHelpPanel from '../../shared/misc/help-panel';
 
 const module = angular.module(__moduleName, [
     uiRouter,
@@ -13,7 +12,6 @@ const module = angular.module(__moduleName, [
     mtIndicatorFilter,
     mtDimensions,
     mtOlapGrid,
-    mtHelpPanel,
 ]);
 
 module.config($stateProvider => {

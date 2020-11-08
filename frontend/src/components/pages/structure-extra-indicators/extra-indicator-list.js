@@ -3,16 +3,9 @@ import uiRouter from '@uirouter/angularjs';
 import uiModal from 'angular-ui-bootstrap/src/modal';
 import 'angular-legacy-sortablejs-maintained';
 import mtIndicator from '../../shared/indicator/indicator';
-import mtHelpPanel from '../../shared/misc/help-panel';
 require(__scssPath);
 
-const module = angular.module(__moduleName, [
-    uiRouter,
-    uiModal,
-    'ng-sortable',
-    mtIndicator,
-    mtHelpPanel,
-]);
+const module = angular.module(__moduleName, [uiRouter, uiModal, 'ng-sortable', mtIndicator]);
 
 module.config($stateProvider => {
     $stateProvider.state('project.config.extra', {

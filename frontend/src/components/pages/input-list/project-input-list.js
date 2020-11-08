@@ -2,10 +2,9 @@ import uiRouter from '@uirouter/angularjs';
 import angular from 'angular';
 import mtFilterTimeSlot from '../../../filters/time-slot';
 import Input from '../../../models/input';
-import mtHelpPanel from '../../shared/misc/help-panel';
 require(__scssPath);
 
-const module = angular.module(__moduleName, [uiRouter, mtFilterTimeSlot, mtHelpPanel]);
+const module = angular.module(__moduleName, [uiRouter, mtFilterTimeSlot]);
 
 module.config($stateProvider => {
     $stateProvider.state('project.usage.list', {

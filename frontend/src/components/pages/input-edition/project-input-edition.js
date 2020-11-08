@@ -4,7 +4,6 @@ import axios from 'axios';
 import TimeSlot from 'timeslot-dag';
 import mtTimeSlot from '../../../filters/time-slot';
 import Input from '../../../models/input';
-import mtHelpPanel from '../../shared/misc/help-panel';
 import mtSaveBlock from '../../shared/project/save-block';
 import mtImageScroll from './image-scroll';
 import mtInputGrid from './input-grid';
@@ -16,7 +15,6 @@ const module = angular.module(__moduleName, [
     mtTimeSlot,
     mtInputGrid,
     mtSaveBlock,
-    mtHelpPanel,
     mtImageScroll,
 ]);
 

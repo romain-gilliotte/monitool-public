@@ -3,16 +3,10 @@ import angular from 'angular';
 import infiniteScroll from 'ng-infinite-scroll';
 import Project from '../../../models/project';
 import Revision from '../../../models/revision';
-import mtHelpPanel from '../../shared/misc/help-panel';
 import mtRevisionSummary from './revision-summary';
 require(__scssPath);
 
-const module = angular.module(__moduleName, [
-    uiRouter,
-    infiniteScroll,
-    mtRevisionSummary,
-    mtHelpPanel,
-]);
+const module = angular.module(__moduleName, [uiRouter, infiniteScroll, mtRevisionSummary]);
 
 module.config($stateProvider => {
     $stateProvider.state('project.config.history', {

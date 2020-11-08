@@ -4,7 +4,6 @@ import angular from 'angular';
 import 'angular-legacy-sortablejs-maintained';
 import mtProjectInvitationModal from './project-invitation-modal';
 import mtColumnsPanel from '../../shared/misc/columns-panel';
-import mtHelpPanel from '../../shared/misc/help-panel';
 require(__scssPath);
 
 const module = angular.module(__moduleName, [
@@ -12,7 +11,6 @@ const module = angular.module(__moduleName, [
     'ng-sortable',
     mtProjectInvitationModal,
     mtColumnsPanel,
-    mtHelpPanel,
 ]);
 
 module.config($stateProvider => {

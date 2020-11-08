@@ -3,10 +3,9 @@ import { v4 as uuid } from 'uuid';
 import uiRouter from '@uirouter/angularjs';
 import 'angular-legacy-sortablejs-maintained';
 import mtColumnsPanel from '../../shared/misc/columns-panel';
-import mtHelpPanel from '../../shared/misc/help-panel';
 require(__scssPath);
 
-const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtColumnsPanel, mtHelpPanel]);
+const module = angular.module(__moduleName, [uiRouter, 'ng-sortable', mtColumnsPanel]);
 
 module.config($stateProvider => {
     $stateProvider.state('project.config.logical_frame_list', {

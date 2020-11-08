@@ -1,7 +1,8 @@
 import angular from 'angular';
+import mtHelpPanel from '../misc/help-panel';
 require(__scssPath);
 
-const module = angular.module(__moduleName, []);
+const module = angular.module(__moduleName, [mtHelpPanel]);
 
 module.component(__componentName, {
     bindings: {

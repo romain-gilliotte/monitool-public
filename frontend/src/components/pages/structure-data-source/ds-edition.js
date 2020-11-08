@@ -8,7 +8,6 @@ import mtElementFilter from '../../shared/ng-models/element-filter';
 import mtPartitionList from './partition-list';
 import mtPartitionDistribution from './partition-distribution';
 import mtPartitionOrder from './partition-order';
-import mtHelpPanel from '../../shared/misc/help-panel';
 require(__scssPath);
 
 const module = angular.module(__moduleName, [
@@ -21,7 +20,6 @@ const module = angular.module(__moduleName, [
     mtPartitionList,
     mtPartitionDistribution,
     mtPartitionOrder,
-    mtHelpPanel,
 ]);
 
 module.config($stateProvider => {

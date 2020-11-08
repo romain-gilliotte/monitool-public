@@ -4,7 +4,6 @@ import uiRouter from '@uirouter/angularjs';
 import 'angular-legacy-sortablejs-maintained';
 import mtElementGroups from '../../shared/misc/element-groups';
 import mtColumnsPanel from '../../shared/misc/columns-panel';
-import mtHelpPanel from '../../shared/misc/help-panel';
 require(__scssPath);
 
 const module = angular.module(__moduleName, [
@@ -12,7 +11,6 @@ const module = angular.module(__moduleName, [
     'ng-sortable',
     mtElementGroups,
     mtColumnsPanel,
-    mtHelpPanel,
 ]);
 
 module.config($stateProvider => {

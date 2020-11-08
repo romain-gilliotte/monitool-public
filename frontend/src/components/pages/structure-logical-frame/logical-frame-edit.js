@@ -6,7 +6,6 @@ import mtIndicatorDisplay from '../../shared/indicator/indicator';
 import mtIndicatorModal from '../../shared/indicator/indicator-edition-modal';
 import mtDirectiveAutoresize from '../../../directives/helpers/autoresize';
 import mtDatePicker from '../../shared/ng-models/utc-datepicker';
-import mtHelpPanel from '../../shared/misc/help-panel';
 require(__scssPath);
 
 const module = angular.module(__moduleName, [
@@ -18,7 +17,6 @@ const module = angular.module(__moduleName, [
     mtIndicatorModal,
     mtDirectiveAutoresize,
     mtDatePicker,
-    mtHelpPanel,
 ]);
 
 module.config($stateProvider => {
