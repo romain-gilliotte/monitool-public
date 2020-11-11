@@ -7,6 +7,7 @@ async function authenticate() {
         domain: 'monitool.eu.auth0.com',
         client_id: 'z31Kt6FYp8YDG4BypH4qp1ibLd1Ns4ME',
         audience: 'https://api.monitool.org',
+        redirect_uri: window.location.origin + '/app.html',
     }));
 
     // Handle callback
@@ -16,7 +17,7 @@ async function authenticate() {
         await auth0.handleRedirectCallback();
 
         // Use replaceState to redirect the user away and remove the querystring parameters
-        window.history.replaceState({}, document.title, '/');
+        window.history.replaceState({}, document.title, '/app.html');
     }
 
     // If authenticated, start app
@@ -44,9 +45,7 @@ async function authenticate() {
     }
     // otherwise, go login
     else {
-        await auth0.loginWithRedirect({
-            redirect_uri: window.location.origin,
-        });
+        await auth0.loginWithRedirect();
     }
 }
 

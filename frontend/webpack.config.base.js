@@ -105,7 +105,7 @@ module.exports = {
 
         new HtmlWebpackPlugin({
             favicon: null,
-            filename: 'index.html',
+            filename: 'app.html',
             template: './src/template.html',
             inject: 'body',
             chunks: ['index'],
