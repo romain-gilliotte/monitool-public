@@ -99,6 +99,18 @@ module.exports = {
             title: `Téléchargements`,
             paragraph: /* html */ `Vous pouvez ici accéder à différents fichiers à télécharger`,
         },
+        'project.usage.log': {
+            title: `Historique des modifications`,
+            paragraph: /* html */ `Cette page vous présente l'historique de toutes les saisies qui ont été réalisées sur votre projet.`,
+        },
+        'project.usage.preview': {
+            title: `Historique des modifications`,
+            paragraph: /* html */ `Cette page vous permet de Visualiser les modifications réalisée lors d'une saisie en particulier.`,
+        },
+        'project.usage.uploads': {
+            title: `Téléversement de fichiers`,
+            paragraph: /* html */ `Cette page vous permet de mettre en ligne des formulaires qui ont été saisis sur papier ou sur Excel par vos équipes.`,
+        },
         'project.usage.list': {
             title: `Calendrier de saisie`,
             paragraph: /* html */ `Le calendrier de saisie permet d'accèder aux fiches de saisie du projet`,
@@ -153,14 +165,14 @@ module.exports = {
             prefixes: ['main.projects'],
             question: `Quelle est l'utilité de pouvoir "Cloner la structure" d'un projet?`,
             answer: /* html */ `
-                    La fonctionalité "Cloner la structure uniquement" est pensée pour les ONGs qui réalisent des 
-                    programmes d'urgence. En effet dans ce cas, plutot que de prendre le temps de réflexion nécessaire
-                    à la construction d'un projet, il est fréquent de créer en avance différents
-                    squelettes de projets avec toutes les sources de données et le cadre logique prêts à l'emploi.
-                    <br/>
-                    Lorsqu'une nouvelle crise démarre le système de monitoring peut ainsi être opérationel en quelques
-                    minutes. Il suffit alors de cloner la structure du squelette adapté à la situation, et de renommer le projet,
-                    l'adaptation du projet au contexte viendra dans une phase ultérieur du projet.
+                La fonctionalité "Cloner la structure uniquement" est pensée pour les ONGs qui réalisent des 
+                programmes d'urgence. En effet dans ce cas, plutot que de prendre le temps de réflexion nécessaire
+                à la construction d'un projet, il est fréquent de créer en avance différents
+                squelettes de projets avec toutes les sources de données et le cadre logique prêts à l'emploi.
+                <br/>
+                Lorsqu'une nouvelle crise démarre le système de monitoring peut ainsi être opérationel en quelques
+                minutes. Il suffit alors de cloner la structure du squelette adapté à la situation, et de renommer le projet,
+                l'adaptation du projet au contexte viendra dans une phase ultérieur du projet.
             `,
         },
         {
@@ -521,6 +533,92 @@ module.exports = {
             question: `J'aimerai télécharger mes rapports`,
             answer: /* html */ `
                 Des liens de téléchargement sont disponibles sur les pages associées aux rapports
+            `,
+        },
+        {
+            prefixes: ['project.usage.log', 'project.usage.preview'],
+            question: `Que représente une saisie?`,
+            answer: /* html */ `
+                Une nouvelle saisie est enregistrée quand un utilisateur sauvegarde les données sur
+                un formulaire, que ça soit directement, ou à partir d'un formulaire papier ou Excel.<br/>
+                Afin d'éviter la multiplication des saisies, si au cours d'une saisie un utilisateur sauvegarde 
+                plusieurs fois le même formulaire, sans quitter la page, ces multiples sauvegardes seront
+                groupées en une seule action au sein de l'historique.
+            `,
+        },
+        {
+            prefixes: ['project.usage.preview'],
+            question: `Que signifie le symbole ∅?`,
+            answer: /* html */ `
+                Ce symbole signifie "vide", il dénote l'absence de saisie sur une valeur.
+            `,
+        },
+        {
+            prefixes: ['project.usage.preview'],
+            question: `Quel est la signification du code couleur utilisé?`,
+            answer: /* html */ `
+                Les cases contenant du texte en gris n'ont pas été modifiées par la saisie en cours de visualisation<br/>
+                Les cases dont le texte est en vert, bleu et rouge ont été modifiées, respectivement pour ajouter, modifier ou effacer 
+                une valeur. 
+            `,
+        },
+        {
+            prefixes: ['project.usage.uploads'],
+            question: `Quels types de formulaires puis-je téléverser?`,
+            answer: /* html */ `
+                Les formulaires qui peuvent être téléversés sont uniquement ceux qui sont disponibles en téléchargement
+                dans la section correspondante.<br/>
+                Deux types de formulaires sont possibles: Papier ou Excel.<br/>
+                Pour les formulaires papier, les formats acceptés sont les images (png, jpg), les faxs (tiff) et les PDFs.<br/>
+                Les formulaires Excel eux doivent être téléversés en format "xlsx". Ils ne fonctionneront plus si ils sont
+                convertis dans un autre format (par ex: iWork Numbers, LibreOffice, OpenOffice, ...).
+            `,
+        },
+        {
+            prefixes: ['project.usage.uploads'],
+            question: `Quelle est la taille maximum des fichiers à téléverser?`,
+            answer: /* html */ `
+                Elle est de 16 mega-octets par fichier.<br/>
+                Cependant, il est inutile de téléverser des photos dont la taille dépasse 2 mega-octets:
+                des images à trop haute résolution ralentissent le traitement, et n'améliore pas sa qualité. 
+            `,
+        },
+        {
+            prefixes: ['project.usage.uploads'],
+            question: `Comment m'assurer de la bonne reconnaissance automatique des formulaires papier pris en photo?`,
+            answer: /* html */ `
+                Lorsque vous téléversez des formulaires papier, vous pouvez au choix les scanner ou les prendre en photo.<br/>
+                Une photo de formulaire prise avec un téléphone, et transmise par email ou messagerie est généralement
+                suffisante pour que Monitool arrive à la recadrer et à identifier les cases de saisie.<br/>
+
+                Cependant si vous avez des problèmes de reconnaissance voici quelques conseils à suivre pour garantir de
+                meilleurs résultats:
+                <ul>
+                    <li>
+                        Le formulaire doit être entièrement visible, notamment le marqueur qui est
+                        positioné en haut à droite de la page, et les trois plus petits marqueurs qui sont
+                        en bas de page.
+                     </li>
+                     <li>Le formulaire doit être posé à plat, et non tenu à la main</li>
+                     <li>
+                        Si possible, d'avoir une photo contrastée. Par exemple, ne pas poser le formulaire sur une
+                        table blanche
+                    </li>
+                </ul>
+                
+                Par contre, il n'est pas nécessaire de:
+                <ul>
+                    <li>Être à la verticale au dessus du formulaire pour prendre la photo.</li>
+                    <li>Que les bords du formulaires corresponde au bord de la photo</li>
+                </ul>
+            `,
+        },
+        {
+            prefixes: ['project.usage.uploads'],
+            question: `Comment m'assurer de la bonne reconnaissance automatique des formulaires papier scannés ou faxés?`,
+            answer: /* html */ `
+                Les formulaires scannés ou faxés ne devraient pas poser de problème de reconnaissance.<br/>
+                Assurez-vous qu'ils soient entièrement visibles (en incluant les trois marqueurs de bas de page).
             `,
         },
         {
