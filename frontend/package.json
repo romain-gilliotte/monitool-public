@@ -12,7 +12,7 @@
     "angular-translate": "^2.18.3",
     "angular-translate-storage-local": "^2.18.3",
     "angular-ui-bootstrap": "^2.5.6",
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "bootstrap": "3",
     "c3": "~0.4.11",
     "core-js": "^3.6.5",
