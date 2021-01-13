@@ -9,7 +9,7 @@
     "dependencies": {
         "adm-zip": "^0.4.16",
         "aruco-marker": "^2.0.0",
-        "axios": "^0.21.0",
+        "axios": "^0.21.1",
         "bull": "^3.18.1",
         "dotenv": "^8.2.0",
         "excel4node": "^1.7.2",
