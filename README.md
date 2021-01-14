@@ -24,24 +24,39 @@ It is close to completion (check remaining issues).
 
 ## Development
 
+### System dependencies
+
+The worker depends on `gm`.
+
+Install binary dependency on your machine with `sudo apt install graphicsmagick` or `brew install graphicsmagick`
+
 ### External dependencies
 
 The application depends on external processes which can be started from the docker-compose file at the root of the project.
-- MongoDB for storage
+- MongoDB for storage (needs to be started in replica set mode)
 - Redis for cache and work queues
 - UnoConv for thumbnailing
 
 Start them with `docker-compose up`.
 
-You will also need an account at Auth0 to run the app.
+On first start, you'll need to initiate a single node replica set.
+```
+docker exec monitool_mongo_1 sh -c "mongo -u admin -p admin --eval 'rs.initiate({_id: 'rs0', members: [{_id:1, host:'localhost:27017'}]})'"
+```
+
+### Authentication
+
+A valid account at Auth0 is required for authentication.
 
 ### Running the app
 
-Start by creating `.env` files in `api/` and `workers/` folders. Templates are available.
+Start by creating `.env` files in `api/` and `workers/` folders. A template is available on the same folder.
 
 Then run on the three root folders: `npm install && npm start`
 
-Monitool should be reachable at http://localhost:8080/app.html
+- Monitool should be reachable at http://localhost:8080/app.html
+- Mongo Express at http://localhost:8081/
+- RedisCommander at http://localhost:8082/
 
 ### Tests
 
@@ -50,5 +65,4 @@ Monitool itself does not come yet with unit / integration tests.
 However, most code dealing with the reporting is in the [Olap in memory](https://github.com/romain-gilliotte/olap-in-memory) companion package, which is properly unit tested.
 
 This repository is mainly for the GUI and the CRUD API.
-
 
