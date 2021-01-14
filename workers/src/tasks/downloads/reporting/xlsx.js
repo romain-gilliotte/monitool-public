@@ -19,8 +19,7 @@ async function generateReportingXlsx(io, id, projectId, periodicity) {
         _id: id,
         filename: `${project.name || 'report'}.xlsx`,
         mimeType,
-        content,
-        thumbnail: generateThumbnail(content, mimeType),
+        content
     });
 }
 
@@ -50,6 +49,7 @@ async function getWorkbook(io, project, periodicity = 'month') {
             const cube = await getQueryCube(
                 io,
                 project,
+                null,
                 formula,
                 parameters,
                 [
@@ -83,6 +83,7 @@ async function getWorkbook(io, project, periodicity = 'month') {
             const cube = await getVariableCube(
                 io,
                 project,
+                null,
                 variable.id,
                 [
                     { id: 'time', attribute: periodicity },
