@@ -1,5 +1,6 @@
-const { createPdf } = require('./pdf');
-const { createXlsx } = require('./xlsx');
+const { QuestionList } = require('tallysheet-timemachine');
+const { PaperForm } = require('tallysheet-timemachine-paper');
+const { ExcelForm } = require('tallysheet-timemachine-xlsx');
 const { generateThumbnail } = require('../../../helpers/thumbnail');
 const { InputOutput } = require('../../../io');
 
@@ -11,41 +12,38 @@ const { InputOutput } = require('../../../io');
  * @param {'portrait'|'landscape'} orientation
  */
 async function generateForm(io, id, start, end, sites, dataSource, language, orientation, format) {
-    const randomId = createRandomId(6);
+    // Build question list.
+    const ql = new QuestionList(dataSource.name, start, end, dataSource.periodicity, sites);
 
-    let content, mimeType, metadata;
-    if (format === 'pdf') {
-        const result = await createPdf(randomId, dataSource, orientation, language);
-        content = result[0];
-        mimeType = 'application/pdf';
-        metadata = { boundaries: result[1], orientation };
-    } else if (format === 'xlsx') {
-        const result = await createXlsx(randomId, start, end, sites, dataSource, language);
-        content = result[0];
-        mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-        metadata = { boundaries: result[1] };
-    } else {
+    dataSource.elements.filter(v => v.active).forEach(variable => {
+        ql.addQuestion(variable.id, variable.name, variable.distribution);
+        variable.partitions.filter(p => p.active).forEach(partition => {
+            ql.addDisagregation(variable.id, partition.id, partition.name);
+            partition.elements.filter(e => e.active).forEach(element => {
+                ql.addDisagregationElement(variable.id, partition.id, element.id, element.name);
+            })
+        });
+    });
+
+    // Generate form
+    let form = null;
+    if (format === 'pdf')
+        form = new PaperForm(ql, orientation, language);
+    else if (format === 'xlsx')
+        form = new ExcelForm(ql);
+    else
         throw new Error('Unsupported format');
-    }
 
     await io.database.collection('forms').insertOne({
         _id: id,
         dataSourceId: dataSource.id,
-        randomId,
+        randomId: form.id,
         filename: `${dataSource.name || 'data-source'}.${format}`,
-        mimeType,
-        content,
-        thumbnail: await generateThumbnail(content, mimeType),
-        ...metadata,
+        mimeType: form.mimeType,
+        content: form.generateOutput(),
+        thumbnail: await generateThumbnail(content, form.mimeType),
+        metadata: await form.generateMetadata(),
     });
-}
-
-function createRandomId(length) {
-    const bytes = Buffer.alloc(length);
-    for (let i = 0; i < length; ++i) {
-        bytes[i] = 256 * Math.random();
-    }
-    return bytes;
 }
 
 module.exports = { generateForm };
