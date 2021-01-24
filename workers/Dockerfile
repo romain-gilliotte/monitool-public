@@ -99,7 +99,9 @@ RUN apk --no-cache add \
     openblas \
     # gm
     graphicsmagick \
-    ghostscript
+    ghostscript \
+    # thumbnails
+    libreoffice
 
 COPY --from=build /app /app
 
