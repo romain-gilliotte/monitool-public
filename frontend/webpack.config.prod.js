@@ -1,8 +1,10 @@
 const zopfli = require('@gfx/zopfli');
 const CompressionPlugin = require('compression-webpack-plugin');
-const config = require('./webpack.config.base');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const CopyPlugin = require('copy-webpack-plugin');
+const path = require('path');
 const webpack = require('webpack');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const config = require('./webpack.config.base');
 
 module.exports = {
     ...config,
@@ -10,13 +12,17 @@ module.exports = {
     plugins: [
         ...config.plugins,
 
+        new CopyPlugin({
+            patterns: [{ from: path.resolve('../presentation') }],
+        }),
+
         new webpack.DefinePlugin({
             SERVICE_URL: '"/api"',
             IS_PRODUCTION: true,
         }),
 
         new CompressionPlugin({
-            filename: '[name].gz[query]',
+            filename: '[file].gz[query]',
             minRatio: 0.8,
             algorithm: zopfli.gzip,
             compressionOptions: {
@@ -25,7 +31,7 @@ module.exports = {
         }),
 
         new CompressionPlugin({
-            filename: '[name].br[query]',
+            filename: '[file].br[query]',
             minRatio: 0.8,
             algorithm: 'brotliCompress',
         }),
