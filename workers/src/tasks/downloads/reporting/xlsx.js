@@ -3,7 +3,6 @@ const { ObjectId } = require('mongodb');
 const { TimeDimension } = require('olap-in-memory');
 const { getVariableCube } = require('../../reporting/loader/cube-variable');
 const { getQueryCube } = require('../../reporting/loader/cube-query');
-const { generateThumbnail } = require('../../../helpers/thumbnail');
 
 const mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
@@ -19,7 +18,7 @@ async function generateReportingXlsx(io, id, projectId, periodicity) {
         _id: id,
         filename: `${project.name || 'report'}.xlsx`,
         mimeType,
-        content
+        content,
     });
 }
 
