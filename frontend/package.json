@@ -1,7 +1,7 @@
 {
-  "name": "monitool-angularjs-client",
+  "name": "monitool-frontend",
   "description": "AngularJS client for Monitool API",
-  "version": "2.7.0",
+  "version": "0.0.0-development",
   "license": "GPL-3.0+",
   "private": true,
   "dependencies": {

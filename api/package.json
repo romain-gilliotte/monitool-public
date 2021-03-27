@@ -1,7 +1,7 @@
 {
-  "name": "monitool",
+  "name": "monitool-api",
   "description": "Indicator monitoring application",
-  "version": "2.7.0",
+  "version": "0.0.0-development",
   "repository": "git@github.com:romain-gilliotte/monitool.git",
   "license": "GPL-3.0+",
   "private": true,
