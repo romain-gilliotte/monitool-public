@@ -2,7 +2,7 @@
 # Build stage
 ###################################
 
-FROM node:12-alpine as build
+FROM node:14-alpine as build
 
 WORKDIR /app
 ENV LANG=C.UTF-8
@@ -89,7 +89,7 @@ COPY data data
 # Production stage
 ###################################
 
-FROM node:12-alpine
+FROM node:14-alpine
 
 WORKDIR /app
 
