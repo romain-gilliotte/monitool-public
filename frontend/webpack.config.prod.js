@@ -13,7 +13,7 @@ module.exports = {
         ...config.plugins,
 
         new CopyPlugin({
-            patterns: [{ from: path.resolve('../presentation') }],
+            patterns: [{ from: path.resolve('./static') }],
         }),
 
         new webpack.DefinePlugin({

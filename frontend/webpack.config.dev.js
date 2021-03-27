@@ -9,7 +9,7 @@ module.exports = {
     devtool: 'source-map',
 
     devServer: {
-        contentBase: path.resolve('../presentation'),
+        contentBase: path.resolve('./static'),
         port: 8080,
         compress: false,
         disableHostCheck: true,
