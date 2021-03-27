@@ -1,0 +1,24 @@
+name: Create Semantic Release
+on:
+  push:
+    branches:
+      - master
+jobs:
+  sematic_release:
+    name: Semantic Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: '${{ secrets.PERSONAL_ACCESS_TOKEN }}'
+          fetch-depth: 0
+      - run: npm install semantic-release@17 semantic-release-monorepo@7
+      - run: cd api && ../node_modules/.bin/semantic-release -e semantic-release-monorepo
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - run: cd workers && ../node_modules/.bin/semantic-release -e semantic-release-monorepo
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - run: cd frontend && ../node_modules/.bin/semantic-release -e semantic-release-monorepo
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}

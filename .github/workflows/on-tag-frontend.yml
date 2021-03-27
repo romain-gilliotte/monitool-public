@@ -1,0 +1,24 @@
+name: Deploy Frontend
+on:
+  push:
+    tags: ['monitool-frontend**']
+jobs:
+  publish_frontend:
+    name: Publish frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@master
+        with:
+          node-version: 14
+      - run: cd frontend && npm ci && npm run build && cd -
+      - uses: burnett01/rsync-deployments@22f8d1ffe807551ba75eba6a450c3d577690249f
+        with:
+          switches: -avzr --delete
+          path: frontend/dist/
+          remote_path: ~/monitool-deployment/data/nginx/
+          remote_host: monitool.org
+          remote_user: eloims
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
