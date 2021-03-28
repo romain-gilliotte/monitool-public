@@ -18,6 +18,10 @@ tr[tr-data] {
         &:hover {
             color: #555;
         }
+
+        &.active {
+            color: black;
+        }
     }
 
     .row-baseline,
