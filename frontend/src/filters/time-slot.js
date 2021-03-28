@@ -6,7 +6,7 @@ const module = angular.module(__moduleName, []);
 module.filter('formatSlot', function ($rootScope) {
     return function (slotValue) {
         try {
-            return new TimeSlot(slotValue).humanizeValue($rootScope.language);
+            return TimeSlot.fromValue(slotValue, true).humanizeValue($rootScope.language);
         } catch (e) {
             return slotValue;
         }
@@ -30,7 +30,7 @@ module.filter('formatSlotRange', function ($filter) {
 
     return function (slotValue, start, end) {
         try {
-            const slot = new TimeSlot(slotValue);
+            const slot = TimeSlot.fromValue(slotValue, true);
             const startDate = getStart(slot, start);
             const endDate = getEnd(slot, end);
 
