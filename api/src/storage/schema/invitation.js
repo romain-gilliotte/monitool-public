@@ -6,7 +6,7 @@ module.exports = {
     properties: {
         projectId: {
             type: 'string',
-            match: '^[0-9a-z]{24}$',
+            pattern: '^[0-9a-z]{24}$',
         },
         email: {
             type: 'string',

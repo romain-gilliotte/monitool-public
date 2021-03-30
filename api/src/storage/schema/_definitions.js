@@ -25,7 +25,8 @@ module.exports = {
                         range: {
                             type: 'array',
                             uniqueItems: true,
-                            additionalItems: false,
+                            minItems: 2,
+                            maxItems: 2,
                             items: [
                                 { oneOf: [{ type: 'null' }, { $ref: '#/definitions/timeslot' }] },
                                 { oneOf: [{ type: 'null' }, { $ref: '#/definitions/timeslot' }] },

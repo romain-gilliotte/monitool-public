@@ -1,11 +1,17 @@
 const Ajv = require('ajv');
+const addFormats = require('ajv-formats');
 
 module.exports = name => {
-    let schemaFn = new Ajv().compile(require(`../storage/schema/${name}`));
+    const ajv = new Ajv();
+    addFormats(ajv);
+
+    let schemaFn = ajv.compile(require(`../storage/schema/${name}`));
     let customFn;
     try {
         customFn = require(`../storage/validator/${name}`);
-    } catch (e) {}
+    } catch (e) {
+        customFn = () => [];
+    }
 
     return async (ctx, next) => {
         const schemaPassed = schemaFn(ctx.request.body);
@@ -15,13 +21,11 @@ module.exports = name => {
             return;
         }
 
-        if (customFn) {
-            const errors = customFn(ctx.request.body);
-            if (errors.length) {
-                ctx.response.status = 400;
-                ctx.response.body = errors;
-                return;
-            }
+        const errors = customFn(ctx.request.body);
+        if (errors.length) {
+            ctx.response.status = 400;
+            ctx.response.body = errors;
+            return;
         }
 
         await next();
@@ -30,8 +34,10 @@ module.exports = name => {
 
 function formatAjvErrors(errors) {
     return errors.map(error => {
-        let path = error.dataPath;
-        if (error.keyword === 'additionalProperties') path += `.${error.params.additionalProperty}`;
+        let path = error.instancePath;
+        if (error.keyword === 'additionalProperties') {
+            path += `.${error.params.additionalProperty}`;
+        }
 
         return { path: path, code: error.keyword, message: error.message };
     });

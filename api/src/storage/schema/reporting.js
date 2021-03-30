@@ -14,7 +14,7 @@ module.exports = {
         },
         formula: {
             type: 'string',
-            match: '^[-\\(\\)\\|+*/_ 0-9a-z]+$',
+            pattern: '^[-\\(\\)\\|+*/_ 0-9a-z]+$',
         },
         parameters: {
             type: 'object',
