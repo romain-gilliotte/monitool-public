@@ -12,10 +12,7 @@ module.exports = {
             type: ['null', 'string'],
             pattern: '^[0-9a-f]{8}$',
         },
-        formula: {
-            type: 'string',
-            pattern: '^[-\\(\\)\\|+*/_ 0-9a-z]+$',
-        },
+        formula: { $ref: '#/definitions/formula' },
         parameters: {
             type: 'object',
             additionalProperties: false,

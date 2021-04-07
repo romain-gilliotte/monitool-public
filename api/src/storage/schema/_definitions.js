@@ -143,6 +143,10 @@ module.exports = {
             },
         },
     },
+    formula: {
+        type: 'string',
+        minLength: 1,
+    },
     computation: {
         oneOf: [
             {
@@ -150,10 +154,7 @@ module.exports = {
                 additionalProperties: false,
                 required: ['formula', 'parameters'],
                 properties: {
-                    formula: {
-                        type: 'string',
-                        minLength: 1,
-                    },
+                    formula: { $ref: '#/definitions/formula' },
                     parameters: {
                         type: 'object',
                         additionalProperties: false,
