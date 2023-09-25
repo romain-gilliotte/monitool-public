@@ -1,4 +1,4 @@
-const cv = require('opencv4nodejs');
+const cv = require('@u4/opencv4nodejs');
 
 /**
  * Use Edge detection to find something white-ish, square-ish and using at least 30% of the pixels.

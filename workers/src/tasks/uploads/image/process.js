@@ -1,4 +1,4 @@
-const cv = require('opencv4nodejs');
+const cv = require('@u4/opencv4nodejs');
 const { findArucoMarkers } = require('./landmarks/aruco');
 const { getPageContour } = require('./landmarks/page-contours');
 const { findQrCode } = require('./landmarks/qr-code');

@@ -36,7 +36,6 @@ The application depends on external processes which can be started from the dock
 
 -   MongoDB for storage (needs to be started in replica set mode)
 -   Redis for cache and work queues
--   UnoConv for thumbnailing
 
 Start them with `docker-compose up`.
 
@@ -67,3 +66,8 @@ Monitool itself does not come yet with unit / integration tests.
 However, most code dealing with the reporting is in the [Olap in memory](https://github.com/romain-gilliotte/olap-in-memory) companion package, which is properly unit tested.
 
 This repository is mainly for the GUI and the CRUD API.
+
+Notes:
+
+-   node 14
+-   node-gyp/git/cmake/build-essentials for opencv

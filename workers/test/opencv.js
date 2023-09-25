@@ -1,4 +1,4 @@
-const cv = require('opencv4nodejs');
+const cv = require('@u4/opencv4nodejs');
 const { findQrCode, reprojectFromCode } = require('../src/tasks/data-entry/cv/extract-context');
 const {
     extractPage,

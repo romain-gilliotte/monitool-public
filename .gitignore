@@ -41,3 +41,4 @@ docs
 dist
 *.log
 .env
+*/replica.key

@@ -9,8 +9,10 @@ services:
             MONGO_INITDB_ROOT_USERNAME: admin
             MONGO_INITDB_ROOT_PASSWORD: admin
         volumes:
+            - ./_setup/mongodb/rs-initiate.js:/docker-entrypoint-initdb.d/rs-initiate.js
+            - ./_setup/mongodb/replica.key:/data/replica.key
             - mongo_data:/data/db
-        command: --replSet rs0
+        command: --replSet rs0 --bind_ip_all --keyFile /data/replica.key
 
     redis:
         image: redis
@@ -24,6 +26,7 @@ services:
         environment:
             ME_CONFIG_MONGODB_ADMINUSERNAME: admin
             ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+            ME_CONFIG_MONGODB_URL: mongodb://admin:admin@mongo:27017/
 
     redis-commander:
         image: rediscommander/redis-commander
