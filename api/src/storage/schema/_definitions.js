@@ -24,7 +24,6 @@ module.exports = {
                         attribute: { $ref: '#/definitions/dimensionAttribute' },
                         range: {
                             type: 'array',
-                            uniqueItems: true,
                             minItems: 2,
                             maxItems: 2,
                             items: [
