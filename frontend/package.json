@@ -2,6 +2,7 @@
   "name": "monitool-frontend",
   "description": "AngularJS client for Monitool API",
   "version": "0.0.0-development",
+  "repository": "git@github.com:romain-gilliotte/monitool-public.git",
   "license": "GPL-3.0+",
   "private": true,
   "dependencies": {
