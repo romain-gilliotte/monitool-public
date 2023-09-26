@@ -16,7 +16,6 @@ COPY package.json package-lock.json ./
 RUN npm ci --only=production
 
 # Install opencv
-RUN apk --no-cache add 
 RUN npx build-opencv --binDir=/usr/bin/ --incDir /usr/include/opencv4/ --libDir /usr/lib/ --nobuild rebuild
 
 COPY src src
