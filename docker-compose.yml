@@ -9,7 +9,6 @@ services:
             MONGO_INITDB_ROOT_USERNAME: admin
             MONGO_INITDB_ROOT_PASSWORD: admin
         volumes:
-            - ./_setup/mongodb/rs-initiate.js:/docker-entrypoint-initdb.d/rs-initiate.js
             - ./_setup/mongodb/replica.key:/data/replica.key
             - mongo_data:/data/db
         command: --replSet rs0 --bind_ip_all --keyFile /data/replica.key

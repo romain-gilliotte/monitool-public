@@ -127,12 +127,19 @@ function greatestCommonDivisor(attr1, attr2) {
     }
 
     const periods = [
-        ['day', 'month_week_sat', 'week_sat', 'month', 'quarter', 'semester', 'year', 'all'],
-        ['day', 'month_week_sun', 'week_sun', 'month', 'quarter', 'semester', 'year', 'all'],
-        ['day', 'month_week_mon', 'week_mon', 'month', 'quarter', 'semester', 'year', 'all'],
+        ['day', 'month_week_sat', 'month', 'quarter', 'semester', 'year', 'all'],
+        ['day', 'month_week_sun', 'month', 'quarter', 'semester', 'year', 'all'],
+        ['day', 'month_week_mon', 'month', 'quarter', 'semester', 'year', 'all'],
+
+        // This next line should be ['day', 'month_week_mon', 'week_sat', 'all']
+        // but the interpolation system in olap-in-memory divides equally between
+        // sub-entries.
+        ['day', 'week_sat', 'all'],
+        ['day', 'week_sun', 'all'],
+        ['day', 'week_mon', 'all'],
     ];
 
-    for (let i = 0; i < 3; ++i) {
+    for (let i = 0; i < periods.length; ++i) {
         const index1 = periods[i].indexOf(attr1);
         const index2 = periods[i].indexOf(attr2);
         if (index1 !== -1 && index2 !== -1) {
