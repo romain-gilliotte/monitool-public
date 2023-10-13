@@ -65,7 +65,7 @@ module.component(__componentName, {
             }
 
             const periods = [];
-            while (current.value > start.value) {
+            while (current.value >= start.value) {
                 periods.push(current.value);
                 current = current.previous();
             }
