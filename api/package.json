@@ -39,5 +39,8 @@
     "start": "nodemon --unhandled-rejections=strict --inspect src/main.js",
     "serve": "node src/main.js",
     "test": "NODE_ENV=test mocha"
+  },
+  "volta": {
+    "node": "16.20.2"
   }
 }
