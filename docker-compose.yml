@@ -19,6 +19,8 @@ services:
             - '6379:6379'
 
     mongo-express:
+        depends_on:
+            - mongo
         image: mongo-express
         ports:
             - '8081:8081'
