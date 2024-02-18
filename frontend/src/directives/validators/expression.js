@@ -11,8 +11,8 @@ module.directive('expression', () => ({
 
         controller.$validators.expression = function (value) {
             try {
-                getParser().parse(value);
-                return true;
+                const expr = getParser().parse(value);
+                return expr.variables().length > 0;
             } catch (e) {
                 return false;
             }

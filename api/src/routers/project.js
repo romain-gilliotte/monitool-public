@@ -4,6 +4,7 @@ const jiff = require('jiff');
 const Router = require('@koa/router');
 const ObjectId = require('mongodb').ObjectID;
 const JSONStream = require('JSONStream');
+const formatAjvErrors = require('../utils/format-ajv-errors');
 const validateBody = require('../middlewares/validate-body');
 const { listProjects, getProject } = require('../storage/queries/project');
 const { listProjectInvitations } = require('../storage/queries/invitations');
@@ -129,49 +130,66 @@ router.get('/project/:id/user', async ctx => {
     }
 });
 
-router.get('/project/:id/report/:query([-_=a-z0-9]+)', async ctx => {
-    const projectId = ctx.params.id;
-    if (!(await ctx.state.profile.isInvitedTo(projectId))) {
-        ctx.response.status = 404;
-        return;
-    }
-
-    // use object-hash!
-    const sha1 = crypto.createHash('sha1').update(ctx.params.query).digest('hex');
-    let result = await ctx.io.redis.hget(`reporting:${projectId}`, sha1);
-    if (!result) {
+router.get(
+    '/project/:id/report/:query([-_=a-z0-9]+)',
+    async (ctx, next) => {
+        let queryAsBase64, queryAsString, queryAsJson;
         try {
-            // Decode and validate query
-            const ajv = new Ajv();
-            const b64query = ctx.params.query.replace('-', '+').replace('_', '/');
-            const query = JSON.parse(Buffer.from(b64query, 'base64').toString());
-            if (!ajv.validate(reportingSchema, query)) {
-                throw new Error('validation failed');
-            }
+            queryAsBase64 = ctx.params.query.replace('-', '+').replace('_', '/');
+            queryAsString = Buffer.from(queryAsBase64, 'base64').toString();
+            queryAsJson = JSON.parse(queryAsString);
+        } catch {
+            ctx.throw(400, 'Query cannot be decoded from base64');
+        }
 
-            // Submit reporting job to workers
-            const jobParams = { ...query, projectId };
-            const job = await ctx.io.queue.add('compute-report', jobParams, {
-                attempts: 1,
-                removeOnComplete: true,
-            });
-            result = await job.finished();
-
-            // Update cache
-            await ctx.io.redis.hset(`reporting:${projectId}`, sha1, result);
-        } catch (e) {
+        const ajv = new Ajv();
+        if (!ajv.validate(reportingSchema, queryAsJson)) {
             ctx.response.status = 400;
+            ctx.response.body = formatAjvErrors(ajv.errors);
+        } else {
+            ctx.state.query = queryAsJson;
+            await next();
+        }
+    },
+    async ctx => {
+        // Check if user is invited to project
+        const projectId = ctx.params.id;
+        if (!(await ctx.state.profile.isInvitedTo(projectId))) {
+            ctx.response.status = 404;
             return;
         }
-    }
 
-    const { payload, mimeType, filename } = JSON.parse(result);
-    ctx.response.body = Buffer.from(payload, 'base64');
-    ctx.response.type = mimeType;
-    ctx.response.set('content-encoding', 'gzip');
-    if (filename) {
-        ctx.response.attachment(filename, { type: 'inline' });
+        // Either fetch report from cache or compute it
+        const sha1 = crypto.createHash('sha1').update(ctx.params.query).digest('hex');
+        let result = await ctx.io.redis.hget(`reporting:${projectId}`, sha1);
+        if (!result) {
+            try {
+                // Submit reporting job to workers
+                const query = ctx.state.query;
+                const jobParams = { ...query, projectId };
+                const job = await ctx.io.queue.add('compute-report', jobParams, {
+                    attempts: 1,
+                    removeOnComplete: true,
+                });
+                result = await job.finished();
+
+                // Update cache
+                await ctx.io.redis.hset(`reporting:${projectId}`, sha1, result);
+            } catch (e) {
+                ctx.throw(400, e.message);
+                return;
+            }
+        }
+
+        // Send report to client
+        const { payload, mimeType, filename } = JSON.parse(result);
+        ctx.response.body = Buffer.from(payload, 'base64');
+        ctx.response.type = mimeType;
+        ctx.response.set('content-encoding', 'gzip');
+        if (filename) {
+            ctx.response.attachment(filename, { type: 'inline' });
+        }
     }
-});
+);
 
 module.exports = router;

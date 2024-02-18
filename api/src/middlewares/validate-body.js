@@ -1,5 +1,6 @@
 const Ajv = require('ajv');
 const addFormats = require('ajv-formats');
+const formatAjvErrors = require('../utils/format-ajv-errors');
 
 module.exports = name => {
     const ajv = new Ajv();
@@ -31,14 +32,3 @@ module.exports = name => {
         await next();
     };
 };
-
-function formatAjvErrors(errors) {
-    return errors.map(error => {
-        let path = error.instancePath;
-        if (error.keyword === 'additionalProperties') {
-            path += `.${error.params.additionalProperty}`;
-        }
-
-        return { path: path, code: error.keyword, message: error.message };
-    });
-}
