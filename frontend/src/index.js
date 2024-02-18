@@ -11,8 +11,8 @@ async function authenticate() {
     }));
 
     // Handle callback
-    const query = window.location.search;
-    if (query.includes('code=') && query.includes('state=')) {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('code') && urlParams.has('state')) {
         // Process the login state
         await auth0.handleRedirectCallback();
 

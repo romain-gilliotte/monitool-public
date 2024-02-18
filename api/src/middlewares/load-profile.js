@@ -66,10 +66,20 @@ async function createUser(ctx) {
             const token =
                 ctx.request.header.authorization || ctx.cookies.get('monitool_access_token');
             const profile = await auth0Client.getProfile(token);
-            if (!profile.email)
+            if (!profile.email) {
                 throw new Error(
-                    'When loading your profile from your identity provider, we could not find your email address. Please contact support.'
+                    'When loading your profile from your identity provider, we could not find your email address. ' +
+                        'Please contact support.'
                 );
+            }
+
+            if (!profile.email_verified) {
+                throw new Error(
+                    'Your email address is not verified. ' +
+                        'Please verify your email address before accessing monitool. ' +
+                        'You should have received an email from us with a link to verify your email address. '
+                );
+            }
 
             user = await collection.findOne({ _id: profile.email });
             if (user) {

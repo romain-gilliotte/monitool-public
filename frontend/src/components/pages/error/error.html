@@ -1,13 +1,9 @@
 <div class="panel panel-danger">
     <div class="panel-heading">
-      <h3 class="panel-title">A critical error has occurred</h3>
+      <h3 class="panel-title">An error has occurred</h3>
     </div>
     <div class="panel-body">
-        <p>
-            {{$ctrl.message}}
-        </p>
-        <p>
-            <a ng-click="$ctrl.logout()">Back to homepage</a>
-        </p>
+        <p>{{$ctrl.message}}</p>
+        <p><a ng-click="$ctrl.logout()">Back to homepage</a></p>
     </div>
   </div>
