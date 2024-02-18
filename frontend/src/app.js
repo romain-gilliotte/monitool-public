@@ -24,7 +24,7 @@ module.config(function ($compileProvider) {
 });
 
 // Hook angular-ui-router transitions.
-module.run(function ($window, $transitions) {
+module.run(function ($window, $state, $transitions) {
     $transitions.onBefore({}, function (transition) {});
 
     // Scroll to top when changing page.
@@ -34,7 +34,17 @@ module.run(function ($window, $transitions) {
 
     $transitions.onError({}, function (transition) {
         const error = transition.error();
-        console.log(error);
+
+        // error might be a rejected promise or an error object
+        Promise.reject(error).catch(e => {
+            // If the error is an axios error, show the message from the server.
+            const message =
+                e.detail.isAxiosError && e.detail?.response?.data?.message
+                    ? e.detail?.response?.data?.message
+                    : String(e.detail);
+
+            $state.go('error', { message });
+        });
     });
 });
 

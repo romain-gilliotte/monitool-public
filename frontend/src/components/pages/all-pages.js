@@ -1,5 +1,7 @@
 import angular from 'angular';
 
+import error from './error/error';
+
 import mainMenu from './main-menu/main-menu';
 import mainProjectList from './main-list/project-list';
 import mainInvitations from './main-invitations/main-invitations';
@@ -32,6 +34,7 @@ import reportingOlap from './reporting-olap/olap-reporting';
 import miscDownloads from './misc-downloads/downloads';
 
 const module = angular.module(__moduleName, [
+    error,
     mainMenu,
     mainProjectList,
     mainInvitations,

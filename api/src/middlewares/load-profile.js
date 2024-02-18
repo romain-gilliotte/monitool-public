@@ -58,40 +58,47 @@ async function createUser(ctx) {
     const collection = ctx.io.database.collection('user');
     const lock = await ctx.io.redisLock.lock(`profile:${subcriber}`, 10000);
 
-    // Search user again, now that we own the lock.
-    let user = await collection.findOne({ subs: subcriber });
-    if (!user) {
-        // User was not found from the subcriber id
-        const token = ctx.request.header.authorization || ctx.cookies.get('monitool_access_token');
-        const profile = await auth0Client.getProfile(token);
+    try {
+        // Search user again, now that we own the lock.
+        let user = await collection.findOne({ subs: subcriber });
+        if (!user) {
+            // User was not found from the subcriber id
+            const token =
+                ctx.request.header.authorization || ctx.cookies.get('monitool_access_token');
+            const profile = await auth0Client.getProfile(token);
+            if (!profile.email)
+                throw new Error(
+                    'When loading your profile from your identity provider, we could not find your email address. Please contact support.'
+                );
 
-        user = await collection.findOne({ _id: profile.email });
-        if (user) {
-            // User logged with a new identity provider
-            user.subs.push(subcriber);
-            collection.updateOne({ _id: user._id }, { $addToSet: { subs: subcriber } });
-        } else {
-            // User is new: we wait for the insertion before releasing the lock.
-            user = {
-                _id: profile.email,
-                name: profile.name,
-                picture: profile.picture,
-                subs: [subcriber],
-                lastSeen: new Date(),
-            };
+            user = await collection.findOne({ _id: profile.email });
+            if (user) {
+                // User logged with a new identity provider
+                user.subs.push(subcriber);
+                collection.updateOne({ _id: user._id }, { $addToSet: { subs: subcriber } });
+            } else {
+                // User is new: we wait for the insertion before releasing the lock.
+                user = {
+                    _id: profile.email,
+                    name: profile.name,
+                    picture: profile.picture,
+                    subs: [subcriber],
+                    lastSeen: new Date(),
+                };
 
-            // insert test project _first_, so that other parallel queries
-            // don't find the user, and also get stuck on the shared lock.
-            await insertDemoProject(ctx.io, profile.email);
+                // insert test project _first_, so that other parallel queries
+                // don't find the user, and also get stuck on the shared lock.
+                await insertDemoProject(ctx.io, profile.email);
 
-            // One this is done, other queries won't try to get the lock
-            // Default retry in redlock is 200ms + 200ms * Math.random()
-            await collection.insertOne(user);
+                // One this is done, other queries won't try to get the lock
+                // Default retry in redlock is 200ms + 200ms * Math.random()
+                await collection.insertOne(user);
+            }
         }
+    } finally {
+        // Unlock access to this user (no waiting).
+        lock.unlock().catch(e => {});
     }
-
-    // Unlock access to this user (no waiting).
-    lock.unlock().catch(e => {});
 
     return user;
 }
