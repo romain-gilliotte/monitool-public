@@ -23,6 +23,10 @@ module.component(__componentName, {
         constructor() {
             'ngInject';
         }
+
+        logout() {
+            window.auth0.logout({ returnTo: window.location.origin });
+        }
     },
 });
 
