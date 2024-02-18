@@ -1,8 +1,9 @@
 import angular from 'angular';
 import { getParser } from 'olap-in-memory';
 import mtPartitionFilter from './partition-filter';
+import mtExpression from '../../../directives/validators/expression';
 
-const module = angular.module(__moduleName, [mtPartitionFilter]);
+const module = angular.module(__moduleName, [mtPartitionFilter, mtExpression]);
 
 const PERCENTAGE_FORMULA = '100 * numerator / denominator';
 const PERMILLE_FORMULA = '1000 * numerator / denominator';

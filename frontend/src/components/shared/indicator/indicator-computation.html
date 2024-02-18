@@ -6,18 +6,6 @@
     <option value="formula" translate="project.computations.formula"></option>
 </select>
 
-<input
-    type="text"
-    class="form-control"
-    ng-if="$ctrl.computation.type === 'fixed'"
-    style="margin-top: 3px;"
-    ng-model="$ctrl.computation.formula"
-    ng-change="$ctrl.onOtherChange()"
-    ng-pattern="'\\d+'"
-    required
-    placeholder="{{'project.indicator_ph_fixed'|translate}}"
-/>
-
 <p class="help-block">
     <i class="fa fa-info-circle"></i>
     <span translate="project.indicator_help_computation"></span>
