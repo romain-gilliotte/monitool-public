@@ -47,7 +47,7 @@ router.post('/project/:id/input', validateBody('input'), async ctx => {
             accepted: true,
         });
 
-        if (project.owner === email || verifyInvitation(invitation, ctx.request.body)) {
+        if (project.owner === email || verifyInvitation(project, invitation, ctx.request.body)) {
             const input = {
                 sequenceId: await getCurrentSequenceId(ctx.io, ctx.params.id),
                 author: email,
@@ -100,7 +100,7 @@ router.put('/project/:projectId/input/:id', validateBody('input'), async ctx => 
     }
 });
 
-function verifyInvitation(invitation, input) {
+function verifyInvitation(project, invitation, input) {
     return (
         invitation &&
         input.content.every(content => {
