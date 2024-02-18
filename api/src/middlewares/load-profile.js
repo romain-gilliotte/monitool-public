@@ -95,12 +95,12 @@ async function createUser(ctx) {
                 await collection.insertOne(user);
             }
         }
+
+        return user;
     } finally {
         // Unlock access to this user (no waiting).
         lock.unlock().catch(e => {});
     }
-
-    return user;
 }
 
 class Profile {
