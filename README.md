@@ -71,3 +71,6 @@ Notes:
 
 -   node 14
 -   node-gyp/git/cmake/build-essentials for opencv
+
+install opencv with apt and then run
+`npx build-opencv --nobuild rebuild`
