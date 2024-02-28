@@ -6,7 +6,7 @@ const { InputOutput } = require('./io');
 const { initDownloads } = require('./tasks/downloads');
 const { initReporting } = require('./tasks/reporting');
 const { initUploads } = require('./tasks/uploads');
-const { initDummy } = require('./tasks/dummy');
+const { initHealthCheck } = require('./tasks/health');
 
 winston.add(new winston.transports.Console());
 
@@ -22,7 +22,7 @@ async function start() {
     const io = new InputOutput();
     await io.connect();
 
-    initDummy(io);
+    initHealthCheck(io);
     initDownloads(io);
     initReporting(io);
     initUploads(io);
