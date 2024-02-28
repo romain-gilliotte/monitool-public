@@ -36,7 +36,7 @@ router.get('/health/workers', async ctx => {
     try {
         await Promise.race([
             ctx.io.queue
-                .add('health-check', {}, { attempts: 1, removeOnComplete: true, timeout: 5000 })
+                .add('health-check', {}, { attempts: 1, removeOnComplete: true })
                 .then(job => job.finished()),
             new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000)),
         ]);

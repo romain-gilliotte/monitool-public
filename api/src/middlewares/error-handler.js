@@ -12,6 +12,6 @@ module.exports = async (ctx, next) => {
             stack: config.debug ? error.stack : '🤫',
         };
 
-        winston.log('warn', error.message, { stack: error.stack });
+        winston.log('warn', error.message, { stack: error.stack, route: ctx.url });
     }
 };
