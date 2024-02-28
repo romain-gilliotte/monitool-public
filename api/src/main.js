@@ -27,6 +27,7 @@ async function start() {
     app.use(responseTime());
     app.use(bodyParser({ enableTypes: ['json'] }));
     app.use(require('./middlewares/error-handler'));
+    app.use(require('./routers/health').routes());
     app.use(require('./middlewares/load-profile'));
     app.use(require('./routers/downloads').routes());
     app.use(require('./routers/invitations').routes());
