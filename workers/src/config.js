@@ -41,10 +41,6 @@ const config = {
     redis: {
         uri: readEnv('MONITOOL_REDIS_URI'),
     },
-
-    unoconv: {
-        uri: readEnv('MONITOOL_UNOCONV_URI', null),
-    },
 };
 
 if (!success) {
