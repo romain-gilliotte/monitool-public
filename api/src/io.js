@@ -11,7 +11,7 @@ class InputOutput {
             poolSize: 50,
         });
 
-        this.redis = new Redis(config.redis.uri);
+        this.redis = new Redis(config.redis.uri, { showFriendlyErrorStack: true });
         this.redisLock = new Redlock([this.redis]);
         this.queue = new Bull('workers', config.redis.uri);
 

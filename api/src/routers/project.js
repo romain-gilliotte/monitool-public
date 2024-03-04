@@ -174,6 +174,7 @@ router.get(
                 result = await job.finished();
 
                 // Update cache
+                // FIXME missing ttl
                 await ctx.io.redis.hset(`reporting:${projectId}`, sha1, result);
             } catch (e) {
                 ctx.throw(400, e.message);
