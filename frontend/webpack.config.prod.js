@@ -1,5 +1,3 @@
-const zopfli = require('@gfx/zopfli');
-const CompressionPlugin = require('compression-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
@@ -19,21 +17,6 @@ module.exports = {
         new webpack.DefinePlugin({
             SERVICE_URL: '"/api"',
             IS_PRODUCTION: true,
-        }),
-
-        new CompressionPlugin({
-            filename: '[file].gz[query]',
-            minRatio: 0.8,
-            algorithm: zopfli.gzip,
-            compressionOptions: {
-                numiterations: 15,
-            },
-        }),
-
-        new CompressionPlugin({
-            filename: '[file].br[query]',
-            minRatio: 0.8,
-            algorithm: 'brotliCompress',
         }),
 
         new BundleAnalyzerPlugin({
