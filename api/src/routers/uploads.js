@@ -11,18 +11,20 @@ const router = new Router();
 
 router.get('/project/:id/upload', async ctx => {
     const collection = ctx.io.database.collection('input_upload');
+    const filter = { projectId: new ObjectId(ctx.params.id) };
+    const projection = { 'original.data': 0, 'thumbnail.data': 0, 'processed.data': 0 };
+    const forms = collection.find(
+        { ...filter, status: { $nin: ['done', 'hidden'] } },
+        { projection, sort: [['_id', -1]] }
+    );
 
-    if (ctx.request.accepts('application/json')) {
-        const filter = { projectId: new ObjectId(ctx.params.id) };
-        const projection = { 'original.data': 0, 'thumbnail.data': 0, 'processed.data': 0 };
-        const forms = collection.find(
-            { ...filter, status: { $nin: ['done', 'hidden'] } },
-            { projection, sort: [['_id', -1]] }
-        );
+    ctx.response.type = 'application/json';
+    ctx.response.body = forms.pipe(JSONStream.stringify());
+});
 
-        ctx.response.type = 'application/json';
-        ctx.response.body = forms.pipe(JSONStream.stringify());
-    } else if (ctx.request.accepts('text/event-stream')) {
+router.post('/project/:id/upload-sse', async ctx => {
+    const collection = ctx.io.database.collection('input_upload');
+    if (ctx.request.accepts('text/event-stream')) {
         const options = { batchSize: 1, fullDocument: 'updateLookup' };
         const wpipeline = [
             { $match: { 'fullDocument.projectId': new ObjectId(ctx.params.id) } },

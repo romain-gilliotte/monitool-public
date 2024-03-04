@@ -3,6 +3,7 @@ import angular from 'angular';
 import axios from 'axios';
 import dropzone from './dropzone';
 import upload from './upload';
+import { SSE } from 'sse.js';
 require(__scssPath);
 
 const module = angular.module(__moduleName, [uiRouter, dropzone, upload]);
@@ -41,7 +42,9 @@ module.component(__componentName, {
         }
 
         $onChanges() {
-            this.eventSource = new EventSource(`/api/project/${this.project._id}/upload`);
+            this.eventSource = new SSE(`/api/project/${this.project._id}/upload-sse`, {
+                method: 'POST',
+            });
             this.eventSource.onmessage = this.onMessage.bind(this);
         }
 
