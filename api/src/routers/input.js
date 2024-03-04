@@ -5,11 +5,12 @@ const JSONStream = require('JSONStream');
 const validateBody = require('../middlewares/validate-body');
 const { getProject } = require('../storage/queries/project');
 const { getSequenceIds, getCurrentSequenceId } = require('../storage/queries/input');
+const isInvited = require('../middlewares/is-invited');
 
 const router = new Router();
 
-router.get('/project/:id/input', async ctx => {
-    const filter = { sequenceId: { $in: await getSequenceIds(ctx.io, ctx.params.id) } };
+router.get('/project/:projectId/input', isInvited, async ctx => {
+    const filter = { sequenceId: { $in: await getSequenceIds(ctx.io, ctx.params.projectId) } };
     if (ctx.query.cursor) {
         filter._id = { $lt: new ObjectId(ctx.query.cursor) };
     }
@@ -24,23 +25,23 @@ router.get('/project/:id/input', async ctx => {
     ctx.response.body = inputs.pipe(JSONStream.stringify());
 });
 
-router.get('/project/:projectId/input/:id', async ctx => {
+router.get('/project/:projectId/input/:inputId', isInvited, async ctx => {
     ctx.response.body = await ctx.io.database.collection('input').findOne(
         {
-            _id: new ObjectId(ctx.params.id),
+            _id: new ObjectId(ctx.params.inputId),
             sequenceId: { $in: await getSequenceIds(ctx.io, ctx.params.projectId) },
         },
         { projection: { sequenceId: 0 } }
     );
 });
 
-router.post('/project/:id/input', validateBody('input'), async ctx => {
+router.post('/project/:projectId/input', validateBody('input'), async ctx => {
     const inputs = ctx.io.database.collection('input');
     const invitations = ctx.io.database.collection('invitation');
     const email = ctx.state.profile.email;
 
     try {
-        const project = await getProject(ctx.io, email, ctx.params.id);
+        const project = await getProject(ctx.io, email, ctx.params.projectId);
         const invitation = await invitations.findOne({
             projectId: project._id,
             email,
@@ -49,7 +50,7 @@ router.post('/project/:id/input', validateBody('input'), async ctx => {
 
         if (project.owner === email || verifyInvitation(project, invitation, ctx.request.body)) {
             const input = {
-                sequenceId: await getCurrentSequenceId(ctx.io, ctx.params.id),
+                sequenceId: await getCurrentSequenceId(ctx.io, ctx.params.projectId),
                 author: email,
                 content: ctx.request.body.content.map(c => ({
                     variableId: c.variableId,
@@ -73,11 +74,11 @@ router.post('/project/:id/input', validateBody('input'), async ctx => {
     }
 });
 
-router.put('/project/:projectId/input/:id', validateBody('input'), async ctx => {
+router.put('/project/:projectId/input/:inputId', validateBody('input'), async ctx => {
     const inputs = ctx.io.database.collection('input');
 
     try {
-        const input = await inputs.findOne({ _id: new ObjectId(ctx.params.id) });
+        const input = await inputs.findOne({ _id: new ObjectId(ctx.params.inputId) });
         const age = new Date() - input._id.getTimestamp();
 
         // The author can edit for 1 hour
@@ -89,6 +90,7 @@ router.put('/project/:projectId/input/:id', validateBody('input'), async ctx => 
 
             ctx.io.redis.del(`reporting:${ctx.params.projectId}`); // reporting cache
 
+            delete input.sequenceId;
             ctx.response.body = { ...input, content: ctx.request.body.content };
         } else {
             throw new Error('forbidden');

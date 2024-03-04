@@ -9,7 +9,7 @@ router.post('/rpc/clone-project', async ctx => {
         // Load old project
         const oldProject = await ctx.io.database.collection('project').findOne({
             _id: new ObjectId(ctx.request.body.projectId),
-            $or: [{ owner: ctx.state.profile.email }, { 'users.email': ctx.state.profile.email }],
+            owner: ctx.state.profile.email,
         });
 
         if (!oldProject) throw new Error('Not found');

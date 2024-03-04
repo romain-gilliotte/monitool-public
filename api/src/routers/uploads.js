@@ -1,17 +1,16 @@
 const { Hash } = require('crypto');
-const { readFile } = require('fs');
-const { promisify } = require('util');
 const Router = require('@koa/router');
 const multer = require('@koa/multer');
 const { ObjectId } = require('mongodb');
 const JSONStream = require('JSONStream');
 const { Transform, pipeline } = require('stream');
+const isInvited = require('../middlewares/is-invited');
 
 const router = new Router();
 
-router.get('/project/:id/upload', async ctx => {
+router.get('/project/:projectId/upload', isInvited, async ctx => {
     const collection = ctx.io.database.collection('input_upload');
-    const filter = { projectId: new ObjectId(ctx.params.id) };
+    const filter = { projectId: new ObjectId(ctx.params.projectId) };
     const projection = { 'original.data': 0, 'thumbnail.data': 0, 'processed.data': 0 };
     const forms = collection.find(
         { ...filter, status: { $nin: ['done', 'hidden'] } },
@@ -22,12 +21,12 @@ router.get('/project/:id/upload', async ctx => {
     ctx.response.body = forms.pipe(JSONStream.stringify());
 });
 
-router.post('/project/:id/upload-sse', async ctx => {
+router.post('/project/:projectId/upload-sse', isInvited, async ctx => {
     const collection = ctx.io.database.collection('input_upload');
     if (ctx.request.accepts('text/event-stream')) {
         const options = { batchSize: 1, fullDocument: 'updateLookup' };
         const wpipeline = [
-            { $match: { 'fullDocument.projectId': new ObjectId(ctx.params.id) } },
+            { $match: { 'fullDocument.projectId': new ObjectId(ctx.params.projectId) } },
             {
                 $project: {
                     'fullDocument.original.data': 0,
@@ -51,10 +50,15 @@ router.post('/project/:id/upload-sse', async ctx => {
     }
 });
 
-router.get('/project/:id/upload-history', async ctx => {
+router.get('/project/:projectId/upload-history', isInvited, async ctx => {
+    if (!(await ctx.state.profile.isInvitedTo(ctx.params.projectId))) {
+        ctx.response.status = 404;
+        return;
+    }
+
     const collection = ctx.io.database.collection('input_upload');
     const projection = { 'original.data': 0, 'thumbnail.data': 0, 'processed.data': 0 };
-    const filter = { projectId: new ObjectId(ctx.params.id), status: 'done' };
+    const filter = { projectId: new ObjectId(ctx.params.projectId), status: 'done' };
     if (ctx.query.before) {
         filter._id = { $lt: new ObjectId(ctx.query.before) };
     }
@@ -69,33 +73,43 @@ router.get('/project/:id/upload-history', async ctx => {
     ctx.response.body = forms.pipe(JSONStream.stringify());
 });
 
-router.get('/project/:projectId/upload/:id', async ctx => {
+router.get('/project/:projectId/upload/:uploadId', isInvited, async ctx => {
     ctx.response.body = await ctx.io.database
         .collection('input_upload')
         .findOne(
-            { _id: new ObjectId(ctx.params.id), projectId: new ObjectId(ctx.params.projectId) },
+            {
+                _id: new ObjectId(ctx.params.uploadId),
+                projectId: new ObjectId(ctx.params.projectId),
+            },
             { projection: { 'original.data': 0, 'thumbnail.data': 0, 'processed.data': 0 } }
         );
 });
 
-router.get('/project/:projectId/upload/:id/:name(original|processed|thumbnail)', async ctx => {
-    const upload = await ctx.io.database
-        .collection('input_upload')
-        .findOne(
-            { _id: new ObjectId(ctx.params.id), projectId: new ObjectId(ctx.params.projectId) },
-            { [ctx.params.name]: 1 }
-        );
+router.get(
+    '/project/:projectId/upload/:uploadId/:name(original|processed|thumbnail)',
+    isInvited,
+    async ctx => {
+        const upload = await ctx.io.database
+            .collection('input_upload')
+            .findOne(
+                {
+                    _id: new ObjectId(ctx.params.uploadId),
+                    projectId: new ObjectId(ctx.params.projectId),
+                },
+                { [ctx.params.name]: 1 }
+            );
 
-    if (upload[ctx.params.name]) {
-        ctx.response.type = upload[ctx.params.name].mimeType;
-        ctx.response.body = upload[ctx.params.name].data.buffer;
-        if (upload[ctx.params.name].name) {
-            ctx.response.attachment(upload[ctx.params.name].name, { type: 'inline' });
+        if (upload[ctx.params.name]) {
+            ctx.response.type = upload[ctx.params.name].mimeType;
+            ctx.response.body = upload[ctx.params.name].data.buffer;
+            if (upload[ctx.params.name].name) {
+                ctx.response.attachment(upload[ctx.params.name].name, { type: 'inline' });
+            }
         }
     }
-});
+);
 
-router.post('/project/:projectId/upload', multer().single('file'), async ctx => {
+router.post('/project/:projectId/upload', multer().single('file'), isInvited, async ctx => {
     const file = ctx.request.file;
 
     try {
@@ -125,10 +139,10 @@ router.post('/project/:projectId/upload', multer().single('file'), async ctx => 
     ctx.response.status = 204;
 });
 
-router.patch('/project/:projectId/upload/:id', async ctx => {
+router.patch('/project/:projectId/upload/:uploadId', isInvited, async ctx => {
     await ctx.io.database.collection('input_upload').updateOne(
         {
-            _id: new ObjectId(ctx.params.id),
+            _id: new ObjectId(ctx.params.uploadId),
             projectId: new ObjectId(ctx.params.projectId),
         },
         { $set: { status: 'done' } }
@@ -137,9 +151,9 @@ router.patch('/project/:projectId/upload/:id', async ctx => {
     ctx.response.status = 204;
 });
 
-router.delete('/project/:projectId/upload/:id', async ctx => {
+router.delete('/project/:projectId/upload/:uploadId', isInvited, async ctx => {
     await ctx.io.database.collection('input_upload').deleteOne({
-        _id: new ObjectId(ctx.params.id),
+        _id: new ObjectId(ctx.params.uploadId),
         projectId: new ObjectId(ctx.params.projectId),
     });
 

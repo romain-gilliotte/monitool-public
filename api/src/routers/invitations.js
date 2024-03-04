@@ -31,8 +31,8 @@ router.post('/invitation', validateBody('invitation'), async ctx => {
 });
 
 // modifie / accepte une invitation
-router.put('/invitation/:id', validateBody('invitation'), async ctx => {
-    const oldIvt = await getInvitation(ctx.io, ctx.state.profile.email, ctx.params.id);
+router.put('/invitation/:invitationId', validateBody('invitation'), async ctx => {
+    const oldIvt = await getInvitation(ctx.io, ctx.state.profile.email, ctx.params.invitationId);
     const newIvt = {
         ...ctx.request.body,
         projectId: new ObjectId(ctx.request.body.projectId),
@@ -54,8 +54,8 @@ router.put('/invitation/:id', validateBody('invitation'), async ctx => {
 });
 
 // refuse une invitation ou deinvite un utilisateur
-router.delete('/invitation/:id', async ctx => {
-    const oldIvt = await getInvitation(ctx.state.profile.email, ctx.params.id);
+router.delete('/invitation/:invitationId', async ctx => {
+    const oldIvt = await getInvitation(ctx.state.profile.email, ctx.params.invitationId);
 
     if (oldIvt) {
         await ctx.io.database.collection('invitation').deleteOne({ _id: oldIvt._id });

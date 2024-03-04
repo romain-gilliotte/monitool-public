@@ -9,6 +9,7 @@ const validateBody = require('../middlewares/validate-body');
 const { listProjects, getProject } = require('../storage/queries/project');
 const { listProjectInvitations } = require('../storage/queries/invitations');
 const reportingSchema = require('../storage/schema/reporting');
+const isInvited = require('../middlewares/is-invited');
 
 const router = new Router();
 
@@ -22,9 +23,9 @@ router.get('/project', async ctx => {
 /**
  * Retrieve one project
  */
-router.get('/project/:id', async ctx => {
+router.get('/project/:projectId', async ctx => {
     try {
-        ctx.response.body = await getProject(ctx.io, ctx.state.profile.email, ctx.params.id);
+        ctx.response.body = await getProject(ctx.io, ctx.state.profile.email, ctx.params.projectId);
     } catch (e) {
         if (e.message === 'not found' || /must be .* 24 hex characters/.test(e.message)) {
             ctx.response.status = 404;
@@ -52,11 +53,11 @@ router.post('/project', validateBody('project'), async ctx => {
 /**
  * Save an existing project
  */
-router.put('/project/:id', validateBody('project'), async ctx => {
+router.put('/project/:projectId', validateBody('project'), async ctx => {
     const newProject = ctx.request.body;
 
     // Update ctx.io.database and fetch previous version.
-    const filter = { _id: new ObjectId(ctx.params.id), owner: ctx.state.profile.email };
+    const filter = { _id: new ObjectId(ctx.params.projectId), owner: ctx.state.profile.email };
     const projection = { projection: { _id: false } };
     const { value: oldProject } = await ctx.io.database
         .collection('project')
@@ -69,7 +70,7 @@ router.put('/project/:id', validateBody('project'), async ctx => {
 
     // Insert patch in ctx.io.database.
     await ctx.io.database.collection('revision').insertOne({
-        projectId: new ObjectId(ctx.params.id),
+        projectId: new ObjectId(ctx.params.projectId),
         user: ctx.state.profile.email,
         time: new Date(),
         backwards: jiff.diff(newProject, oldProject, {
@@ -79,18 +80,18 @@ router.put('/project/:id', validateBody('project'), async ctx => {
     });
 
     // Clear reporting cache
-    ctx.io.redis.del(`reporting:${ctx.params.id}`);
+    ctx.io.redis.del(`reporting:${ctx.params.projectId}`);
 
-    ctx.response.body = { _id: ctx.params.id, ...newProject };
+    ctx.response.body = { _id: ctx.params.projectId, ...newProject };
 });
 
 /**
  * Retrieve project revisions
  */
-router.get('/project/:id/revisions', async ctx => {
-    if (await ctx.state.profile.isOwnerOf(ctx.params.id)) {
+router.get('/project/:projectId/revisions', async ctx => {
+    if (await ctx.state.profile.isOwnerOf(ctx.params.projectId)) {
         const revisions = ctx.io.database.collection('revision').find(
-            { projectId: new ObjectId(ctx.params.id) },
+            { projectId: new ObjectId(ctx.params.projectId) },
             {
                 skip: +ctx.request.query.offset || 0,
                 limit: +ctx.request.query.limit || 10,
@@ -106,20 +107,26 @@ router.get('/project/:id/revisions', async ctx => {
 
 // liste les invitations du projet
 // si pas owner, ne contiendra que celle de l'utilisateur.
-router.get('/project/:id/invitation', async ctx => {
-    const invitations = listProjectInvitations(ctx.io, ctx.state.profile.email, ctx.params.id);
+router.get('/project/:projectId/invitation', async ctx => {
+    const invitations = listProjectInvitations(
+        ctx.io,
+        ctx.state.profile.email,
+        ctx.params.projectId
+    );
 
     ctx.response.type = 'application/json';
     ctx.response.body = invitations.pipe(JSONStream.stringify());
 });
 
-router.get('/project/:id/user', async ctx => {
-    const project = await getProject(ctx.io, ctx.state.profile.email, ctx.params.id, { owner: 1 });
+router.get('/project/:projectId/user', async ctx => {
+    const project = await getProject(ctx.io, ctx.state.profile.email, ctx.params.projectId, {
+        owner: 1,
+    });
 
     if (project) {
         const invitations = await ctx.io.database
             .collection('invitation')
-            .find({ projectId: new ObjectId(ctx.params.id), accepted: true }, { email: 1 })
+            .find({ projectId: new ObjectId(ctx.params.projectId), accepted: true }, { email: 1 })
             .toArray();
 
         const emails = [project.owner, ...invitations.map(i => i.email)];
@@ -131,7 +138,8 @@ router.get('/project/:id/user', async ctx => {
 });
 
 router.get(
-    '/project/:id/report/:query([-_=a-z0-9]+)',
+    '/project/:projectId/report/:query([-_=a-z0-9]+)',
+    isInvited,
     async (ctx, next) => {
         let queryAsBase64, queryAsString, queryAsJson;
         try {
@@ -152,12 +160,7 @@ router.get(
         }
     },
     async ctx => {
-        // Check if user is invited to project
-        const projectId = ctx.params.id;
-        if (!(await ctx.state.profile.isInvitedTo(projectId))) {
-            ctx.response.status = 404;
-            return;
-        }
+        const { projectId } = ctx.params;
 
         // Either fetch report from cache or compute it
         const sha1 = crypto.createHash('sha1').update(ctx.params.query).digest('hex');
