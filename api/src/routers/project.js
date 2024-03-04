@@ -172,7 +172,7 @@ router.get(
                 const jobParams = { ...query, projectId };
                 const job = await ctx.io.queue.add('compute-report', jobParams, {
                     attempts: 1,
-                    removeOnComplete: true,
+                    removeOnComplete: false,
                 });
                 result = await job.finished();
 

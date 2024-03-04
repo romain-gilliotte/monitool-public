@@ -140,7 +140,7 @@ async function sendFile(ctx, thumbnail, jobName, jobParams, invalidationParams =
             { id: fileId, ...jobParams },
             {
                 attempts: 1,
-                removeOnComplete: true,
+                removeOnComplete: false,
             }
         );
         await job.finished();
