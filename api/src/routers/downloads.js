@@ -144,6 +144,7 @@ async function sendFile(ctx, thumbnail, jobName, jobParams, invalidationParams =
             }
         );
         await job.finished();
+        await job.remove();
 
         form = await forms.findOne({ _id: fileId });
         if (!form) throw new Error('not found');

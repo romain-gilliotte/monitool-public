@@ -109,9 +109,9 @@
                 ng-if="$ctrl.contentByVariableId"
                 ng-repeat="variable in ::$ctrl.variables track by variable.id"
             >
-                <label class="col-sm-2 control-label">{{::variable.name}}</label>
+                <label class="col-sm-3 control-label">{{::variable.name}}</label>
 
-                <div class="col-sm-10">
+                <div class="col-sm-9">
                     <image-scroll
                         ng-if="::$ctrl.upload && $ctrl.upload.processed.regions[variable.id]"
                         class="img-thumbnail"

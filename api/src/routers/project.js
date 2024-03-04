@@ -175,6 +175,7 @@ router.get(
                     removeOnComplete: false,
                 });
                 result = await job.finished();
+                await job.remove();
 
                 // Update cache
                 // FIXME missing ttl
