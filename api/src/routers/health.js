@@ -36,7 +36,7 @@ router.get('/health/workers', async ctx => {
     try {
         await Promise.race([
             (async () => {
-                const job = ctx.io.queue.add(
+                const job = await ctx.io.queue.add(
                     'health-check',
                     {},
                     { attempts: 1, removeOnComplete: false }
