@@ -10,8 +10,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
           fetch-depth: 0
       - run: npm install semantic-release@17 semantic-release-monorepo@7
       - run: cd api && ../node_modules/.bin/semantic-release -e semantic-release-monorepo
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: cd workers && ../node_modules/.bin/semantic-release -e semantic-release-monorepo
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: cd frontend && ../node_modules/.bin/semantic-release -e semantic-release-monorepo
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
