@@ -29,7 +29,7 @@ It is close to completion (check remaining issues).
 
 If you already have VS Code and Docker installed, you can click the badge above or [here](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/romain-gilliotte/monitool-public) to get started. Clicking these links will cause VS Code to automatically install the Dev Containers extension if needed, clone the source code into a container volume, and spin up a dev container for use.
 
-Spining the dev container may be a bit slow the first time, as it will download the necessary images and build opencv4nodejs.
+Spining the dev container will take a long time the first time, as it will build opencv4nodejs.
 
 - Monitool should be reachable at http://localhost:8080
 - Mongo Express at http://localhost:8081/

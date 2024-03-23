@@ -4,5 +4,5 @@ To start the application you may start three shells in the VS Code terminal and 
 
     cd api && npm run start
     cd workers && npm run start
-    cd frontend && npm run start
+    cd frontend && nvm use 14 && npm run start
 

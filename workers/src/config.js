@@ -1,7 +1,5 @@
 const fs = require('fs');
 
-require('dotenv').config();
-
 let success = true;
 
 const toBool = function (str) {
