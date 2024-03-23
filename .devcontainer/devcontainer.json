@@ -22,15 +22,16 @@
     "MONITOOL_AUDIENCE": "https://api.monitool.org",
     "MONITOOL_ISSUER": "https://monitool.eu.auth0.com/",
     "MONITOOL_REDIS_URI": "redis://127.0.0.1:6379/0",
-    "MONITOOL_MONGO_URI": "mongodb://admin:admin@localhost:27017",
+    "MONITOOL_MONGO_URI": "mongodb://localhost:27017",
     "MONITOOL_MONGO_DB": "monitool"
   },
   "postCreateCommand": {
+    "init_replicaset": "mongosh --eval \"rs.initiate({_id: 'rs0', members: [{_id:1, host:'localhost:27017'}]})\" || true",
     "install_api": "bash -i -c 'cd api && npm install'",
     "install_frontend": "bash -i -c 'cd frontend && npm install'",
-    "install_workers": "bash -i -c 'cd workers && nvm use 14 && npm install'"
-    // npx build-opencv --nobuild rebuild
+    "install_workers": "bash -i -c 'cd workers && nvm use 14 && npm install && npx build-opencv --nobuild rebuild'"
   },
+  "postStartCommand": "cat .devcontainer/banner.txt",
   "customizations": {
     "vscode": {
       "extensions": ["esbenp.prettier-vscode"],
