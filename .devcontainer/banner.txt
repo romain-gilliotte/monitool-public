@@ -1,0 +1,8 @@
+Your dev container is ready to go!
+
+To start the application you may start three shells in the VS Code terminal and run:
+
+    cd api && npm run start
+    cd workers && npm run start
+    cd frontend && npm run start
+
