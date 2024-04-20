@@ -31,7 +31,6 @@
     "install_frontend": "bash -i -c 'cd frontend && npm install'",
     "install_workers": "bash -i -c 'cd workers && nvm use 14 && npm install && npx build-opencv --nobuild rebuild'"
   },
-  "postStartCommand": "cat .devcontainer/banner.txt",
   "customizations": {
     "vscode": {
       "extensions": ["esbenp.prettier-vscode"],

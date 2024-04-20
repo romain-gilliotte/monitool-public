@@ -1,0 +1,54 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // See https://code.visualstudio.com/docs/editor/tasks-appendix
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run API",
+      "type": "shell",
+      "command": "npm run start",
+      "options": { "cwd": "${workspaceFolder}/api" },
+      "isBackground": true, // removes the infinite spinner
+      "problemMatcher": [],
+      "presentation": {
+        "group": "main_tasks",
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Run Workers",
+      "type": "shell",
+      "command": "bash -ic 'nvm use 14 && npm run start'",
+      "options": { "cwd": "${workspaceFolder}/workers" },
+      "isBackground": true, // removes the infinite spinner
+      "problemMatcher": [],
+      "presentation": {
+        "group": "main_tasks",
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Run Frontend",
+      "type": "shell",
+      "command": "npm run start",
+      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "isBackground": true, // removes the infinite spinner
+      "problemMatcher": [],
+      "presentation": {
+        "group": "main_tasks",
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "Start Monitool",
+      "dependsOn": ["Run API", "Run Workers", "Run Frontend"],
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
