@@ -9,6 +9,11 @@
             <th></th>
         </tr>
     </thead>
+    <tbody ng-if="$ctrl.rows.length == 0 && $ctrl.infiniteScrollDisabled">
+        <tr>
+            <td colspan="6" translate="project.revision_none"></td>
+        </tr>
+    </tbody>
     <tbody
         infinite-scroll="$ctrl.loadMore()"
         infinite-scroll-distance="1"

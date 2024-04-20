@@ -3,6 +3,11 @@ log {
     height: 100%;
     overflow: auto;
 
+
+    td[colspan='6'] {
+        text-align: center;
+    }
+
     .table-bordered {
         border-collapse: separate; /* Don't collapse */
         border-spacing: 0;
