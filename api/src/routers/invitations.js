@@ -55,7 +55,7 @@ router.put('/invitation/:invitationId', validateBody('invitation'), async ctx =>
 
 // refuse une invitation ou deinvite un utilisateur
 router.delete('/invitation/:invitationId', async ctx => {
-    const oldIvt = await getInvitation(ctx.state.profile.email, ctx.params.invitationId);
+    const oldIvt = await getInvitation(ctx.io, ctx.state.profile.email, ctx.params.invitationId);
 
     if (oldIvt) {
         await ctx.io.database.collection('invitation').deleteOne({ _id: oldIvt._id });
