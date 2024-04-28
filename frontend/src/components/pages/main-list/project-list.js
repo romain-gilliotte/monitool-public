@@ -11,208 +11,200 @@ require(__scssPath);
 const module = angular.module(__moduleName, [uiDropdown, uiRouter, mtColumnsPanel, mtHelpPopup]);
 
 module.config($stateProvider => {
-    $stateProvider.state('main.projects', {
-        url: '/projects',
-        component: __componentName,
-        resolve: {
-            lastInputDate: async () => {
-                const response = await axios.get('/rpc/get-last-inputs');
-                return response.data;
-            },
-        },
-    });
+  $stateProvider.state('main.projects', {
+    url: '/projects',
+    component: __componentName,
+    resolve: {
+      lastInputDate: async () => {
+        const response = await axios.get('/rpc/get-last-inputs');
+        return response.data;
+      },
+    },
+  });
 });
 
 module.component(__componentName, {
-    bindings: {
-        projects: '<',
-        lastInputDate: '<',
-    },
+  bindings: {
+    projects: '<',
+    lastInputDate: '<',
+  },
 
-    template: require(__templatePath),
+  template: require(__templatePath),
 
-    controller: class {
-        constructor($filter, $rootScope, $scope, $state, $uibModal, $window) {
-            'ngInject';
+  controller: class {
+    constructor($filter, $rootScope, $scope, $state, $uibModal, $window) {
+      'ngInject';
 
-            this.translate = $filter('translate');
-            this.userEmail = $rootScope.profile.email;
-            this.$scope = $scope;
-            this.$state = $state;
-            this.$uibModal = $uibModal;
-            this.$window = $window;
+      this.translate = $filter('translate');
+      this.userEmail = $rootScope.profile.email;
+      this.$scope = $scope;
+      this.$state = $state;
+      this.$uibModal = $uibModal;
+      this.$window = $window;
 
-            this.displayOngoing = true;
-            this.displayFinished = true;
-            this.displayArchived = false;
+      this.displayOngoing = true;
+      this.displayFinished = true;
+      this.displayArchived = false;
+    }
+
+    $onInit() {
+      const hasSeenHelp = window.localStorage.getItem('help_disclaimer_shown_new');
+      if (!hasSeenHelp) {
+        window.localStorage.setItem('help_disclaimer_shown_new', 'true');
+
+        this.$uibModal
+          .open({ component: 'helpPopup', size: 'xlg', backdrop: true })
+          .result.catch(e => {});
+      }
+    }
+
+    $onChanges(changes) {
+      this.displayedProjects = this.projects.slice();
+      this.numOngoingProjects = this.numFinishedProjects = this.numArchivedProjects = 0;
+
+      this.displayedProjects.forEach(p => {
+        p.running = p.end > new Date().toISOString().slice(0, 10);
+        p.favorite = !!localStorage['favorites::projects::' + p._id];
+
+        if (!p.active) {
+          p.variant = 'archived';
+          this.numArchivedProjects++;
+        } else if (!p.running) {
+          p.variant = 'dashed';
+          this.numFinishedProjects++;
+        } else {
+          p.variant = 'default';
+          this.numOngoingProjects++;
+        }
+      });
+
+      this.displayedProjects = this.displayedProjects.filter(p => {
+        const search = diacritics.remove(p.country + '//' + p.name || '').toLowerCase();
+        const needle = diacritics.remove(this.filterValue || '').toLowerCase();
+
+        const matchSearch = search.includes(needle);
+        const matchOngoing = this.displayOngoing && p.running && p.active;
+        const matchFinished = this.displayFinished && !p.running && p.active;
+        const matchArchived = this.displayArchived && !p.active;
+
+        return matchSearch && (matchOngoing || matchFinished || matchArchived);
+      });
+
+      this.displayedProjects.sort((p1, p2) => {
+        const p1f = [p1.favorite, p1.country || 'zzz', p1.name, p1.end];
+        const p2f = [p2.favorite, p2.country || 'zzz', p2.name, p2.end];
+
+        for (let i = 0; i < p1f.length; ++i) {
+          if (typeof p1f[i] == 'boolean' && p1f[i] !== p2f[i]) return p1f[i] ? -1 : 1;
+
+          if (typeof p1f[i] == 'string' && p1f[i] !== p2f[i]) return p1f[i].localeCompare(p2f[i]);
         }
 
-        $onInit() {
-            const hasSeenHelp = window.localStorage.getItem('help_disclaimer_shown');
-            if (!hasSeenHelp) {
-                window.localStorage.setItem('help_disclaimer_shown', 'true');
+        return 0;
+      });
+    }
 
-                this.$uibModal
-                    .open({ component: 'helpPopup' })
-                    .result.catch(e => {})
-                    .then(() => {
-                        const node = document.querySelector('help-panel');
-                        node.classList.add('locked');
-                        setTimeout(() => node.classList.remove('locked'), 3000);
-                    });
-            }
-        }
+    filter() {
+      this.$onChanges();
+    }
 
-        $onChanges(changes) {
-            this.displayedProjects = this.projects.slice();
-            this.numOngoingProjects = this.numFinishedProjects = this.numArchivedProjects = 0;
+    showAll() {
+      this.filterValue = '';
+      this.displayOngoing = true;
+      this.displayFinished = true;
+      this.displayArchived = true;
+      this.$onChanges();
+    }
 
-            this.displayedProjects.forEach(p => {
-                p.running = p.end > new Date().toISOString().slice(0, 10);
-                p.favorite = !!localStorage['favorites::projects::' + p._id];
+    toggleOngoing() {
+      this.displayOngoing = !this.displayOngoing;
+      this.$onChanges();
+    }
 
-                if (!p.active) {
-                    p.variant = 'archived';
-                    this.numArchivedProjects++;
-                } else if (!p.running) {
-                    p.variant = 'dashed';
-                    this.numFinishedProjects++;
-                } else {
-                    p.variant = 'default';
-                    this.numOngoingProjects++;
-                }
-            });
+    toggleFinished() {
+      this.displayFinished = !this.displayFinished;
+      this.$onChanges();
+    }
 
-            this.displayedProjects = this.displayedProjects.filter(p => {
-                const search = diacritics.remove(p.country + '//' + p.name || '').toLowerCase();
-                const needle = diacritics.remove(this.filterValue || '').toLowerCase();
+    toggleArchived() {
+      this.displayArchived = !this.displayArchived;
+      this.$onChanges();
+    }
 
-                const matchSearch = search.includes(needle);
-                const matchOngoing = this.displayOngoing && p.running && p.active;
-                const matchFinished = this.displayFinished && !p.running && p.active;
-                const matchArchived = this.displayArchived && !p.active;
+    toggleFavorite(p) {
+      const lsKey = 'favorites::projects::' + p._id;
 
-                return matchSearch && (matchOngoing || matchFinished || matchArchived);
-            });
+      if (localStorage[lsKey]) delete localStorage[lsKey];
+      else localStorage[lsKey] = 'yes';
 
-            this.displayedProjects.sort((p1, p2) => {
-                const p1f = [p1.favorite, p1.country || 'zzz', p1.name, p1.end];
-                const p2f = [p2.favorite, p2.country || 'zzz', p2.name, p2.end];
+      this.$onChanges();
+      this.$window.scrollTo(0, 0);
+    }
 
-                for (let i = 0; i < p1f.length; ++i) {
-                    if (typeof p1f[i] == 'boolean' && p1f[i] !== p2f[i]) return p1f[i] ? -1 : 1;
+    createProject() {
+      this.$state.go('project.config.home', { projectId: 'new' });
+    }
 
-                    if (typeof p1f[i] == 'string' && p1f[i] !== p2f[i])
-                        return p1f[i].localeCompare(p2f[i]);
-                }
+    async unInvite(project) {
+      var question = this.translate('project.are_you_sure_to_uninvite');
 
-                return 0;
-            });
-        }
+      if (window.confirm(question)) {
+        this.projects.splice(this.projects.indexOf(project), 1);
+        this.$onChanges();
 
-        filter() {
-            this.$onChanges();
-        }
+        const response = await axios.get(`/project/${project._id}/invitation`);
+        const invitationId = response.data[0]._id;
+        await axios.delete(`/invitation/${invitationId}`);
+      }
+    }
 
-        showAll() {
-            this.filterValue = '';
-            this.displayOngoing = true;
-            this.displayFinished = true;
-            this.displayArchived = true;
-            this.$onChanges();
-        }
+    async onCloneClicked(project, withInputs) {
+      const response = await axios.post('/rpc/clone-project', {
+        projectId: project._id,
+        withInputs,
+      });
+      const newProject = response.data;
 
-        toggleOngoing() {
-            this.displayOngoing = !this.displayOngoing;
-            this.$onChanges();
-        }
+      this.projects.push(newProject);
+      this.lastInputDate[newProject._id] = withInputs ? this.lastInputDate[project._id] : null;
 
-        toggleFinished() {
-            this.displayFinished = !this.displayFinished;
-            this.$onChanges();
-        }
+      this.$onChanges();
+      this.$scope.$apply();
+      this.$window.scrollTo(0, 0);
+    }
 
-        toggleArchived() {
-            this.displayArchived = !this.displayArchived;
-            this.$onChanges();
-        }
+    async onArchiveClicked(shortProject) {
+      const project = await Project.get(shortProject._id);
+      project.active = false;
 
-        toggleFavorite(p) {
-            const lsKey = 'favorites::projects::' + p._id;
+      try {
+        await project.save();
 
-            if (localStorage[lsKey]) delete localStorage[lsKey];
-            else localStorage[lsKey] = 'yes';
+        this.projects = await Project.fetchAll();
+        this.$onChanges();
+        this.$scope.$apply();
+      } catch (error) {
+        // Display message to tell user that it's not possible to save.
+        alert(this.translate('project.saving_failed'));
+      }
+    }
 
-            this.$onChanges();
-            this.$window.scrollTo(0, 0);
-        }
+    async onRestoreClicked(shortProject) {
+      const project = await Project.get(shortProject._id);
+      project.active = true;
 
-        createProject() {
-            this.$state.go('project.config.home', { projectId: 'new' });
-        }
+      try {
+        await project.save();
 
-        async unInvite(project) {
-            var question = this.translate('project.are_you_sure_to_uninvite');
-
-            if (window.confirm(question)) {
-                this.projects.splice(this.projects.indexOf(project), 1);
-                this.$onChanges();
-
-                const response = await axios.get(`/project/${project._id}/invitation`);
-                const invitationId = response.data[0]._id;
-                await axios.delete(`/invitation/${invitationId}`);
-            }
-        }
-
-        async onCloneClicked(project, withInputs) {
-            const response = await axios.post('/rpc/clone-project', {
-                projectId: project._id,
-                withInputs,
-            });
-            const newProject = response.data;
-
-            this.projects.push(newProject);
-            this.lastInputDate[newProject._id] = withInputs
-                ? this.lastInputDate[project._id]
-                : null;
-
-            this.$onChanges();
-            this.$scope.$apply();
-            this.$window.scrollTo(0, 0);
-        }
-
-        async onArchiveClicked(shortProject) {
-            const project = await Project.get(shortProject._id);
-            project.active = false;
-
-            try {
-                await project.save();
-
-                this.projects = await Project.fetchAll();
-                this.$onChanges();
-                this.$scope.$apply();
-            } catch (error) {
-                // Display message to tell user that it's not possible to save.
-                alert(this.translate('project.saving_failed'));
-            }
-        }
-
-        async onRestoreClicked(shortProject) {
-            const project = await Project.get(shortProject._id);
-            project.active = true;
-
-            try {
-                await project.save();
-
-                this.projects = await Project.fetchAll();
-                this.$onChanges();
-                this.$scope.$apply();
-            } catch (error) {
-                // Display message to tell user that it's not possible to save.
-                alert(this.translate('project.saving_failed'));
-            }
-        }
-    },
+        this.projects = await Project.fetchAll();
+        this.$onChanges();
+        this.$scope.$apply();
+      } catch (error) {
+        // Display message to tell user that it's not possible to save.
+        alert(this.translate('project.saving_failed'));
+      }
+    }
+  },
 });
 
 export default module.name;
