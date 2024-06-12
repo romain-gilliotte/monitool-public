@@ -99,38 +99,39 @@ module.component(__componentName, {
         }
 
         $onInit() {
+            const opts = {
+                onStart: () => document.body.classList.add('dragging'),
+                onEnd: () => document.body.classList.remove('dragging'),
+                onUpdate: this.onFieldChange.bind(this),
+                onAdd: this.onFieldChange.bind(this),
+            };
+
             // Allow purposes, outputs and indicators reordering. We need to hack around bugs
             // in current Sortable plugin implementation.
             // @see https://github.com/RubaXa/Sortable/issues/581
             // @see https://github.com/RubaXa/Sortable/issues/722
             this.purposeSortOptions = {
+                ...opts,
                 group: 'purposes',
                 handle: '.purpose-handle',
-                onUpdate: this.onFieldChange.bind(this),
-                onAdd: this.onFieldChange.bind(this),
             };
 
             this.outputSortOptions = {
+                ...opts,
                 group: 'outputs',
                 handle: '.output-handle',
-                onUpdate: this.onFieldChange.bind(this),
-                onAdd: this.onFieldChange.bind(this),
             };
 
             this.activitySortOptions = {
+                ...opts,
                 group: 'activities',
                 handle: '.activity-handle',
-                onUpdate: this.onFieldChange.bind(this),
-                onAdd: this.onFieldChange.bind(this),
             };
 
             this.indicatorsSortOptions = {
+                ...opts,
                 group: 'indicators',
                 handle: '.indicator-handle',
-                onStart: () => document.body.classList.add('dragging'),
-                onEnd: () => document.body.classList.remove('dragging'),
-                onUpdate: this.onFieldChange.bind(this),
-                onAdd: this.onFieldChange.bind(this),
             };
         }
 
