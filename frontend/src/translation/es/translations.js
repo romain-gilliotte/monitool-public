@@ -146,7 +146,7 @@ export default {
     original_file: 'Fichero original',
     load_data: 'Cargar datos',
     no_logframe_yet: 'Aún no ha creado ningún marco logico en este proyecto',
-    show_all_projects: 'Display all projects ({{count}})',
+    show_all_projects: 'Mostrar todos los proyectos ({{count}})',
     no_projects: 'No tiene ningún proyecto',
     download_portrait: 'Descargar PDF (vertical)',
     download_landscape: 'Descargar PDF (horizontal)',

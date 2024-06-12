@@ -145,7 +145,7 @@ export default {
     original_file: 'Original file',
     load_data: 'Load data',
     no_logframe_yet: 'This project does not have logical frameworks yet',
-    show_all_projects: 'Mostrar todos los proyectos',
+    show_all_projects: 'Display all projects ({{count}})',
     no_projects: "You don't have any project",
     download_portrait: 'Download PDF (Portrait)',
     download_landscape: 'Download PDF (Landscape)',
