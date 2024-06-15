@@ -33,7 +33,7 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": ["esbenp.prettier-vscode"],
+      "extensions": ["esbenp.prettier-vscode", "mongodb.mongodb-vscode"],
       "settings": {}
     }
   }

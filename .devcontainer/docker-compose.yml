@@ -19,14 +19,6 @@ services:
     image: redis
     network_mode: service:devcontainer
 
-  mongo-express:
-    image: mongo-express
-    network_mode: service:devcontainer
-    depends_on:
-      - mongo
-    environment:
-      ME_CONFIG_MONGODB_URL: mongodb://localhost:27017/
-
   redis-commander:
     image: rediscommander/redis-commander
     network_mode: service:devcontainer

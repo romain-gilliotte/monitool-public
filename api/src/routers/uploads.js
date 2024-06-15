@@ -51,11 +51,6 @@ router.post('/project/:projectId/upload-sse', isInvited, async ctx => {
 });
 
 router.get('/project/:projectId/upload-history', isInvited, async ctx => {
-    if (!(await ctx.state.profile.isInvitedTo(ctx.params.projectId))) {
-        ctx.response.status = 404;
-        return;
-    }
-
     const collection = ctx.io.database.collection('input_upload');
     const projection = { 'original.data': 0, 'thumbnail.data': 0, 'processed.data': 0 };
     const filter = { projectId: new ObjectId(ctx.params.projectId), status: 'done' };
