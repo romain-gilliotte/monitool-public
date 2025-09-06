@@ -7,33 +7,39 @@ require(__scssPath);
 const module = angular.module(__moduleName, [uiRouter]);
 
 module.config($stateProvider => {
-    $stateProvider.state('main', {
-        abstract: true,
-        component: __componentName,
-        resolve: {
-            projects: () => Project.fetchAll(),
-            invitations: async () => {
-                const response = await axios.get(`/invitation`);
-                return response.data;
-            },
-        },
-    });
+  $stateProvider.state('main', {
+    abstract: true,
+    component: __componentName,
+    resolve: {
+      projects: () => Project.fetchAll(),
+      invitations: async () => {
+        const response = await axios.get(`/invitation`);
+        return response.data;
+      },
+    },
+  });
 });
 
 module.component(__componentName, {
-    bindings: {
-        projects: '<',
-        invitations: '<',
-    },
-    template: require(__templatePath),
+  bindings: {
+    projects: '<',
+    invitations: '<',
+  },
+  template: require(__templatePath),
 
-    controller: class {
-        logout() {
-            window.auth0.logout({
-                returnTo: window.location.origin,
-            });
-        }
-    },
+  controller: class {
+    constructor($rootScope, $state, $window, AuthService) {
+      this.$rootScope = $rootScope;
+      this.$state = $state;
+      this.$window = $window;
+      this.AuthService = AuthService;
+    }
+
+    async logout() {
+      await this.AuthService.logout();
+      this.$state.go('auth.login');
+    }
+  },
 });
 
 export default module.name;

@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest",
+        "--no-sandbox",
+        "--headless",
+        "--isolated",
+        "--caps=vision,pdf,verify,tracing"
+      ]
+    }
+  }
+}

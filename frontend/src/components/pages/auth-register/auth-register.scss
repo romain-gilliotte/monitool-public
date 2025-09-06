@@ -1,0 +1,63 @@
+@import '../auth-login/auth-login.scss';
+
+.auth-container {
+    .password-strength {
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .strength-bar {
+            flex: 1;
+            height: 4px;
+            background-color: #e9ecef;
+            border-radius: 2px;
+            overflow: hidden;
+
+            .strength-fill {
+                height: 100%;
+                transition: width 0.3s ease, background-color 0.3s ease;
+                border-radius: 2px;
+
+                &.strength-weak {
+                    width: 33%;
+                    background-color: #dc3545;
+                }
+
+                &.strength-medium {
+                    width: 66%;
+                    background-color: #ffc107;
+                }
+
+                &.strength-strong {
+                    width: 100%;
+                    background-color: #28a745;
+                }
+            }
+        }
+
+        .strength-text {
+            font-size: 12px;
+            font-weight: 600;
+            min-width: 60px;
+
+            &.text-weak {
+                color: #dc3545;
+            }
+
+            &.text-medium {
+                color: #ffc107;
+            }
+
+            &.text-strong {
+                color: #28a745;
+            }
+        }
+    }
+
+    .alert.alert-success {
+        .btn {
+            margin-top: 0;
+        }
+    }
+} 
