@@ -1,4 +1,6 @@
 const { MongoClient } = require('mongodb');
+const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const config = require('../../src/config');
 
 class DatabaseHelper {
@@ -48,9 +50,6 @@ class DatabaseHelper {
     if (!this.db) {
       await this.connect();
     }
-
-    const bcrypt = require('bcrypt');
-    const crypto = require('crypto');
 
     const defaultUser = {
       _id: userData.email || 'test@example.com',

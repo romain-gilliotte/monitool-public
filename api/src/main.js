@@ -9,6 +9,17 @@ const logger = require('./utils/logger');
 const config = require('./config');
 const { InputOutput } = require('./io');
 const { passport, configurePassport } = require('./middlewares/passport-config');
+const errorHandler = require('./middlewares/error-handler');
+const healthRouter = require('./routers/health');
+const authRouter = require('./routers/auth');
+const jwtAuth = require('./middlewares/jwt-auth');
+const userRouter = require('./routers/user');
+const downloadsRouter = require('./routers/downloads');
+const invitationsRouter = require('./routers/invitations');
+const inputRouter = require('./routers/input');
+const projectRouter = require('./routers/project');
+const rpcRouter = require('./routers/rpc');
+const uploadsRouter = require('./routers/uploads');
 
 // Catch the uncaught errors that weren't wrapped in a domain or try catch statement
 process.on('uncaughtException', e => {
@@ -45,25 +56,25 @@ async function start() {
   app.use(cors({ credentials: true, origin: config.appUrl }));
   app.use(responseTime());
   app.use(bodyParser({ enableTypes: ['json'] }));
-  app.use(require('./middlewares/error-handler'));
+  app.use(errorHandler);
 
   // Initialize Passport
   app.use(passport.initialize());
   app.use(passport.session());
 
   // Public routes (no authentication required)
-  app.use(require('./routers/health').routes());
-  app.use(require('./routers/auth').routes());
+  app.use(healthRouter.routes());
+  app.use(authRouter.routes());
 
   // Protected routes (authentication required)
-  app.use(require('./middlewares/jwt-auth'));
-  app.use(require('./routers/user').routes());
-  app.use(require('./routers/downloads').routes());
-  app.use(require('./routers/invitations').routes());
-  app.use(require('./routers/input').routes());
-  app.use(require('./routers/project').routes());
-  app.use(require('./routers/rpc').routes());
-  app.use(require('./routers/uploads').routes());
+  app.use(jwtAuth);
+  app.use(userRouter.routes());
+  app.use(downloadsRouter.routes());
+  app.use(invitationsRouter.routes());
+  app.use(inputRouter.routes());
+  app.use(projectRouter.routes());
+  app.use(rpcRouter.routes());
+  app.use(uploadsRouter.routes());
 
   const server = app.listen(config.port);
   logger.info(`Listening on ${config.port}.`);

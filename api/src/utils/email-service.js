@@ -1,11 +1,11 @@
 const nodemailer = require('nodemailer');
-const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
+const ClientSES = require('@aws-sdk/client-ses');
 const logger = require('./logger');
 const config = require('../config');
 
 class EmailService {
   constructor() {
-    this.sesClient = new SESClient({
+    this.sesClient = new ClientSES.SESClient({
       region: config.aws.region || 'us-east-1',
       credentials: {
         accessKeyId: config.aws.accessKeyId,
@@ -14,7 +14,7 @@ class EmailService {
     });
 
     this.transporter = nodemailer.createTransport({
-      SES: { ses: this.sesClient, aws: require('@aws-sdk/client-ses') },
+      SES: { ses: this.sesClient, aws: ClientSES },
     });
 
     this.fromEmail = config.email.from || 'noreply@monitool.org';
