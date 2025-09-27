@@ -1,32 +1,59 @@
 const { InputOutput } = require('../src/io');
-const { updateUsersWithGravatar } = require('../src/storage/queries/user');
+const { getGravatarUrl } = require('../src/utils/gravatar-service');
+
+/**
+ * Update users without pictures to use Gravatar
+ */
+async function updateUsersWithGravatar(io) {
+  const collection = io.database.collection('user');
+
+  // Find users without pictures or with null pictures
+  const usersWithoutPictures = await collection
+    .find({
+      $or: [{ picture: null }, { picture: { $exists: false } }],
+    })
+    .toArray();
+
+  let updatedCount = 0;
+
+  for (const user of usersWithoutPictures) {
+    const gravatarUrl = getGravatarUrl(user._id, { size: 80 });
+
+    if (gravatarUrl) {
+      await collection.updateOne({ _id: user._id }, { $set: { picture: gravatarUrl } });
+      updatedCount++;
+    }
+  }
+
+  return {
+    totalUsers: usersWithoutPictures.length,
+    updatedCount,
+  };
+}
 
 async function migrateUserAvatars() {
-  console.log('Starting user avatar migration...');
-
   const io = new InputOutput();
 
   try {
     await io.connect();
-    console.log('Connected to database');
 
+    console.log('Starting user avatar migration...');
     const result = await updateUsersWithGravatar(io);
 
-    console.log('Migration completed successfully!');
-    console.log(`Found ${result.totalUsers} users without profile pictures`);
-    console.log(`Updated ${result.updatedCount} users with Gravatar URLs`);
+    console.log(`Migration completed:`);
+    console.log(`- Total users without pictures: ${result.totalUsers}`);
+    console.log(`- Users updated with Gravatar: ${result.updatedCount}`);
+    process.exit(0);
   } catch (error) {
     console.error('Migration failed:', error);
     process.exit(1);
   } finally {
     await io.disconnect();
-    console.log('Disconnected from database');
   }
 }
 
-// Run the migration if this script is executed directly
 if (require.main === module) {
   migrateUserAvatars();
 }
 
-module.exports = { migrateUserAvatars };
+module.exports = migrateUserAvatars;

@@ -20,11 +20,9 @@ module.component(__componentName, {
   },
   template: require(__templatePath),
   controller: class {
-    constructor($rootScope, $state, $window, AuthService) {
+    constructor($state, AuthService) {
       'ngInject';
-      this.$rootScope = $rootScope;
       this.$state = $state;
-      this.$window = $window;
       this.AuthService = AuthService;
     }
 

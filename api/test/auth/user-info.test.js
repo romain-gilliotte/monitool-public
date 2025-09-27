@@ -47,7 +47,7 @@ describe('User Info & Session Management', () => {
       const response = await request(authSetup.app).get('/me').expect(401);
 
       expect(response.body).to.have.property('error');
-      expect(response.body.error).to.contain('Not authenticated');
+      expect(response.body.error).to.contain('No token provided');
     });
 
     it('should reject request with invalid token', async () => {
@@ -66,7 +66,7 @@ describe('User Info & Session Management', () => {
         .expect(401);
 
       expect(response.body).to.have.property('error');
-      expect(response.body.error).to.contain('Not authenticated');
+      expect(response.body.error).to.contain('No token provided');
     });
 
     it('should reject request for unverified user', async () => {

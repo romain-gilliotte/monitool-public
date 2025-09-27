@@ -1,6 +1,7 @@
 import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
 import axios from 'axios';
+import { getPasswordStrength } from '../../../utils/password-strength.js';
 require(__scssPath);
 
 const module = angular.module(__moduleName, [uiRouter]);
@@ -26,6 +27,7 @@ module.component(__componentName, {
       this.loading = false;
       this.error = null;
       this.success = false;
+      this._passwordStrengthCache = {};
 
       if (!this.token) {
         this.error = 'Invalid or missing reset token';
@@ -83,33 +85,7 @@ module.component(__componentName, {
     }
 
     getPasswordStrength() {
-      const password = this.form.password;
-      if (!password) {
-        this._cachedPasswordStrength = null;
-        return null;
-      }
-
-      // Cache the result to prevent infinite digest loops
-      if (this._lastPassword === password && this._cachedPasswordStrength) {
-        return this._cachedPasswordStrength;
-      }
-
-      let strength = 0;
-      if (password.length >= 8) strength++;
-      if (/[a-z]/.test(password)) strength++;
-      if (/[A-Z]/.test(password)) strength++;
-      if (/[0-9]/.test(password)) strength++;
-      if (/[^A-Za-z0-9]/.test(password)) strength++;
-
-      let result;
-      if (strength <= 2) result = { level: 'weak', text: 'Weak' };
-      else if (strength <= 3) result = { level: 'medium', text: 'Medium' };
-      else result = { level: 'strong', text: 'Strong' };
-
-      // Cache the result
-      this._lastPassword = password;
-      this._cachedPasswordStrength = result;
-      return result;
+      return getPasswordStrength(this.form.password, this._passwordStrengthCache);
     }
   },
 });

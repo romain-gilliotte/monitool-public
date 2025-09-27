@@ -16,8 +16,8 @@ module.config($stateProvider => {
 module.component(__componentName, {
   template: require(__templatePath),
   controller: class {
-    constructor($rootScope, $state, $window, $timeout, AuthService) {
-      this.$rootScope = $rootScope;
+    constructor($scope, $state, $window, $timeout, AuthService) {
+      this.$scope = $scope;
       this.$state = $state;
       this.$window = $window;
       this.$timeout = $timeout;
@@ -28,7 +28,6 @@ module.component(__componentName, {
       };
       this.loading = false;
       this.error = null;
-      this.isAuth0User = false;
       this.isAuth0User = false;
     }
 
@@ -54,16 +53,16 @@ module.component(__componentName, {
 
         // Set authentication using the service
         this.AuthService.setAuthentication(response.data.token, response.data.user);
-        this.$rootScope.$evalAsync(() => {
+        this.$scope.$apply(() => {
           this.$state.go('main.projects');
         });
       } catch (error) {
-        this.$rootScope.$evalAsync(() => {
+        this.$scope.$apply(() => {
           this.error = error.response?.data?.error || 'Login failed';
           this.isAuth0User = error.response?.data?.isAuth0User || false;
         });
       } finally {
-        this.$rootScope.$evalAsync(() => {
+        this.$scope.$apply(() => {
           this.loading = false;
         });
       }

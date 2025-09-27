@@ -5,17 +5,15 @@ const bodyParser = require('koa-bodyparser');
 const cors = require('@koa/cors');
 const responseTime = require('koa-response-time');
 const session = require('koa-session');
-const winston = require('winston');
+const logger = require('./utils/logger');
 const config = require('./config');
 const { InputOutput } = require('./io');
-const passport = require('./middlewares/passport-config');
-
-winston.add(new winston.transports.Console());
+const { passport, configurePassport } = require('./middlewares/passport-config');
 
 // Catch the uncaught errors that weren't wrapped in a domain or try catch statement
 process.on('uncaughtException', e => {
   // This should never be called, as we handle all errors insides promises.
-  winston.log('error', 'uncaughtException', e);
+  logger.error('uncaughtException', e);
   process.exit(1);
 });
 
@@ -24,8 +22,8 @@ async function start() {
   app.context.io = new InputOutput();
   await app.context.io.connect();
 
-  // Store IO globally for passport strategies
-  global.io = app.context.io;
+  // Configure Passport with IO
+  configurePassport(app.context.io);
 
   // Session configuration
   app.keys = [config.session.secret || 'your-session-secret'];
@@ -59,6 +57,7 @@ async function start() {
 
   // Protected routes (authentication required)
   app.use(require('./middlewares/jwt-auth'));
+  app.use(require('./routers/user').routes());
   app.use(require('./routers/downloads').routes());
   app.use(require('./routers/invitations').routes());
   app.use(require('./routers/input').routes());
@@ -67,10 +66,10 @@ async function start() {
   app.use(require('./routers/uploads').routes());
 
   const server = app.listen(config.port);
-  winston.log('info', `Listening on ${config.port}.`);
+  logger.info(`Listening on ${config.port}.`);
 
   const closeFunction = async () => {
-    winston.log('info', `Closing gracefully.`);
+    logger.info(`Closing gracefully.`);
 
     server.close(); // should listen to the event handler
     await app.context.io.disconnect();
@@ -96,7 +95,7 @@ if (require.main === module) {
         process.on('SIGINT', stop);
       })
       .catch(e => {
-        winston.log('error', 'Error starting application', e);
+        logger.error('Error starting application', e);
         process.exit(1);
       });
   }

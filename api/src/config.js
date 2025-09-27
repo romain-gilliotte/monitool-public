@@ -1,5 +1,5 @@
 const fs = require('fs');
-const winston = require('winston');
+const logger = require('./utils/logger');
 
 let success = true;
 
@@ -18,7 +18,7 @@ const readEnv = function (key, defaultValue = undefined) {
 
   if (value === undefined) {
     if (defaultValue === undefined) {
-      winston.warn(`Missing environment variable: ${key}`);
+      logger.warn(`Missing environment variable: ${key}`);
       success = false;
     } else {
       value = defaultValue;
@@ -76,7 +76,7 @@ const config = {
 };
 
 if (!success && process.env.NODE_ENV !== 'test') {
-  winston.error('Failed to start');
+  logger.error('Failed to start');
   process.exit(1);
 }
 

@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
-const winston = require('winston');
+const logger = require('../utils/logger');
 const config = require('../config');
 const { findUserByEmail, updateLastSeen } = require('../storage/queries/user');
+const Profile = require('../classes/Profile');
 
 module.exports = async (ctx, next) => {
   try {
@@ -42,37 +43,11 @@ module.exports = async (ctx, next) => {
 
     // Update last seen (async, don't wait)
     if (new Date() - new Date(user.lastSeen) > 60 * 1000) {
-      updateLastSeen(ctx.io, user._id).catch(winston.error);
+      updateLastSeen(ctx.io, user._id).catch(logger.error);
     }
 
-    // Create profile object similar to the original structure
-    ctx.state.profile = {
-      io: ctx.io,
-      email: user._id,
-      name: user.name,
-      picture: user.picture,
-      lastSeen: user.lastSeen,
-
-      // Methods from original Profile class
-      async isInvitedTo(projectId) {
-        try {
-          const { getProject } = require('../storage/queries/project');
-          await getProject(this.io, this.email, projectId, { _id: true });
-          return true;
-        } catch (e) {
-          return false;
-        }
-      },
-
-      async isOwnerOf(projectId) {
-        const { ObjectId } = require('mongodb');
-        const numProjects = await this.io.database.collection('project').countDocuments({
-          _id: new ObjectId(projectId),
-          owner: this.email,
-        });
-        return numProjects === 1;
-      },
-    };
+    // Create profile object using the Profile class
+    ctx.state.profile = new Profile(ctx.io, user);
 
     await next();
   } catch (error) {
@@ -83,7 +58,7 @@ module.exports = async (ctx, next) => {
       ctx.status = 401;
       ctx.body = { error: 'Token expired' };
     } else {
-      winston.error('JWT Auth Error:', error);
+      logger.error('JWT Auth Error:', error);
       ctx.status = 500;
       ctx.body = { error: 'Internal server error' };
     }

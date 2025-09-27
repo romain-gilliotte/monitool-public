@@ -1,6 +1,7 @@
 import angular from 'angular';
 import uiRouter from '@uirouter/angularjs';
 import axios from 'axios';
+import { getPasswordStrength } from '../../../utils/password-strength';
 require(__scssPath);
 
 const module = angular.module(__moduleName, [uiRouter]);
@@ -15,8 +16,8 @@ module.config($stateProvider => {
 module.component(__componentName, {
   template: require(__templatePath),
   controller: class {
-    constructor($rootScope, $state, $window, $timeout) {
-      this.$rootScope = $rootScope;
+    constructor($scope, $state, $window, $timeout) {
+      this.$scope = $scope;
       this.$state = $state;
       this.$window = $window;
       this.$timeout = $timeout;
@@ -73,16 +74,16 @@ module.component(__componentName, {
           password: this.form.password,
         });
 
-        this.$rootScope.$evalAsync(() => {
+        this.$scope.$apply(() => {
           this.success = true;
           this.successMessage = response.data.message || 'Registration successful!';
         });
       } catch (error) {
-        this.$rootScope.$evalAsync(() => {
+        this.$scope.$apply(() => {
           this.error = error.response?.data?.error || 'Registration failed';
         });
       } finally {
-        this.$rootScope.$evalAsync(() => {
+        this.$scope.$apply(() => {
           this.loading = false;
         });
       }
@@ -106,33 +107,7 @@ module.component(__componentName, {
     }
 
     getPasswordStrength() {
-      const password = this.form.password;
-      if (!password) {
-        this._cachedPasswordStrength = null;
-        return null;
-      }
-
-      // Cache the result to prevent infinite digest loops
-      if (this._lastPassword === password && this._cachedPasswordStrength) {
-        return this._cachedPasswordStrength;
-      }
-
-      let strength = 0;
-      if (password.length >= 8) strength++;
-      if (/[a-z]/.test(password)) strength++;
-      if (/[A-Z]/.test(password)) strength++;
-      if (/[0-9]/.test(password)) strength++;
-      if (/[^A-Za-z0-9]/.test(password)) strength++;
-
-      let result;
-      if (strength <= 2) result = { level: 'weak', text: 'Weak' };
-      else if (strength <= 3) result = { level: 'medium', text: 'Medium' };
-      else result = { level: 'strong', text: 'Strong' };
-
-      // Cache the result
-      this._lastPassword = password;
-      this._cachedPasswordStrength = result;
-      return result;
+      return getPasswordStrength(this.form.password, this);
     }
   },
 });

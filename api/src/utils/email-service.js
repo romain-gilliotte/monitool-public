@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
-const winston = require('winston');
+const logger = require('./logger');
 const config = require('../config');
 
 class EmailService {
@@ -61,9 +61,9 @@ If you didn't create this account, you can safely ignore this email.
 
     try {
       await this.transporter.sendMail(mailOptions);
-      winston.info(`Verification email sent to ${email}`);
+      logger.info(`Verification email sent to ${email}`);
     } catch (error) {
-      winston.error('Error sending verification email:', error);
+      logger.error('Error sending verification email:', error);
       throw error;
     }
   }
@@ -111,9 +111,9 @@ If you didn't request this password reset, you can safely ignore this email. You
 
     try {
       await this.transporter.sendMail(mailOptions);
-      winston.info(`Password reset email sent to ${email}`);
+      logger.info(`Password reset email sent to ${email}`);
     } catch (error) {
-      winston.error('Error sending password reset email:', error);
+      logger.error('Error sending password reset email:', error);
       throw error;
     }
   }

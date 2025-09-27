@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
-const winston = require('winston');
+const logger = require('../../utils/logger');
 const { insertDemoProject } = require('./project');
 const { getGravatarUrl } = require('../../utils/gravatar-service');
 
@@ -45,7 +45,7 @@ async function createUser(io, userData) {
   try {
     await insertDemoProject(io, user._id);
   } catch (error) {
-    winston.error('Failed to create demo project for new user:', error);
+    logger.error('Failed to create demo project for new user:', error);
     // Don't fail user creation if demo project creation fails
   }
 
@@ -176,36 +176,6 @@ async function linkOAuthAccount(io, email, provider, providerId) {
   await collection.updateOne({ _id: email }, { $set: { [updateField]: providerId } });
 }
 
-/**
- * Update users without pictures to use Gravatar
- */
-async function updateUsersWithGravatar(io) {
-  const collection = io.database.collection('user');
-
-  // Find users without pictures or with null pictures
-  const usersWithoutPictures = await collection
-    .find({
-      $or: [{ picture: null }, { picture: { $exists: false } }],
-    })
-    .toArray();
-
-  let updatedCount = 0;
-
-  for (const user of usersWithoutPictures) {
-    const gravatarUrl = getGravatarUrl(user._id, { size: 80 });
-
-    if (gravatarUrl) {
-      await collection.updateOne({ _id: user._id }, { $set: { picture: gravatarUrl } });
-      updatedCount++;
-    }
-  }
-
-  return {
-    totalUsers: usersWithoutPictures.length,
-    updatedCount,
-  };
-}
-
 module.exports = {
   createUser,
   findUserByEmail,
@@ -217,5 +187,4 @@ module.exports = {
   setPasswordResetToken,
   resetPassword,
   linkOAuthAccount,
-  updateUsersWithGravatar,
 };

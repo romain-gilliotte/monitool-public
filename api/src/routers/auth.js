@@ -1,7 +1,7 @@
 const Router = require('@koa/router');
-const passport = require('../middlewares/passport-config');
+const { passport } = require('../middlewares/passport-config');
 const emailService = require('../utils/email-service');
-const winston = require('winston');
+const logger = require('../utils/logger');
 const {
   createUser,
   findUserByEmail,
@@ -49,7 +49,7 @@ router.post('/register', async ctx => {
       await emailService.sendVerificationEmail(email, name, user.emailVerificationToken);
       emailSent = true;
     } catch (emailError) {
-      winston.warn('Failed to send verification email:', emailError.message);
+      logger.warn('Failed to send verification email:', emailError.message);
       // In development, this is expected if AWS credentials are not configured
     }
 
@@ -61,7 +61,7 @@ router.post('/register', async ctx => {
       emailSent,
     };
   } catch (error) {
-    winston.error('Registration error:', error);
+    logger.error('Registration error:', error);
     ctx.status = 500;
     ctx.body = { error: 'Internal server error' };
   }
@@ -91,7 +91,7 @@ router.post('/login', async (ctx, next) => {
     });
 
     // Update last seen
-    updateLastSeen(ctx.io, user._id).catch(winston.error);
+    updateLastSeen(ctx.io, user._id).catch(logger.error);
 
     ctx.body = {
       token,
@@ -129,7 +129,7 @@ router.get('/verify-email', async ctx => {
       ctx.body = { error: 'Invalid or expired verification token' };
     }
   } catch (error) {
-    winston.error('Email verification error:', error);
+    logger.error('Email verification error:', error);
     ctx.status = 500;
     ctx.body = { error: 'Internal server error' };
   }
@@ -170,7 +170,7 @@ router.post('/forgot-password', async ctx => {
       };
     }
   } catch (error) {
-    winston.error('Forgot password error:', error);
+    logger.error('Forgot password error:', error);
     ctx.status = 500;
     ctx.body = { error: 'Internal server error' };
   }
@@ -201,7 +201,7 @@ router.post('/reset-password', async ctx => {
       ctx.body = { error: 'Invalid or expired reset token' };
     }
   } catch (error) {
-    winston.error('Password reset error:', error);
+    logger.error('Password reset error:', error);
     ctx.status = 500;
     ctx.body = { error: 'Internal server error' };
   }
@@ -224,23 +224,22 @@ router.get('/google/callback', async (ctx, next) => {
     return;
   }
 
-  return passport.authenticate('google', { failureRedirect: '/login?error=oauth_failed' })(
-    ctx,
-    async () => {
-      // Generate JWT token
-      const token = jwt.sign(
-        { email: ctx.state.user._id, name: ctx.state.user.name },
-        config.jwt.secret,
-        { expiresIn: config.jwt.expiresIn || '7d' }
-      );
+  return passport.authenticate('google', {
+    failureRedirect: `${config.appUrl}/app.html#!/login?error=oauth_failed`,
+  })(ctx, async () => {
+    // Generate JWT token
+    const token = jwt.sign(
+      { email: ctx.state.user._id, name: ctx.state.user.name },
+      config.jwt.secret,
+      { expiresIn: config.jwt.expiresIn || '7d' }
+    );
 
-      // Update last seen
-      updateLastSeen(ctx.io, ctx.state.user._id).catch(winston.error);
+    // Update last seen
+    updateLastSeen(ctx.io, ctx.state.user._id).catch(logger.error);
 
-      // Redirect to frontend with token
-      ctx.redirect(`${config.appUrl}/app.html#!/oauth-callback?token=${token}`);
-    }
-  );
+    // Redirect to frontend with token
+    ctx.redirect(`${config.appUrl}/app.html#!/oauth-callback?token=${token}`);
+  });
 });
 
 // Microsoft OAuth routes
@@ -260,97 +259,28 @@ router.get('/microsoft/callback', async (ctx, next) => {
     return;
   }
 
-  return passport.authenticate('microsoft', { failureRedirect: '/login?error=oauth_failed' })(
-    ctx,
-    async () => {
-      // Generate JWT token
-      const token = jwt.sign(
-        { email: ctx.state.user._id, name: ctx.state.user.name },
-        config.jwt.secret,
-        { expiresIn: config.jwt.expiresIn || '7d' }
-      );
+  return passport.authenticate('microsoft', {
+    failureRedirect: `${config.appUrl}/app.html#!/login?error=oauth_failed`,
+  })(ctx, async () => {
+    // Generate JWT token
+    const token = jwt.sign(
+      { email: ctx.state.user._id, name: ctx.state.user.name },
+      config.jwt.secret,
+      { expiresIn: config.jwt.expiresIn || '7d' }
+    );
 
-      // Update last seen
-      updateLastSeen(ctx.io, ctx.state.user._id).catch(winston.error);
+    // Update last seen
+    updateLastSeen(ctx.io, ctx.state.user._id).catch(logger.error);
 
-      // Redirect to frontend with token
-      ctx.redirect(`${config.appUrl}/app.html#!/oauth-callback?token=${token}`);
-    }
-  );
+    // Redirect to frontend with token
+    ctx.redirect(`${config.appUrl}/app.html#!/oauth-callback?token=${token}`);
+  });
 });
 
-// OAuth configuration endpoint (public)
+// Add a specific route for oauth-config that returns 404 (for backward compatibility)
 router.get('/oauth-config', ctx => {
-  ctx.body = {
-    google: {
-      enabled: !!config.oauth.google.clientId,
-      configured: !!config.oauth.google.clientId && !!config.oauth.google.clientSecret,
-    },
-    microsoft: {
-      enabled: !!config.oauth.microsoft.clientId,
-      configured: !!config.oauth.microsoft.clientId && !!config.oauth.microsoft.clientSecret,
-    },
-  };
-});
-
-// Check authentication status
-router.get('/me', async ctx => {
-  try {
-    // Get token from Authorization header or cookie
-    let token = null;
-
-    if (ctx.request.header.authorization) {
-      const authHeader = ctx.request.header.authorization;
-      if (authHeader.startsWith('Bearer ')) {
-        token = authHeader.substring(7);
-      }
-    } else if (ctx.cookies.get('monitool_access_token')) {
-      token = ctx.cookies.get('monitool_access_token');
-    }
-
-    if (!token) {
-      ctx.status = 401;
-      ctx.body = { error: 'Not authenticated' };
-      return;
-    }
-
-    // Verify token
-    const decoded = jwt.verify(token, config.jwt.secret);
-
-    // Load user from database
-    const user = await findUserByEmail(ctx.io, decoded.email);
-    if (!user) {
-      ctx.status = 401;
-      ctx.body = { error: 'User not found' };
-      return;
-    }
-
-    if (!user.emailVerified) {
-      ctx.status = 401;
-      ctx.body = { error: 'Email not verified' };
-      return;
-    }
-
-    ctx.body = {
-      user: {
-        email: user._id,
-        name: user.name,
-        picture: user.picture,
-      },
-    };
-  } catch (error) {
-    if (error.name === 'JsonWebTokenError') {
-      ctx.status = 401;
-      ctx.body = { error: 'Invalid token' };
-    } else if (error.name === 'TokenExpiredError') {
-      ctx.status = 401;
-      ctx.body = { error: 'Token expired' };
-    } else {
-      winston.error('Auth check error:', error);
-      ctx.status = 500;
-      ctx.body = { error: 'Internal server error' };
-    }
-  }
+  ctx.status = 404;
+  ctx.body = { error: 'Route not found' };
 });
 
 module.exports = router;

@@ -28,10 +28,8 @@ module.component(__componentName, {
   template: require(__templatePath),
 
   controller: class {
-    constructor($rootScope, $state, $window, AuthService) {
-      this.$rootScope = $rootScope;
+    constructor($state, AuthService) {
       this.$state = $state;
-      this.$window = $window;
       this.AuthService = AuthService;
     }
 

@@ -47,13 +47,11 @@ describe('OAuth Configuration', () => {
   });
 
   describe('OAuth Configuration Check', () => {
-    it('should provide endpoint to check OAuth configuration', async () => {
-      const response = await request(app).get('/oauth-config').expect(200);
+    it('should not provide oauth-config endpoint (removed)', async () => {
+      // The oauth-config endpoint was removed as part of cleanup
+      const response = await request(app).get('/oauth-config').expect(404);
 
-      expect(response.body).to.have.property('google');
-      expect(response.body).to.have.property('microsoft');
-      expect(response.body.google).to.have.property('enabled');
-      expect(response.body.microsoft).to.have.property('enabled');
+      expect(response.body).to.have.property('error');
     });
   });
 });
