@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
-const { v4: uuidv4 } = require('uuid');
+const crypto = require('crypto');
+const winston = require('winston');
 const { insertDemoProject } = require('./project');
 const { getGravatarUrl } = require('../../utils/gravatar-service');
 
@@ -19,7 +20,7 @@ async function createUser(io, userData) {
     _id: userData.email,
     name: userData.name,
     emailVerified: false,
-    emailVerificationToken: uuidv4(),
+    emailVerificationToken: crypto.randomUUID(),
     lastSeen: new Date(),
     picture: picture,
   };
@@ -44,7 +45,7 @@ async function createUser(io, userData) {
   try {
     await insertDemoProject(io, user._id);
   } catch (error) {
-    console.error('Failed to create demo project for new user:', error);
+    winston.error('Failed to create demo project for new user:', error);
     // Don't fail user creation if demo project creation fails
   }
 
@@ -125,7 +126,7 @@ async function verifyEmail(io, token) {
  */
 async function setPasswordResetToken(io, email) {
   const collection = io.database.collection('user');
-  const token = uuidv4();
+  const token = crypto.randomUUID();
   const expires = new Date(Date.now() + 3600000); // 1 hour
 
   await collection.updateOne(

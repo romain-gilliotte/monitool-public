@@ -60,6 +60,12 @@ class AuthService {
     return !!this.$rootScope.profile;
   }
 
+  async checkAuthentication() {
+    // Ensure initialization is complete
+    await this.initialize();
+    return this.isAuthenticated();
+  }
+
   setAuthentication(token, user) {
     // Store token and user data
     this.accessToken = token;

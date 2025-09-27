@@ -15,8 +15,7 @@ winston.add(new winston.transports.Console());
 // Catch the uncaught errors that weren't wrapped in a domain or try catch statement
 process.on('uncaughtException', e => {
   // This should never be called, as we handle all errors insides promises.
-  console.log('uncaughtException!!!', e);
-  // winston.log('error', e.message);
+  winston.log('error', 'uncaughtException', e);
   process.exit(1);
 });
 
@@ -97,8 +96,7 @@ if (require.main === module) {
         process.on('SIGINT', stop);
       })
       .catch(e => {
-        console.log('Error starting application', e);
-        winston.log('error', 'Error starting application', { error: e });
+        winston.log('error', 'Error starting application', e);
         process.exit(1);
       });
   }

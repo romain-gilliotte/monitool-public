@@ -1,6 +1,7 @@
 const Router = require('@koa/router');
 const passport = require('../middlewares/passport-config');
 const emailService = require('../utils/email-service');
+const winston = require('winston');
 const {
   createUser,
   findUserByEmail,
@@ -48,7 +49,7 @@ router.post('/register', async ctx => {
       await emailService.sendVerificationEmail(email, name, user.emailVerificationToken);
       emailSent = true;
     } catch (emailError) {
-      console.warn('Failed to send verification email:', emailError.message);
+      winston.warn('Failed to send verification email:', emailError.message);
       // In development, this is expected if AWS credentials are not configured
     }
 
@@ -60,7 +61,7 @@ router.post('/register', async ctx => {
       emailSent,
     };
   } catch (error) {
-    console.error('Registration error:', error);
+    winston.error('Registration error:', error);
     ctx.status = 500;
     ctx.body = { error: 'Internal server error' };
   }
@@ -90,7 +91,7 @@ router.post('/login', async (ctx, next) => {
     });
 
     // Update last seen
-    updateLastSeen(ctx.io, user._id).catch(console.error);
+    updateLastSeen(ctx.io, user._id).catch(winston.error);
 
     ctx.body = {
       token,
@@ -128,7 +129,7 @@ router.get('/verify-email', async ctx => {
       ctx.body = { error: 'Invalid or expired verification token' };
     }
   } catch (error) {
-    console.error('Email verification error:', error);
+    winston.error('Email verification error:', error);
     ctx.status = 500;
     ctx.body = { error: 'Internal server error' };
   }
@@ -169,7 +170,7 @@ router.post('/forgot-password', async ctx => {
       };
     }
   } catch (error) {
-    console.error('Forgot password error:', error);
+    winston.error('Forgot password error:', error);
     ctx.status = 500;
     ctx.body = { error: 'Internal server error' };
   }
@@ -200,7 +201,7 @@ router.post('/reset-password', async ctx => {
       ctx.body = { error: 'Invalid or expired reset token' };
     }
   } catch (error) {
-    console.error('Password reset error:', error);
+    winston.error('Password reset error:', error);
     ctx.status = 500;
     ctx.body = { error: 'Internal server error' };
   }
@@ -234,7 +235,7 @@ router.get('/google/callback', async (ctx, next) => {
       );
 
       // Update last seen
-      updateLastSeen(ctx.io, ctx.state.user._id).catch(console.error);
+      updateLastSeen(ctx.io, ctx.state.user._id).catch(winston.error);
 
       // Redirect to frontend with token
       ctx.redirect(`${config.appUrl}/app.html#!/oauth-callback?token=${token}`);
@@ -270,7 +271,7 @@ router.get('/microsoft/callback', async (ctx, next) => {
       );
 
       // Update last seen
-      updateLastSeen(ctx.io, ctx.state.user._id).catch(console.error);
+      updateLastSeen(ctx.io, ctx.state.user._id).catch(winston.error);
 
       // Redirect to frontend with token
       ctx.redirect(`${config.appUrl}/app.html#!/oauth-callback?token=${token}`);
@@ -345,7 +346,7 @@ router.get('/me', async ctx => {
       ctx.status = 401;
       ctx.body = { error: 'Token expired' };
     } else {
-      console.error('Auth check error:', error);
+      winston.error('Auth check error:', error);
       ctx.status = 500;
       ctx.body = { error: 'Internal server error' };
     }

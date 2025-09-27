@@ -12,15 +12,17 @@ const module = angular.module(__moduleName, [mtPages, mtTranslation, mtFilterMis
 
 module.config(function ($urlRouterProvider) {
   $urlRouterProvider.otherwise(function ($injector, $location) {
-    const $rootScope = $injector.get('$rootScope');
     const $state = $injector.get('$state');
+    const AuthService = $injector.get('AuthService');
 
-    // If user is not authenticated, redirect to login
-    if (!$rootScope.profile) {
-      $state.go('auth.login');
-    } else {
-      $state.go('main.projects');
-    }
+    // Check authentication status and redirect appropriately
+    return AuthService.checkAuthentication().then(isAuth => {
+      if (isAuth) {
+        $state.go('main.projects');
+      } else {
+        $state.go('auth.login');
+      }
+    });
   });
 });
 

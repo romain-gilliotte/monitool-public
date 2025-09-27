@@ -50,14 +50,14 @@ class DatabaseHelper {
     }
 
     const bcrypt = require('bcrypt');
-    const { v4: uuidv4 } = require('uuid');
+    const crypto = require('crypto');
 
     const defaultUser = {
       _id: userData.email || 'test@example.com',
       name: userData.name || 'Test User',
       password: await bcrypt.hash(userData.password || 'password123', 10),
       emailVerified: userData.emailVerified !== undefined ? userData.emailVerified : true,
-      emailVerificationToken: userData.emailVerified === false ? uuidv4() : null,
+      emailVerificationToken: userData.emailVerified === false ? crypto.randomUUID() : null,
       passwordResetToken: null,
       passwordResetExpires: null,
       createdAt: new Date(),

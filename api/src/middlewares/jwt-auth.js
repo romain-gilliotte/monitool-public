@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const winston = require('winston');
 const config = require('../config');
 const { findUserByEmail, updateLastSeen } = require('../storage/queries/user');
 
@@ -41,7 +42,7 @@ module.exports = async (ctx, next) => {
 
     // Update last seen (async, don't wait)
     if (new Date() - new Date(user.lastSeen) > 60 * 1000) {
-      updateLastSeen(ctx.io, user._id).catch(console.error);
+      updateLastSeen(ctx.io, user._id).catch(winston.error);
     }
 
     // Create profile object similar to the original structure
@@ -82,7 +83,7 @@ module.exports = async (ctx, next) => {
       ctx.status = 401;
       ctx.body = { error: 'Token expired' };
     } else {
-      console.error('JWT Auth Error:', error);
+      winston.error('JWT Auth Error:', error);
       ctx.status = 500;
       ctx.body = { error: 'Internal server error' };
     }

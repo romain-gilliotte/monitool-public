@@ -1,4 +1,5 @@
 const fs = require('fs');
+const winston = require('winston');
 
 let success = true;
 
@@ -17,7 +18,7 @@ const readEnv = function (key, defaultValue = undefined) {
 
   if (value === undefined) {
     if (defaultValue === undefined) {
-      console.log(`Missing environment variable: ${key}`);
+      winston.warn(`Missing environment variable: ${key}`);
       success = false;
     } else {
       value = defaultValue;
@@ -43,12 +44,12 @@ const config = {
 
   oauth: {
     google: {
-      clientId: readEnv('MONITOOL_GOOGLE_CLIENT_ID', ''),
-      clientSecret: readEnv('MONITOOL_GOOGLE_CLIENT_SECRET', ''),
+      clientId: readEnv('MONITOOL_GOOGLE_CLIENT_ID'),
+      clientSecret: readEnv('MONITOOL_GOOGLE_CLIENT_SECRET'),
     },
     microsoft: {
-      clientId: readEnv('MONITOOL_MICROSOFT_CLIENT_ID', ''),
-      clientSecret: readEnv('MONITOOL_MICROSOFT_CLIENT_SECRET', ''),
+      clientId: readEnv('MONITOOL_MICROSOFT_CLIENT_ID'),
+      clientSecret: readEnv('MONITOOL_MICROSOFT_CLIENT_SECRET'),
     },
   },
 
@@ -75,7 +76,7 @@ const config = {
 };
 
 if (!success && process.env.NODE_ENV !== 'test') {
-  console.log('Failed to start');
+  winston.error('Failed to start');
   process.exit(1);
 }
 
