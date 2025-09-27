@@ -5,6 +5,9 @@
   "workspaceFolder": "/workspaces/monitool-public",
   "shutdownAction": "stopCompose",
   "features": {},
+  "mounts": [
+    "source=${localEnv:HOME}/.cursor/mcp.json,target=/home/vscode/.cursor/mcp.json,type=bind"
+  ],
   "forwardPorts": [6379, 8000, 8080, 8082, 27017],
   "portsAttributes": {
     "8080": { "label": "Frontend", "onAutoForward": "openBrowserOnce" },
