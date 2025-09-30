@@ -9,10 +9,6 @@ class AuthTestSetup {
   }
 
   async setupTests() {
-    // Set required environment variables for testing
-    process.env.MONITOOL_MONGO_URI = process.env.MONITOOL_MONGO_URI || 'mongodb://localhost:27017';
-    process.env.MONITOOL_REDIS_URI = process.env.MONITOOL_REDIS_URI || 'redis://localhost:6379';
-
     // Start test server
     this.app = await global.testServer.start();
 

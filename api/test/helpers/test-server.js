@@ -12,6 +12,8 @@ class TestServer {
     }
 
     // Set test environment variables
+    process.env.MONITOOL_MONGO_URI = process.env.MONITOOL_MONGO_URI || 'mongodb://localhost:27017';
+    process.env.MONITOOL_REDIS_URI = process.env.MONITOOL_REDIS_URI || 'redis://localhost:6379';
     process.env.NODE_ENV = 'test';
     process.env.MONITOOL_PORT = '0'; // Use random available port
     process.env.MONITOOL_CLUSTER = 'false'; // Disable clustering in tests
