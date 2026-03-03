@@ -1,11 +1,11 @@
 export default {
   shared: {
-    yes: 'Si',
+    yes: 'Sí',
     no: 'No',
     archive: 'Archivar',
     enable: 'Activar',
-    disable: 'Deactivar',
-    accept_invitation: 'Acceptar',
+    disable: 'Desactivar',
+    accept_invitation: 'Aceptar',
     refuse_invitation: 'Declinar',
     uninvite: 'Eliminar de mis proyectos',
     no_invitations: 'No tiene invitaciones pendientes!',
@@ -45,7 +45,7 @@ export default {
 
     add: 'Añadir',
     save: 'Guardar',
-    save_and_archive_doc: 'Guardar e archivar el formulario',
+    save_and_archive_doc: 'Guardar y archivar el formulario',
     remove: 'Quitar',
     remove_changes: 'Cancelar los cambios',
     edit: 'Modificar',
@@ -60,7 +60,7 @@ export default {
 
     logout: 'Desconectar',
 
-    sure_to_leave: 'Ha realizado cambios. ¿Esta seguro de querer cambiar de página sin guardar?',
+    sure_to_leave: 'Ha realizado cambios. ¿Está seguro de querer cambiar de página sin guardar?',
   },
   menu: {
     language: 'Idiomas',
@@ -69,7 +69,7 @@ export default {
     english: 'Inglés',
   },
   welcome: {
-    i_got_it: 'He entendido, ¡Empezemos!',
+    i_got_it: 'He entendido, ¡Empecemos!',
     text: /* html */ `
             <legend>¡Bienvenido!</legend>
             <p>Es su primera visita a Monitool.</p>
@@ -125,7 +125,7 @@ export default {
     uploads: 'Formularios en papel y Excel',
 
     drop_file_here:
-      'Solte sus formularios completados aquí o <label for="file-input">elija archivos</label>',
+      'Suelte sus formularios completados aquí o <label for="file-input">elija archivos</label>',
     drop_file_here_formats:
       'Formatos admitidos: foto, escaneo, fax (pdf, jpg, png, tiff), excel (xlsx) o archivo (zip).',
     waiting_dataentry: 'Esperando entrada',
@@ -145,7 +145,7 @@ export default {
     prefill_with: 'Rellenar con: ',
     original_file: 'Fichero original',
     load_data: 'Cargar datos',
-    no_logframe_yet: 'Aún no ha creado ningún marco logico en este proyecto',
+    no_logframe_yet: 'Aún no ha creado ningún marco lógico en este proyecto',
     show_all_projects: 'Mostrar todos los proyectos ({{count}})',
     no_projects: 'No tiene ningún proyecto',
     download_portrait: 'Descargar PDF (vertical)',
@@ -157,14 +157,14 @@ export default {
     confirm_delete_datasource: `Si elimina esta fuente de datos, ya no podrá acceder a sus datos en informes o a los indicadores que dependen de ella. Confirme para eliminar.`,
     total: 'Total',
     variables: 'Variables',
-    owner: 'Proprietario',
+    owner: 'Propietario',
     invitations: 'Invitaciones',
     downloads: 'Descargas',
     last_entry: 'Última entrada',
     show_totals: 'Mostrar totales',
     add_datasource: 'Crear una nueva fuente de datos',
     no_matches: 'Ningún proyecto corresponde a sus criterios de búsqueda',
-    is_finished: 'Este proyecto esta terminado',
+    is_finished: 'Este proyecto está terminado',
     was_archived: 'Este proyecto fue archivado',
     show_ongoing_projects: 'Mostrar proyectos en curso ({{count}})',
     show_finished_projects: 'Mostrar proyectos terminados ({{count}})',
@@ -178,7 +178,7 @@ export default {
     revision_save_to_confirm: 'Guarde para confirmar que desea volver a este punto',
     revision_is_equivalent: 'Este punto es equivalente al estado actual del proyecto',
     revision_none: 'No hay historial en este proyecto',
-    revision_show_more: 'Ver cambios mas antiguos',
+    revision_show_more: 'Ver cambios más antiguos',
 
     history: {
       active_replace: "{{after ? 'Restaura' : 'Elimina'}} el proyecto",
@@ -203,7 +203,7 @@ export default {
       groups_move: 'Reordena los grupos del proyecto',
       groups_remove: 'Elimina el grupo <code>{{item.name}}</code>',
       groups_name_replace:
-        'Cambia el nombre del groupo <code>{{before}}</code> en <code>{{after}}</code>',
+        'Cambia el nombre del grupo <code>{{before}}</code> en <code>{{after}}</code>',
       groups_members_add:
         'Añade el lugar <code>{{item.name}}</code> al grupo <code>{{group.name}}</code>',
       groups_members_move: 'Reordena los lugares del grupo <code>{{group.name}}</code>',
@@ -213,7 +213,7 @@ export default {
       forms_add: 'Añade la fuente de datos <code>{{item.name}}</code>',
       forms_move: 'Reordena las fuentes de datos del proyecto',
       forms_replace:
-        'Reemplaca la fuente de datos <code>{{before.name}}</code> por <code>{{after.name}}</code>',
+        'Reemplaza la fuente de datos <code>{{before.name}}</code> por <code>{{after.name}}</code>',
       forms_remove: 'Elimina la fuente de datos <code>{{item.name}}</code>',
       forms_name_replace:
         'Cambia el nombre de la fuente de datos <code>{{before}}</code> en <code>{{after}}</code>',
@@ -228,14 +228,14 @@ export default {
       forms_entities_remove:
         'Elimina el lugar <code>{{item.name}}</code> de la fuente de datos <code>{{form.name}}</code>',
       forms_entities_replace:
-        'Reemplaca el lugar <code>{{beforeItem.name}}</code> por <code>{{afterItem.name}}</code> en la fuente de datos <code>{{form.name}}</code>',
+        'Reemplaza el lugar <code>{{beforeItem.name}}</code> por <code>{{afterItem.name}}</code> en la fuente de datos <code>{{form.name}}</code>',
 
       forms_elements_add:
         'Añade la variable <code>{{item.name}}</code> en <code>{{form.name}}</code>',
       forms_elements_move:
         'Reordena las variables de la fuente de datos <code>{{form.name}}</code>',
       forms_elements_replace:
-        'Remplaca la variable <code>{{before.name}}</code> por <code>{{after.name}}</code> en la fuente de datos <code>{{form.name}}</code>',
+        'Reemplaza la variable <code>{{before.name}}</code> por <code>{{after.name}}</code> en la fuente de datos <code>{{form.name}}</code>',
       forms_elements_remove:
         'Elimina la variable <code>{{item.name}}</code> en <code>{{form.name}}</code>',
 
@@ -281,7 +281,7 @@ export default {
       forms_elements_partitions_groups_remove:
         'Elimina el grupo <code>{{item.name}}</code> en la desagregación <code>{{partition.name}}</code> de la variable <code>{{variable.name}}</code>',
       forms_elements_partitions_groups_name_replace:
-        'Cambia el nombre del groupo <code>{{before}}</code> en <code>{{after}}</code> en la desagregación <code>{{partition.name}}</code> de la variable <code>{{variable.name}}</code>',
+        'Cambia el nombre del grupo <code>{{before}}</code> en <code>{{after}}</code> en la desagregación <code>{{partition.name}}</code> de la variable <code>{{variable.name}}</code>',
       forms_elements_partitions_groups_members_add:
         'Añade <code>{{item.name}}</code> al grupo <code>{{group.name}}</code> en la desagregación <code>{{partition.name}}</code> de la variable <code>{{variable.name}}</code>',
       forms_elements_partitions_groups_members_move:
@@ -303,22 +303,22 @@ export default {
       logicalFrames_name_replace:
         'Cambia el nombre del marco lógico <code>{{before}}</code> en <code>{{after}}</code>',
       logicalFrames_goal_replace:
-        'Cambia el objectivo general <code>{{before}}</code> en <code>{{after}}</code> en el marco lógico <code>{{logicalFrame.name}}</code>',
+        'Cambia el objetivo general <code>{{before}}</code> en <code>{{after}}</code> en el marco lógico <code>{{logicalFrame.name}}</code>',
       logicalFrames_start_replace:
         'Cambia el inicio <code>{{before}}</code> en <code>{{after}}</code> en el marco lógico <code>{{logicalFrame.name}}</code>',
       logicalFrames_end_replace:
         'Cambia el final <code>{{before}}</code> en <code>{{after}}</code> en el marco lógico <code>{{logicalFrame.name}}</code>',
 
       logicalFrames_purposes_add:
-        'Añade el objectivo especifico <code>{{item.description}}</code> al marco lógico <code>{{logicalFrame.name}}</code>',
+        'Añade el objetivo específico <code>{{item.description}}</code> al marco lógico <code>{{logicalFrame.name}}</code>',
       logicalFrames_purposes_move:
-        'Reordena los objectivos especificos del marco lógico <code>{{logicalFrame.name}}</code>',
+        'Reordena los objetivos específicos del marco lógico <code>{{logicalFrame.name}}</code>',
       logicalFrames_purposes_remove:
-        'Elimina el objectivo especifico <code>{{item.description}}</code> del marco lógico <code>{{logicalFrame.name}}</code>',
+        'Elimina el objetivo específico <code>{{item.description}}</code> del marco lógico <code>{{logicalFrame.name}}</code>',
       logicalFrames_purposes_description_replace:
-        'Cambia la descripción del objectivo especifico <code>{{before}}</code> en <code>{{after}}</code> en el marco lógico <code>{{logicalFrame.name}}</code>',
+        'Cambia la descripción del objetivo específico <code>{{before}}</code> en <code>{{after}}</code> en el marco lógico <code>{{logicalFrame.name}}</code>',
       logicalFrames_purposes_assumptions_replace:
-        'Cambia las hypotesis del objectivo especifico <code>{{purpose.description}}</code> de <code>{{before}}</code> en <code>{{after}}</code> en el marco lógico <code>{{logicalFrame.name}}</code>',
+        'Cambia las hipótesis del objetivo específico <code>{{purpose.description}}</code> de <code>{{before}}</code> en <code>{{after}}</code> en el marco lógico <code>{{logicalFrame.name}}</code>',
 
       logicalFrames_purposes_outputs_add:
         'Añade el resultado <code>{{item.description}}</code> al marco lógico <code>{{logicalFrame.name}}</code>',
@@ -329,7 +329,7 @@ export default {
       logicalFrames_purposes_outputs_description_replace:
         'Cambia la descripción del resultado <code>{{before}}</code> en <code>{{after}}</code> en el marco lógico <code>{{logicalFrame.name}}</code>',
       logicalFrames_purposes_outputs_assumptions_replace:
-        'Cambia las hypotesis del resultado <code>{{output.description}}</code> de <code>{{before}}</code> a <code>{{after}}</code> en el marco lógico <code>{{logicalFrame.name}}</code>',
+        'Cambia las hipótesis del resultado <code>{{output.description}}</code> de <code>{{before}}</code> a <code>{{after}}</code> en el marco lógico <code>{{logicalFrame.name}}</code>',
 
       logicalFrames_purposes_outputs_activities_add:
         'Añade la actividad <code>{{item.description}}</code> al marco lógico <code>{{logicalFrame.name}}</code>',
@@ -358,7 +358,7 @@ export default {
         'Cambia el cálculo del indicador <code>{{indicator.display}}</code> del marco lógico <code>{{logicalFrame.name}}</code>',
 
       extraIndicators_add: 'Añade el indicador adicional <code>{{item.display}}</code>',
-      extraIndicators_move: 'Reordena les indicadores adicionales',
+      extraIndicators_move: 'Reordena los indicadores adicionales',
       extraIndicators_remove: 'Elimina el indicador adicional <code>{{item.display}}</code>',
       extraIndicators_baseline_replace:
         'Cambia el valor inicial del indicador adicional <code>{{extraIndicator.display}}</code> de <code>{{before}}</code> a <code>{{after}}</code>',
@@ -372,24 +372,24 @@ export default {
         'Cambia el cálculo del indicador adicional <code>{{extraIndicator.display}}</code>',
     },
 
-    form_error_short: 'Algunos campos del formulario no son validos.',
+    form_error_short: 'Algunos campos del formulario no son válidos.',
     form_persisted_short: 'No ha realizado cambios.',
     form_changed_short: 'Ha realizado cambios.',
 
-    form_error: 'Algunos campos del formulario no son validos, arreglelos para poder guardar.',
-    form_persisted: 'Sus datos estan guardados.',
+    form_error: 'Algunos campos del formulario no son válidos, arreglelos para poder guardar.',
+    form_persisted: 'Sus datos están guardados.',
     form_changed: 'Ha realizado cambios. No olvide hacer click en Guardar.',
 
-    show_more_inputs: 'Ver la fechas anteriores',
+    show_more_inputs: 'Ver las fechas anteriores',
     all_elements: 'Todo',
     no_extra_indicators: 'Ningún indicador adicional ha sido creado.',
     no_data_source_yet: 'Ninguna fuente de datos ha sido creada.',
     no_data_source:
-      '<span style="font-style: italic">Ninguna fuente de datos esta lista para entrar datos</span>',
+      '<span style="font-style: italic">Ninguna fuente de datos está lista para entrar datos</span>',
     general_info: 'Información general',
     indicator_computation_missing: 'Falta el cálculo',
-    which_variable: 'De que variable viene esta información?',
-    which_partitions: 'Qué desagregaciones son relevantes?',
+    which_variable: '¿De qué variable viene esta información?',
+    which_partitions: '¿Qué desagregaciones son relevantes?',
     value_unknown: 'Valor desconocido',
 
     computations: {
@@ -397,7 +397,7 @@ export default {
       copy: 'Copiar un valor (desde una fuente de datos)',
       percentage: 'Porcentaje (desde fuentes de datos)',
       permille: 'Por mil (desde fuentes de datos)',
-      formula: 'Formula personalizada (desde fuentes de datos)',
+      formula: 'Fórmula personalizada (desde fuentes de datos)',
     },
 
     formula: {
@@ -411,24 +411,24 @@ export default {
 
     partition_edit: 'Edición desagregación',
     partition_help_name:
-      'Este nombre aparecera en varios informes. Identifica la desagregación que desea crear en su variable',
+      'Este nombre aparecerá en varios informes. Identifica la desagregación que desea crear en su variable',
     partition_help_elements:
       'Los elementos de la desagregación deben ser mutualmente exclusivos, y se debe poder calcular el valor total agregandolos.',
-    partition_help_aggregation: 'Como calcular el valor total agregando los elementos describidos?',
+    partition_help_aggregation: '¿Cómo calcular el valor total agregando los elementos descritos?',
     partition_help_groups: 'Los grupos permiten hacer agregaciones intermediarias',
     logical_frame: 'Marco lógico',
 
     no_data: 'Datos no disponibles',
 
     saving_failed:
-      'No se pudieron guardar los cambios, probablemente porque no esta conectado a internet. Intente guardar de nuevo cuando se conecte a internet.',
+      'No se pudieron guardar los cambios, probablemente porque no está conectado a internet. Intente guardar de nuevo cuando se conecte a internet.',
 
     partition_general: 'General',
     partition_general_placeholder: 'ej: Grupos de edad, sexo, motivo de consulta, patología, ...',
     partition_elements: 'Elementos',
-    aggregation_lab: 'Como compilar los elements juntos?',
+    aggregation_lab: '¿Cómo agrupar los elementos juntos?',
     partition_name: 'Nombre',
-    partition_name_placeholder: 'ex: Menor de 12 años, hombre, consultación social, gripe, ...',
+    partition_name_placeholder: 'ej: Menor de 12 años, hombre, consulta social, gripe, ...',
     no_partition_elements: 'Pulse "Añadir" para añadir un elemento en la desagregación',
 
     partition_group_name: 'Nombre',
@@ -438,8 +438,8 @@ export default {
 
     no_inputs: 'Ninguna entrada de datos en espera',
     no_variable:
-      'Ninguna variable esta definida en esta fuente de datos. ¡Haga click en "Añadir una variable" para create una nueva!',
-    no_partitions: 'Ninguna desagregación esta definida en esta variable',
+      'Ninguna variable está definida en esta fuente de datos. ¡Haga clic en "Añadir una variable" para crear una nueva!',
+    no_partitions: 'Ninguna desagregación está definida en esta variable',
 
     dimensions: {
       day: 'Días',
@@ -459,7 +459,7 @@ export default {
       partition_group: 'Desagregación: {{name}} / {{groupName}}',
     },
 
-    parameter: 'Parametro',
+    parameter: 'Parámetro',
     unnamed_logframe: 'Marco lógico sin nombre',
 
     edit_indicator: 'Editar indicador',
@@ -469,7 +469,7 @@ export default {
 
     show_finished: 'Ver todas las entradas',
     are_you_sure_to_uninvite:
-      '¿Esta seguro de querer quitar este proyecto de su lista? El proprietario debera invitarle de nuevo si necesita tener acceso. Confirme para quitarlo',
+      '¿Está seguro de querer quitar este proyecto de su lista? El propietario deberá invitarle de nuevo si necesita tener acceso. Confirme para quitarlo',
     data_selection: 'Seleccione los datos',
     filters: 'Filtros',
     input_status: {
@@ -477,10 +477,10 @@ export default {
       expected: 'Crear',
     },
     cols: 'Columnas',
-    rows: 'Linear',
+    rows: 'Líneas',
     entity: 'Lugar de colecta',
-    select_cols: 'Selecione las columnas',
-    select_rows: 'Selecione las lineas',
+    select_cols: 'Seleccione las columnas',
+    select_rows: 'Seleccione las líneas',
     pivot_table: 'Tabla dinámica',
 
     groups: 'Grupos',
@@ -517,7 +517,7 @@ export default {
 
     variable: 'Variable',
 
-    no_purposes: 'Ningun objetivo específico ha sido definido',
+    no_purposes: 'Ningún objetivo específico ha sido definido',
 
     form_name_ph: 'ej: Datos SNIS, Ficha de colecta ante-natal, Ficha sanidad primaria, ...',
 
@@ -551,10 +551,10 @@ export default {
     input: 'Entrar datos',
 
     baseline: 'Valor de base',
-    target: 'Objectivo',
+    target: 'Objetivo',
 
-    goal: 'Objectivo global',
-    intervention_logic: 'Logica de intervención',
+    goal: 'Objetivo global',
+    intervention_logic: 'Lógica de intervención',
 
     start_date: 'Fecha de inicio',
     end_date: 'Fecha de fin',
@@ -562,18 +562,18 @@ export default {
     name_ph: 'ej: Acceso a atención de calidad para las personas afectadas por la crisis',
     add_indicator: 'Añadir un indicador',
 
-    purpose: 'Objectivo específico',
-    purposes: 'Objectivos específicos',
-    assumptions: 'Hipotesis',
+    purpose: 'Objetivo específico',
+    purposes: 'Objetivos específicos',
+    assumptions: 'Hipótesis',
     output: 'Resultado',
 
-    indicator_is_computed: 'Valido',
-    indicator_is_not_computed: 'Invalido',
+    indicator_is_computed: 'Válido',
+    indicator_is_not_computed: 'Inválido',
 
     intervention_logic_goal_ph:
       'ej. Reducir la mortalidad y la morbididad de la población afectada por la crisis',
     intervention_logic_purpose_ph:
-      'ej. Mejorar el acceso a la salud para la población afectada por la crisis en los districtos de Bimbo y Begoua',
+      'ej. Mejorar el acceso a la salud para la población afectada por la crisis en los distritos de Bimbo y Begoua',
     output_desc_ph:
       'ej. Mejorar la atención de salud primaria en los centros de salud de Bimbo y Begoua',
     assumptions_purpose_ph: '',
@@ -587,57 +587,57 @@ export default {
     logframe_edit_help_start:
       'Fecha a partir de la cual desea calcular los indicadores para este marco lógico',
     logframe_edit_help_end:
-      'Fecha hasta la que desea calcular los indicadores de este marco lógico se calcularán',
+      'Fecha hasta la que desea calcular los indicadores de este marco lógico',
 
     logframe_help_sites:
-      'Entre los lugares identificados en "Lugares de colecta", cuales son relevantes para este marco lógico?',
+      'Entre los lugares identificados en "Lugares de colecta", ¿cuáles son relevantes para este marco lógico?',
     logframe_help_name:
-      'Nombre este marco lógico para poder identificarlo facilment. Por ejemplo con el nombre del donante relevante',
+      'Nombre este marco lógico para poder identificarlo fácilmente. Por ejemplo con el nombre del donante relevante',
     logframe_help_goal:
-      'Descripción de la contribución del proyecto a los objectivos (impacto) de una política o de un programa',
-    logframe_help_goal_indicators: 'Entre los indicadores que permiten medir el objectivo general',
+      'Descripción de la contribución del proyecto a los objetivos (impacto) de una política o de un programa',
+    logframe_help_goal_indicators: 'Entre los indicadores que permiten medir el objetivo general',
     logframe_help_purpose_desc:
       'Describa las ventajas tangibles que se proporcionan a los beneficiarios',
     logframe_help_purpose_assumptions:
-      'Factores externos susceptibles de comprometer el alcanze del objectivo específico',
+      'Factores externos susceptibles de comprometer el alcance del objetivo específico',
     logframe_help_purpose_indicators:
-      'Entre los indicadores que permiten medir el objectivo específico',
+      'Entre los indicadores que permiten medir el objetivo específico',
     logframe_help_output_desc: 'Producto o servicio tangible proporcionado por el proyecto',
     logframe_help_output_assumptions:
-      'Factores externos susceptibles de comprometer el alcanze del resultado',
+      'Factores externos susceptibles de comprometer el alcance del resultado',
     logframe_help_output_indicators: 'Entre los indicadores que permiten medir el resultado',
 
     add_output: 'Añadir un resultado',
     add_purpose: 'Añadir un objetivo específico',
 
     basics_help_country:
-      'En que país tiene lugar su proyecto? Si es un proyecto regional, entre el nombre de la región.',
+      '¿En qué país tiene lugar su proyecto? Si es un proyecto regional, entre el nombre de la región.',
     basics_help_name:
-      'El nombre del proyecto le permite encontrarlo en Monitool. Elija algo que sea suficientemente informativo, o copie el objectivo general.',
+      'El nombre del proyecto le permite encontrarlo en Monitool. Elija algo que sea suficientemente informativo, o copie el objetivo general.',
     basics_help_begin:
-      'La fecha de inicio es el momento en el que su proyecto empieza a colectar datos (usualemente, con la primeras actividades)',
+      'La fecha de inicio es el momento en el que su proyecto empieza a recolectar datos (usualmente, con las primeras actividades)',
     basics_help_end:
       'La fecha de fin es el momento en el que termina la colecta de datos. Si no es conocida, entre una fecha en el futuro.',
 
     collection_edit_help_name:
-      'Cual es el nombre de la fuente de datos de la que quiere extraer datos? ej. "Historiales clínicos electronicos", "Fichas de colecta", "Informe SNIS", ...',
+      '¿Cuál es el nombre de la fuente de datos de la que quiere extraer datos? ej. "Historiales clínicos electrónicos", "Fichas de colecta", "Informe SNIS", ...',
     collection_edit_help_sites:
-      'Entre los lugares identificados en "Lugares de colecta", cuales son los que colectan esta fuente de datos?',
+      'Entre los lugares identificados en "Lugares de colecta", ¿cuáles son los que recolectan esta fuente de datos?',
     collection_edit_help_periodicity:
-      'Cada cuanto son disponibles estos datos? Tenga ciudado, no entre aqui la frecuencia a la que hace sus informes.',
+      '¿Cada cuánto están disponibles estos datos? Tenga cuidado, no entre aquí la frecuencia a la que hace sus informes.',
 
     collection_edit_help_varname:
-      'Nombre la variable que quiere extraer de <code>{{name}}</code>. ej: "Número de diagnosticos".',
+      'Nombre la variable que quiere extraer de <code>{{name}}</code>. ej: "Número de diagnósticos".',
     collection_edit_help_geoagg:
       'En un proyecto que trabaja en dos lugares, si <code>{{name}}</code> vale 10 en el primero, y 20 en el segundo, cual es el valor para el proyecto entero?',
     collection_edit_help_timeagg:
-      'En un proyecto que colecta datos mensuales, si <code>{{name}}</code> vale 10 en enero, 20 en febrero y 30 en marzo, que vale para el trimer trimestre?',
+      'En un proyecto que recolecta datos mensuales, si <code>{{name}}</code> vale 10 en enero, 20 en febrero y 30 en marzo, ¿qué vale para el primer trimestre?',
     collection_edit_help_partition:
       '¿Quiere poder diferenciar <code>{{name}}</code> por edad, sexo, tipo de consulta, motivo de consulta, patología, hora del dia, ...? <br/>No desagrege por zona geográfica: los lugares de colecta ya se rellenaron en la otra página.',
     collection_edit_help_distribution:
-      'Si va a imprimir formulario en A4, prefiera tener columnas a la izquierda para que las tablas sean menor anchas.',
+      'Si va a imprimir formularios en A4, prefiera tener los títulos a la izquierda para que las tablas sean menos anchas.',
     collection_edit_help_order:
-      'En que ordén quiere que aparescan la desagregaciones en las tablas de entrada de datos?',
+      '¿En qué orden quiere que aparezcan las desagregaciones en las tablas de entrada de datos?',
 
     download_portrait: 'Descargar PDF (vertical)',
     download_landscape: 'Descargar PDF (horizontal)',
@@ -650,40 +650,40 @@ export default {
     fill_from_upload: 'Formulario cargado',
     fill_with_zeros: 'Cero',
 
-    variable_name_label: 'Qué esta midiendo?',
-    variable_name_ph: 'ej: Número de diagnosticos',
-    site_agg_label: 'Como compilar entradas provenientes de diferentes lugares?',
-    time_agg_label: 'Como compilar entradas provenientes de diferentes periodos?',
-    partitions_label: 'Que desagregaciones quiere usar en esta variable?',
-    distribution_label: 'Como mostrar la desagregaciones en el formulario de colecta?',
-    order_label: 'En que ordén mostrar las desagregaciones en el formulario de colecta?',
-    delete_purpose: 'Suprimir el objectivo especifico',
+    variable_name_label: '¿Qué está midiendo?',
+    variable_name_ph: 'ej: Número de diagnósticos',
+    site_agg_label: '¿Cómo agrupar entradas provenientes de diferentes lugares?',
+    time_agg_label: '¿Cómo agrupar entradas provenientes de diferentes periodos?',
+    partitions_label: '¿Qué desagregaciones quiere usar en esta variable?',
+    distribution_label: '¿Cómo mostrar las desagregaciones en el formulario de colecta?',
+    order_label: '¿En qué orden mostrar las desagregaciones en el formulario de colecta?',
+    delete_purpose: 'Suprimir el objetivo específico',
     delete_result: 'Suprimir el resultado',
 
-    no_element_selected: 'Ningún elemento esta seleccionado',
+    no_element_selected: 'Ningún elemento está seleccionado',
 
     indicator_ph_fixed: 'Entre el valor constante del indicador (ej: "12")',
     indicator_help_description: 'Contexto de colecta, detalles sobre el método de cálculo...',
     indicator_help_display:
       'Nombre su indicador. Es preferible obtener el nombre a partir de un catalogo para ser consistente con otros proyectos.',
     indicator_help_baseline:
-      'Cual era el valor del indicador antes de empezar la actividades? Marque la casilla para especificar un valor.',
+      '¿Cuál era el valor del indicador antes de empezar las actividades? Marque la casilla para especificar un valor.',
     indicator_help_target:
-      'Cual es el objectivo para este indicador? Marque la casilla para especificar un valor.',
+      '¿Cuál es el objetivo para este indicador? Marque la casilla para especificar un valor.',
     indicator_help_colorize:
-      'Desea tener colores (rojo, naranja, verde) en informes para este indicador?',
+      '¿Desea tener colores (rojo, naranja, verde) en informes para este indicador?',
     indicator_help_computation:
-      'Como se calcula este indicador a partir de las variables que ha colectado en fuentes de datos?',
+      '¿Cómo se calcula este indicador a partir de las variables que ha recolectado en fuentes de datos?',
 
     activity: 'Actividad',
     add_activity: 'Añadir una actividad',
     delete_activity: 'Suprimir la actividad',
-    activity_desc_ph: 'ej. Realizar sesiones de sensibilización sobre la transmision del VIH',
+    activity_desc_ph: 'ej. Realizar sesiones de sensibilización sobre la transmisión del VIH',
     logframe_help_activity_desc: 'Actividad realizada por la ONG',
     logframe_help_activity_indicators: 'Entre los indicadores que permiten medir la actividad',
 
     form_is_not_associated_with_site:
-      'Esta fuente de datos no esta asociada a ningún lugar de colecta.',
+      'Esta fuente de datos no está asociada a ningún lugar de colecta.',
   },
 
   form: {

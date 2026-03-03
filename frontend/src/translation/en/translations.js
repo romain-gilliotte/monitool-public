@@ -162,7 +162,7 @@ export default {
     last_entry: 'Last entry',
     show_totals: 'Show totals',
     add_datasource: 'Create a new data source',
-    no_matches: 'No projects match the selected criterias',
+    no_matches: 'No projects match the selected criteria',
     is_finished: 'This project is finished',
     was_archived: 'This project was archived',
     show_ongoing_projects: 'Show ongoing projects ({{count}})',
@@ -183,7 +183,7 @@ export default {
       active_replace: "{{after ? 'Restore' : 'Delete'}} the project",
       name_replace: 'Rename the project from <code>{{before}}</code> to <code>{{after}}</code>',
       start_replace:
-        'Change the project start date of the project from <code>{{before|date}}</code> to <code>{{after|date}}</code>',
+        'Change the project start date from <code>{{before|date}}</code> to <code>{{after|date}}</code>',
       end_replace:
         'Change the project end date from <code>{{before|date}}</code> to <code>{{after|date}}</code>',
       country_replace:
@@ -307,13 +307,13 @@ export default {
       logicalFrames_purposes_add:
         'Add specific objective <code>{{item.description}}</code> to logical framework <code>{{logicalFrame.name}}</code>',
       logicalFrames_purposes_move:
-        'Reorder specific objectives of logical framwork <code>{{logicalFrame.name}}</code>',
+        'Reorder specific objectives of logical framework <code>{{logicalFrame.name}}</code>',
       logicalFrames_purposes_remove:
         'Remove specific objective <code>{{item.description}}</code> from logical framework <code>{{logicalFrame.name}}</code>',
       logicalFrames_purposes_description_replace:
         'Change description of specific objective <code>{{before}}</code> to <code>{{after}}</code> in logical framework <code>{{logicalFrame.name}}</code>',
       logicalFrames_purposes_assumptions_replace:
-        'Change assumptions of specific objective <code>{{purpose.description}}</code> de <code>{{before}}</code> to <code>{{after}}</code> in logical framework <code>{{logicalFrame.name}}</code>',
+        'Change assumptions of specific objective <code>{{purpose.description}}</code> from <code>{{before}}</code> to <code>{{after}}</code> in logical framework <code>{{logicalFrame.name}}</code>',
 
       logicalFrames_purposes_outputs_add:
         'Add result <code>{{item.description}}</code> to logical framework <code>{{logicalFrame.name}}</code>',
@@ -342,7 +342,7 @@ export default {
       logicalFrames_indicators_remove:
         'Remove indicator <code>{{item.display}}</code> from logical framework <code>{{logicalFrame.name}}</code>',
       logicalFrames_indicators_baseline_replace:
-        'Change baseline of indicator <code>{{indicator.display}}</code> from <code>{{before}}</code> vers <code>{{after}}</code> in logical framework <code>{{logicalFrame.name}}</code>',
+        'Change baseline of indicator <code>{{indicator.display}}</code> from <code>{{before}}</code> to <code>{{after}}</code> in logical framework <code>{{logicalFrame.name}}</code>',
       logicalFrames_indicators_target_replace:
         'Change target of indicator <code>{{indicator.display}}</code> from <code>{{before}}</code> to <code>{{after}}</code> in logical framework <code>{{logicalFrame.name}}</code>',
       logicalFrames_indicators_display_replace:
@@ -354,7 +354,7 @@ export default {
 
       extraIndicators_add: 'Add extra indicator <code>{{item.display}}</code>',
       extraIndicators_move: 'Reorder extra indicators',
-      extraIndicators_remove: 'Deletee extra indicator <code>{{item.display}}</code>',
+      extraIndicators_remove: 'Delete extra indicator <code>{{item.display}}</code>',
       extraIndicators_baseline_replace:
         'Change baseline of extra indicator <code>{{extraIndicator.display}}</code> from <code>{{before}}</code> to <code>{{after}}</code>',
       extraIndicators_target_replace:
@@ -368,7 +368,7 @@ export default {
     },
 
     form_error_short: 'Some fields are invalid in the form.',
-    form_persisted_short: 'You did not made changes.',
+    form_persisted_short: 'You have not made changes.',
     form_changed_short: 'You made changes.',
 
     form_error: 'Some fields are invalid in the form, fix them in order to save.',
@@ -383,7 +383,7 @@ export default {
       '<span style="font-style: italic">No data sources are ready for data entry</span>',
     general_info: 'General information',
     indicator_computation_missing: 'Calculation is missing',
-    which_variable: 'From which variable does this information comes from?',
+    which_variable: 'From which variable does this information come?',
     which_partitions: 'Which disaggregations are relevant?',
     value_unknown: 'Unknown value',
 
@@ -453,8 +453,8 @@ export default {
       year: 'Years',
       entity: 'Sites',
       group: 'Sites: {{name}}',
-      partition: 'Disagregation: {{name}}',
-      partition_group: 'Disagregation: {{name}} / {{groupName}} ',
+      partition: 'Disaggregation: {{name}}',
+      partition_group: 'Disaggregation: {{name}} / {{groupName}} ',
     },
 
     edit_user: 'User edition',
@@ -536,9 +536,9 @@ export default {
 
     periodicities: {
       day: 'Every day',
-      month_week_sat: 'Every weeks (saturday to friday / split by month)',
-      month_week_sun: 'Every weeks (sunday to saturday / split by month)',
-      month_week_mon: 'Every weeks (monday to sunday / split by month)',
+      month_week_sat: 'Every week (saturday to friday / split by month)',
+      month_week_sun: 'Every week (sunday to saturday / split by month)',
+      month_week_mon: 'Every week (monday to sunday / split by month)',
       week_sat: 'Every week (saturday to friday)',
       week_sun: 'Every week (sunday to saturday)',
       week_mon: 'Every week (monday to sunday)',
@@ -584,7 +584,7 @@ export default {
 
     specific_dates: 'Validity duration',
     specific_dates_yes: 'Use dates which are specific to this logical framework',
-    specific_dates_use_project: 'Use the same dates than the project',
+    specific_dates_use_project: 'Use the same dates as the project',
     logframe_edit_help_specificdates: `If this logical frame is valid only during a part of the project, it can be entered here`,
     logframe_edit_help_start:
       'Date from which indicators will be computed for this logical framework',
@@ -612,9 +612,9 @@ export default {
     add_purpose: 'Add a new specific objective',
 
     basics_help_country:
-      "In which country does your project takes place? If it's a regional project enter the name of the region.",
+      "In which country does your project take place? If it's a regional project, enter the name of the region.",
     basics_help_name:
-      "The project's name allow finding your project in Monitool. Choose something that is informative enought, or copy the general objective.",
+      "The project's name allows finding your project in Monitool. Choose something that is informative enough, or copy the general objective.",
     basics_help_begin:
       'The begin date is the moment when your projects starts collecting data (usually, with the first activities)',
     basics_help_end:
@@ -625,7 +625,7 @@ export default {
     collection_edit_help_sites:
       'Among sites identified in "Collection sites", which one collect this data source?',
     collection_edit_help_periodicity:
-      'How often is this data available? Take care, this is not the same thing as the frenquency of the reports that you need to provide.',
+      'How often is this data available? Take care, this is not the same thing as the frequency of the reports that you need to provide.',
 
     collection_edit_help_varname:
       'Name the variable that you want to extract from <code>{{name}}</code>. i.e. "Number of diagnostics".',
@@ -634,7 +634,7 @@ export default {
     collection_edit_help_timeagg:
       'In a project collecting monthly data, if <code>{{name}}</code> is 10 in january, 20 in february and 30 in march, what is the value for the first quarter?',
     collection_edit_help_partition:
-      'Do we want to be able to differenciate <code>{{name}}</code> by age, gender, type of care, consultation motive, pathology, hour of the day, referral type, ...?<br/>Do not disaggregate by location: your collection sites were already filled in the relevant page.',
+      'Do we want to be able to differentiate <code>{{name}}</code> by age, gender, type of care, consultation motive, pathology, hour of the day, referral type, ...?<br/>Do not disaggregate by location: your collection sites were already filled in the relevant page.',
     collection_edit_help_distribution:
       'If you wish to print the forms in A4 format, prefer having the titles at the left of the tables, to shorten their width.',
     collection_edit_help_order: 'How do you wish to show the disaggregations on the input form?',
@@ -644,12 +644,12 @@ export default {
 
     titles: 'Titles',
     data: 'Data',
-    general_informations: 'General informations',
+    general_informations: 'General information',
     fill_from_last: 'Previous entry',
     fill_from_upload: 'Uploaded file',
     fill_with_zeros: 'Zeros',
 
-    variable_name_label: 'What are your measuring?',
+    variable_name_label: 'What are you measuring?',
     variable_name_ph: 'ex: Number of diagnostics',
     site_agg_label: 'How to group entries from different sites?',
     time_agg_label: 'How to group entries from different periods?',
@@ -680,7 +680,7 @@ export default {
     activity_desc_ph: 'e.g. Awareness sessions on HIV transmission',
     logframe_help_activity_desc: 'Activity realized by the NGO',
     logframe_help_activity_indicators:
-      'Enter here the indicators that allows to measure the activity progress',
+      'Enter here the indicators that allow measuring the activity progress',
 
     form_is_not_associated_with_site:
       'This data source is not associated with any collection site.',
