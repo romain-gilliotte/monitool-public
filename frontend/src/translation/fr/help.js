@@ -26,14 +26,14 @@ module.exports = {
             title: 'Lieux de collecte',
             paragraph: /* html */ `
             <p>
-                Lorsqu'un projet réalise les même activités dans plusieurs lieux, celles-ci doivent pouvoir être
-                suivi individuellements, par groupes, et tous ensembles.
+                Lorsqu'un projet réalise les mêmes activités dans plusieurs lieux, celles-ci doivent pouvoir être
+                suivies individuellement, par groupes, et toutes ensemble.
             </p>
             <p>
                 Rentrez ici:
                 <ul>
                     <li>La liste des lieux sur lesquels le projet travaille (par exemple: une liste des centres de santé)</li>
-                    <li>Des groupements qui seront utilisé lors du suivi (par exemple: des régions, des types de structure)</li>
+                    <li>Des groupements qui seront utilisés lors du suivi (par exemple: des régions, des types de structure)</li>
                 </ul>
             </p>`,
         },
@@ -56,8 +56,8 @@ module.exports = {
         'project.config.logical_frame_list': {
             title: 'Liste des cadres logiques',
             paragraph: /* html */ `
-                Un cadre logique est un document qui décrit les objectifs, les résultats attendus, et les activités misent
-                en oeuvre pour y parvenir, ainsi que les indicateurs qui permette de suivre l'avancement de chaque élément.<br/>
+                Un cadre logique est un document qui décrit les objectifs, les résultats attendus, et les activités mises
+                en œuvre pour y parvenir, ainsi que les indicateurs qui permettent de suivre l'avancement de chaque élément.<br/>
                 Tous les indicateurs présents dans les cadres logiques doivent être calculables à partir des données 
                 décrites dans les sources de données
             `,
@@ -105,7 +105,7 @@ module.exports = {
         },
         'project.usage.preview': {
             title: `Historique des modifications`,
-            paragraph: /* html */ `Cette page vous permet de Visualiser les modifications réalisée lors d'une saisie en particulier.`,
+            paragraph: /* html */ `Cette page vous permet de visualiser les modifications réalisées lors d'une saisie en particulier.`,
         },
         'project.usage.uploads': {
             title: `Téléversement de fichiers`,
@@ -113,7 +113,7 @@ module.exports = {
         },
         'project.usage.list': {
             title: `Calendrier de saisie`,
-            paragraph: /* html */ `Le calendrier de saisie permet d'accèder aux fiches de saisie du projet`,
+            paragraph: /* html */ `Le calendrier de saisie permet d'accéder aux fiches de saisie du projet`,
         },
         'project.usage.edit': {
             title: `Édition d'une saisie`,
@@ -125,12 +125,12 @@ module.exports = {
         },
         'project.usage.general': {
             title: `Rapport général`,
-            paragraph: /* html */ `Cette page vous permet d'explorer vos données hierarchiquement en partant d'une vision général de votre projet.`,
+            paragraph: /* html */ `Cette page vous permet d'explorer vos données hiérarchiquement en partant d'une vision générale de votre projet.`,
         },
         'project.usage.olap': {
             title: `Tableau croisé dynamique`,
             paragraph: /* html */ `Cette page vous permet de construire des tableaux qui prendront la forme que vous désirez, et de les télécharger
-            en format Excel, afin de les inclure dans des rapports ou de créer des visualisation en dehors de Monitool.`,
+            en format Excel, afin de les inclure dans des rapports ou de créer des visualisations en dehors de Monitool.`,
         },
     },
     qas: [
@@ -148,15 +148,15 @@ module.exports = {
             question: `Pourquoi peut-on créer plusieurs projets par compte, alors qu'un seul suffit?`,
             answer: /* html */ `
                 Ça n'a pas d'utilité d'un point de vue terrain, mais certains utilisateurs doivent pouvoir accéder 
-                à de nombreux projets qu'ils ne crée pas eux-même.<br/>
-                Notament des salariés siège, régionaux ou des consultants
+                à de nombreux projets qu'ils ne créent pas eux-mêmes.<br/>
+                Notamment des salariés siège, régionaux ou des consultants
             `,
         },
         {
             prefixes: ['main.projects'],
             question: `Comment retourner sur les pages de configuration sur un projet que j'ai déjà créé?`,
             answer: /* html */ `
-                Sur votre projet, à droite du bouton ouvrir, clickez sur
+                Sur votre projet, à droite du bouton ouvrir, cliquez sur
                 <span class="btn btn-default btn-xs"><span class="caret"></span></span>
                 pour les voir toutes les actions possibles.
             `,
@@ -165,21 +165,21 @@ module.exports = {
             prefixes: ['main.projects'],
             question: `Quelle est l'utilité de pouvoir "Cloner la structure" d'un projet?`,
             answer: /* html */ `
-                La fonctionalité "Cloner la structure uniquement" est pensée pour les ONGs qui réalisent des 
-                programmes d'urgence. En effet dans ce cas, plutot que de prendre le temps de réflexion nécessaire
+                La fonctionnalité "Cloner la structure uniquement" est pensée pour les ONG qui réalisent des
+                programmes d'urgence. En effet dans ce cas, plutôt que de prendre le temps de réflexion nécessaire
                 à la construction d'un projet, il est fréquent de créer en avance différents
                 squelettes de projets avec toutes les sources de données et le cadre logique prêts à l'emploi.
                 <br/>
-                Lorsqu'une nouvelle crise démarre le système de monitoring peut ainsi être opérationel en quelques
+                Lorsqu'une nouvelle crise démarre le système de monitoring peut ainsi être opérationnel en quelques
                 minutes. Il suffit alors de cloner la structure du squelette adapté à la situation, et de renommer le projet,
-                l'adaptation du projet au contexte viendra dans une phase ultérieur du projet.
+                l'adaptation du projet au contexte viendra dans une phase ultérieure du projet.
             `,
         },
         {
             prefixes: ['main.projects'],
             question: `Quelle est l'utilité de pouvoir "Cloner structure et données" d'un projet?`,
             answer: /* html */ `
-                La fonctionalité "Cloner structure et données" intervient géneralement au moment d'un changement
+                La fonctionnalité "Cloner structure et données" intervient généralement au moment d'un changement
                 de bailleur ou un changement majeur dans l'appareil de monitoring d'un projet long terme.<br/>
                 Il permet de prendre une photographie d'un projet, avec sa structure et toutes ses saisies à un instant donné
                 et à la conserver dans le long terme.
@@ -187,7 +187,7 @@ module.exports = {
         },
         {
             prefixes: ['main.projects'],
-            question: `J'ai archivé mon projet par erreur, comment le récuperer?`,
+            question: `J'ai archivé mon projet par erreur, comment le récupérer?`,
             answer: /* html */ `
                 Cliquez sur <span class="btn btn-default btn-xs">Afficher les projets archivés</span>,
                 puis sur <span class="btn btn-default btn-xs">Restaurer</span>
@@ -219,7 +219,7 @@ module.exports = {
                 <ul>
                     <li>Votre projet ne correspond pas au filtre que vous avez rentré. Videz la barre de saisie de texte en haut de la page</li>
                     <li>Votre projet vient de terminer. Cliquez sur <span class="btn btn-default btn-xs">Afficher 
-                    les projets terminés</span>. Vous pouvez éditeur sa date de fin pour le prolonger.</li>
+                    les projets terminés</span>. Vous pouvez éditer sa date de fin pour le prolonger.</li>
                     <li>Vous avez archivé votre projet. Cliquez sur <span class="btn btn-default btn-xs">Afficher les
                     projets archivés</span> puis sur
                     <span class="btn btn-default btn-xs">Restaurer</span></li>
@@ -234,20 +234,20 @@ module.exports = {
         },
         {
             prefixes: ['main.projects'],
-            question: `Combien de temps mon projet va-t'il resté stocké sur Monitool?`,
+            question: `Combien de temps mon projet va-t-il rester stocké sur Monitool?`,
             answer: /* html */ `
                 Pendant toute la durée de vie de l'outil: les coûts de stockage des projets sont faibles par rapport
                 aux coûts de développement et d'hébergement de la plateforme.<br/>
                 Il ne nous est donc pas nécessaire de supprimer les anciens projets pour « faire de la place ».<br/>
                 <br/>
-                Si votre ONG dispose de règles au sujet de l'archivage électronique pour les projet terminés, vous pouvez
+                Si votre ONG dispose de règles au sujet de l'archivage électronique pour les projets terminés, vous pouvez
                 télécharger toutes les données saisies par projet depuis la page "Rapport Général"
             `,
         },
 
         {
             prefixes: ['main.invitations'],
-            question: `Je n'ai pas reçu l'invitation que j'attend`,
+            question: `Je n'ai pas reçu l'invitation que j'attends`,
             answer: /* html */ `
                 Pour vous inviter à participer à un projet, son propriétaire utilise votre adresse email.<br/>
                 Assurez-vous que vous vous êtes connecté avec la même adresse email que celle qui a été utilisée
@@ -268,7 +268,7 @@ module.exports = {
             prefixes: ['project.config'],
             question: `Comment choisir des noms adaptés pour les lieux de collecte, sources de données, variables et indicateurs`,
             answer: /* html */ `Utilisez des noms courts pour nommer les différents composants de votre projet.<br/>
-            En évitant les acronymes vous améliorez la lisibilité de vos graphiques et tableaux et permettez une meilleur
+            En évitant les acronymes vous améliorez la lisibilité de vos graphiques et tableaux et permettez une meilleure
             compréhension de votre projet par tous les acteurs concernés.`,
         },
         {
@@ -305,15 +305,15 @@ module.exports = {
         {
             prefixes: ['project.config.collection_form_list'],
             question: `
-                Que se passe-t'il quand je déplace des variables entre des sources de données qui 
-                n'ont pas les même périodicités ou lieux de collecte?
+                Que se passe-t-il quand je déplace des variables entre des sources de données qui
+                n'ont pas les mêmes périodicités ou lieux de collecte?
             `,
             answer: /* html */ `
-                Les données déjà saisies vont êtres déplacées et aggrégées ou interpolées pour s'adapter à la nouvelle périodicité.<br/>
+                Les données déjà saisies vont être déplacées et agrégées ou interpolées pour s'adapter à la nouvelle périodicité.<br/>
                 Si les lieux de collectes ne sont pas les mêmes entre les deux sources de données
                 <ul>
                     <li>Les données qui ont été saisies sur les lieux supplémentaires deviendront inaccessibles.</li>
-                    <li>Les saisisseurs seront invités à saisir retro-activement les données manquante.</li>
+                    <li>Les saisisseurs seront invités à saisir rétroactivement les données manquantes.</li>
                 </ul>
             `,
         },
@@ -321,18 +321,18 @@ module.exports = {
             prefixes: ['project.config.collection_form_edition'],
             question: `Mes équipes passent trop de temps à saisir des données, comment réduire?`,
             answer: /* html */ `
-                Réduisez la quantitée de données à collecter!<br/>
+                Réduisez la quantité de données à collecter!<br/>
                 Par exemple, vous pouvez désactiver des variables ou des désagrégations que vous n'analysez pas,
                 ou bien réduire la périodicité de la saisie.
             `,
         },
         {
             prefixes: ['project.config.collection_form_edition'],
-            question: `Je ne comprend pas les deux questions sur "Comment grouper les saisies"`,
+            question: `Je ne comprends pas les deux questions sur "Comment grouper les saisies"`,
             answer: /* html */ `
                 Monitool vous affiche des rapports selon l'échelle de temps de votre choix (semaine, mois, trimestre...) et ne vous demande
                 pas de saisir vos données autant de fois qu'il y a d'échelles de temps.<br/>
-                Pour cela, il est nécessaire de savoir comment aggréger les données qui sont saisies dans l'outil, et ces règles dependent
+                Pour cela, il est nécessaire de savoir comment agréger les données qui sont saisies dans l'outil, et ces règles dépendent
                 de la nature des données que vous saisissez.<br/>
                 <br/>
 
@@ -344,14 +344,14 @@ module.exports = {
                     </tr>
                     <tr>
                         <td>Nombre de consultations médicales</td>
-                        <td>Si 10 consultations sont réalisés par jour, cela fait 70 consulations par semaine, donc "Somme"</td>
-                        <td>10 consultations à Paris et 10 consultations à Lilles font 20 consultations, donc "Somme" également</td>
+                        <td>Si 10 consultations sont réalisées par jour, cela fait 70 consultations par semaine, donc "Somme"</td>
+                        <td>10 consultations à Paris et 10 consultations à Lille font 20 consultations, donc "Somme" également</td>
                     </tr>
                     <tr>
                         <td>Nombre de structures soutenues</td>
                         <td>10 structures étaient soutenues en janvier, et 15 en février et 20 en mars, la valeur à garder 
                         pour le trimestre est 15, donc "Moyenne"</td>
-                        <td>10 structures étaient soutenues à Paris, et 10 à Lilles, cela fait 20 structures, donc "Somme"</td>
+                        <td>10 structures étaient soutenues à Paris, et 10 à Lille, cela fait 20 structures, donc "Somme"</td>
                     </tr>                    
                 </table>
             `,
@@ -382,7 +382,7 @@ module.exports = {
             question: `Je veux arrêter de saisir une variable mais j'ai déjà réalisé des saisies.`,
             answer: /* html */ `
                 Vous pouvez désactiver des variables à tout moment sans perte de données.<br/>
-                Les données rentrées précedement seront toujours accessibles dans vos rapports, mais toutes les nouvelles
+                Les données rentrées précédemment seront toujours accessibles dans vos rapports, mais toutes les nouvelles
                 saisies seront alors marquées comme "incomplètes" dans le tableau de bord du projet, sans autres conséquences.<br/><br/>
 
                 Lorsque vous n'aurez plus usage de cette variable, vous pourrez alors la supprimer.
@@ -422,7 +422,7 @@ module.exports = {
             prefixes: ['project.config.collection_form_edition'],
             question: `Je veux supprimer une désagrégation mais j'ai déjà réalisé des saisies`,
             answer: /* html */ `
-                Toutes les données qui ont étés saisies jusqu'à ce jour vont être aggrégées, et la désagrégation va disparaitre rétroactivement
+                Toutes les données qui ont été saisies jusqu'à ce jour vont être agrégées, et la désagrégation va disparaître rétroactivement
                 des rapports.<br/>
                 Vous ne pourrez plus voir cette désagrégation dans les rapports, même sur les données saisies avant la modification.<br/>
                 Une alternative consiste à désactiver cette désagrégation.
@@ -430,8 +430,8 @@ module.exports = {
         },
         {
             prefixes: ['project.config.history'],
-            question: `Certaines modifications à la structure du projet sont réalisées par un utilisateur qui ne devrait pas avoir y avoir accès`,
-            answer: /* html */ `Vous pouvez gérer les droits des differents intervenants au projet dans la section "<i class="fa fa-share-alt"> Partage"`,
+            question: `Certaines modifications à la structure du projet sont réalisées par un utilisateur qui ne devrait pas y avoir accès`,
+            answer: /* html */ `Vous pouvez gérer les droits des différents intervenants au projet dans la section "<i class="fa fa-share-alt"> Partage"`,
         },
         {
             prefixes: ['project.config.history'],
@@ -479,23 +479,23 @@ module.exports = {
             question: `Quel est l'usage des cadres logiques en PDF?`,
             answer: /* html */ `
                 Lorsque vous communiquez sur votre projet, il est souvent plus pratique d'envoyer votre
-                cadre logique par email, plutôt que de demander à un bailleur ou un partenaire se se connecter
+                cadre logique par email, plutôt que de demander à un bailleur ou un partenaire de se connecter
                 à une plateforme en ligne pour y avoir accès.<br/>
 
                 Pouvoir les télécharger vous évitera ainsi un double travail: concevez votre cadre logique directement
-                sur l'outil, et disposez d'une version toujours à jour prette à être transmise.
+                sur l'outil, et disposez d'une version toujours à jour prête à être transmise.
             `,
         },
         {
             prefixes: ['project.usage.downloads'],
             question: `Quel est l'usage des fiches de saisie en format PDF et Excel?`,
             answer: /* html */ `
-                Dans de nombreux contextes, la mise en place d'outil de collecte de donnée électroniques 
+                Dans de nombreux contextes, la mise en place d'outils de collecte de données électroniques
                 demande du temps et des ressources en formation.
                 <ul>
                     <li>
                         La version PDF des fiches de saisies est facilement imprimable, ne demande aucune formation
-                        pour être utilisée, et peut être opérationelle dès le premier jour de votre projet.
+                        pour être utilisée, et peut être opérationnelle dès le premier jour de votre projet.
                     </li>
                     <li>
                         La version Excel est une alternative pour les lieux de collecte où l'accès à l'informatique est
@@ -510,7 +510,7 @@ module.exports = {
             prefixes: ['project.usage.downloads'],
             question: `Sur mes fiches de saisie, les tableaux sont trop larges et dépassent de la page`,
             answer: /* html */ `
-                Deux possibilitées s'offrent à vous:
+                Deux possibilités s'offrent à vous:
                 <ul>
                     <li>
                         Une version "paysage" de la même fiche de saisie est disponible en cliquant sur 
@@ -580,7 +580,7 @@ module.exports = {
             answer: /* html */ `
                 Elle est de 16 mega-octets par fichier.<br/>
                 Cependant, il est inutile de téléverser des photos dont la taille dépasse 2 mega-octets:
-                des images à trop haute résolution ralentissent le traitement, et n'améliore pas sa qualité. 
+                des images à trop haute résolution ralentissent le traitement, et n'améliorent pas sa qualité.
             `,
         },
         {
@@ -609,7 +609,7 @@ module.exports = {
                 Par contre, il n'est pas nécessaire de:
                 <ul>
                     <li>Être à la verticale au dessus du formulaire pour prendre la photo.</li>
-                    <li>Que les bords du formulaires corresponde au bord de la photo</li>
+                    <li>Que les bords du formulaire correspondent au bord de la photo</li>
                 </ul>
             `,
         },
@@ -625,16 +625,16 @@ module.exports = {
             prefixes: ['project.usage.edit', 'project.usage.data_entry'],
             question: `Comment passer rapidement d'une case à l'autre?`,
             answer: /* html */ `
-                Lors de la saisie de données, la touch Tab de votre clavier vous permet de naviguer entre les cases.<br/>
+                Lors de la saisie de données, la touche Tab de votre clavier vous permet de naviguer entre les cases.<br/>
                 Pour revenir à la case précédente, utilisez Shift + Tab
             `,
         },
         {
             prefixes: ['project.usage.edit', 'project.usage.data_entry'],
-            question: `Je saisie à partir de fiches papier remontées par plusieurs intervenants par lieu de collecte. Comment saisir plus rapidement?`,
+            question: `Je saisis à partir de fiches papier remontées par plusieurs intervenants par lieu de collecte. Comment saisir plus rapidement?`,
             answer: /* html */ `
                 Si vous disposez de plusieurs formulaires papier à saisir par lieu (par exemple, un par travailleur social),
-                et que désirez les additioner, vous pouvez rentrer des sommes dans les cases de saisies: "1+2+3".<br/>
+                et que désirez les additionner, vous pouvez rentrer des sommes dans les cases de saisie: "1+2+3".<br/>
             `,
         },
         {
@@ -649,7 +649,7 @@ module.exports = {
             question: `À quoi sert le bouton "Remplir avec les données de la période précédente"`,
             answer: /* html */ `
                 À gagner du temps dans certains cas particuliers!<br/>
-                Si votre projet suit des indicateur qui nécessitent des indicateurs qui varient peu dans le temps (nombre de structure soutenues,
+                Si votre projet suit des indicateurs qui varient peu dans le temps (nombre de structures soutenues,
                 population de la zone ciblée, ...), il est souvent plus facile de copier les données de la saisie précédente et de corriger
                 les différences, que de réaliser la saisie à partir de zéro.
             `,
@@ -665,10 +665,10 @@ module.exports = {
         },
         {
             prefixes: ['project.usage.edit', 'project.usage.data_entry'],
-            question: `Que se passe-t'il si je laisse certaines cases en blanc?`,
+            question: `Que se passe-t-il si je laisse certaines cases en blanc?`,
             answer: /* html */ `
                 Attention!<br/>
-                Une case laissée blanche n'est pas équivalente à une case qui contient un zéro. Les données non saisies apparaitront comme telles
+                Une case laissée blanche n'est pas équivalente à une case qui contient un zéro. Les données non saisies apparaîtront comme telles
                 dans les rapports.
             `,
         },
@@ -697,7 +697,7 @@ module.exports = {
             prefixes: ['project.usage.general'],
             question: `Comment désagréger mes données par tranche d'age, sexe, pathologie, contenu de formation, ...?`,
             answer: /* html */ `
-                    Si vous avez utilisé des désagrégations lors de la collecte de vos données celles-ci apparaitront dans le
+                    Si vous avez utilisé des désagrégations lors de la collecte de vos données celles-ci apparaîtront dans le
                     menu qui est accessible sur chaque ligne en cliquant sur le symbole <i class="fa fa-plus"></i>.<br/>
                     Pour les indicateurs calculés (cadres logiques, et indicateurs supplémentaires), il n'est possible de désagréger
                     les resultats que par lieu de collecte et par unité de temps.`,
@@ -711,13 +711,13 @@ module.exports = {
             prefixes: ['project.usage.general', 'project.usage.olap'],
             question: `Que signifie le symbole <i class="fa fa fa-exclamation"></i> qui s'affiche à la place de mes données?`,
             answer: /* html */ `
-                Ce symbole signifie qu'une division par zéro à eu lieu!
+                Ce symbole signifie qu'une division par zéro a eu lieu!
             `,
         },
         {
             prefixes: ['project.usage.general', 'project.usage.olap'],
             question: `Pourquoi certaines données sont précédées par le symbole ≈?`,
-            answer: /* html */ `Vous consultez ces données à un niveau d'aggrégation qui est inférieur à celui auquel vous les avez collecté!<br/>
+            answer: /* html */ `Vous consultez ces données à un niveau d'agrégation qui est inférieur à celui auquel vous les avez collecté!<br/>
                 Par exemple, vous avez réalisé la collecte trimestriellement, mais consultez ces données sur un tableau qui les affiche
                 mensuellement.<br/><br/>
                 Dans ce cas, les données sont "interpolés" afin de vous permettre d'avoir des ordres de grandeurs, et de pouvoir
@@ -737,7 +737,7 @@ module.exports = {
             answer: /* html */ `
                 Les données affichées en <i>italique</i> n'ont été que partiellement saisies. Le plus souvent, cela signifie que
                 seules certains des lieux de collectes attendus ont été saisis.
-                Le cas peut également se produire si vous consultez une version aggrégée (ex: par trimestre) de données collectés
+                Le cas peut également se produire si vous consultez une version agrégée (ex: par trimestre) de données collectées
                 à une periodicité plus courte (ex: par mois) et que tous les mois du trimestre considéré n'ont pas été saisis.<br/>
                 En désagrégant la ligne avec le bouton <i class="fa fa-plus"></i> vous pourrez trouver facilement les saisies manquantes.`,
         },

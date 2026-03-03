@@ -9,7 +9,7 @@ export default {
     refuse_invitation: 'Refuser',
     uninvite: 'Retirer de mes projets',
     no_invitations: "Vous n'avez aucune invitation en attente!",
-    no_invitations_back: 'Retournez à la liste de vos projet',
+    no_invitations_back: 'Retournez à la liste de vos projets',
 
     configure: 'Configuration',
     back: 'Retour',
@@ -61,7 +61,7 @@ export default {
     logout: 'Déconnecter',
 
     sure_to_leave:
-      'Vous avez realisé des changements. Êtes-vous sûr de vouloir quitter sans sauvegarder?',
+      'Vous avez réalisé des changements. Êtes-vous sûr de vouloir quitter sans sauvegarder?',
   },
   menu: {
     language: 'Langue',
@@ -72,12 +72,12 @@ export default {
   welcome: {
     i_got_it: "J'ai compris! Commençons!",
     text: /* html */ `
-            <legend>Bienvenu!</legend>
+            <legend>Bienvenue !</legend>
             <p>C'est votre première visite sur Monitool.</p>
             <p>
                 Afin de vous aider à appréhender l'outil nous avons créé un premier projet dans votre
                 espace!<br />
-                Il utilise la majorité des fonctionalitées de l'outil, et pourra vous servir de référence.
+                Il utilise la majorité des fonctionnalités de l'outil, et pourra vous servir de référence.
             </p>
             <ul>
                 <li>
@@ -103,7 +103,7 @@ export default {
                 Pour y accéder:
             </p>
             <ul style="margin-bottom: 20px">
-                <li>Déplacez le pointeur de votre souris sur la barre latéral à droite de votre écran.</li>
+                <li>Déplacez le pointeur de votre souris sur la barre latérale à droite de votre écran.</li>
                 <li>Attendez un court instant.</li>
             </ul>
         `,
@@ -114,8 +114,8 @@ export default {
     add_invitation: 'Inviter une personne',
     email: 'Email',
     help_email: "Quel est l'email de la personne que vous désirez inviter?",
-    help_sites: "Sur quels lieux de collecte cette personne pourra-t'elle saisir?",
-    help_datasources: " Sur quels sources de données cette personne pourra-t'il saisir?",
+    help_sites: 'Sur quels lieux de collecte cette personne pourra-t-elle saisir?',
+    help_datasources: 'Sur quelles sources de données cette personne pourra-t-elle saisir?',
     accepted: 'Acceptée',
     contact: 'Contact',
     data_entry_perms: 'Permissions saisie',
@@ -127,7 +127,7 @@ export default {
     uploads: 'Papier & Excel',
 
     drop_file_here:
-      'Déposez ici vos fiches de saisies remplies ou <label for="file-input">choisissez des fichier</label>',
+      'Déposez ici vos fiches de saisies remplies ou <label for="file-input">choisissez des fichiers</label>',
     drop_file_here_formats:
       'Formats supportés: Photo, scan, fax (pdf, jpg, png, tiff), excel (xlsx) ou archive (zip).',
     waiting_dataentry: 'En attente de saisie',
@@ -243,9 +243,9 @@ export default {
       forms_elements_active_replace:
         "{{after ? 'Active' : 'Désactive'}} la saisie de la variable <code>{{variable.name}}</code>",
       forms_elements_geoAgg_replace:
-        "Change la règle d'aggrégation (lieux) de <code>{{variable.name}}</code> de <code>{{before}}</code> vers <code>{{after}}</code>",
+        "Change la règle d'agrégation (lieux) de <code>{{variable.name}}</code> de <code>{{before}}</code> vers <code>{{after}}</code>",
       forms_elements_timeAgg_replace:
-        "Change la règle d'aggrégation (temps) de <code>{{variable.name}}</code> de <code>{{before}}</code> vers <code>{{after}}</code>",
+        "Change la règle d'agrégation (temps) de <code>{{variable.name}}</code> de <code>{{before}}</code> vers <code>{{after}}</code>",
       forms_elements_distribution_replace:
         'Change la présentation de la saisie de la variable <code>{{variable.name}}</code>',
 
@@ -260,7 +260,7 @@ export default {
       forms_elements_partitions_active_replace:
         "{{after ? 'Active' : 'Désactive'}} la saisie de la désagrégation <code>{{partition.name}}</code> de la variable <code>{{variable.name}}</code>",
       forms_elements_partitions_aggregation_replace:
-        "Change la règle d'aggrégation de <code>{{before}}</code> vers <code>{{after}}</code> pour la variable <code>{{variable.name}}</code>",
+        "Change la règle d'agrégation de <code>{{before}}</code> vers <code>{{after}}</code> pour la variable <code>{{variable.name}}</code>",
 
       forms_elements_partitions_elements_add:
         "Ajoute l'élément <code>{{item.name}}</code> dans la désagrégation <code>{{partition.name}}</code> de la variable <code>{{variable.name}}</code>",
@@ -380,13 +380,13 @@ export default {
     form_persisted: 'Vos données sont sauvegardées.',
     form_changed: "Vous avez réalisé des changements. N'oubliez pas de cliquer sur sauvegarder.",
 
-    show_more_inputs: 'Voir les dates précedentes',
+    show_more_inputs: 'Voir les dates précédentes',
     all_elements: 'Tout',
     no_extra_indicators: "Aucun indicateur annexé n'a été créé.",
     no_data_source_yet: "Aucune source de données n'a été créée.",
     no_data_source:
       '<span style="font-style: italic">Aucune source de données n\'est prête à la saisie</span>',
-    general_info: 'Information génerales',
+    general_info: 'Informations générales',
     indicator_computation_missing: 'Calcul absent',
     which_variable: 'De quelle variable provient cette information?',
     which_partitions: 'Quelles désagrégations sont concernées?',
@@ -394,10 +394,10 @@ export default {
 
     computations: {
       unavailable: "Il n'est pas possible de calculer cet indicateur",
-      copy: 'Copier une valeur (depuis une sources de données)',
+      copy: 'Copier une valeur (depuis une source de données)',
       percentage: 'Pourcentage (depuis les sources de données)',
       permille: 'Pour mille (depuis les sources de données)',
-      formula: 'Formule personalisée (depuis les sources de données)',
+      formula: 'Formule personnalisée (depuis les sources de données)',
     },
 
     formula: {
@@ -413,10 +413,10 @@ export default {
     partition_help_name:
       'Ce nom apparaîtra dans divers rapports. Il nomme la désagrégation que vous voulez créer sur votre donnée',
     partition_help_elements:
-      'Les éléments de la désagrégation doivent être mutuellement exclusifs, et il doit être possible de trouver la valeur totale en les aggrégant.',
+      'Les éléments de la désagrégation doivent être mutuellement exclusifs, et il doit être possible de trouver la valeur totale en les agrégeant.',
     partition_help_aggregation:
       'Comment trouver la valeur totale en agrégeant les éléments décrits?',
-    partition_help_groups: 'Les groupes permettent de faire des aggrégations intermédiaires',
+    partition_help_groups: 'Les groupes permettent de faire des agrégations intermédiaires',
     logical_frame: 'Cadre logique',
 
     no_data: 'Les données ne sont pas disponibles',
@@ -499,8 +499,8 @@ export default {
     aggregation: {
       sum: 'Faire une somme',
       average: 'Faire une moyenne',
-      highest: 'Prendre la plus grande valeure',
-      lowest: 'Prendre la plus petite valeure',
+      highest: 'Prendre la plus grande valeur',
+      lowest: 'Prendre la plus petite valeur',
       last: 'Prendre la dernière valeur',
       none: "Il n'est pas possible de faire ce calcul",
     },
@@ -538,10 +538,10 @@ export default {
     periodicities: {
       day: 'Tous les jours',
       month_week_sat: 'Toutes les semaines (samedi à vendredi / coupées par mois)',
-      month_week_sun: 'Toutes les semaines (dimanche à lundi / coupées par mois)',
+      month_week_sun: 'Toutes les semaines (dimanche à samedi / coupées par mois)',
       month_week_mon: 'Toutes les semaines (lundi à dimanche / coupées par mois)',
       week_sat: 'Toutes les semaines (samedi à vendredi)',
-      week_sun: 'Toutes les semaines (dimanche à lundi)',
+      week_sun: 'Toutes les semaines (dimanche à samedi)',
       week_mon: 'Toutes les semaines (lundi à dimanche)',
       month: 'Tous les mois',
       quarter: 'Tous les trimestres',
@@ -617,20 +617,20 @@ export default {
     add_purpose: 'Ajouter un objectif spécifique',
 
     basics_help_country:
-      "Dans quel pays le projet se déroule-t'il? S'il s'agit d'un projet régional, entrez le nom de la région.",
+      "Dans quel pays le projet se déroule-t-il? S'il s'agit d'un projet régional, entrez le nom de la région.",
     basics_help_name:
-      "Le nom permet de retrouver le projet dans Monitool. Choisissez un nom suffisament informatif, ou copiez l'objectif général du projet.",
+      "Le nom permet de retrouver le projet dans Monitool. Choisissez un nom suffisamment informatif, ou copiez l'objectif général du projet.",
     basics_help_begin:
       'La date de début représente le moment où le projet commence à collecter des données (généralement, le début des activités)',
     basics_help_end:
-      "La date de fin représente le moment où le projet finale sa collecte de données. Si cette date n'est pas connu à l'avance, rentrer une date lointaine dans le futur.",
+      "La date de fin représente le moment où le projet finalise sa collecte de données. Si cette date n'est pas connue à l'avance, rentrez une date lointaine dans le futur.",
 
     collection_edit_help_name:
       'Comment s\'apelle la source de laquelle vous voulez extraire des données? Par exemple: "Dossier patient informatisé", "Registre des centre de santé", "Rapport du système national d\'information sanitaire", ...',
     collection_edit_help_sites:
-      'Parmi les structures identifiées dans "Lieux de collecte", lesquelles font remonter cette source de donnée?',
+      'Parmi les structures identifiées dans "Lieux de collecte", lesquelles font remonter cette source de données?',
     collection_edit_help_periodicity:
-      'À quelle fréquence ces données remontent-elles? Attention, cette fréquence est complétement decorrelée de la fréquence à laquelle le projet doit fournir du reporting.',
+      'À quelle fréquence ces données remontent-elles? Attention, cette fréquence est complètement décorrélée de la fréquence à laquelle le projet doit fournir du reporting.',
 
     collection_edit_help_varname:
       'Nommez la variable que vous voulez extraire de/du <code>{{name}}</code>. Par exemple "Nombre de diagnostics effectués".',
@@ -639,7 +639,7 @@ export default {
     collection_edit_help_timeagg:
       'Dans un projet qui collecte mensuellement, si <code>{{name}}</code> vaut 10 en janvier, et 20 en février et 30 en mars que vaut-il pour le premier trimestre?',
     collection_edit_help_partition:
-      "Veut-t'on être capable de différencier <code>{{name}}</code> par age, sexe, prise en charge, motif de consultation, pathologie, tranche horaire, reférencement effectif, ...?<br/>Ne désagrégez pas ici par zone géographique ou site d'intervention: vos lieux de collecte ont déjà été renseignés dans la page prévu à cet effet.",
+      "Veut-on être capable de différencier <code>{{name}}</code> par âge, sexe, prise en charge, motif de consultation, pathologie, tranche horaire, référencement effectif, ...?<br/>Ne désagrégez pas ici par zone géographique ou site d'intervention: vos lieux de collecte ont déjà été renseignés dans la page prévue à cet effet.",
     collection_edit_help_distribution:
       'Si vous desirez imprimer des formulaires en A4, préférez placer les intitulés sur la gauche des tableaux, afin de limiter leur largeur.',
     collection_edit_help_order:
@@ -650,7 +650,7 @@ export default {
 
     titles: 'Intitulés',
     data: 'Données',
-    general_informations: 'Informations génerales',
+    general_informations: 'Informations générales',
     fill_from_last: 'La saisie précédente',
     fill_from_upload: 'Le fichier téléchargé',
     fill_with_zeros: 'Zéro',
@@ -689,7 +689,7 @@ export default {
       "Rentrez ici les indicateurs permettant de mesurer l'avancement de l'activité",
 
     form_is_not_associated_with_site:
-      "Cette source de données n'est associé à aucun lieu de collecte.",
+      "Cette source de données n'est associée à aucun lieu de collecte.",
   },
 
   form: {

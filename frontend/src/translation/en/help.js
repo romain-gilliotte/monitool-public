@@ -645,7 +645,7 @@ module.exports = {
             question: `What is the purpose of the "Fill with previous period's data" button?`,
             answer: /* html */ `
                     To save time in certain specific cases!<br/>
-                    If your project follows indicators that require indicators that vary little over time (number of supported structures,
+                    If your project follows indicators that vary little over time (number of supported structures,
                     population of the targeted area, ...), it is often easier to copy the data from the previous entry and correct
                     the differences, than to enter the data from scratch.
                 `,
