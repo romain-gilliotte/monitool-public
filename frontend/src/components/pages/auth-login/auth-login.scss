@@ -1,0 +1,170 @@
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('/images/working-at-the-office.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    padding: 20px;
+    position: relative;
+    
+    // Add a subtle overlay to ensure text readability
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.3);
+        z-index: 1;
+    }
+
+    .panel {
+        max-width: 400px;
+        width: 100%;
+        margin: 0;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        position: relative;
+        z-index: 2;
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+    }
+
+    .panel-heading {
+        background-color: rgba(255, 255, 255, 0.9);
+        border-bottom: 1px solid rgba(221, 221, 221, 0.5);
+    }
+    
+    .panel-body {
+        background-color: transparent;
+    }
+
+    .panel-title {
+        margin: 0;
+        font-size: 18px;
+        
+        i {
+            margin-right: 8px;
+        }
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+
+        label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .form-control {
+            height: 42px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            
+            &:focus {
+                border-color: #5cb85c;
+                box-shadow: 0 0 0 2px rgba(92, 184, 92, 0.2);
+            }
+        }
+    }
+
+    .btn {
+        height: 42px;
+        border-radius: 4px;
+        font-weight: 600;
+
+        i {
+            margin-right: 8px;
+        }
+
+        &.btn-block {
+            margin-bottom: 10px;
+        }
+    }
+
+    .btn-google {
+        background-color: #db4437;
+        border-color: #db4437;
+        color: white;
+
+        &:hover, &:focus {
+            background-color: #c23321;
+            border-color: #c23321;
+            color: white;
+        }
+    }
+
+    .btn-microsoft {
+        background-color: #0078d4;
+        border-color: #0078d4;
+        color: white;
+
+        &:hover, &:focus {
+            background-color: #106ebe;
+            border-color: #106ebe;
+            color: white;
+        }
+    }
+
+    .auth-divider {
+        text-align: center;
+        margin: 20px 0;
+        position: relative;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: #ddd;
+        }
+
+        span {
+            background-color: white;
+            padding: 0 15px;
+            color: #999;
+            font-size: 14px;
+            position: relative;
+        }
+    }
+
+    .oauth-buttons {
+        margin-bottom: 20px;
+    }
+
+    .auth-links {
+        text-align: center;
+        
+        p {
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        a {
+            color: #5cb85c;
+            text-decoration: none;
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .alert {
+        margin-bottom: 20px;
+        
+        i {
+            margin-right: 5px;
+        }
+    }
+} 

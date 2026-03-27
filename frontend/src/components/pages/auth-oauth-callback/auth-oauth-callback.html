@@ -1,0 +1,23 @@
+<div class="auth-container">
+    <div class="panel panel-default">
+        <div class="panel-body text-center">
+            <div ng-if="$ctrl.loading">
+                <i class="fa fa-spinner fa-spin fa-3x text-primary"></i>
+                <h4 style="margin-top: 20px;">Completing sign in...</h4>
+                <p class="text-muted">Please wait while we finish setting up your account.</p>
+            </div>
+
+            <div ng-if="$ctrl.error">
+                <i class="fa fa-exclamation-triangle fa-3x text-danger"></i>
+                <h4 style="margin-top: 20px; color: #d9534f;">Authentication Failed</h4>
+                <p>{{$ctrl.error}}</p>
+                <div style="margin-top: 20px;">
+                    <a ng-click="$ctrl.goToLogin()" class="btn btn-primary">
+                        <i class="fa fa-sign-in"></i>
+                        Try Again
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

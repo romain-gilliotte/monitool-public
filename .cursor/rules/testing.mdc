@@ -1,0 +1,13 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+When it's needed to run the e2e, it must be done in headless mode.
+Otherwise the script hangs because it open a browser windows with the results
+
+The command is the following:
+
+```bash
+npx playwright test --reporter=line
+```

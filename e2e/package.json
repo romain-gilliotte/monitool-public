@@ -1,0 +1,19 @@
+{
+  "name": "monitool-e2e",
+  "version": "1.0.0",
+  "description": "End-to-end tests for Monitool application",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report",
+    "install-deps": "playwright install chromium"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.30.0"
+  }
+}
