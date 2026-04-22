@@ -177,9 +177,16 @@ router.get(
                 result = await job.finished();
                 await job.remove();
 
-                // Update cache
-                // FIXME missing ttl
-                await ctx.io.redis.hset(`reporting:${projectId}`, sha1, result);
+                // Update cache. Expire extends the TTL of the whole hash on
+                // every write, so active projects keep their cache and
+                // abandoned ones are eventually reclaimed. TTL also marks the
+                // key as volatile, making it eligible for volatile-lru
+                // eviction when Redis hits maxmemory.
+                await ctx.io.redis
+                    .pipeline()
+                    .hset(`reporting:${projectId}`, sha1, result)
+                    .expire(`reporting:${projectId}`, 30 * 24 * 60 * 60)
+                    .exec();
             } catch (e) {
                 ctx.throw(400, e.message);
                 return;
