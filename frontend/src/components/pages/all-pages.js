@@ -2,6 +2,15 @@ import angular from 'angular';
 
 import error from './error/error';
 
+// Authentication components
+import authContainer from './auth-container/auth-container';
+import authLogin from './auth-login/auth-login';
+import authRegister from './auth-register/auth-register';
+import authForgotPassword from './auth-forgot-password/auth-forgot-password';
+import authResetPassword from './auth-reset-password/auth-reset-password';
+import authOAuthCallback from './auth-oauth-callback/auth-oauth-callback';
+import authVerifyEmail from './auth-verify-email/auth-verify-email';
+
 import mainMenu from './main-menu/main-menu';
 import mainProjectList from './main-list/project-list';
 import mainInvitations from './main-invitations/main-invitations';
@@ -34,33 +43,43 @@ import reportingOlap from './reporting-olap/olap-reporting';
 import miscDownloads from './misc-downloads/downloads';
 
 const module = angular.module(__moduleName, [
-    error,
-    mainMenu,
-    mainProjectList,
-    mainInvitations,
-    menu,
-    structMenu,
-    structHome,
-    structBasics,
-    structSites,
-    structDsList,
-    structDsEdit,
-    structExtra,
-    structHistory,
-    structLfList,
-    structLfEdit,
-    structInvitationList,
-    inputMenu,
-    inputHome,
-    inputUploads,
-    inputList,
-    inputEdition,
-    inputLog,
-    inputPreview,
-    reportingGeneral,
-    reportingOlap,
+  error,
 
-    miscDownloads,
+  // Authentication modules
+  authContainer,
+  authLogin,
+  authRegister,
+  authForgotPassword,
+  authResetPassword,
+  authOAuthCallback,
+  authVerifyEmail,
+
+  mainMenu,
+  mainProjectList,
+  mainInvitations,
+  menu,
+  structMenu,
+  structHome,
+  structBasics,
+  structSites,
+  structDsList,
+  structDsEdit,
+  structExtra,
+  structHistory,
+  structLfList,
+  structLfEdit,
+  structInvitationList,
+  inputMenu,
+  inputHome,
+  inputUploads,
+  inputList,
+  inputEdition,
+  inputLog,
+  inputPreview,
+  reportingGeneral,
+  reportingOlap,
+
+  miscDownloads,
 ]);
 
 export default module.name;

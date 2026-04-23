@@ -1,0 +1,108 @@
+<div class="auth-container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <i class="fa fa-sign-in"></i>
+                Sign In to Monitool
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div ng-if="$ctrl.error && !$ctrl.isAuth0User" class="alert alert-danger" data-testid="login-error">
+                <i class="fa fa-exclamation-triangle"></i>
+                {{$ctrl.error}}
+            </div>
+
+            <div ng-if="$ctrl.error && $ctrl.isAuth0User" class="alert alert-warning" data-testid="auth0-migration-message">
+                <i class="fa fa-info-circle"></i>
+                <strong>Account Migration Required</strong>
+                <p style="margin: 10px 0;">{{$ctrl.error}}</p>
+                <p style="margin: 10px 0;">Click the button below to reset your password and regain access to your account.</p>
+                <button 
+                    type="button" 
+                    class="btn btn-warning btn-sm" 
+                    ng-click="$ctrl.resetAuth0Password()"
+                    data-testid="reset-auth0-password">
+                    <i class="fa fa-key"></i>
+                    Reset My Password
+                </button>
+            </div>
+
+            <form ng-submit="$ctrl.login($event)" novalidate data-testid="login-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        class="form-control" 
+                        ng-model="$ctrl.form.email"
+                        placeholder="Enter your email"
+                        required
+                        ng-disabled="$ctrl.loading"
+                        data-testid="email-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        class="form-control" 
+                        ng-model="$ctrl.form.password"
+                        placeholder="Enter your password"
+                        required
+                        ng-disabled="$ctrl.loading"
+                        data-testid="password-input">
+                </div>
+
+                <div class="form-group">
+                    <button 
+                        type="submit" 
+                        class="btn btn-primary btn-block"
+                        ng-disabled="$ctrl.loading"
+                        data-testid="login-submit">
+                        <i ng-class="$ctrl.loading ? 'fa fa-spinner fa-spin' : 'fa fa-sign-in'"></i>
+                        {{$ctrl.loading ? 'Signing In...' : 'Sign In'}}
+                    </button>
+                </div>
+            </form>
+
+            <div class="auth-divider">
+                <span>or</span>
+            </div>
+
+            <div class="oauth-buttons">
+                <button 
+                    type="button" 
+                    class="btn btn-google btn-block"
+                    ng-click="$ctrl.loginWithGoogle()"
+                    ng-disabled="$ctrl.loading">
+                    <i class="fa fa-google"></i>
+                    Continue with Google
+                </button>
+
+                <button 
+                    type="button" 
+                    class="btn btn-microsoft btn-block"
+                    ng-click="$ctrl.loginWithMicrosoft()"
+                    ng-disabled="$ctrl.loading">
+                    <i class="fa fa-windows"></i>
+                    Continue with Microsoft
+                </button>
+            </div>
+
+                            <div class="auth-links">
+                    <p>
+                        <a ng-click="$ctrl.goToForgotPassword()" data-testid="forgot-password-link">
+                            Forgot your password?
+                        </a>
+                    </p>
+                    <p>
+                        Don't have an account? 
+                        <a ng-click="$ctrl.goToRegister()" data-testid="register-link">
+                            Sign up here
+                        </a>
+                    </p>
+                </div>
+        </div>
+    </div>
+</div> 

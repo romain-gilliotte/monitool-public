@@ -5,40 +5,39 @@
 
 ## About
 
-[www.monitool.org](www.monitool.org) is a free platform to host, organize, and share logical frameworks for humanitarian organizations.
+[www.monitool.org](https://www.monitool.org) is a free platform designed to help humanitarian organizations host, organize, and share logical frameworks for their projects.
 
-Instead of being "Yet Another Form Builder v2.0 ®", it heavily focuses on helping projects get their monitoring and data management planning right.
+Instead of being "Yet Another Form Builder v2.0 ®", Monitool heavily focuses on helping projects get their monitoring and data management planning right by addressing critical questions:
 
 - Which indicators will you use?
-- Do you have access to data-sources that will enable you to measure them? How often? With which level of detail?
+- Do you have access to data sources that will enable you to measure them? How often? With which level of detail?
 - Once you start measuring them, which figures do you expect to find?
-- How much of your operative staff time are you willing to allocate to data collection? Who is reponsible for what?
+- How much of your operative staff time are you willing to allocate to data collection? Who is responsible for what?
 - Will the effects of your project be able to change those indicators in a reasonable timeframe?
-- Which correctives actions on your project did you plan in advance for each indicator?
+- Which corrective actions on your project did you plan in advance for each indicator?
 
-Those are the questions that we hope that using Monitool will help you to answer, write down in a tidy manner and share with your team and staff.
+Monitool helps you answer these questions, document them in a tidy manner, and share them with your team and staff.
 
-## Why
+## Background
 
-Monitool was initially developped as an internal tool at MDM France, which has been in production since 2014-2015.
+Monitool was initially developed as an internal tool at MDM France and has been in production since 2014-2015. This open-source version aims to make the tool available to a broader public in the humanitarian sector.
 
-This version is a work in progress, which aims to have a version of the tool which can be usable by a broader public.
-It is close to completion (check remaining issues).
+The project focuses on providing a comprehensive solution for monitoring and evaluation (M&E) activities, helping organizations move beyond simple form building to strategic indicator planning and data management.
 
-## Development
+## Development Setup
 
-If you already have VS Code and Docker installed, you can click the badge above or [here](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/romain-gilliotte/monitool-public) to get started. Clicking these links will cause VS Code to automatically install the Dev Containers extension if needed, clone the source code into a container volume, and spin up a dev container for use.
+If you have VS Code and Docker installed, click the badge above or [here](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/romain-gilliotte/monitool-public) to get started. This will:
 
-Spining the dev container will take a long time the first time, as it will build opencv4nodejs.
+1. Install the Dev Containers extension if needed
+2. Clone the source code into a container volume
+3. Spin up a complete development environment
 
-- Monitool should be reachable at http://localhost:8080
-- Mongo Express at http://localhost:8081/
-- RedisCommander at http://localhost:8082/
+**Note**: The first build will take considerable time as it compiles OpenCV4Node.js.
 
-### Tests
+## License
 
-Monitool itself does not come yet with unit / integration tests.
+This project is licensed under the GPL-3.0+ License. See the [LICENCE](LICENCE) file for details.
 
-However, most code dealing with the reporting is in the [Olap in memory](https://github.com/romain-gilliotte/olap-in-memory) companion package, which is properly unit tested.
+## Related Projects
 
-This repository is mainly for the GUI and the CRUD API.
+- [Olap in Memory](https://github.com/romain-gilliotte/olap-in-memory) - The reporting engine powering Monitool's data analysis capabilities

@@ -6,41 +6,51 @@
   "license": "GPL-3.0+",
   "private": true,
   "dependencies": {
+    "@aws-sdk/client-ses": "^3.645.0",
     "@koa/cors": "^3.1.0",
     "@koa/multer": "^3.0.0",
     "@koa/router": "^10.0.0",
     "ajv": "^8.0.2",
     "ajv-formats": "^2.0.1",
-    "auth0": "^2.34.0",
+    "bcrypt": "^5.1.1",
     "bull": "^4.12.2",
     "ioredis": "^5.3.2",
     "jiff": "https://github.com/romain-gilliotte/jiff/tarball/master",
     "JSONStream": "^1.3.5",
-    "jwks-rsa": "^2.0.2",
+    "jsonwebtoken": "^9.0.2",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
     "koa-compose": "^4.1.0",
-    "koa-jwt": "^4.0.0",
+    "koa-passport": "^6.0.0",
     "koa-response-time": "^2.0.0",
+    "koa-session": "^6.4.0",
     "lodash": "^4.17.21",
     "lru-cache": "^6.0.0",
     "mongodb": "^3.6.5",
     "multer": "^1.4.2",
+    "nodemailer": "^6.9.7",
     "object-hash": "^2.1.1",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-local": "^1.0.0",
+    "passport-microsoft": "^1.0.0",
     "redlock": "^4.2.0",
     "timeslot-dag": "^2.2.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "chai": "^4.3.7",
     "mocha": "^8.3.2",
-    "nodemon": "^2.0.7"
+    "sinon": "^15.2.0",
+    "supertest": "^6.3.3"
   },
   "scripts": {
-    "start": "nodemon --unhandled-rejections=strict --inspect src/main.js",
-    "serve": "node src/main.js",
-    "test": "NODE_ENV=test mocha"
+    "start": "node --watch --env-file=./.env --unhandled-rejections=strict --inspect src/main.js",
+    "test": "NODE_ENV=test mocha --require test/setup.js test/**/*.test.js --timeout 10000",
+    "test:watch": "NODE_ENV=test mocha --require test/setup.js test/**/*.test.js --timeout 10000 --watch",
+    "bootstrap-test-data": "node scripts/bootstrap-test-data.js"
   },
-  "volta": {
-    "node": "16.20.2"
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
