@@ -33,34 +33,34 @@ async function generateThumbnail(buffer, mimeType) {
     try {
         if (libreofficeMimes[mimeType]) {
             const filePath = path.join(tmpDir, `file`);
-            let numTries = 10;
+            const profileDir = path.join(tmpDir, 'lo-profile');
 
             await fs.writeFile(`${filePath}.xlsx`, buffer);
-            while (numTries > 0) {
-                numTries--;
 
-                try {
-                    await new Promise((resolve, reject) => {
-                        childproc.exec(
-                            `libreoffice --headless --convert-to pdf ${filePath}.xlsx`,
-                            { cwd: tmpDir },
-                            (error, stdout) => {
-                                if (error) reject(error);
-                                else resolve(stdout);
-                            }
-                        );
-                    });
+            // Use a dedicated UserInstallation profile per call: parallel soffice
+            // invocations otherwise fight over the same profile lock and crash.
+            await new Promise((resolve, reject) => {
+                childproc.execFile(
+                    'soffice',
+                    [
+                        `-env:UserInstallation=file://${profileDir}`,
+                        '--headless',
+                        '--convert-to',
+                        'pdf',
+                        '--outdir',
+                        tmpDir,
+                        `${filePath}.xlsx`,
+                    ],
+                    { cwd: tmpDir, timeout: 60000, killSignal: 'SIGKILL' },
+                    (error, stdout) => {
+                        if (error) reject(error);
+                        else resolve(stdout);
+                    }
+                );
+            });
 
-                    buffer = await fs.readFile(`${filePath}.pdf`);
-                    mimeType = 'application/pdf';
-                    break;
-                } catch (e) {
-                    // For some reason, libreoffice sometime crashes when running in parallel.
-                    // => Just retry in a couple seconds.
-                    await new Promise(resolve => setTimeout(resolve, Math.random() * 1000));
-                    continue;
-                }
-            }
+            buffer = await fs.readFile(`${filePath}.pdf`);
+            mimeType = 'application/pdf';
         }
 
         if (gmMimes[mimeType]) {
