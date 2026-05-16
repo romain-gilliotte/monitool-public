@@ -9,7 +9,8 @@ RUN apk --no-cache add \
     # gm
     graphicsmagick ghostscript \
     # thumbnails
-    libreoffice
+    libreoffice \
+    ttf-liberation ttf-dejavu font-noto
 
 # Install prod dependencies only
 COPY package.json package-lock.json ./
