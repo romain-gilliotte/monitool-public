@@ -18,7 +18,7 @@ router.get('/project/:projectId/upload', isInvited, async ctx => {
     );
 
     ctx.response.type = 'application/json';
-    ctx.response.body = forms.pipe(JSONStream.stringify());
+    ctx.response.body = forms.stream().pipe(JSONStream.stringify());
 });
 
 router.post('/project/:projectId/upload-sse', isInvited, async ctx => {
@@ -41,7 +41,7 @@ router.post('/project/:projectId/upload-sse', isInvited, async ctx => {
         // Close changelog on all errors (most notably, client disconnects are an error).
         const changeLog = collection.watch(wpipeline, options);
         const transform = mongoWatchToEventStream();
-        pipeline(changeLog, transform, error => void changeLog.close());
+        pipeline(changeLog.stream(), transform, error => void changeLog.close());
 
         ctx.response.type = 'text/event-stream';
         ctx.response.body = transform;
@@ -65,7 +65,7 @@ router.get('/project/:projectId/upload-history', isInvited, async ctx => {
     });
 
     ctx.response.type = 'application/json';
-    ctx.response.body = forms.pipe(JSONStream.stringify());
+    ctx.response.body = forms.stream().pipe(JSONStream.stringify());
 });
 
 router.get('/project/:projectId/upload/:uploadId', isInvited, async ctx => {

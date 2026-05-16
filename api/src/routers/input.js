@@ -1,6 +1,5 @@
 const Router = require('@koa/router');
 const { ObjectId } = require('mongodb');
-const _ = require('lodash');
 const JSONStream = require('JSONStream');
 const validateBody = require('../middlewares/validate-body');
 const { getProject } = require('../storage/queries/project');
@@ -22,7 +21,7 @@ router.get('/project/:projectId/input', isInvited, async ctx => {
     });
 
     ctx.response.type = 'application/json';
-    ctx.response.body = inputs.pipe(JSONStream.stringify());
+    ctx.response.body = inputs.stream().pipe(JSONStream.stringify());
 });
 
 router.get('/project/:projectId/input/:inputId', isInvited, async ctx => {
@@ -115,7 +114,7 @@ function verifyInvitation(project, invitation, input) {
                 dataSource &&
                 location &&
                 invitation.dataEntry.dataSourceIds.includes(dataSource.id) &&
-                _.difference(location.items, invitation.dataEntry.siteIds).length === 0
+                location.items.every(item => invitation.dataEntry.siteIds.includes(item))
             );
         })
     );

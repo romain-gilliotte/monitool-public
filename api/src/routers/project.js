@@ -2,7 +2,7 @@ const Ajv = require('ajv');
 const crypto = require('node:crypto');
 const jiff = require('jiff');
 const Router = require('@koa/router');
-const ObjectId = require('mongodb').ObjectID;
+const { ObjectId } = require('mongodb');
 const JSONStream = require('JSONStream');
 const formatAjvErrors = require('../utils/format-ajv-errors');
 const validateBody = require('../middlewares/validate-body');
@@ -17,7 +17,7 @@ router.get('/project', async ctx => {
     const projects = listProjects(ctx.io, ctx.state.profile.email);
 
     ctx.response.type = 'application/json';
-    ctx.response.body = projects.pipe(JSONStream.stringify());
+    ctx.response.body = projects.stream().pipe(JSONStream.stringify());
 });
 
 /**
@@ -57,11 +57,13 @@ router.put('/project/:projectId', validateBody('project'), async ctx => {
     const newProject = ctx.request.body;
 
     // Update ctx.io.database and fetch previous version.
+    // Note: since mongodb v6, findOneAndReplace returns the document directly
+    // (or null) instead of { value, ok }. We could opt back into the legacy
+    // wrapper with `includeResultMetadata: true`, but the doc is all we need.
     const filter = { _id: new ObjectId(ctx.params.projectId), owner: ctx.state.profile.email };
-    const projection = { projection: { _id: false } };
-    const { value: oldProject } = await ctx.io.database
+    const oldProject = await ctx.io.database
         .collection('project')
-        .findOneAndReplace(filter, newProject, projection);
+        .findOneAndReplace(filter, newProject, { projection: { _id: false } });
 
     if (!oldProject) {
         ctx.response.status = 404;
@@ -101,7 +103,7 @@ router.get('/project/:projectId/revisions', async ctx => {
         );
 
         ctx.response.type = 'application/json';
-        ctx.response.body = revisions.pipe(JSONStream.stringify());
+        ctx.response.body = revisions.stream().pipe(JSONStream.stringify());
     }
 });
 
@@ -115,7 +117,7 @@ router.get('/project/:projectId/invitation', async ctx => {
     );
 
     ctx.response.type = 'application/json';
-    ctx.response.body = invitations.pipe(JSONStream.stringify());
+    ctx.response.body = invitations.stream().pipe(JSONStream.stringify());
 });
 
 router.get('/project/:projectId/user', async ctx => {
@@ -133,7 +135,7 @@ router.get('/project/:projectId/user', async ctx => {
         const users = ctx.io.database.collection('user').find({ _id: { $in: emails } });
 
         ctx.response.type = 'application/json';
-        ctx.response.body = users.pipe(JSONStream.stringify());
+        ctx.response.body = users.stream().pipe(JSONStream.stringify());
     }
 });
 

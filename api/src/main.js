@@ -1,9 +1,8 @@
 const cluster = require('node:cluster');
 const numCPUs = require('node:os').cpus().length;
 const Koa = require('koa');
-const bodyParser = require('koa-bodyparser');
+const { bodyParser } = require('@koa/bodyparser');
 const cors = require('@koa/cors');
-const responseTime = require('koa-response-time');
 const winston = require('winston');
 const config = require('./config');
 const { InputOutput } = require('./io');
@@ -24,7 +23,12 @@ async function start() {
     await app.context.io.connect();
 
     app.use(cors());
-    app.use(responseTime());
+    app.use(async (ctx, next) => {
+        const start = process.hrtime.bigint();
+        await next();
+        const ms = Number(process.hrtime.bigint() - start) / 1e6;
+        ctx.set('X-Response-Time', `${ms.toFixed(3)}ms`);
+    });
     app.use(bodyParser({ enableTypes: ['json'] }));
     app.use(require('./middlewares/error-handler'));
     app.use(require('./routers/health').routes());

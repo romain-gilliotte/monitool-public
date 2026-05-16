@@ -4,7 +4,7 @@ const config = require('./config');
 
 class InputOutput {
     async connect() {
-        this.mongo = await MongoClient.connect(config.mongo.uri, { useUnifiedTopology: true });
+        this.mongo = await MongoClient.connect(config.mongo.uri);
         this._createDatabase();
 
         this.cache = this.mongo.db(config.mongo.database + '_cache');

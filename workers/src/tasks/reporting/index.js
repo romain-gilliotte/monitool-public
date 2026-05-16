@@ -1,5 +1,5 @@
 const zlib = require('node:zlib');
-const Cache = require('lru-cache');
+const { LRUCache } = require('lru-cache');
 const { promisify } = require('node:util');
 const { getQueryCube } = require('./loader/cube-query');
 const { loadProject } = require('./loader/project');
@@ -8,7 +8,7 @@ const renderXlsx = require('./renderer/xlsx');
 
 const { InputOutput } = require('../../io');
 
-const cache = new Cache({ max: 25, maxAge: 10000 });
+const cache = new LRUCache({ max: 25, ttl: 10000 });
 
 /**
  * @param {InputOutput} io

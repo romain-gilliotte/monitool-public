@@ -2,17 +2,19 @@ const Bull = require('bull');
 const Redis = require('ioredis');
 const config = require('./config');
 const MongoClient = require('mongodb').MongoClient;
-const Redlock = require('redlock');
+const Redlock = require('redlock').default;
 
 class InputOutput {
     async connect() {
         this.mongo = await MongoClient.connect(config.mongo.uri, {
-            useUnifiedTopology: true,
-            poolSize: 50,
+            maxPoolSize: 50,
         });
 
         this.redis = new Redis(config.redis.uri, { showFriendlyErrorStack: true });
         this.redisLock = new Redlock([this.redis]);
+        // Redlock v5 emits 'error' for transient failures (extensions, unlocks);
+        // swallow them so they don't crash the process.
+        this.redisLock.on('error', () => {});
         this.queue = new Bull('workers', config.redis.uri);
 
         this._createDatabase();

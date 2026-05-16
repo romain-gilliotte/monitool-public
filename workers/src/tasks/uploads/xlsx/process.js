@@ -1,5 +1,4 @@
 const xlsx = require('xlsx');
-const _ = require('lodash');
 const { InputOutput } = require('../../../io');
 
 /**
@@ -24,7 +23,9 @@ async function processXlsxUpload(io, upload) {
 
     for (let key of ['site', 'period']) {
         if (extracted[`${key}Name`]) {
-            const cellName = _.findKey(ws.Sheets['Metadata'], c => c.v == extracted[`${key}Name`]);
+            const cellName = Object.keys(ws.Sheets['Metadata']).find(
+                k => ws.Sheets['Metadata'][k].v == extracted[`${key}Name`]
+            );
             const { c, r } = xlsx.utils.decode_cell(cellName);
             const cellId = xlsx.utils.encode_cell({ c: c - 1, r: r });
 

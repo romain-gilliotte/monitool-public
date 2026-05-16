@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const Router = require('@koa/router');
 const { ObjectId } = require('mongodb');
 
@@ -14,9 +13,10 @@ router.post('/rpc/clone-project', async ctx => {
 
         if (!oldProject) throw new Error('Not found');
 
-        // Create new one.
-        const newProject = _.cloneDeep(oldProject);
-        delete newProject._id;
+        // Create new one. Exclude _id before cloning: structuredClone cannot
+        // clone ObjectId, and we want a fresh id anyway.
+        const { _id, ...rest } = oldProject;
+        const newProject = structuredClone(rest);
         newProject.name = `Copy of ${newProject.name}`;
         await ctx.io.database.collection('project').insertOne(newProject);
         await ctx.io.database.collection('input_seq').insertOne({ projectIds: [newProject._id] });
