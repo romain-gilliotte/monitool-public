@@ -18,12 +18,12 @@ RUN apt-get install -y mongodb-mongosh
 USER vscode
 
 ENV NVM_DIR /home/vscode/.nvm
-ENV NODE_VERSION 16.20.2
+ENV NODE_VERSION 22.13.0
 RUN mkdir -p $NVM_DIR
 RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 RUN . $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
-    && nvm install 22 \
+    && nvm install 16 \
     && nvm alias default $NODE_VERSION \
     && nvm use default
 

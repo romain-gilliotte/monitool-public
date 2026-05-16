@@ -45,9 +45,7 @@
     {
       "label": "Start Monitool",
       "dependsOn": ["Run API", "Run Workers", "Run Frontend"],
-      "runOptions": {
-        "runOn": "folderOpen"
-      },
+      "runOptions": {},
       "problemMatcher": []
     }
   ]
