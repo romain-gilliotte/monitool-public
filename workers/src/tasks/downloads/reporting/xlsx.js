@@ -1,10 +1,10 @@
-const xl = require('excel4node');
-const { ObjectId } = require('mongodb');
-const { TimeDimension } = require('olap-in-memory');
-const { getVariableCube } = require('../../reporting/loader/cube-variable');
-const { getQueryCube } = require('../../reporting/loader/cube-query');
-const { generateThumbnail } = require('../../../helpers/thumbnail');
-
+import xl from 'excel4node';
+import { ObjectId } from 'mongodb';
+import olap from 'olap-in-memory';
+const { TimeDimension } = olap;
+import { getVariableCube } from '../../reporting/loader/cube-variable.js';
+import { getQueryCube } from '../../reporting/loader/cube-query.js';
+import { generateThumbnail } from '../../../helpers/thumbnail.js';
 const mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
 async function generateReportingXlsx(io, id, projectId, periodicity) {
@@ -270,4 +270,4 @@ function appendDataRowRec(ws, cube, partitions, partitionElsIdxs, total) {
     }
 }
 
-module.exports = { generateReportingXlsx, getWorkbook };
+export { generateReportingXlsx, getWorkbook };

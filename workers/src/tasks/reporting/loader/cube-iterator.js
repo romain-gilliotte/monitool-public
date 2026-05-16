@@ -1,6 +1,6 @@
-const { ObjectId } = require('mongodb');
-const { Cube, GenericDimension, TimeDimension } = require('olap-in-memory');
-
+import { ObjectId } from 'mongodb';
+import olap from 'olap-in-memory';
+const { Cube, GenericDimension, TimeDimension } = olap;
 /**
  * This module allows iterating inputs in the database.
  *
@@ -89,4 +89,4 @@ function createInputDimensions(content) {
     });
 }
 
-module.exports = iterateCube;
+export default iterateCube;

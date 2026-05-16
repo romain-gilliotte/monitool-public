@@ -1,5 +1,4 @@
-const { ObjectId } = require('mongodb');
-
+import { ObjectId } from 'mongodb';
 async function getSequenceIds(io, projectId) {
     if (typeof projectId === 'string') {
         projectId = new ObjectId(projectId);
@@ -24,4 +23,4 @@ async function getCurrentSequenceId(io, projectId) {
     return sequence._id;
 }
 
-module.exports = { getSequenceIds, getCurrentSequenceId };
+export { getSequenceIds, getCurrentSequenceId };

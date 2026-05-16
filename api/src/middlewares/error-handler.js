@@ -1,7 +1,6 @@
-const winston = require('winston');
-const config = require('../config');
-
-module.exports = async (ctx, next) => {
+import winston from 'winston';
+import config from '../config.js';
+export default async (ctx, next) => {
     try {
         await next();
         winston.log('info', { method: ctx.method, url: ctx.url, status: ctx.response.status });

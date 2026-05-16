@@ -1,5 +1,4 @@
-const Router = require('@koa/router');
-
+import Router from '@koa/router';
 const router = new Router();
 
 router.get('/health/api', async ctx => {
@@ -55,4 +54,4 @@ router.get('/health/workers', async ctx => {
     }
 });
 
-module.exports = router;
+export default router;

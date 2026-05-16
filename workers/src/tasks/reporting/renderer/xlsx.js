@@ -1,14 +1,12 @@
-const xl = require('excel4node');
-
+import xl from 'excel4node';
 const filename = 'report.xlsx';
 const mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
-module.exports = async (cube, rendererOpts) => {
+export default async (cube, rendererOpts) => {
     const distribution =
         typeof rendererOpts === 'number' && rendererOpts < cube.dimensions.length
             ? rendererOpts
             : Math.floor(cube.dimensions.length / 2);
-
     const payload = await getWorkbook(cube, distribution).writeToBuffer();
     return { mimeType, filename, payload };
 };

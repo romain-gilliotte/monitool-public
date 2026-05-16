@@ -1,10 +1,9 @@
-const jwksRsa = require('jwks-rsa');
-const koaJwt = require('koa-jwt');
-const { LRUCache } = require('lru-cache');
-const { ObjectId } = require('mongodb');
-const config = require('../config');
-const { getProject, insertDemoProject } = require('../storage/queries/project');
-
+import jwksRsa from 'jwks-rsa';
+import koaJwt from 'koa-jwt';
+import { LRUCache } from 'lru-cache';
+import { ObjectId } from 'mongodb';
+import config from '../config.js';
+import { getProject, insertDemoProject } from '../storage/queries/project.js';
 const cache = new LRUCache({ max: 150, ttl: 10 * 60 * 1000 });
 
 async function fetchUserInfo(token) {
@@ -52,8 +51,7 @@ async function loadProfile(ctx, next) {
     await next();
 }
 
-module.exports = (ctx, next) => verifyToken(ctx, () => loadProfile(ctx, next));
-
+export default (ctx, next) => verifyToken(ctx, () => loadProfile(ctx, next));
 /**
  * Create user is it was not created by a concurrent request
  */

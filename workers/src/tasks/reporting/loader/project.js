@@ -1,6 +1,5 @@
-const { ObjectId } = require('mongodb');
-const { InputOutput } = require('../../../io');
-
+import { ObjectId } from 'mongodb';
+import { InputOutput } from '../../../io.js';
 /**
  * @param {InputOutput} io
  * @param {string} projectId
@@ -33,4 +32,4 @@ function loadProject(io, projectId) {
     return io.database.collection('project').findOne(filter, options);
 }
 
-module.exports = { loadProject };
+export { loadProject };

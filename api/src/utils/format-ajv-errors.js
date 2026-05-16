@@ -1,4 +1,4 @@
-module.exports = errors => {
+export default errors => {
     return errors.map(error => {
         let path = error.instancePath;
         if (error.keyword === 'additionalProperties') {

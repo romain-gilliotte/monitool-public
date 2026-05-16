@@ -1,8 +1,7 @@
-const { createHash } = require('node:crypto');
-const gm = require('gm');
-const { promisify } = require('node:util');
-const { InputOutput } = require('../../../io');
-
+import { createHash } from 'node:crypto';
+import gm from 'gm';
+import { promisify } from 'node:util';
+import { InputOutput } from '../../../io.js';
 /**
  * Screenshot every page with ~200dpi and queue for image processing.
  * @see https://stackoverflow.com/questions/6605006/convert-pdf-to-image-with-high-resolution
@@ -63,4 +62,4 @@ async function queueJpg(io, projectId, filename, buffer) {
     }
 }
 
-module.exports = { processPdfUpload };
+export { processPdfUpload };

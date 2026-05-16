@@ -1,5 +1,7 @@
-module.exports = {
-    definitions: require('./_definitions'),
+import definitions from './_definitions.js';
+
+export default {
+    definitions,
     type: 'object',
     additionalProperties: false,
     required: ['content'],

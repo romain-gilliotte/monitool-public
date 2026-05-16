@@ -5,6 +5,7 @@
   "repository": "git@github.com:romain-gilliotte/monitool-public.git",
   "license": "GPL-3.0+",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@koa/bodyparser": "^6.1.0",
     "@koa/cors": "^5.0.0",

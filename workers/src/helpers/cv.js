@@ -1,5 +1,4 @@
-const cvModule = require('@techstark/opencv-js');
-
+import cvModule from '@techstark/opencv-js';
 let instance = null;
 let resolveReady;
 const ready = new Promise(resolve => {
@@ -27,4 +26,4 @@ function cv() {
     return instance;
 }
 
-module.exports = { init, cv };
+export { init, cv };

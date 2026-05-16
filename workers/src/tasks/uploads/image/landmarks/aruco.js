@@ -1,7 +1,7 @@
-const { AR } = require('js-aruco');
-const { cv } = require('../../../../helpers/cv');
-const { slideOnImage } = require('./_helper');
-
+import jsAruco from 'js-aruco';
+const { AR } = jsAruco;
+import { cv } from '../../../../helpers/cv.js';
+import { slideOnImage } from './_helper.js';
 /**
  * @param {import('@techstark/opencv-js').Mat} image
  * @returns {Promise<Record<string, {x: number, y: number}>>}
@@ -73,4 +73,4 @@ async function findArucoMarkers(image) {
     return points;
 }
 
-module.exports = { findArucoMarkers };
+export { findArucoMarkers };

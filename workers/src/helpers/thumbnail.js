@@ -1,10 +1,9 @@
-const childproc = require('node:child_process');
-const fs = require('node:fs/promises');
-const gm = require('gm');
-const util = require('node:util');
-const os = require('node:os');
-const path = require('node:path');
-
+import childproc from 'node:child_process';
+import fs from 'node:fs/promises';
+import gm from 'gm';
+import util from 'node:util';
+import os from 'node:os';
+import path from 'node:path';
 const libreofficeMimes = {
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xlsx',
 };
@@ -99,4 +98,4 @@ async function generateThumbnail(buffer, mimeType) {
     return buffer;
 }
 
-module.exports = { generateThumbnail };
+export { generateThumbnail };

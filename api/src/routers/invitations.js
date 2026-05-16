@@ -1,9 +1,8 @@
-const Router = require('@koa/router');
-const { ObjectId } = require('mongodb');
-const JSONStream = require('JSONStream');
-const validateBody = require('../middlewares/validate-body');
-const { listWaitingInvitations, getInvitation } = require('../storage/queries/invitations');
-
+import Router from '@koa/router';
+import { ObjectId } from 'mongodb';
+import JSONStream from 'JSONStream';
+import validateBody from '../middlewares/validate-body.js';
+import { listWaitingInvitations, getInvitation } from '../storage/queries/invitations.js';
 const router = new Router();
 
 // liste mes invitations.
@@ -63,4 +62,4 @@ router.delete('/invitation/:invitationId', async ctx => {
     }
 });
 
-module.exports = router;
+export default router;

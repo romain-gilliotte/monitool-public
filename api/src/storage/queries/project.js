@@ -1,8 +1,7 @@
-const { ObjectId } = require('mongodb');
-const { TimeSlot } = require('timeslot-dag');
-const demoProject = require('../../../data/demo-project/project.json');
-const demoInputs = require('../../../data/demo-project/inputs.json');
-
+import { ObjectId } from 'mongodb';
+import { TimeSlot } from 'timeslot-dag';
+import demoProject from '../../../data/demo-project/project.json' with { type: 'json' };
+import demoInputs from '../../../data/demo-project/inputs.json' with { type: 'json' };
 function listProjects(io, userEmail, projection = null) {
     const pipeline = [
         {
@@ -116,4 +115,4 @@ async function insertDemoProject(io, email) {
     await io.database.collection('input').insertMany(inputs);
 }
 
-module.exports = { listProjects, getProject, insertDemoProject };
+export { listProjects, getProject, insertDemoProject };

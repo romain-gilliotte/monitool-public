@@ -1,7 +1,6 @@
-const ArucoMarker = require('aruco-marker');
-const PdfPrinter = require('pdfmake');
-const LayoutBuilder = require('pdfmake/src/layoutBuilder');
-
+import ArucoMarker from 'aruco-marker';
+import PdfPrinter from 'pdfmake';
+import LayoutBuilder from 'pdfmake/src/layoutBuilder.js';
 const printer = new PdfPrinter({
     Roboto: {
         normal: 'node_modules/roboto-fontface/fonts/roboto/Roboto-Regular.woff',
@@ -418,4 +417,4 @@ function makeLeftCols(partitions) {
     return result;
 }
 
-module.exports = { createPdf, createDataSourceDocDef };
+export { createPdf, createDataSourceDocDef };

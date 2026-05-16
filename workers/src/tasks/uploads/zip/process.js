@@ -1,8 +1,7 @@
-const AdmZip = require('adm-zip');
-const { createHash } = require('node:crypto');
-const FileType = require('file-type');
-const { InputOutput } = require('../../../io');
-
+import AdmZip from 'adm-zip';
+import { createHash } from 'node:crypto';
+import FileType from 'file-type';
+import { InputOutput } from '../../../io.js';
 /**
  * @param {InputOutput} io
  * @param {any} upload
@@ -62,4 +61,4 @@ async function queueFile(io, projectId, filename, buffer) {
     }
 }
 
-module.exports = { processZipUpload };
+export { processZipUpload };

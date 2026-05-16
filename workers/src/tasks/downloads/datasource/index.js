@@ -1,8 +1,7 @@
-const { createPdf } = require('./pdf');
-const { createXlsx } = require('./xlsx');
-const { generateThumbnail } = require('../../../helpers/thumbnail');
-const { InputOutput } = require('../../../io');
-
+import { createPdf } from './pdf.js';
+import { createXlsx } from './xlsx.js';
+import { generateThumbnail } from '../../../helpers/thumbnail.js';
+import { InputOutput } from '../../../io.js';
 /**
  * @param {InputOutput} io
  * @param {string} prjId
@@ -48,4 +47,4 @@ function createRandomId(length) {
     return bytes;
 }
 
-module.exports = { generateForm };
+export { generateForm };

@@ -1,5 +1,4 @@
-const { getVariableCube } = require('./cube-variable');
-
+import { getVariableCube } from './cube-variable.js';
 /**
  * Generate a cube from a query.
  *
@@ -25,4 +24,4 @@ async function getQueryCube(io, project, upto, formula, parameters, aggregate, d
     return cube;
 }
 
-module.exports = { getQueryCube };
+export { getQueryCube };

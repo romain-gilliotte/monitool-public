@@ -1,6 +1,5 @@
-const sharp = require('sharp');
-const { cv } = require('./cv');
-
+import sharp from 'sharp';
+import { cv } from './cv.js';
 async function decodeImage(buffer) {
     const { data, info } = await sharp(buffer)
         .removeAlpha()
@@ -57,4 +56,4 @@ async function withMats(fn) {
     }
 }
 
-module.exports = { decodeImage, encodeJpeg, pointsToMat, withMats };
+export { decodeImage, encodeJpeg, pointsToMat, withMats };

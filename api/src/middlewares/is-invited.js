@@ -1,4 +1,4 @@
-module.exports = async (ctx, next) => {
+export default async (ctx, next) => {
     if (ctx.params.projectId && (await ctx.state.profile.isInvitedTo(ctx.params.projectId))) {
         await next();
     } else {

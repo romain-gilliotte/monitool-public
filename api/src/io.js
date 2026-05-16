@@ -1,9 +1,8 @@
-const Bull = require('bull');
-const Redis = require('ioredis');
-const config = require('./config');
-const MongoClient = require('mongodb').MongoClient;
-const Redlock = require('redlock').default;
-
+import Bull from 'bull';
+import Redis from 'ioredis';
+import config from './config.js';
+import { MongoClient } from 'mongodb';
+import { default as Redlock } from 'redlock';
 class InputOutput {
     async connect() {
         this.mongo = await MongoClient.connect(config.mongo.uri, {
@@ -41,4 +40,4 @@ class InputOutput {
     }
 }
 
-module.exports = { InputOutput };
+export { InputOutput };

@@ -1,7 +1,7 @@
-const xl = require('excel4node');
-const { TimeDimension } = require('olap-in-memory');
-const { TimeSlot } = require('timeslot-dag');
-
+import xl from 'excel4node';
+import olap from 'olap-in-memory';
+const { TimeDimension } = olap;
+import { TimeSlot } from 'timeslot-dag';
 async function createXlsx(id, start, end, sites, dataSource) {
     const [wb, boundaries] = getWorkbook(id, start, end, sites, dataSource);
     return [await wb.writeToBuffer(), boundaries];
@@ -198,4 +198,4 @@ function cartesian(arr) {
     );
 }
 
-module.exports = { createXlsx };
+export { createXlsx };

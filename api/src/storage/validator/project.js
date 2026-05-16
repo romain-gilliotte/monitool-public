@@ -6,9 +6,8 @@ function hasUniqueId(arr) {
     return isUnique(arr.map(e => e.id));
 }
 
-module.exports = project => {
+export default project => {
     const errors = [];
-
     const lfDatesValid = project.logicalFrames.every(lf => {
         return (!lf.start || lf.start >= project.start) && (!lf.end || lf.end <= project.end);
     });

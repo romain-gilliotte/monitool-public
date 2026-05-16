@@ -1,5 +1,4 @@
-const fs = require('node:fs');
-
+import fs from 'node:fs';
 let success = true;
 
 const toBool = function (str) {
@@ -53,4 +52,4 @@ if (!success) {
     process.exit(1);
 }
 
-module.exports = config;
+export default config;

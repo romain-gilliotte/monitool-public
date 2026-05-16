@@ -1,5 +1,5 @@
-const { TimeDimension, GenericDimension } = require('olap-in-memory');
-
+import olap from 'olap-in-memory';
+const { TimeDimension, GenericDimension } = olap;
 /**
  * Create dimensions for a given variable
  */
@@ -63,4 +63,4 @@ function createVariableRules(variable) {
     return aggregation;
 }
 
-module.exports = { createVariableDimensions, createVariableRules };
+export { createVariableDimensions, createVariableRules };

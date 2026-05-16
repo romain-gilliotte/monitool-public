@@ -1,5 +1,4 @@
-const { InputOutput } = require('../io');
-
+import { InputOutput } from '../io.js';
 /**
  * @param {InputOutput} io
  */
@@ -10,4 +9,4 @@ function initHealthCheck(io) {
     });
 }
 
-module.exports = { initHealthCheck };
+export { initHealthCheck };

@@ -1,16 +1,15 @@
-const Ajv = require('ajv');
-const crypto = require('node:crypto');
-const jiff = require('jiff');
-const Router = require('@koa/router');
-const { ObjectId } = require('mongodb');
-const JSONStream = require('JSONStream');
-const formatAjvErrors = require('../utils/format-ajv-errors');
-const validateBody = require('../middlewares/validate-body');
-const { listProjects, getProject } = require('../storage/queries/project');
-const { listProjectInvitations } = require('../storage/queries/invitations');
-const reportingSchema = require('../storage/schema/reporting');
-const isInvited = require('../middlewares/is-invited');
-
+import Ajv from 'ajv';
+import crypto from 'node:crypto';
+import jiff from 'jiff';
+import Router from '@koa/router';
+import { ObjectId } from 'mongodb';
+import JSONStream from 'JSONStream';
+import formatAjvErrors from '../utils/format-ajv-errors.js';
+import validateBody from '../middlewares/validate-body.js';
+import { listProjects, getProject } from '../storage/queries/project.js';
+import { listProjectInvitations } from '../storage/queries/invitations.js';
+import reportingSchema from '../storage/schema/reporting.js';
+import isInvited from '../middlewares/is-invited.js';
 const router = new Router();
 
 router.get('/project', async ctx => {
@@ -206,4 +205,4 @@ router.get(
     }
 );
 
-module.exports = router;
+export default router;

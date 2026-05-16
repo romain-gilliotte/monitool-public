@@ -1,5 +1,4 @@
-const { ObjectId } = require('mongodb');
-
+import { ObjectId } from 'mongodb';
 function listWaitingInvitations(io, userEmail) {
     return io.database.collection('invitation').aggregate([
         { $match: { email: userEmail, accepted: false } },
@@ -65,4 +64,4 @@ async function getInvitation(io, userEmail, id) {
         .next();
 }
 
-module.exports = { listWaitingInvitations, listProjectInvitations, getInvitation };
+export { listWaitingInvitations, listProjectInvitations, getInvitation };

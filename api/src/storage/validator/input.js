@@ -1,5 +1,4 @@
-const { TimeSlot } = require('timeslot-dag');
-
+import { TimeSlot } from 'timeslot-dag';
 const timeAttributes = [
     'day',
     'month_week_sat',
@@ -14,9 +13,8 @@ const timeAttributes = [
     'year',
 ];
 
-module.exports = input => {
+export default input => {
     const errors = [];
-
     input.content.forEach(content => {
         const expectedLength = content.dimensions.reduce((m, d) => m * d.items.length, 1);
         if (expectedLength !== content.data.length) errors.push({ code: 'invalid length' });

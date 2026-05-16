@@ -1,7 +1,6 @@
-const jsQR = require('jsqr');
-const { cv } = require('../../../../helpers/cv');
-const { slideOnImage } = require('./_helper');
-
+import jsQR from 'jsqr';
+import { cv } from '../../../../helpers/cv.js';
+import { slideOnImage } from './_helper.js';
 /**
  * Find QR code in a Matrix, and return its data and corner positions.
  *
@@ -51,4 +50,4 @@ async function findQrCode(image) {
     return [location, Buffer.from(value.binaryData)];
 }
 
-module.exports = { findQrCode };
+export { findQrCode };

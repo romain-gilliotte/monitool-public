@@ -1,11 +1,10 @@
-const { ObjectId } = require('mongodb');
-const { InputOutput } = require('../../io');
-const { processImageUpload } = require('./image/process');
-const { processPdfUpload } = require('./pdf/process');
-const { processXlsxUpload } = require('./xlsx/process');
-const { processZipUpload } = require('./zip/process');
-const { generateThumbnail } = require('../../helpers/thumbnail');
-
+import { ObjectId } from 'mongodb';
+import { InputOutput } from '../../io.js';
+import { processImageUpload } from './image/process.js';
+import { processPdfUpload } from './pdf/process.js';
+import { processXlsxUpload } from './xlsx/process.js';
+import { processZipUpload } from './zip/process.js';
+import { generateThumbnail } from '../../helpers/thumbnail.js';
 /**
  * @param {InputOutput} io
  */
@@ -54,4 +53,4 @@ async function processUpload(io, uploadId) {
     await collection.updateOne({ _id: upload._id }, update);
 }
 
-module.exports = { initUploads };
+export { initUploads };

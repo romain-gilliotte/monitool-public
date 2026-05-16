@@ -1,7 +1,6 @@
-const Bull = require('bull');
-const MongoClient = require('mongodb').MongoClient;
-const config = require('./config');
-
+import Bull from 'bull';
+import { MongoClient } from 'mongodb';
+import config from './config.js';
 class InputOutput {
     async connect() {
         this.mongo = await MongoClient.connect(config.mongo.uri);
@@ -40,4 +39,4 @@ class InputOutput {
     }
 }
 
-module.exports = { InputOutput };
+export { InputOutput };

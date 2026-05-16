@@ -1,6 +1,7 @@
 {
     "name": "monitool-workers",
     "private": true,
+    "type": "module",
     "version": "0.0.0-development",
     "description": "",
     "main": "src/main.js",

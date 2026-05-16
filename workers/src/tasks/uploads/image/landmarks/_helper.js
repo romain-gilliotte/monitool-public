@@ -1,5 +1,4 @@
-const { cv } = require('../../../../helpers/cv');
-
+import { cv } from '../../../../helpers/cv.js';
 /**
  * @param {import('@techstark/opencv-js').Mat} image
  * @param {(region: import('@techstark/opencv-js').Mat, rect: import('@techstark/opencv-js').Rect) => Promise<boolean>} handler
@@ -29,4 +28,4 @@ async function slideOnImage(image, handler) {
     }
 }
 
-module.exports = { slideOnImage };
+export { slideOnImage };

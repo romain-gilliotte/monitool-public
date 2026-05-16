@@ -1,6 +1,5 @@
-const Router = require('@koa/router');
-const { ObjectId } = require('mongodb');
-
+import Router from '@koa/router';
+import { ObjectId } from 'mongodb';
 const router = new Router();
 
 router.post('/rpc/clone-project', async ctx => {
@@ -97,4 +96,4 @@ router.get('/rpc/get-last-inputs', async ctx => {
         .next();
 });
 
-module.exports = router;
+export default router;

@@ -1,13 +1,11 @@
-const zlib = require('node:zlib');
-const { LRUCache } = require('lru-cache');
-const { promisify } = require('node:util');
-const { getQueryCube } = require('./loader/cube-query');
-const { loadProject } = require('./loader/project');
-const renderJson = require('./renderer/json');
-const renderXlsx = require('./renderer/xlsx');
-
-const { InputOutput } = require('../../io');
-
+import zlib from 'node:zlib';
+import { LRUCache } from 'lru-cache';
+import { promisify } from 'node:util';
+import { getQueryCube } from './loader/cube-query.js';
+import { loadProject } from './loader/project.js';
+import renderJson from './renderer/json.js';
+import renderXlsx from './renderer/xlsx.js';
+import { InputOutput } from '../../io.js';
 const cache = new LRUCache({ max: 25, ttl: 10000 });
 
 /**
@@ -74,4 +72,4 @@ async function computeReport(
     });
 }
 
-module.exports = { initReporting, computeReport };
+export { initReporting, computeReport };

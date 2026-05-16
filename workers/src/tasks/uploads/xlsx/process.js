@@ -1,6 +1,5 @@
-const xlsx = require('xlsx');
-const { InputOutput } = require('../../../io');
-
+import xlsx from 'xlsx';
+import { InputOutput } from '../../../io.js';
 /**
  * @param {InputOutput} io
  * @param {any} upload
@@ -45,4 +44,4 @@ async function processXlsxUpload(io, upload) {
     };
 }
 
-module.exports = { processXlsxUpload };
+export { processXlsxUpload };

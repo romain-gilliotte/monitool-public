@@ -1,8 +1,7 @@
-const { generateForm } = require('./datasource');
-const { generateLogFramePdf } = require('./logframe/pdf');
-const { generateReportingXlsx } = require('./reporting/xlsx');
-const { InputOutput } = require('../../io');
-
+import { generateForm } from './datasource/index.js';
+import { generateLogFramePdf } from './logframe/pdf.js';
+import { generateReportingXlsx } from './reporting/xlsx.js';
+import { InputOutput } from '../../io.js';
 /**
  * @param {InputOutput} io
  */
@@ -23,4 +22,4 @@ function initDownloads(io) {
     });
 }
 
-module.exports = { initDownloads };
+export { initDownloads };

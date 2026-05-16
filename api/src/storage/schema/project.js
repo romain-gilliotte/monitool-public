@@ -1,5 +1,9 @@
-module.exports = {
-    definitions: require('./_definitions'),
+import definitions from './_definitions.js';
+import dataSourceSchema from './data-source.js';
+import logicalFrameworkSchema from './logical-framework.js';
+
+export default {
+    definitions,
     $id: 'http://monitool.org/schemas/schema.json',
     type: 'object',
     additionalProperties: false,
@@ -86,11 +90,11 @@ module.exports = {
         },
         forms: {
             type: 'array',
-            items: require('./data-source'),
+            items: dataSourceSchema,
         },
         logicalFrames: {
             type: 'array',
-            items: require('./logical-framework'),
+            items: logicalFrameworkSchema,
         },
         extraIndicators: {
             type: 'array',

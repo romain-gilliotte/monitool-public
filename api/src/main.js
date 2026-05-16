@@ -1,11 +1,23 @@
-const cluster = require('node:cluster');
-const numCPUs = require('node:os').cpus().length;
-const Koa = require('koa');
-const { bodyParser } = require('@koa/bodyparser');
-const cors = require('@koa/cors');
-const winston = require('winston');
-const config = require('./config');
-const { InputOutput } = require('./io');
+import cluster from 'node:cluster';
+import { cpus } from 'node:os';
+import { pathToFileURL } from 'node:url';
+import Koa from 'koa';
+import { bodyParser } from '@koa/bodyparser';
+import cors from '@koa/cors';
+import winston from 'winston';
+import config from './config.js';
+import { InputOutput } from './io.js';
+import errorHandler from './middlewares/error-handler.js';
+import loadProfile from './middlewares/load-profile.js';
+import healthRouter from './routers/health.js';
+import downloadsRouter from './routers/downloads.js';
+import invitationsRouter from './routers/invitations.js';
+import inputRouter from './routers/input.js';
+import projectRouter from './routers/project.js';
+import rpcRouter from './routers/rpc.js';
+import uploadsRouter from './routers/uploads.js';
+
+const numCPUs = cpus().length;
 
 winston.add(new winston.transports.Console());
 
@@ -17,7 +29,7 @@ process.on('uncaughtException', e => {
     process.exit(1);
 });
 
-async function start() {
+export async function start() {
     const app = new Koa();
     app.context.io = new InputOutput();
     await app.context.io.connect();
@@ -30,15 +42,15 @@ async function start() {
         ctx.set('X-Response-Time', `${ms.toFixed(3)}ms`);
     });
     app.use(bodyParser({ enableTypes: ['json'] }));
-    app.use(require('./middlewares/error-handler'));
-    app.use(require('./routers/health').routes());
-    app.use(require('./middlewares/load-profile'));
-    app.use(require('./routers/downloads').routes());
-    app.use(require('./routers/invitations').routes());
-    app.use(require('./routers/input').routes());
-    app.use(require('./routers/project').routes());
-    app.use(require('./routers/rpc').routes());
-    app.use(require('./routers/uploads').routes());
+    app.use(errorHandler);
+    app.use(healthRouter.routes());
+    app.use(loadProfile);
+    app.use(downloadsRouter.routes());
+    app.use(invitationsRouter.routes());
+    app.use(inputRouter.routes());
+    app.use(projectRouter.routes());
+    app.use(rpcRouter.routes());
+    app.use(uploadsRouter.routes());
 
     const server = app.listen(config.port);
     winston.log('info', `Listening on ${config.port}.`);
@@ -52,7 +64,7 @@ async function start() {
     };
 }
 
-if (require.main === module) {
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     // This file was executed: Start application.
     if (config.cluster && cluster.isPrimary) {
         for (let i = 0; i < numCPUs; i++) {
@@ -68,6 +80,4 @@ if (require.main === module) {
                 process.exit(1);
             });
     }
-} else {
-    module.exports = { start };
 }

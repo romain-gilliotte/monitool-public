@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     type: 'object',
     additionalProperties: false,
     required: ['id', 'name', 'goal', 'entities', 'start', 'end', 'indicators', 'purposes'],

@@ -1,9 +1,8 @@
-const { cv } = require('../../../helpers/cv');
-const { decodeImage, encodeJpeg, pointsToMat, withMats } = require('../../../helpers/cv-bridge');
-const { findArucoMarkers } = require('./landmarks/aruco');
-const { getPageContour } = require('./landmarks/page-contours');
-const { findQrCode } = require('./landmarks/qr-code');
-
+import { cv } from '../../../helpers/cv.js';
+import { decodeImage, encodeJpeg, pointsToMat, withMats } from '../../../helpers/cv-bridge.js';
+import { findArucoMarkers } from './landmarks/aruco.js';
+import { getPageContour } from './landmarks/page-contours.js';
+import { findQrCode } from './landmarks/qr-code.js';
 const MAX_SIZE = 2560;
 
 /**
@@ -145,4 +144,4 @@ function computeTargets(file, pageNo, w, h) {
     return targets;
 }
 
-module.exports = { processImageUpload, findLandmarks, computeTargets };
+export { processImageUpload, findLandmarks, computeTargets };

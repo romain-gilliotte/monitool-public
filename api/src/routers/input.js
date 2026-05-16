@@ -1,11 +1,10 @@
-const Router = require('@koa/router');
-const { ObjectId } = require('mongodb');
-const JSONStream = require('JSONStream');
-const validateBody = require('../middlewares/validate-body');
-const { getProject } = require('../storage/queries/project');
-const { getSequenceIds, getCurrentSequenceId } = require('../storage/queries/input');
-const isInvited = require('../middlewares/is-invited');
-
+import Router from '@koa/router';
+import { ObjectId } from 'mongodb';
+import JSONStream from 'JSONStream';
+import validateBody from '../middlewares/validate-body.js';
+import { getProject } from '../storage/queries/project.js';
+import { getSequenceIds, getCurrentSequenceId } from '../storage/queries/input.js';
+import isInvited from '../middlewares/is-invited.js';
 const router = new Router();
 
 router.get('/project/:projectId/input', isInvited, async ctx => {
@@ -120,4 +119,4 @@ function verifyInvitation(project, invitation, input) {
     );
 }
 
-module.exports = router;
+export default router;

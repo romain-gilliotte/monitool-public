@@ -1,7 +1,7 @@
 const filename = null;
 const mimeType = 'application/json';
 
-module.exports = async (cube, rendererOpts) => {
+export default async (cube, rendererOpts) => {
     let result;
     if (rendererOpts == 'report') result = cube.getNestedObject('main', true, true);
     else if (rendererOpts == 'flatArray') result = cube.getData('main');

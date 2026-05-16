@@ -1,6 +1,5 @@
-const PdfPrinter = require('pdfmake');
-const { generateThumbnail } = require('../../../helpers/thumbnail');
-
+import PdfPrinter from 'pdfmake';
+import { generateThumbnail } from '../../../helpers/thumbnail.js';
 /**
  * Create preconfigured printer
  */
@@ -227,4 +226,4 @@ function computeIndicatorsSourcesDocDef(indicators, dataSources) {
     ];
 }
 
-module.exports = { generateLogFramePdf, computeLogFrameDocDef };
+export { generateLogFramePdf, computeLogFrameDocDef };

@@ -1,13 +1,16 @@
-const cluster = require('node:cluster');
-const numCPUs = require('node:os').cpus().length;
-const winston = require('winston');
-const config = require('./config');
-const { InputOutput } = require('./io');
-const { init: initCv } = require('./helpers/cv');
-const { initDownloads } = require('./tasks/downloads');
-const { initReporting } = require('./tasks/reporting');
-const { initUploads } = require('./tasks/uploads');
-const { initHealthCheck } = require('./tasks/health');
+import cluster from 'node:cluster';
+import { cpus } from 'node:os';
+import { pathToFileURL } from 'node:url';
+import winston from 'winston';
+import config from './config.js';
+import { InputOutput } from './io.js';
+import { init as initCv } from './helpers/cv.js';
+import { initDownloads } from './tasks/downloads/index.js';
+import { initReporting } from './tasks/reporting/index.js';
+import { initUploads } from './tasks/uploads/index.js';
+import { initHealthCheck } from './tasks/health.js';
+
+const numCPUs = cpus().length;
 
 winston.add(new winston.transports.Console());
 
@@ -19,7 +22,7 @@ process.on('uncaughtException', e => {
     process.exit(1);
 });
 
-async function start() {
+export async function start() {
     const io = new InputOutput();
     await Promise.all([io.connect(), initCv()]);
 
@@ -36,15 +39,12 @@ async function start() {
 }
 
 // Start application only if this file is executed.
-// Otherwise just export the start/stop functions
-if (require.main === module) {
-    if (config.cluster && cluster.isMaster) {
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+    if (config.cluster && cluster.isPrimary) {
         for (let i = 0; i < numCPUs; i++) {
             cluster.fork();
         }
     } else {
         start();
     }
-} else {
-    module.exports = { start };
 }

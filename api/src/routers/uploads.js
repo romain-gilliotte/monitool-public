@@ -1,11 +1,10 @@
-const { createHash } = require('node:crypto');
-const Router = require('@koa/router');
-const multer = require('@koa/multer');
-const { ObjectId } = require('mongodb');
-const JSONStream = require('JSONStream');
-const { Transform, pipeline } = require('node:stream');
-const isInvited = require('../middlewares/is-invited');
-
+import { createHash } from 'node:crypto';
+import Router from '@koa/router';
+import multer from '@koa/multer';
+import { ObjectId } from 'mongodb';
+import JSONStream from 'JSONStream';
+import { Transform, pipeline } from 'node:stream';
+import isInvited from '../middlewares/is-invited.js';
 const router = new Router();
 
 router.get('/project/:projectId/upload', isInvited, async ctx => {
@@ -155,8 +154,7 @@ router.delete('/project/:projectId/upload/:uploadId', isInvited, async ctx => {
     ctx.response.status = 204;
 });
 
-module.exports = router;
-
+export default router;
 function mongoWatchToEventStream() {
     return new Transform({
         objectMode: true,

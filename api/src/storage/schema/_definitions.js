@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     dice: {
         type: 'array',
         items: {

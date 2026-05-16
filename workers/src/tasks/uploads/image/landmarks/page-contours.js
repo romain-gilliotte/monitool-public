@@ -1,5 +1,4 @@
-const { cv } = require('../../../../helpers/cv');
-
+import { cv } from '../../../../helpers/cv.js';
 /**
  * Use edge detection to find something white-ish, square-ish and using at least 30% of the pixels.
  *
@@ -107,4 +106,4 @@ function getEdges(image, sensibility = 1) {
     return dilated;
 }
 
-module.exports = { getEdges, getPageContour };
+export { getEdges, getPageContour };

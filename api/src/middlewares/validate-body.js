@@ -1,18 +1,29 @@
-const Ajv = require('ajv');
-const addFormats = require('ajv-formats');
-const formatAjvErrors = require('../utils/format-ajv-errors');
+import Ajv from 'ajv';
+import addFormats from 'ajv-formats';
+import formatAjvErrors from '../utils/format-ajv-errors.js';
+import inputSchema from '../storage/schema/input.js';
+import invitationSchema from '../storage/schema/invitation.js';
+import projectSchema from '../storage/schema/project.js';
+import inputValidator from '../storage/validator/input.js';
+import projectValidator from '../storage/validator/project.js';
 
-module.exports = name => {
+const schemas = {
+    input: inputSchema,
+    invitation: invitationSchema,
+    project: projectSchema,
+};
+
+const customValidators = {
+    input: inputValidator,
+    project: projectValidator,
+};
+
+export default name => {
     const ajv = new Ajv();
     addFormats(ajv);
 
-    let schemaFn = ajv.compile(require(`../storage/schema/${name}`));
-    let customFn;
-    try {
-        customFn = require(`../storage/validator/${name}`);
-    } catch (e) {
-        customFn = () => [];
-    }
+    const schemaFn = ajv.compile(schemas[name]);
+    const customFn = customValidators[name] ?? (() => []);
 
     return async (ctx, next) => {
         const schemaPassed = schemaFn(ctx.request.body);

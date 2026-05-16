@@ -1,7 +1,7 @@
-const { Cube } = require('olap-in-memory');
-const iterateCubes = require('./cube-iterator');
-const { createVariableDimensions, createVariableRules } = require('./helper');
-
+import olap from 'olap-in-memory';
+const { Cube } = olap;
+import iterateCubes from './cube-iterator.js';
+import { createVariableDimensions, createVariableRules } from './helper.js';
 /**
  * Because of memory constraints, it is inconvenient to keep the dimensions attribute
  * which allowed filling each cell in the olap-cubes.
@@ -150,4 +150,4 @@ function greatestCommonDivisor(attr1, attr2) {
     return 'day';
 }
 
-module.exports = { getVariableCube };
+export { getVariableCube };

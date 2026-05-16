@@ -1,7 +1,6 @@
-const Router = require('@koa/router');
-const hash = require('object-hash');
-const { ObjectId } = require('mongodb');
-
+import Router from '@koa/router';
+import hash from 'object-hash';
+import { ObjectId } from 'mongodb';
 const router = new Router({ prefix: '/project/:projectId([0-9a-f]{24})' });
 
 router.use('/project/:projectId', async (ctx, next) => {
@@ -160,4 +159,4 @@ async function sendFile(ctx, thumbnail, jobName, jobParams, invalidationParams =
     }
 }
 
-module.exports = router;
+export default router;
