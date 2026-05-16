@@ -28,7 +28,7 @@
     "multer": "^1.4.2",
     "object-hash": "^2.1.1",
     "redlock": "^4.2.0",
-    "timeslot-dag": "^2.2.0",
+    "timeslot-dag": "^2.4.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
@@ -41,6 +41,6 @@
     "test": "NODE_ENV=test mocha"
   },
   "volta": {
-    "node": "16.20.2"
+    "node": "22.13.0"
   }
 }

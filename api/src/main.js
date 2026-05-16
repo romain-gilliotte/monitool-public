@@ -1,5 +1,5 @@
-const cluster = require('cluster');
-const numCPUs = require('os').cpus().length;
+const cluster = require('node:cluster');
+const numCPUs = require('node:os').cpus().length;
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
 const cors = require('@koa/cors');
@@ -50,7 +50,7 @@ async function start() {
 
 if (require.main === module) {
     // This file was executed: Start application.
-    if (config.cluster && cluster.isMaster) {
+    if (config.cluster && cluster.isPrimary) {
         for (let i = 0; i < numCPUs; i++) {
             cluster.fork();
         }
