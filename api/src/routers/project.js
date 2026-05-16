@@ -1,5 +1,5 @@
 const Ajv = require('ajv');
-const crypto = require('crypto');
+const crypto = require('node:crypto');
 const jiff = require('jiff');
 const Router = require('@koa/router');
 const ObjectId = require('mongodb').ObjectID;

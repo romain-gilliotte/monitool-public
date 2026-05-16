@@ -1,6 +1,6 @@
-const zlib = require('zlib');
+const zlib = require('node:zlib');
 const Cache = require('lru-cache');
-const { promisify } = require('util');
+const { promisify } = require('node:util');
 const { getQueryCube } = require('./loader/cube-query');
 const { loadProject } = require('./loader/project');
 const renderJson = require('./renderer/json');

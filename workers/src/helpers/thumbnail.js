@@ -1,9 +1,9 @@
-const childproc = require('child_process');
-const fs = require('fs/promises');
+const childproc = require('node:child_process');
+const fs = require('node:fs/promises');
 const gm = require('gm');
-const util = require('util');
-const os = require('os');
-const path = require('path');
+const util = require('node:util');
+const os = require('node:os');
+const path = require('node:path');
 
 const libreofficeMimes = {
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xlsx',
@@ -93,7 +93,7 @@ async function generateThumbnail(buffer, mimeType) {
         buffer = await util.promisify(image.toBuffer.bind(image))('PNG');
         mimeType = 'image/png';
     } finally {
-        await fs.rmdir(tmpDir, { recursive: true });
+        await fs.rm(tmpDir, { recursive: true, force: true });
     }
 
     return buffer;

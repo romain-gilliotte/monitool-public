@@ -1,9 +1,9 @@
-const { Hash } = require('crypto');
+const { createHash } = require('node:crypto');
 const Router = require('@koa/router');
 const multer = require('@koa/multer');
 const { ObjectId } = require('mongodb');
 const JSONStream = require('JSONStream');
-const { Transform, pipeline } = require('stream');
+const { Transform, pipeline } = require('node:stream');
 const isInvited = require('../middlewares/is-invited');
 
 const router = new Router();
@@ -112,7 +112,7 @@ router.post('/project/:projectId/upload', multer().single('file'), isInvited, as
             status: 'pending_processing',
             projectId: new ObjectId(ctx.params.projectId),
             original: {
-                sha1: new Hash('sha1').update(file.buffer).digest(),
+                sha1: createHash('sha1').update(file.buffer).digest(),
                 name: file.originalname,
                 size: file.size,
                 mimeType: file.mimetype,

@@ -1,6 +1,6 @@
-const { Hash } = require('crypto');
+const { createHash } = require('node:crypto');
 const gm = require('gm');
-const { promisify } = require('util');
+const { promisify } = require('node:util');
 const { InputOutput } = require('../../../io');
 
 /**
@@ -43,7 +43,7 @@ async function queueJpg(io, projectId, filename, buffer) {
             status: 'pending_processing',
             projectId: projectId,
             original: {
-                sha1: new Hash('sha1').update(buffer).digest(),
+                sha1: createHash('sha1').update(buffer).digest(),
                 name: filename,
                 size: buffer.byteLength,
                 mimeType: 'image/jpeg',

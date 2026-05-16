@@ -1,5 +1,5 @@
 const AdmZip = require('adm-zip');
-const { Hash } = require('crypto');
+const { createHash } = require('node:crypto');
 const FileType = require('file-type');
 const { InputOutput } = require('../../../io');
 
@@ -42,7 +42,7 @@ async function queueFile(io, projectId, filename, buffer) {
             status: 'pending_processing',
             projectId: projectId,
             original: {
-                sha1: new Hash('sha1').update(buffer).digest(),
+                sha1: createHash('sha1').update(buffer).digest(),
                 name: filename,
                 size: buffer.byteLength,
                 mimeType: type.mime,
