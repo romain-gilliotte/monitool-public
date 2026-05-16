@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const { getVariableCube } = require('./cube-variable');
 
 /**
@@ -9,7 +8,7 @@ const { getVariableCube } = require('./cube-variable');
  */
 async function getQueryCube(io, project, upto, formula, parameters, aggregate, dice) {
     const cubes = await Promise.all(
-        _.toPairs(parameters).map(async ([paramName, parameter]) => {
+        Object.entries(parameters).map(async ([paramName, parameter]) => {
             let cube = await getVariableCube(io, project, upto, parameter.variableId, aggregate, [
                 ...dice,
                 ...parameter.dice,

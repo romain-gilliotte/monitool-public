@@ -1,54 +1,58 @@
-const { AuthenticationClient } = require('auth0');
 const jwksRsa = require('jwks-rsa');
-const koaCompose = require('koa-compose');
 const koaJwt = require('koa-jwt');
-const Cache = require('lru-cache');
+const { LRUCache } = require('lru-cache');
 const { ObjectId } = require('mongodb');
 const config = require('../config');
 const { getProject, insertDemoProject } = require('../storage/queries/project');
 
-const auth0Client = new AuthenticationClient({ domain: config.jwt.jwksHost });
-const cache = new Cache({ max: 150, maxAge: 10 * 60 * 1000 });
+const cache = new LRUCache({ max: 150, ttl: 10 * 60 * 1000 });
 
-module.exports = koaCompose([
-    // Validate token
-    koaJwt({
-        secret: jwksRsa.koaJwtSecret({
-            cache: true,
-            rateLimit: true,
-            jwksRequestsPerMinute: 2,
-            jwksUri: `https://${config.jwt.jwksHost}/.well-known/jwks.json`,
-        }),
-        audience: config.jwt.audience,
-        issuer: config.jwt.issuer,
-        algorithms: ['RS256'],
-        cookie: 'monitool_access_token',
+async function fetchUserInfo(token) {
+    const bearer = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+    const res = await fetch(`https://${config.jwt.jwksHost}/userinfo`, {
+        headers: { Authorization: bearer },
+    });
+    if (!res.ok) throw new Error(`Failed to fetch user profile (HTTP ${res.status})`);
+    return res.json();
+}
+
+const verifyToken = koaJwt({
+    secret: jwksRsa.koaJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 2,
+        jwksUri: `https://${config.jwt.jwksHost}/.well-known/jwks.json`,
     }),
+    audience: config.jwt.audience,
+    issuer: config.jwt.issuer,
+    algorithms: ['RS256'],
+    cookie: 'monitool_access_token',
+});
 
-    // Load profile
-    async (ctx, next) => {
-        const collection = ctx.io.database.collection('user');
-        const subcriber = ctx.state.user.sub;
+async function loadProfile(ctx, next) {
+    const collection = ctx.io.database.collection('user');
+    const subcriber = ctx.state.user.sub;
 
-        // Find or create user
-        let user = cache.get(subcriber);
-        if (!user) user = await collection.findOne({ subs: subcriber });
-        if (!user) user = await createUser(ctx);
-        cache.set(subcriber, user);
+    // Find or create user
+    let user = cache.get(subcriber);
+    if (!user) user = await collection.findOne({ subs: subcriber });
+    if (!user) user = await createUser(ctx);
+    cache.set(subcriber, user);
 
-        // Update lastSeen date if older than 1 minute (no waiting).
-        if (new Date() - user.lastSeen > 60 * 1000) {
-            user.lastSeen = new Date();
-            collection
-                .updateOne({ _id: user._id }, { $currentDate: { lastSeen: true } })
-                .catch(e => {});
-        }
+    // Update lastSeen date if older than 1 minute (no waiting).
+    if (new Date() - user.lastSeen > 60 * 1000) {
+        user.lastSeen = new Date();
+        collection
+            .updateOne({ _id: user._id }, { $currentDate: { lastSeen: true } })
+            .catch(e => {});
+    }
 
-        ctx.state.profile = new Profile(ctx.io, user);
+    ctx.state.profile = new Profile(ctx.io, user);
 
-        await next();
-    },
-]);
+    await next();
+}
+
+module.exports = (ctx, next) => verifyToken(ctx, () => loadProfile(ctx, next));
 
 /**
  * Create user is it was not created by a concurrent request
@@ -56,7 +60,7 @@ module.exports = koaCompose([
 async function createUser(ctx) {
     const subcriber = ctx.state.user.sub;
     const collection = ctx.io.database.collection('user');
-    const lock = await ctx.io.redisLock.lock(`profile:${subcriber}`, 10000);
+    const lock = await ctx.io.redisLock.acquire([`profile:${subcriber}`], 10000);
 
     try {
         // Search user again, now that we own the lock.
@@ -65,7 +69,7 @@ async function createUser(ctx) {
             // User was not found from the subcriber id
             const token =
                 ctx.request.header.authorization || ctx.cookies.get('monitool_access_token');
-            const profile = await auth0Client.getProfile(token);
+            const profile = await fetchUserInfo(token);
             if (!profile.email) {
                 throw new Error(
                     'When loading your profile from your identity provider, we could not find your email address. ' +
@@ -108,8 +112,8 @@ async function createUser(ctx) {
 
         return user;
     } finally {
-        // Unlock access to this user (no waiting).
-        lock.unlock().catch(e => {});
+        // Release the lock (errors are non-fatal; redlock's TTL guards us).
+        lock.release().catch(e => {});
     }
 }
 

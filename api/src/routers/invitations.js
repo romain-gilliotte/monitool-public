@@ -1,5 +1,5 @@
 const Router = require('@koa/router');
-const ObjectId = require('mongodb').ObjectID;
+const { ObjectId } = require('mongodb');
 const JSONStream = require('JSONStream');
 const validateBody = require('../middlewares/validate-body');
 const { listWaitingInvitations, getInvitation } = require('../storage/queries/invitations');
@@ -11,7 +11,7 @@ router.get('/invitation', async ctx => {
     const invitations = listWaitingInvitations(ctx.io, ctx.state.profile.email);
 
     ctx.response.type = 'application/json';
-    ctx.response.body = invitations.pipe(JSONStream.stringify());
+    ctx.response.body = invitations.stream().pipe(JSONStream.stringify());
 });
 
 // invite un nouvel utilisateur
