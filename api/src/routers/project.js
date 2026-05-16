@@ -139,7 +139,7 @@ router.get('/project/:projectId/user', async ctx => {
 });
 
 router.get(
-    '/project/:projectId/report/:query([-_=a-z0-9]+)',
+    '/project/:projectId/report/:query',
     isInvited,
     async (ctx, next) => {
         let queryAsBase64, queryAsString, queryAsJson;

@@ -80,9 +80,14 @@ router.get('/project/:projectId/upload/:uploadId', isInvited, async ctx => {
 });
 
 router.get(
-    '/project/:projectId/upload/:uploadId/:name(original|processed|thumbnail)',
+    '/project/:projectId/upload/:uploadId/:name',
     isInvited,
     async ctx => {
+        if (!['original', 'processed', 'thumbnail'].includes(ctx.params.name)) {
+            ctx.response.status = 404;
+            return;
+        }
+
         const upload = await ctx.io.database
             .collection('input_upload')
             .findOne(

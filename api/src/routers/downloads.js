@@ -1,7 +1,7 @@
 import Router from '@koa/router';
 import hash from 'object-hash';
 import { ObjectId } from 'mongodb';
-const router = new Router({ prefix: '/project/:projectId([0-9a-f]{24})' });
+const router = new Router({ prefix: '/project/:projectId' });
 
 router.use('/project/:projectId', async (ctx, next) => {
     const { projectId } = ctx.params;
@@ -12,9 +12,12 @@ router.use('/project/:projectId', async (ctx, next) => {
 });
 
 /** Logical framework */
-router.get('/logical-frame/:logFrameId.:format(pdf):thumbnail(.png)?', async ctx => {
-    const { projectId, logFrameId, thumbnail } = ctx.params;
-    const { language, orientation, format } = validateDownloadParams(ctx, 'pdf');
+router.get('/logical-frame/:logFrameId.pdf', ctx => sendLogFrame(ctx, false));
+router.get('/logical-frame/:logFrameId.pdf.png', ctx => sendLogFrame(ctx, true));
+
+async function sendLogFrame(ctx, thumbnail) {
+    const { projectId, logFrameId } = ctx.params;
+    const { language, orientation } = validateDownloadParams(ctx);
 
     const projects = ctx.io.database.collection('project');
     const project = await projects.findOne(
@@ -33,15 +36,20 @@ router.get('/logical-frame/:logFrameId.:format(pdf):thumbnail(.png)?', async ctx
             dataSources: project.forms,
             language,
             orientation,
-            format,
+            format: 'pdf',
         });
     }
-});
+}
 
 /** Paper & Excel forms */
-router.get('/data-source/:dataSourceId.:format(xlsx|pdf):thumbnail(.png)?', async ctx => {
-    const { projectId, dataSourceId, thumbnail } = ctx.params;
-    const { language, orientation, format } = validateDownloadParams(ctx, 'pdf');
+router.get('/data-source/:dataSourceId.pdf', ctx => sendDataSource(ctx, 'pdf', false));
+router.get('/data-source/:dataSourceId.pdf.png', ctx => sendDataSource(ctx, 'pdf', true));
+router.get('/data-source/:dataSourceId.xlsx', ctx => sendDataSource(ctx, 'xlsx', false));
+router.get('/data-source/:dataSourceId.xlsx.png', ctx => sendDataSource(ctx, 'xlsx', true));
+
+async function sendDataSource(ctx, format, thumbnail) {
+    const { projectId, dataSourceId } = ctx.params;
+    const { language, orientation } = validateDownloadParams(ctx);
 
     const projects = ctx.io.database.collection('project');
     const project = await projects.findOne(
@@ -67,12 +75,15 @@ router.get('/data-source/:dataSourceId.:format(xlsx|pdf):thumbnail(.png)?', asyn
             format,
         });
     }
-});
+}
 
 /** Render file containing all data entry up to a given date */
-router.get('/export/:periodicity.:format(xlsx):thumbnail(.png)?', async ctx => {
-    const { projectId, thumbnail } = ctx.params;
-    const { language, format, periodicity } = validateDownloadParams(ctx, 'xlsx');
+router.get('/export/:periodicity.xlsx', ctx => sendExport(ctx, false));
+router.get('/export/:periodicity.xlsx.png', ctx => sendExport(ctx, true));
+
+async function sendExport(ctx, thumbnail) {
+    const { projectId } = ctx.params;
+    const { language, periodicity } = validateDownloadParams(ctx);
 
     // We need the project and last input id for the invalidation
     const objProjectId = new ObjectId(projectId);
@@ -101,10 +112,10 @@ router.get('/export/:periodicity.:format(xlsx):thumbnail(.png)?', async ctx => {
             { project, lastInputId: lastInput._id.toHexString() }
         );
     }
-});
+}
 
 function validateDownloadParams(ctx) {
-    let { format, periodicity } = ctx.params;
+    let { periodicity } = ctx.params;
     let { language, orientation } = ctx.request.query;
     const periodicities = [
         'day',
@@ -120,12 +131,11 @@ function validateDownloadParams(ctx) {
         'year',
     ];
 
-    if (!['xlsx', 'pdf'].includes(format)) format = 'pdf';
     if (!['en', 'es', 'fr'].includes(language)) language = 'en';
     if (!['portrait', 'landscape'].includes(orientation)) orientation = 'portrait';
     if (!periodicities.includes(periodicity)) periodicity = 'month';
 
-    return { format, language, orientation, periodicity };
+    return { language, orientation, periodicity };
 }
 
 async function sendFile(ctx, thumbnail, jobName, jobParams, invalidationParams = {}) {
