@@ -1,4 +1,4 @@
-const TimeSlot = require('timeslot-dag');
+const { TimeSlot } = require('timeslot-dag');
 
 const timeAttributes = [
     'day',

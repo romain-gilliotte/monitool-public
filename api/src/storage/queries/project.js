@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongodb');
-const TimeSlot = require('timeslot-dag');
+const { TimeSlot } = require('timeslot-dag');
 const demoProject = require('../../../data/demo-project/project.json');
 const demoInputs = require('../../../data/demo-project/inputs.json');
 

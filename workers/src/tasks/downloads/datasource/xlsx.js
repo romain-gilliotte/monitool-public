@@ -1,6 +1,6 @@
 const xl = require('excel4node');
 const { TimeDimension } = require('olap-in-memory');
-const TimeSlot = require('timeslot-dag');
+const { TimeSlot } = require('timeslot-dag');
 
 async function createXlsx(id, start, end, sites, dataSource) {
     const [wb, boundaries] = getWorkbook(id, start, end, sites, dataSource);
