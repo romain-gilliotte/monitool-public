@@ -3,11 +3,13 @@ import hash from 'object-hash';
 import { ObjectId } from 'mongodb';
 const router = new Router({ prefix: '/project/:projectId' });
 
-router.use('/project/:projectId', async (ctx, next) => {
+router.use(async (ctx, next) => {
     const { projectId } = ctx.params;
 
     if (await ctx.state.profile.isInvitedTo(projectId)) {
         await next();
+    } else {
+        ctx.response.status = 404;
     }
 });
 
