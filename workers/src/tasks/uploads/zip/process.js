@@ -1,6 +1,6 @@
 import AdmZip from 'adm-zip';
 import { createHash } from 'node:crypto';
-import FileType from 'file-type';
+import { fileTypeFromBuffer } from 'file-type';
 import { InputOutput } from '../../../io.js';
 /**
  * @param {InputOutput} io
@@ -20,7 +20,7 @@ async function processZipUpload(io, upload) {
 }
 
 async function queueFile(io, projectId, filename, buffer) {
-    let type = await FileType.fromBuffer(buffer);
+    let type = await fileTypeFromBuffer(buffer);
     if (!type) {
         if (filename.endsWith('.pdf')) type = { mime: 'application/pdf' };
         if (filename.endsWith('.png')) type = { mime: 'image/png' };

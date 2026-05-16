@@ -1,4 +1,4 @@
-import ArucoMarker from 'aruco-marker';
+import { arucoToSVGString } from 'aruco-marker';
 import PdfPrinter from 'pdfmake';
 import LayoutBuilder from 'pdfmake/src/layoutBuilder.js';
 const printer = new PdfPrinter({
@@ -224,15 +224,15 @@ function createDataSourceDocDef(qrCode, dataSource, pageOrientation, language) {
             columns: [
                 {
                     alignment: 'left',
-                    svg: new ArucoMarker(62).toSVG('25px'),
+                    svg: arucoToSVGString(62, '25px'),
                 },
                 {
                     alignment: 'center',
-                    svg: new ArucoMarker(112).toSVG('25px'),
+                    svg: arucoToSVGString(112, '25px'),
                 },
                 {
                     alignment: 'right',
-                    svg: new ArucoMarker(207).toSVG('25px'),
+                    svg: arucoToSVGString(207, '25px'),
                 },
             ],
         },
