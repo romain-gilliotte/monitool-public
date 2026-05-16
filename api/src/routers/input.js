@@ -72,32 +72,31 @@ router.post('/project/:projectId/input', validateBody('input'), async ctx => {
     }
 });
 
-router.put('/project/:projectId/input/:inputId', validateBody('input'), async ctx => {
-    const inputs = ctx.io.database.collection('input');
-
-    try {
-        const input = await inputs.findOne({ _id: new ObjectId(ctx.params.inputId) });
-        const age = new Date() - input._id.getTimestamp();
-
-        // The author can edit for 1 hour
-        if (input.author === ctx.state.profile.email && age < 60 * 60 * 1000) {
-            await inputs.updateOne(
-                { _id: input._id },
-                { $set: { content: ctx.request.body.content } }
-            );
-
-            ctx.io.redis.del(`reporting:${ctx.params.projectId}`); // reporting cache
-
-            delete input.sequenceId;
-            ctx.response.body = { ...input, content: ctx.request.body.content };
-        } else {
-            throw new Error('forbidden');
-        }
-    } catch (e) {
-        if (/forbidden/i.test(e.message)) ctx.response.status = 403;
-        else if (/not found/i.test(e.message)) ctx.response.status = 404;
-        else throw e;
+router.put('/project/:projectId/input/:inputId', isInvited, validateBody('input'), async ctx => {
+    const inputId = new ObjectId(ctx.params.inputId);
+    const age = Date.now() - inputId.getTimestamp().getTime();
+    if (age >= 60 * 60 * 1000) {
+        ctx.response.status = 403;
+        return;
     }
+
+    const input = await ctx.io.database.collection('input').findOneAndUpdate(
+        {
+            _id: inputId,
+            sequenceId: { $in: await getSequenceIds(ctx.io, ctx.params.projectId) },
+            author: ctx.state.profile.email,
+        },
+        { $set: { content: ctx.request.body.content } },
+        { returnDocument: 'after', projection: { sequenceId: 0 } }
+    );
+
+    if (!input) {
+        ctx.response.status = 404;
+        return;
+    }
+
+    ctx.io.redis.del(`reporting:${ctx.params.projectId}`);
+    ctx.response.body = input;
 });
 
 function verifyInvitation(project, invitation, input) {
