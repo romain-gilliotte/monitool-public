@@ -1,7 +1,6 @@
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const config = require('./webpack.config.base');
 
 module.exports = {
@@ -17,10 +16,6 @@ module.exports = {
         new webpack.DefinePlugin({
             SERVICE_URL: '"/api"',
             IS_PRODUCTION: true,
-        }),
-
-        new BundleAnalyzerPlugin({
-            analyzerMode: 'static',
         }),
     ],
 };

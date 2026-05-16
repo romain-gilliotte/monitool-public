@@ -13,19 +13,3 @@ RUN apt-get install -y libreoffice
 
 # Install mongo shell
 RUN apt-get install -y mongodb-mongosh
-
-# Install Node.js
-USER vscode
-
-ENV NVM_DIR /home/vscode/.nvm
-ENV NODE_VERSION 22.13.0
-RUN mkdir -p $NVM_DIR
-RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-RUN . $NVM_DIR/nvm.sh \
-    && nvm install $NODE_VERSION \
-    && nvm install 16 \
-    && nvm alias default $NODE_VERSION \
-    && nvm use default
-
-ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
-ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH

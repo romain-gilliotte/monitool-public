@@ -9,21 +9,22 @@ module.exports = {
     devtool: 'source-map',
 
     devServer: {
-        contentBase: path.resolve('./static'),
+        static: { directory: path.resolve('./static') },
         port: 8080,
         compress: false,
-        disableHostCheck: true,
+        allowedHosts: 'all',
         host: '0.0.0.0',
-        proxy: {
-            '/api': {
+        proxy: [
+            {
+                context: ['/api'],
                 target: 'http://localhost:8000',
                 pathRewrite: { '^/api': '' },
             },
-        },
-        publicPath: '/', // @see https://github.com/webpack/webpack-dev-server/issues/2745
-        watchOptions: {
-            ignored: /node_modules/, // Reduce inotify watches usages
-        },
+        ],
+        devMiddleware: { publicPath: '/' },
+        watchFiles: { options: { ignored: /node_modules/ } },
+        hot: false,
+        liveReload: true,
     },
 
     plugins: [

@@ -1,7 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -12,6 +11,7 @@ module.exports = {
     output: {
         path: path.resolve('dist'),
         filename: 'monitool2-[name]-[chunkhash].js',
+        clean: true,
     },
 
     node: false,
@@ -34,7 +34,14 @@ module.exports = {
                                     },
                                 ],
                             ],
-                            plugins: ['angularjs-annotate', 'syntax-dynamic-import'],
+                            plugins: [
+                                // Force ES6 class -> function transpilation even if
+                                // browserslist doesn't need it: angularjs-annotate
+                                // can't read 'ngInject' inside a native class constructor.
+                                '@babel/plugin-transform-classes',
+                                'angularjs-annotate',
+                                'syntax-dynamic-import',
+                            ],
                         },
                     },
                 ],
@@ -44,7 +51,7 @@ module.exports = {
                 use: [
                     {
                         loader: 'html-loader',
-                        options: { minimize: true },
+                        options: { minimize: true, esModule: false },
                     },
                 ],
             },
@@ -52,25 +59,25 @@ module.exports = {
                 test: /\.scss$/,
                 use: [
                     { loader: 'style-loader' },
-                    { loader: 'css-loader' },
+                    { loader: 'css-loader', options: { esModule: false } },
                     { loader: 'sass-loader' },
                 ],
             },
             {
                 test: /\.css$/,
-                use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+                use: [
+                    { loader: 'style-loader' },
+                    { loader: 'css-loader', options: { esModule: false } },
+                ],
             },
             {
                 test: /\.(svg|eot|woff|woff2|ttf)$/,
-                use: [{ loader: 'file-loader' }],
+                type: 'asset/resource',
             },
         ],
     },
 
     plugins: [
-        // Clear /dist folder before building.
-        new CleanWebpackPlugin(),
-
         // Define __moduleName, __templatePath, __scssPath and __componentName macros.
         new webpack.DefinePlugin({
             // 'components.pages.project-structure-basics.project-basics'
