@@ -40,7 +40,6 @@ module.exports = {
                                 // can't read 'ngInject' inside a native class constructor.
                                 '@babel/plugin-transform-classes',
                                 'angularjs-annotate',
-                                'syntax-dynamic-import',
                             ],
                         },
                     },
