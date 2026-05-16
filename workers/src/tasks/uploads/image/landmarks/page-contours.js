@@ -1,61 +1,110 @@
-const cv = require('@u4/opencv4nodejs');
+const { cv } = require('../../../../helpers/cv');
 
 /**
- * Use Edge detection to find something white-ish, square-ish and using at least 30% of the pixels.
+ * Use edge detection to find something white-ish, square-ish and using at least 30% of the pixels.
  *
- * This allows finding a form in a contrasted background with reasonable accuracy when we can't find
+ * Allows finding a form in a contrasted background with reasonable accuracy when we can't find
  * the aruco markers (or miss some of them).
  *
  * @see https://bretahajek.com/2017/01/scanning-documents-photos-opencv/
  * @see https://stackoverflow.com/questions/43009923/how-to-complete-close-a-contour-in-python-opencv
  * @see https://stackoverflow.com/questions/8667818/opencv-c-obj-c-detecting-a-sheet-of-paper-square-detection
-
- * @param {cv.Mat} image
- * @returns {cv.Contour}
+ *
+ * @param {import('@techstark/opencv-js').Mat} image
+ * @returns {Promise<Array<{x: number, y: number}> | null>}
  */
 async function getPageContour(image) {
-    const minArea = 0.3 * image.sizes[0] * image.sizes[1];
+    const c = cv();
+    const minArea = 0.3 * image.rows * image.cols;
     let bestArea = minArea;
-    let bestContour = null;
+    let bestPoints = null;
 
-    // Try detection on each color channel + the luminence one.
-    const channels = [...(await image.splitAsync()), await image.cvtColorAsync(cv.COLOR_BGR2GRAY)];
-    for (let sensibility = 1; sensibility < 3; ++sensibility) {
-        for (let channel of channels) {
-            const edges = await getEdges(channel, sensibility);
-            const contours = await edges.findContoursAsync(cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE);
+    const channelMats = [];
+    const mv = new c.MatVector();
+    c.split(image, mv);
+    for (let i = 0; i < mv.size(); i++) {
+        channelMats.push(mv.get(i));
+    }
+    mv.delete();
 
-            for (let contour of contours) {
-                // FIXME assuming size is around the standard one we've be using... (1600*1200)
-                // => we should express this as a % of (w + h) in case we change our minds
-                // => Note to self: DO NOT express this as a percentage of contour perimeter.
-                const approx = contour.approxPolyDPContour(30, true);
+    const gray = new c.Mat();
+    c.cvtColor(image, gray, c.COLOR_BGR2GRAY);
+    channelMats.push(gray);
 
-                if (approx.numPoints == 4 && approx.isConvex && bestArea < approx.area) {
-                    bestContour = approx;
-                    bestArea = approx.area;
+    try {
+        for (let sensibility = 1; sensibility < 3; ++sensibility) {
+            for (const channel of channelMats) {
+                const edges = getEdges(channel, sensibility);
+                const contours = new c.MatVector();
+                const hier = new c.Mat();
+                try {
+                    c.findContours(edges, contours, hier, c.RETR_TREE, c.CHAIN_APPROX_SIMPLE);
+                    for (let i = 0; i < contours.size(); i++) {
+                        const contour = contours.get(i);
+                        const approx = new c.Mat();
+                        try {
+                            c.approxPolyDP(contour, approx, 30, true);
+                            const area = c.contourArea(approx);
+                            if (
+                                approx.rows === 4 &&
+                                c.isContourConvex(approx) &&
+                                bestArea < area
+                            ) {
+                                const data = approx.data32S;
+                                bestPoints = [
+                                    { x: data[0], y: data[1] },
+                                    { x: data[2], y: data[3] },
+                                    { x: data[4], y: data[5] },
+                                    { x: data[6], y: data[7] },
+                                ];
+                                bestArea = area;
+                            }
+                        } finally {
+                            approx.delete();
+                            contour.delete();
+                        }
+                    }
+                } finally {
+                    contours.delete();
+                    hier.delete();
+                    edges.delete();
                 }
             }
         }
+    } finally {
+        for (const m of channelMats) m.delete();
     }
 
-    return bestContour;
+    return bestPoints;
 }
 
 /**
- *
- * @param {cv.Mat} image
+ * @param {import('@techstark/opencv-js').Mat} image
  * @param {number} sensibility
+ * @returns {import('@techstark/opencv-js').Mat}
  */
-async function getEdges(image, sensibility = 1) {
-    image = await image.normalizeAsync(0, 255, cv.NORM_MINMAX);
-    // image = await image.bilateralFilterAsync(9, 75, 75); // noise removal
-    // image = await image.adaptiveThresholdAsync(255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 115, -10);
-    image = await image.medianBlurAsync(9);
-    image = await image.cannyAsync(5 / sensibility, 30 / sensibility, 3);
-    image = await image.dilateAsync(new cv.Mat(), new cv.Point2(-1, -1), 1);
+function getEdges(image, sensibility = 1) {
+    const c = cv();
+    const normalized = new c.Mat();
+    const blurred = new c.Mat();
+    const edges = new c.Mat();
+    const dilated = new c.Mat();
+    const kernel = new c.Mat();
+    const anchor = new c.Point(-1, -1);
 
-    return image;
+    try {
+        c.normalize(image, normalized, 0, 255, c.NORM_MINMAX);
+        c.medianBlur(normalized, blurred, 9);
+        c.Canny(blurred, edges, 5 / sensibility, 30 / sensibility, 3);
+        c.dilate(edges, dilated, kernel, anchor, 1);
+    } finally {
+        normalized.delete();
+        blurred.delete();
+        edges.delete();
+        kernel.delete();
+    }
+
+    return dilated;
 }
 
 module.exports = { getEdges, getPageContour };

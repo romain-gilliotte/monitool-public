@@ -1,60 +1,72 @@
 const { AR } = require('js-aruco');
-const cv = require('@u4/opencv4nodejs');
+const { cv } = require('../../../../helpers/cv');
 const { slideOnImage } = require('./_helper');
 
 /**
- *
- * @param {cv.Mat} image
- * @returns {Promise<Record<string, cv.Point2>>}
+ * @param {import('@techstark/opencv-js').Mat} image
+ * @returns {Promise<Record<string, {x: number, y: number}>>}
  */
 async function findArucoMarkers(image) {
+    const c = cv();
     const detector = new AR.Detector();
     const points = {};
 
-    // Search in the image.
     await slideOnImage(image, async (region, rect) => {
-        const gray = await region.cvtColorAsync(cv.COLOR_BGR2GRAY);
-        const [threshold, adaptative] = await Promise.all([
-            gray.thresholdAsync(0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU),
-            gray.adaptiveThresholdAsync(
+        const gray = new c.Mat();
+        const threshold = new c.Mat();
+        const adaptative = new c.Mat();
+        const attemptColor = new c.Mat();
+        const attemptThresh = new c.Mat();
+        const attemptAdapt = new c.Mat();
+
+        try {
+            c.cvtColor(region, gray, c.COLOR_BGR2GRAY);
+            c.threshold(gray, threshold, 0, 255, c.THRESH_BINARY + c.THRESH_OTSU);
+            c.adaptiveThreshold(
+                gray,
+                adaptative,
                 255,
-                cv.ADAPTIVE_THRESH_GAUSSIAN_C,
-                cv.THRESH_BINARY,
+                c.ADAPTIVE_THRESH_GAUSSIAN_C,
+                c.THRESH_BINARY,
                 21,
                 0
-            ),
-        ]);
+            );
 
-        const attempts = await Promise.all([
-            region.cvtColorAsync(cv.COLOR_BGR2RGBA),
-            threshold.cvtColorAsync(cv.COLOR_GRAY2RGBA),
-            adaptative.cvtColorAsync(cv.COLOR_GRAY2RGBA),
-        ]);
+            c.cvtColor(region, attemptColor, c.COLOR_BGR2RGBA);
+            c.cvtColor(threshold, attemptThresh, c.COLOR_GRAY2RGBA);
+            c.cvtColor(adaptative, attemptAdapt, c.COLOR_GRAY2RGBA);
 
-        for (let attempt of attempts) {
-            const detected = detector.detect({
-                data: await attempt.getDataAsync(),
-                width: rect.width,
-                height: rect.height,
-            });
-
-            for (let marker of detected) {
-                const corners = marker.corners;
-
-                ['tl', 'tr', 'br', 'bl'].forEach((corner, index) => {
-                    points[`aruco-${marker.id}-${corner}`] = new cv.Point2(
-                        corners[index].x + rect.x,
-                        corners[index].y + rect.y
-                    );
+            const attempts = [attemptColor, attemptThresh, attemptAdapt];
+            for (const attempt of attempts) {
+                const detected = detector.detect({
+                    data: attempt.data,
+                    width: rect.width,
+                    height: rect.height,
                 });
-            }
 
-            if (Object.keys(points).length >= 12) {
-                break;
+                for (const marker of detected) {
+                    const corners = marker.corners;
+                    ['tl', 'tr', 'br', 'bl'].forEach((corner, index) => {
+                        points[`aruco-${marker.id}-${corner}`] = {
+                            x: corners[index].x + rect.x,
+                            y: corners[index].y + rect.y,
+                        };
+                    });
+                }
+
+                if (Object.keys(points).length >= 12) {
+                    break;
+                }
             }
+        } finally {
+            gray.delete();
+            threshold.delete();
+            adaptative.delete();
+            attemptColor.delete();
+            attemptThresh.delete();
+            attemptAdapt.delete();
         }
 
-        // Stop when we have found all markers.
         return Object.keys(points).length >= 12;
     });
 

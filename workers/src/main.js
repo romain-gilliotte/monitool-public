@@ -3,6 +3,7 @@ const numCPUs = require('os').cpus().length;
 const winston = require('winston');
 const config = require('./config');
 const { InputOutput } = require('./io');
+const { init: initCv } = require('./helpers/cv');
 const { initDownloads } = require('./tasks/downloads');
 const { initReporting } = require('./tasks/reporting');
 const { initUploads } = require('./tasks/uploads');
@@ -20,7 +21,7 @@ process.on('uncaughtException', e => {
 
 async function start() {
     const io = new InputOutput();
-    await io.connect();
+    await Promise.all([io.connect(), initCv()]);
 
     initHealthCheck(io);
     initDownloads(io);

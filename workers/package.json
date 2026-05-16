@@ -8,7 +8,7 @@
     "repository": "git@github.com:romain-gilliotte/monitool-public.git",
     "license": "ISC",
     "dependencies": {
-        "@u4/opencv4nodejs": "^6.5.2",
+        "@techstark/opencv-js": "4.12.0-release.1",
         "adm-zip": "^0.4.16",
         "aruco-marker": "^2.0.0",
         "axios": "^0.21.1",
@@ -24,6 +24,7 @@
         "olap-in-memory": "^7.0.12",
         "pdfmake": "^0.1.70",
         "roboto-fontface": "^0.10.0",
+        "sharp": "^0.34.0",
         "timeslot-dag": "^2.1.3",
         "winston": "^3.3.3",
         "xlsx": "^0.16.9"
@@ -38,6 +39,6 @@
         "test": "NODE_ENV=test mocha"
     },
     "volta": {
-        "node": "14.21.3"
+        "node": "22.13.0"
     }
 }

@@ -19,7 +19,7 @@
     {
       "label": "Run Workers",
       "type": "shell",
-      "command": "bash -ic 'nvm use 14 && npm run start'",
+      "command": "bash -ic 'nvm use 22 && npm run start'",
       "options": { "cwd": "${workspaceFolder}/workers" },
       "isBackground": true, // removes the infinite spinner
       "problemMatcher": [],

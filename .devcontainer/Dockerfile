@@ -8,7 +8,6 @@ RUN echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mon
 RUN apt-get update
 
 # Install worker dependencies
-RUN apt-get install -y make g++ libopencv-dev
 RUN apt-get install -y graphicsmagick ghostscript
 RUN apt-get install -y libreoffice
 
@@ -24,7 +23,7 @@ RUN mkdir -p $NVM_DIR
 RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 RUN . $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
-    && nvm install 14.21.3 \
+    && nvm install 22 \
     && nvm alias default $NODE_VERSION \
     && nvm use default
 
