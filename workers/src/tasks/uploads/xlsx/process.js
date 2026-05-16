@@ -1,13 +1,15 @@
-import xlsx from 'xlsx';
+import ExcelJS from 'exceljs';
 import { InputOutput } from '../../../io.js';
 /**
  * @param {InputOutput} io
  * @param {any} upload
  */
 async function processXlsxUpload(io, upload) {
-    const ws = xlsx.read(upload.original.data.buffer);
+    const wb = new ExcelJS.Workbook();
+    await wb.xlsx.load(upload.original.data.buffer);
 
-    const templateId = Buffer.from(ws.Sheets['Metadata']['J1'].v, 'base64');
+    const metadata = wb.getWorksheet('Metadata');
+    const templateId = Buffer.from(metadata.getCell('J1').value, 'base64');
     const template = await io.database.collection('forms').findOne({ randomId: templateId });
     if (!template) {
         throw Error('Could not find associated form');
@@ -16,20 +18,31 @@ async function processXlsxUpload(io, upload) {
     const extracted = {};
     for (let key in template.boundaries) {
         const addr = template.boundaries[key];
-        if (ws.Sheets[addr.sheet] && ws.Sheets[addr.sheet][addr.cell])
-            extracted[key] = ws.Sheets[addr.sheet][addr.cell].v;
+        const ws = wb.getWorksheet(addr.sheet);
+        if (!ws) continue;
+
+        const value = ws.getCell(addr.cell).value;
+        if (value !== null && value !== undefined) extracted[key] = value;
     }
 
     for (let key of ['site', 'period']) {
         if (extracted[`${key}Name`]) {
-            const cellName = Object.keys(ws.Sheets['Metadata']).find(
-                k => ws.Sheets['Metadata'][k].v == extracted[`${key}Name`]
-            );
-            const { c, r } = xlsx.utils.decode_cell(cellName);
-            const cellId = xlsx.utils.encode_cell({ c: c - 1, r: r });
+            const target = extracted[`${key}Name`];
+            let found = null;
 
-            extracted[key] = ws.Sheets['Metadata'][cellId].v;
-            delete extracted[`${key}Name`];
+            metadata.eachRow({ includeEmpty: false }, row => {
+                if (found) return;
+                row.eachCell({ includeEmpty: false }, cell => {
+                    if (!found && cell.value == target) {
+                        found = { row: cell.row, col: cell.col };
+                    }
+                });
+            });
+
+            if (found) {
+                extracted[key] = metadata.getCell(found.row, found.col - 1).value;
+                delete extracted[`${key}Name`];
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-import xl from 'excel4node';
+import ExcelJS from 'exceljs';
 const filename = 'report.xlsx';
 const mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
@@ -7,12 +7,13 @@ export default async (cube, rendererOpts) => {
         typeof rendererOpts === 'number' && rendererOpts < cube.dimensions.length
             ? rendererOpts
             : Math.floor(cube.dimensions.length / 2);
-    const payload = await getWorkbook(cube, distribution).writeToBuffer();
+    const wb = getWorkbook(cube, distribution);
+    const payload = await wb.xlsx.writeBuffer();
     return { mimeType, filename, payload };
 };
 
 function getWorkbook(cube, distribution) {
-    const wb = new xl.Workbook();
+    const wb = new ExcelJS.Workbook();
     const ws = wb.addWorksheet('Report');
 
     const rowDimensions = cube.dimensions.slice(0, distribution);
@@ -26,7 +27,7 @@ function getWorkbook(cube, distribution) {
         const row = 1 + colDimensions.length + Math.floor(index / width);
         const col = 1 + rowDimensions.length + (index % width);
 
-        if (!Number.isNaN(value)) ws.cell(row, col).number(value);
+        if (!Number.isNaN(value)) ws.getCell(row, col).value = value;
     }
 
     return wb;
@@ -42,12 +43,8 @@ function addTitlesOnTop(ws, dimensions, startRow, startCol, index = 0) {
         const itemStartCol = startCol + itemIndex * colspan;
         const itemEndCol = itemStartCol + colspan - 1;
 
-        let cells =
-            colspan == 1
-                ? ws.cell(startRow, itemStartCol)
-                : ws.cell(startRow, itemStartCol, startRow, itemEndCol, true);
-
-        cells.string(human);
+        if (colspan > 1) ws.mergeCells(startRow, itemStartCol, startRow, itemEndCol);
+        ws.getCell(startRow, itemStartCol).value = human;
 
         addTitlesOnTop(ws, dimensions, startRow + 1, itemStartCol, index + 1);
     }
@@ -63,12 +60,8 @@ function addTitlesOnLeft(ws, dimensions, startRow, startCol, index = 0) {
         const itemStartRow = startRow + itemIndex * rowspan;
         const itemEndRow = itemStartRow + rowspan - 1;
 
-        let cells =
-            rowspan == 1
-                ? ws.cell(itemStartRow, startCol)
-                : ws.cell(itemStartRow, startCol, itemEndRow, startCol, true);
-
-        cells.string(human);
+        if (rowspan > 1) ws.mergeCells(itemStartRow, startCol, itemEndRow, startCol);
+        ws.getCell(itemStartRow, startCol).value = human;
 
         addTitlesOnLeft(ws, dimensions, itemStartRow, startCol + 1, index + 1);
     }
