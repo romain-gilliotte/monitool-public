@@ -1,5 +1,6 @@
 import axios from 'axios';
-import jiff from 'jiff';
+import { diff } from '../helpers/json-diff';
+import { patch } from '../helpers/json-patch';
 
 export default class Revision {
     static async fetch(projectId, offset, limit) {
@@ -17,8 +18,8 @@ export default class Revision {
 
             // Compute before and after state
             revisions[i].after = i === 0 ? project : revisions[i - 1].before;
-            revisions[i].before = jiff.patch(revisions[i].backwards, revisions[i].after);
-            revisions[i].forwards = jiff.diff(
+            revisions[i].before = patch(revisions[i].backwards, revisions[i].after);
+            revisions[i].forwards = diff(
                 revisions[i].before,
                 revisions[i].after,
                 item => item.id || item.display

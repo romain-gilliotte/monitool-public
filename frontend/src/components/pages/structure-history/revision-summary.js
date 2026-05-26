@@ -1,5 +1,5 @@
 import angular from 'angular';
-import jiff from 'jiff';
+import { patch } from '../../../helpers/json-patch';
 
 const module = angular.module(__moduleName, []);
 
@@ -37,7 +37,7 @@ module.component(__componentName, {
             for (var i = 0; i < this.revision.forwards.length; ++i) {
                 var operation = this.revision.forwards[i];
                 if (operation.op !== 'test') {
-                    afterOperation = jiff.patch([operation], afterOperation);
+                    afterOperation = patch([operation], afterOperation);
 
                     var str = this.translate(
                         this._getTranslationKey(operation),
