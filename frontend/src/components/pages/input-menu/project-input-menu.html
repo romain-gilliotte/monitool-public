@@ -1,11 +1,11 @@
 <project-columns back="main.projects">
     <menus>
         <div class="list-group">
-            <a ui-sref="project.usage.home" ui-sref-active="active" class="list-group-item">
+            <a data-testid="nav-usage-home" ui-sref="project.usage.home" ui-sref-active="active" class="list-group-item">
                 <i class="fa fa-home fa-fw"></i>
                 <span translate="shared.home"></span>
             </a>
-            <a ui-sref="project.usage.downloads" ui-sref-active="active" class="list-group-item">
+            <a data-testid="nav-usage-downloads" ui-sref="project.usage.downloads" ui-sref-active="active" class="list-group-item">
                 <i class="fa fa-download fa-fw"></i>
                 <span translate="project.downloads"></span>
             </a>
@@ -36,6 +36,7 @@
                     </a>
                     <a
                         ng-repeat="dataSource in $ctrl.activeDataSources track by dataSource.id"
+                        data-testid="nav-usage-datasource-{{dataSource.id}}"
                         ui-sref="project.usage.list({dataSourceId: dataSource.id})"
                         ng-class="{active: ($ctrl.$state.is('project.usage.list') || $ctrl.$state.is('project.usage.edit')) && $ctrl.$stateParams.dataSourceId == dataSource.id}"
                         class="list-group-item data-source-list-group-item"
@@ -56,6 +57,7 @@
             <div class="panel-collapse">
                 <div class="list-group">
                     <a
+                        data-testid="nav-usage-reporting-general"
                         ui-sref="project.usage.general"
                         ui-sref-active="active"
                         class="list-group-item"
@@ -64,7 +66,7 @@
                         <span translate="shared.reporting_general"></span>
                     </a>
 
-                    <a ui-sref="project.usage.olap" ui-sref-active="active" class="list-group-item">
+                    <a data-testid="nav-usage-olap" ui-sref="project.usage.olap" ui-sref-active="active" class="list-group-item">
                         <i class="fa fa-table fa-fw"></i>
                         <span translate="project.pivot_table"></span>
                     </a>

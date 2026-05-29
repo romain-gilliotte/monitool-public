@@ -9,7 +9,7 @@
 </div>
 <div style="margin-bottom: 10px">
     <div class="pull-right">
-        <a class="btn btn-primary" ng-click="$ctrl.createProject()">
+        <a class="btn btn-primary" data-testid="project-create-button" ng-click="$ctrl.createProject()">
             <i class="fa fa-fw fa-plus"></i>
             <span translate="project.create"></span>
         </a>
@@ -106,6 +106,7 @@
             <div class="panel-buttons btn-group">
                 <a
                     ng-if="p.active"
+                    data-testid="project-open-{{p._id}}"
                     class="btn btn-default btn-xxs"
                     ui-sref="project.usage.home({projectId: p._id})"
                 >
@@ -144,7 +145,7 @@
                             </a>
                         </li>
                         <li ng-switch-when="true">
-                            <a ui-sref="project.config.home({projectId: p._id})">
+                            <a data-testid="project-configure-{{p._id}}" ui-sref="project.config.home({projectId: p._id})">
                                 <i class="fa fa-fw fa-cogs"></i>
                                 <span translate="shared.configure"></span>
                             </a>

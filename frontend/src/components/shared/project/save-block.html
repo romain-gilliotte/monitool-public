@@ -1,5 +1,6 @@
 <div>
     <a
+        data-testid="save-button"
         ng-disabled="!$ctrl.isChanged || !$ctrl.isValid || $ctrl.isSaving"
         ng-click="$ctrl.onSaveClicked()"
         class="btn btn-primary"

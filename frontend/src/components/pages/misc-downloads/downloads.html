@@ -1,4 +1,4 @@
-<div ng-repeat="section in ::$ctrl.sections track by section.id">
+<div ng-repeat="section in ::$ctrl.sections track by section.id" data-testid="downloads-section-{{::section.id}}">
     <legend translate="{{::section.name}}"></legend>
 
     <div class="grid-container">
@@ -7,7 +7,7 @@
             <div class="caption">
                 <h4>{{::file.name}}</h4>
                 <div class="btn-group">
-                    <a href="{{::file.main.url}}" download class="btn btn-default btn-xxs">
+                    <a href="{{::file.main.url}}" download data-testid="download-link-{{::file.id}}" class="btn btn-default btn-xxs">
                         <i class="fa" ng-class="::file.main.icon"></i>
                         <span translate="{{::file.main.key}}"></span>
                     </a>

@@ -1,4 +1,4 @@
-<table id="reporting" class="table table-bordered table-condensed">
+<table id="reporting" data-testid="reporting-table" class="table table-bordered table-condensed">
     <tbody>
         <!-- Main section titles (i.e. logframes, datasources) -->
         <tr
@@ -32,6 +32,7 @@
         <tr
             ng-repeat-end
             ng-if="row.type == 'data'"
+            data-testid="reporting-row"
             class="indent{{row.indent}}"
             tr-data
             project="$ctrl.project"

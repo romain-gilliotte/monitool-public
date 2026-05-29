@@ -1,7 +1,7 @@
 <project-columns back="main.projects">
     <menus>
         <div class="list-group">
-            <a ui-sref="project.config.home" ui-sref-active="active" class="list-group-item">
+            <a data-testid="nav-config-home" ui-sref="project.config.home" ui-sref-active="active" class="list-group-item">
                 <i class="fa fa-home fa-fw"></i>
                 <span translate="shared.home"></span>
             </a>
@@ -24,6 +24,7 @@
             <div class="panel-collapse">
                 <div class="list-group">
                     <a
+                        data-testid="nav-config-basics"
                         ui-sref="project.config.basics"
                         ui-sref-active="active"
                         class="list-group-item"
@@ -33,6 +34,7 @@
                     </a>
 
                     <a
+                        data-testid="nav-config-sites"
                         ui-sref="project.config.collection_site_list"
                         ui-sref-active="active"
                         class="list-group-item"
@@ -46,6 +48,7 @@
                     </a>
 
                     <a
+                        data-testid="nav-config-datasources"
                         ui-sref="project.config.collection_form_list"
                         class="list-group-item"
                         ng-class="{active: $ctrl.$state.is('project.config.collection_form_list') || $ctrl.$state.is('project.config.collection_form_edition')}"
@@ -82,6 +85,7 @@
             <div class="panel-collapse">
                 <div class="list-group">
                     <a
+                        data-testid="nav-config-logframe"
                         ui-sref="project.config.logical_frame_list"
                         ng-class="{active: $ctrl.$state.is('project.config.logical_frame_list') || $ctrl.$state.is('project.config.logical_frame_edition')}"
                         class="list-group-item"

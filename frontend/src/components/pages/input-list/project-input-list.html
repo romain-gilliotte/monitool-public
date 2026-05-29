@@ -1,4 +1,4 @@
-<table class="table-nocollapse">
+<table class="table-nocollapse" data-testid="input-list-table">
     <thead>
         <tr>
             <th translate="shared.date"></th>
@@ -21,6 +21,8 @@
             >
                 <a
                     ng-switch-when="true"
+                    data-testid="input-cell-{{period}}-{{site.id}}"
+                    data-status="expected"
                     ui-sref="project.usage.edit(::{dataSourceId: $ctrl.dataSource.id, period: period, siteId: site.id})"
                     class="btn btn-xs btn-primary"
                     translate="project.input_status.expected"
@@ -28,6 +30,8 @@
 
                 <a
                     ng-switch-when="false"
+                    data-testid="input-cell-{{period}}-{{site.id}}"
+                    data-status="done"
                     ui-sref="project.usage.edit(::{dataSourceId: $ctrl.dataSource.id, period: period, siteId: site.id})"
                     class="btn btn-xs btn-default"
                     translate="project.input_status.done"

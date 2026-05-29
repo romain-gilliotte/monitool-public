@@ -51,6 +51,7 @@
 
 <td
     ng-repeat="cell in $ctrl.tableCells track by $index"
+    data-testid="reporting-cell-{{$index < $ctrl.columns.length ? $ctrl.columns[$index].id : 'total'}}"
     td-reporting-field
     value="cell"
     baseline="::$ctrl.baseline"
