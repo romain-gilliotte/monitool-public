@@ -103,9 +103,11 @@ test('an uploaded Excel form is transcribed into the general reporting table', a
     await expect(page.getByTestId('hot-container')).toBeVisible();
     await page.getByTestId('fill-from-upload-button').click();
 
-    // fillFromUpload() copies the extracted value into the input model (the
-    // Handsontable view may not repaint until the next render); the persisted
-    // value is asserted through reporting below.
+    // The extracted value lands in the grid (waiting for hot-container above
+    // avoids racing the grid's initial render).
+    await expect(
+        page.getByTestId('hot-container').locator('.ht_master .htCore tbody td').first()
+    ).toHaveText(VALUE);
 
     // 6. Save: persists the input.
     await Promise.all([
