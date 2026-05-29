@@ -477,17 +477,25 @@ module.component(__componentName, {
                             ],
                         });
 
-                        rows.push(
-                            ...this._makeRowsFromQuery(
-                                queryId,
-                                subLabel,
-                                subQuery,
-                                indent + 1,
-                                baseline,
-                                target,
-                                colorize
-                            )
+                        const subRows = this._makeRowsFromQuery(
+                            queryId,
+                            subLabel,
+                            subQuery,
+                            indent + 1,
+                            baseline,
+                            target,
+                            colorize
                         );
+
+                        // E2E hook: give location sub-rows a stable, business-id
+                        // keyed test id so disaggregated breakdowns can be targeted
+                        // without relying on (translatable) site labels. Consumed by
+                        // tr-data.html's data-testid="{{row.testid || 'reporting-row'}}".
+                        if (disagregateBy.id === 'location' && subRows[0]) {
+                            subRows[0].testid = `reporting-row-site-${item}`;
+                        }
+
+                        rows.push(...subRows);
                     }
                 });
             });
