@@ -10,6 +10,7 @@
                     <span class="input-group-addon"><i class="fa fa-table fa-fw"></i></span>
                     <ui-select
                         id="rows-input"
+                        data-testid="olap-rows-select"
                         multiple
                         ng-model="$ctrl.selected.rows"
                         ng-change="$ctrl.onSelectUpdate()"
@@ -34,6 +35,7 @@
                     <span class="input-group-addon"><i class="fa fa-columns fa-fw"></i></span>
                     <ui-select
                         id="cols-input"
+                        data-testid="olap-cols-select"
                         multiple
                         ng-model="$ctrl.selected.cols"
                         ng-change="$ctrl.onSelectUpdate()"
@@ -57,6 +59,7 @@
                 <input
                     id="show-totals-input"
                     type="checkbox"
+                    data-testid="olap-show-totals"
                     ng-model="$ctrl.showTotals"
                     ng-change="$ctrl.triggerUpdate()"
                 />

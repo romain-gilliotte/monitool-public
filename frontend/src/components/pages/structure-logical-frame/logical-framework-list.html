@@ -1,12 +1,12 @@
 <div class="centered" ng-if="!$ctrl.editableProject.logicalFrames.length">
     <span translate="project.no_logframe_yet"></span>
-    <a ng-click="$ctrl.onCreateLogicalFrameClicked()" translate="form.create_blank"></a>
+    <a ng-click="$ctrl.onCreateLogicalFrameClicked()" data-testid="logframe-create-blank-button" translate="form.create_blank"></a>
 </div>
 
 <div ng-sortable="$ctrl.ngSortableOptions">
     <columns-panel sortable="true" ng-repeat="logicalFrame in $ctrl.editableProject.logicalFrames">
         <pane-title>
-            <span ng-show="logicalFrame.name">{{logicalFrame.name}}</span>
+            <span ng-show="logicalFrame.name" data-testid="logframe-card-name-{{logicalFrame.id}}">{{logicalFrame.name}}</span>
             <span ng-hide="logicalFrame.name" translate="project.unnamed_logframe"></span>
         </pane-title>
         <pane-body>
@@ -27,6 +27,7 @@
                 <a
                     class="btn btn-default btn-xxs"
                     ui-sref="project.config.logical_frame_edition({logicalFrameId: logicalFrame.id})"
+                    data-testid="logframe-edit-link-{{logicalFrame.id}}"
                 >
                     <i class="fa fa-pencil"></i>
                     <span translate="shared.edit"></span>
@@ -76,7 +77,7 @@
 </div>
 
 <div ng-if="$ctrl.editableProject.logicalFrames.length">
-    <a ng-click="$ctrl.onCreateLogicalFrameClicked()" class="btn btn-default">
+    <a ng-click="$ctrl.onCreateLogicalFrameClicked()" class="btn btn-default" data-testid="logframe-create-blank-button">
         <i class="fa fa-plus"></i>
         <span translate="form.create_blank"></span>
     </a>

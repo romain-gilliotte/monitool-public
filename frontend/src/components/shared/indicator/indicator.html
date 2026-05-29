@@ -1,4 +1,4 @@
-<columns-panel sortable="true" title="$ctrl.indicator.display" handle-class="indicator-handle">
+<columns-panel sortable="true" title="$ctrl.indicator.display" handle-class="indicator-handle" data-testid="indicator-card">
     <pane-title>{{$ctrl.indicator.display|maxLength:90}}</pane-title>
     <pane-body>
         <!-- Baseline -->
@@ -26,14 +26,14 @@
                 {{'project.indicator_is_not_computed'|translate}}
                 <i class="fa fa-unlink"></i>
             </span>
-            <span class="text-success" ng-if="$ctrl.indicator.computation">
+            <span class="text-success" ng-if="$ctrl.indicator.computation" data-testid="indicator-computation-status">
                 {{'project.indicator_is_computed'|translate}}
                 <i class="fa fa-link"></i>
             </span>
         </div>
 
         <div class="panel-buttons btn-group">
-            <button class="btn btn-xxs btn-default" ng-click="$ctrl.onEditClicked()">
+            <button class="btn btn-xxs btn-default" ng-click="$ctrl.onEditClicked()" data-testid="indicator-edit-button">
                 <i class="fa fa-pencil"></i>
                 <span translate="shared.edit"></span>
             </button>

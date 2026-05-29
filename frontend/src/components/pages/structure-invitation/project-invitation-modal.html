@@ -8,6 +8,7 @@
         <form-group input-id="login-input" label="invitation.email" help="invitation.help_email">
             <input
                 id="login-input"
+                data-testid="invitation-modal-email"
                 type="text"
                 ng-model="$ctrl.invitation.email"
                 class="form-control"
@@ -68,6 +69,7 @@
 
     <button
         ng-click="$ctrl.done()"
+        data-testid="invitation-modal-submit"
         ng-disabled="invitationForm.$invalid || !$ctrl.hasChanged()"
         class="btn btn-primary"
     >

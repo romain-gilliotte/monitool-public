@@ -1,6 +1,7 @@
 <div style="margin-bottom: 10px">
     <input
         type="text"
+        data-testid="project-filter-input"
         ng-change="$ctrl.filter()"
         ng-model="$ctrl.filterValue"
         class="form-control"
@@ -18,6 +19,8 @@
     <div class="btn-group">
         <a
             ng-click="$ctrl.toggleOngoing()"
+            data-testid="project-filter-ongoing"
+            ng-attr-data-active="{{!!($ctrl.numOngoingProjects && $ctrl.displayOngoing)}}"
             class="btn btn-default"
             ng-class="{active: $ctrl.numOngoingProjects && $ctrl.displayOngoing, disabled: $ctrl.numOngoingProjects == 0}"
             translate="project.show_ongoing_projects"
@@ -26,6 +29,8 @@
 
         <a
             ng-click="$ctrl.toggleFinished()"
+            data-testid="project-filter-finished"
+            ng-attr-data-active="{{!!($ctrl.numFinishedProjects && $ctrl.displayFinished)}}"
             class="btn btn-default"
             ng-class="{active: $ctrl.numFinishedProjects && $ctrl.displayFinished, disabled: $ctrl.numFinishedProjects == 0}"
             translate="project.show_finished_projects"
@@ -34,6 +39,8 @@
 
         <a
             ng-click="$ctrl.toggleArchived()"
+            data-testid="project-filter-archived"
+            ng-attr-data-active="{{!!($ctrl.numArchivedProjects && $ctrl.displayArchived)}}"
             class="btn btn-default"
             ng-class="{active: $ctrl.numArchivedProjects && $ctrl.displayArchived, disabled: $ctrl.numArchivedProjects == 0}"
             translate="project.show_archived_projects"
@@ -42,7 +49,7 @@
     </div>
 </div>
 
-<div class="centered" ng-if="!$ctrl.displayedProjects.length">
+<div class="centered" data-testid="project-list-empty" ng-if="!$ctrl.displayedProjects.length">
     <span translate="project.no_matches" ng-if="$ctrl.projects.length"></span>
     <span translate="project.no_projects" ng-if="!$ctrl.projects.length"></span>
     <a
@@ -58,11 +65,17 @@
     ></a>
 </div>
 
-<div>
-    <columns-panel ng-repeat="p in $ctrl.displayedProjects track by p._id" variant="p.variant">
+<div data-testid="project-list">
+    <columns-panel
+        data-testid="project-card-{{p._id}}"
+        ng-repeat="p in $ctrl.displayedProjects track by p._id"
+        variant="p.variant"
+    >
         <pane-title>
             <i
                 class="fa fa-fw pull-right"
+                data-testid="project-favorite-{{p._id}}"
+                ng-attr-data-favorite="{{!!p.favorite}}"
                 ng-class="{'fa-star': p.favorite, 'fa-star-o': !p.favorite}"
                 ng-click="$ctrl.toggleFavorite(p)"
             ></i>
@@ -94,7 +107,7 @@
                 <span ng-switch-when="false" translate="shared.none"></span>
             </div>
 
-            <div ng-if="!p.active" class="text-warning">
+            <div ng-if="!p.active" data-testid="project-archived-marker-{{p._id}}" class="text-warning">
                 <i class="fa fa-fw fa-archive"></i>
                 <span translate="project.was_archived"></span>
             </div>
@@ -116,6 +129,7 @@
 
                 <a
                     ng-if="!p.active && p.owner == $root.profile.email"
+                    data-testid="project-restore-{{p._id}}"
                     class="btn btn-default btn-xxs"
                     ng-click="$ctrl.onRestoreClicked(p)"
                 >
@@ -133,7 +147,7 @@
                 </a>
 
                 <div class="btn-group" uib-dropdown ng-if="p.active">
-                    <a class="btn btn-default btn-xxs" uib-dropdown-toggle>
+                    <a class="btn btn-default btn-xxs" data-testid="project-actions-toggle-{{p._id}}" uib-dropdown-toggle>
                         <span class="caret"></span>
                     </a>
 
@@ -151,19 +165,19 @@
                             </a>
                         </li>
                         <li ng-switch-when="true">
-                            <a ng-click="$ctrl.onCloneClicked(p, false)">
+                            <a data-testid="project-clone-structure-{{p._id}}" ng-click="$ctrl.onCloneClicked(p, false)">
                                 <i class="fa fa-fw fa-clone"></i>
                                 <span translate="shared.clone_structure"></span>
                             </a>
                         </li>
                         <li ng-switch-when="true">
-                            <a ng-click="$ctrl.onCloneClicked(p, true)">
+                            <a data-testid="project-clone-all-{{p._id}}" ng-click="$ctrl.onCloneClicked(p, true)">
                                 <i class="fa fa-fw fa-clone"></i>
                                 <span translate="shared.clone_all"></span>
                             </a>
                         </li>
                         <li ng-switch-when="true">
-                            <a ng-click="$ctrl.onArchiveClicked(p)">
+                            <a data-testid="project-archive-{{p._id}}" ng-click="$ctrl.onArchiveClicked(p)">
                                 <i class="text-warning fa fa-fw fa-archive"></i>
                                 <span class="text-warning" translate="shared.archive"></span>
                             </a>

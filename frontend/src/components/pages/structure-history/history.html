@@ -1,5 +1,6 @@
 <table
     class="table table-bordered table-condensed"
+    data-testid="history-table"
     infinite-scroll="$ctrl.loadMore()"
     infinite-scroll-distance="1"
     infinite-scroll-container="'history'"
@@ -12,22 +13,23 @@
             <th translate="project.revision_changes"></th>
         </tr>
     </thead>
-    <tbody ng-if="$ctrl.revisions.length == 0 && $ctrl.infiniteScrollDisabled">
+    <tbody ng-if="$ctrl.revisions.length == 0 && $ctrl.infiniteScrollDisabled" data-testid="history-empty">
         <tr>
             <td colspan="3" translate="project.revision_none"></td>
         </tr>
     </tbody>
-    <tbody ng-repeat="(revIndex, revision) in $ctrl.revisions" class="revtbody">
+    <tbody ng-repeat="(revIndex, revision) in $ctrl.revisions" class="revtbody" data-testid="history-row-{{::revision.time}}" data-history-row>
         <tr>
             <td>{{::revision.time|date:'medium'}}</td>
-            <td>{{::revision.user}}</td>
-            <td><revision-summary revision="revision"></revision-summary></td>
+            <td data-testid="history-row-author">{{::revision.user}}</td>
+            <td data-testid="history-summary"><revision-summary revision="revision"></revision-summary></td>
         </tr>
         <tr class="restore" ng-class="{'selected': revIndex == $ctrl.selectedIndex}">
             <td colspan="3">
                 <a
                     ng-show="!revision.isEquivalent && revIndex != $ctrl.selectedIndex"
                     class="btn btn-xxs btn-default"
+                    data-testid="history-restore"
                     ng-click="$ctrl.onRestoreCliked(revIndex)"
                     translate="project.revision_restore"
                 ></a>

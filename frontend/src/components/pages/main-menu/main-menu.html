@@ -4,7 +4,7 @@
             <a ui-sref="main.projects" ui-sref-active="active" class="list-group-item">
                 <span class="label label-default pull-right">{{$ctrl.projects.length}}</span>
                 <i class="fa fa-home fa-fw"></i>
-                <span translate="shared.project_list"></span>
+                <span translate="shared.project_list" data-testid="menu-link-project-list"></span>
             </a>
 
             <a ui-sref="main.invitations" ui-sref-active="active" class="list-group-item">
@@ -25,7 +25,7 @@
             </a>
 
             <div uib-dropdown>
-                <a href="#" uib-dropdown-toggle class="list-group-item">
+                <a href="#" uib-dropdown-toggle class="list-group-item" data-testid="menu-language-toggle">
                     <i class="fa fa-fw fa-language"></i>
                     {{'menu.language' | translate}}
                 </a>
@@ -36,6 +36,7 @@
                             ng-click="$root.changeLanguage('fr')"
                             ng-if="$root.language != 'fr'"
                             translate="menu.french"
+                            data-testid="menu-language-fr"
                         ></a>
                     </li>
                     <li>
@@ -43,6 +44,7 @@
                             ng-click="$root.changeLanguage('en')"
                             ng-if="$root.language != 'en'"
                             translate="menu.english"
+                            data-testid="menu-language-en"
                         ></a>
                     </li>
                     <li>
@@ -50,6 +52,7 @@
                             ng-click="$root.changeLanguage('es')"
                             ng-if="$root.language != 'es'"
                             translate="menu.spanish"
+                            data-testid="menu-language-es"
                         ></a>
                     </li>
                 </ul>

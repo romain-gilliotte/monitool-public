@@ -1,4 +1,4 @@
-<select class="form-control" ng-model="$ctrl.computation.type" ng-change="$ctrl.onTypeChange()">
+<select class="form-control" ng-model="$ctrl.computation.type" ng-change="$ctrl.onTypeChange()" data-testid="indicator-computation-type-select">
     <option value="unavailable" translate="project.computations.unavailable"></option>
     <option value="copy" translate="project.computations.copy"></option>
     <option value="percentage" translate="project.computations.percentage"></option>
@@ -32,6 +32,7 @@
                     ng-model="$ctrl.computation.formula"
                     ng-change="$ctrl.onFormulaChange()"
                     ng-disabled="$ctrl.computation.type !== 'formula'"
+                    data-testid="indicator-computation-formula-input"
                 />
             </td>
         </tr>
@@ -52,6 +53,7 @@
                     ng-model="$ctrl.computation.parameters[key].elementId"
                     ng-change="$ctrl.onOtherChange()"
                     ng-options="v.id as v.name group by v.group for v in $ctrl.selectElements"
+                    data-testid="indicator-computation-variable-select-{{key}}"
                 ></select>
             </td>
 

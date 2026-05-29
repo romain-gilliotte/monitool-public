@@ -73,11 +73,11 @@
                     <span translate="project.prefill_with"></span>
 
                     <div class="btn-group">
-                        <a ng-click="$ctrl.fillWithZeros()" class="btn btn-default btn-xs">
+                        <a ng-click="$ctrl.fillWithZeros()" class="btn btn-default btn-xs" data-testid="input-prefill-zeros">
                             <i class="fa fa-pencil"></i>
                             <span translate="project.fill_with_zeros"></span>
                         </a>
-                        <a ng-click="$ctrl.fillFromLast()" class="btn btn-default btn-xs">
+                        <a ng-click="$ctrl.fillFromLast()" class="btn btn-default btn-xs" data-testid="input-prefill-previous">
                             <i class="fa fa-clipboard"></i>
                             <span translate="project.fill_from_last"></span>
                         </a>
@@ -86,6 +86,7 @@
                             class="btn btn-default btn-xs"
                             ng-if="$ctrl.upload"
                             ng-disabled="!$ctrl.upload.processed.extracted"
+                            data-testid="fill-from-upload-button"
                         >
                             <i class="fa fa-upload"></i>
                             <span translate="project.fill_from_upload"></span>
@@ -102,6 +103,7 @@
                 ng-click="$ctrl.onMetadataSet()"
                 class="btn btn-default"
                 translate="project.load_data"
+                data-testid="load-data-button"
             ></button>
 
             <div

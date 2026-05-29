@@ -13,6 +13,7 @@
                 class="form-control"
                 id="input-name"
                 name="name"
+                data-testid="ds-name"
                 ng-model="$ctrl.editableDataSource.name"
                 ng-change="$ctrl.onFieldChange()"
                 placeholder="{{'project.form_name_ph'|translate}}"
@@ -46,6 +47,7 @@
                 id="periodicity-input"
                 class="form-control"
                 name="periodicity"
+                data-testid="ds-periodicity"
                 ng-model="$ctrl.editableDataSource.periodicity"
                 ng-change="$ctrl.onFieldChange()"
             >
@@ -157,6 +159,7 @@
                         id="variable-name-input-{{::variable.id}}"
                         type="text"
                         class="form-control"
+                        data-testid="ds-variable-name"
                         ng-model="variable.name"
                         ng-change="$ctrl.onFieldChange()"
                         placeholder="{{'project.variable_name_ph'|translate}}"
@@ -174,6 +177,7 @@
                     <select
                         id="site-agg-select"
                         class="form-control"
+                        data-testid="ds-variable-geoagg"
                         ng-model="variable.geoAgg"
                         ng-change="$ctrl.onFieldChange()"
                         name="geoAgg"
@@ -195,6 +199,7 @@
                     <select
                         id="variable-timeagg-input-{{::variable.id}}"
                         class="form-control"
+                        data-testid="ds-variable-timeagg"
                         ng-model="variable.timeAgg"
                         ng-change="$ctrl.onFieldChange()"
                         name="timeAgg"
@@ -247,7 +252,7 @@
     </div>
     <!-- [/Variables] -->
 
-    <a class="btn btn-default" ng-click="$ctrl.onAddVariableClicked()">
+    <a class="btn btn-default" data-testid="ds-add-variable" ng-click="$ctrl.onAddVariableClicked()">
         <i class="fa fa-plus"></i>
         <span translate="project.add_variable"></span>
     </a>

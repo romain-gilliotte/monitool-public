@@ -18,6 +18,8 @@
             <tr
                 ng-repeat="site in $ctrl.editableProject.entities track by site.id"
                 ng-class="{'disabled': !site.active}"
+                data-testid="site-row-{{site.id}}"
+                ng-attr-data-site-id="{{site.id}}"
             >
                 <td class="handle"><i class="fa fa-sort fa-fw"></i></td>
 
@@ -32,6 +34,7 @@
                                 class="form-control input-sm"
                                 ng-disabled="!site.active"
                                 placeholder="{{'project.entity_name_placeholder'|translate}}"
+                                data-testid="site-name-input-{{site.id}}"
                                 required
                             />
                         </div>
@@ -43,6 +46,7 @@
                             ng-if="site.active"
                             class="btn btn-default btn-sm"
                             ng-click="$ctrl.onChangeSiteStatusClicked(site, false)"
+                            data-testid="site-disable-button-{{site.id}}"
                         >
                             <i class="fa fa-fw fa-pause-circle-o"></i>
                             <span translate="shared.disable"></span>
@@ -51,6 +55,7 @@
                             ng-if="!site.active"
                             class="btn btn-default btn-sm"
                             ng-click="$ctrl.onChangeSiteStatusClicked(site, true)"
+                            data-testid="site-enable-button-{{site.id}}"
                         >
                             <i class="fa fa-fw fa-play-circle-o"></i>
                             <span translate="shared.enable"></span>
@@ -60,7 +65,7 @@
                         </a>
                         <ul class="dropdown-menu" uib-dropdown-menu>
                             <li>
-                                <a ng-click="$ctrl.onDeleteSiteClicked(site)">
+                                <a ng-click="$ctrl.onDeleteSiteClicked(site)" data-testid="site-delete-button-{{site.id}}">
                                     <i class="fa fa-trash text-danger"></i>
                                     <span class="text-danger" translate="shared.delete"></span>
                                 </a>
@@ -73,7 +78,7 @@
         <tfoot>
             <tr>
                 <td colspan="3">
-                    <a class="btn btn-default btn-xs" ng-click="$ctrl.onCreateSiteClicked()">
+                    <a class="btn btn-default btn-xs" ng-click="$ctrl.onCreateSiteClicked()" data-testid="site-add-button">
                         <i class="fa fa-plus"></i>
                         <span translate="shared.add"></span>
                     </a>
@@ -99,7 +104,7 @@
             </tr>
         </tbody>
         <tbody ng-sortable="$ctrl.ngSortableOptions">
-            <tr ng-repeat="siteGroup in $ctrl.editableProject.groups track by siteGroup.id">
+            <tr ng-repeat="siteGroup in $ctrl.editableProject.groups track by siteGroup.id" data-testid="group-row-{{siteGroup.id}}" ng-attr-data-group-id="{{siteGroup.id}}">
                 <td class="handle"><i class="fa fa-sort fa-fw"></i></td>
 
                 <td>
@@ -112,6 +117,7 @@
                                 ng-model="siteGroup.name"
                                 ng-change="$ctrl.onFieldChange()"
                                 class="form-control error input-sm"
+                                data-testid="group-name-input-{{siteGroup.id}}"
                                 required
                             />
                         </div>
@@ -124,6 +130,7 @@
                         ng-model="siteGroup.members"
                         ng-change="$ctrl.onFieldChange()"
                         theme="bootstrap"
+                        data-testid="group-members-select-{{siteGroup.id}}"
                     >
                         <ui-select-match placeholder="">{{$item.name}}</ui-select-match>
                         <ui-select-choices
@@ -138,6 +145,7 @@
                     <a
                         class="btn btn-danger btn-sm"
                         ng-click="$ctrl.onDeleteGroupClicked(siteGroup.id)"
+                        data-testid="group-delete-button-{{siteGroup.id}}"
                     >
                         <i class="fa fa-trash"></i>
                         <span translate="shared.delete"></span>
@@ -148,7 +156,7 @@
         <tfoot>
             <tr>
                 <td colspan="4">
-                    <a class="btn btn-default btn-xs" ng-click="$ctrl.onCreateGroupClicked()">
+                    <a class="btn btn-default btn-xs" ng-click="$ctrl.onCreateGroupClicked()" data-testid="group-add-button">
                         <i class="fa fa-plus"></i>
                         <span translate="shared.add"></span>
                     </a>

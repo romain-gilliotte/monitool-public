@@ -1,4 +1,4 @@
-<div class="modal-header">
+<div class="modal-header" data-testid="indicator-edition-modal">
     <h3 class="modal-title">
         <a ng-click="$ctrl.dismiss()" class="pull-right" style="cursor: pointer;">
             <i class="fa fa-times"></i>
@@ -19,6 +19,7 @@
             <div class="col-sm-10">
                 <input
                     id="display-input"
+                    data-testid="indicator-modal-display"
                     class="form-control"
                     name="display"
                     ng-model="$ctrl.planning.display"
@@ -127,6 +128,7 @@
 
     <button
         ng-click="$ctrl.save()"
+        data-testid="indicator-modal-apply"
         ng-disabled="planningForm.$invalid || $ctrl.isUnchanged()"
         class="btn btn-primary"
     >

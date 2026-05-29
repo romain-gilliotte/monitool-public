@@ -13,6 +13,7 @@
                 <textarea
                     auto-resize
                     id="logframe-name-input"
+                    data-testid="logframe-name-input"
                     class="form-control"
                     name="nameDesc"
                     placeholder="{{'project.logframe_ph_name'|translate}}"
@@ -105,6 +106,7 @@
                 <textarea
                     auto-resize
                     id="logframe-goal-input"
+                    data-testid="logframe-goal-input"
                     class="form-control"
                     name="goalDesc"
                     placeholder="{{'project.intervention_logic_goal_ph'|translate}}"
@@ -133,6 +135,7 @@
 
                 <a
                     class="btn btn-default btn-sm"
+                    data-testid="logframe-add-indicator-button-goal"
                     ng-click="$ctrl.onAddIndicatorClicked($ctrl.editableLogFrame.indicators)"
                 >
                     <i class="fa fa-plus"></i>
@@ -189,6 +192,7 @@
                                 class="form-control"
                                 name="description"
                                 id="purpose-desc-{{purposeId}}-input"
+                                data-testid="purpose-desc-{{purposeId}}-input"
                                 placeholder="{{'project.intervention_logic_purpose_ph'|translate}}"
                                 ng-model="purpose.description"
                                 ng-change="$ctrl.onFieldChange()"
@@ -283,6 +287,7 @@
                                             <textarea
                                                 auto-resize
                                                 id="output-desc-{{purposeId}}-{{outputId}}-input"
+                                                data-testid="output-desc-{{purposeId}}-{{outputId}}-input"
                                                 class="form-control"
                                                 name="description"
                                                 placeholder="{{'project.output_desc_ph'|translate}}"
@@ -385,6 +390,7 @@
                                                             auto-resize
                                                             class="form-control"
                                                             id="activity-desc-{{purposeId}}-{{outputId}}-{{activityId}}-input"
+                                                            data-testid="activity-desc-{{purposeId}}-{{outputId}}-{{activityId}}-input"
                                                             name="description"
                                                             placeholder="{{'project.activity_desc_ph'|translate}}"
                                                             ng-model="activity.description"
@@ -432,6 +438,7 @@
 
                                     <a
                                         class="btn btn-default"
+                                        data-testid="logframe-add-activity-button-{{purposeId}}-{{outputId}}"
                                         ng-click="$ctrl.onAddActivityClicked(output)"
                                     >
                                         <i class="fa fa-plus"></i>
@@ -443,7 +450,7 @@
                             <!-- [/Output repeat] -->
                         </div>
 
-                        <a class="btn btn-default" ng-click="$ctrl.onAddOutputClicked(purpose)">
+                        <a class="btn btn-default" data-testid="logframe-add-output-button-{{purposeId}}" ng-click="$ctrl.onAddOutputClicked(purpose)">
                             <i class="fa fa-plus"></i>
                             <span translate="project.add_output"></span>
                         </a>
@@ -454,7 +461,7 @@
             <!-- [/Purpose repeat] -->
         </div>
 
-        <a class="btn btn-default" ng-click="$ctrl.onAddPurposeClicked()">
+        <a class="btn btn-default" data-testid="logframe-add-purpose-button" ng-click="$ctrl.onAddPurposeClicked()">
             <i class="fa fa-plus"></i>
             <span translate="project.add_purpose"></span>
         </a>

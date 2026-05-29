@@ -15,10 +15,10 @@
     </a>
 </div>
 
-<div class="caption">
+<div class="caption" data-testid="uploads-item-{{::$ctrl.upload._id}}">
     {{::$ctrl.upload.original.name}}
 
-    <div ng-switch="$ctrl.upload.status">
+    <div ng-switch="$ctrl.upload.status" data-testid="upload-status" data-status="{{$ctrl.upload.status}}">
         <div ng-switch-when="failed" class="text-danger">
             <i class="fa fa-fw fa-warning"></i>
             <span translate="input_uploads.processing_failed"></span>
@@ -34,12 +34,13 @@
             ng-switch-when-separator="|"
             class="btn btn-default btn-xxs"
             ui-sref="project.usage.data_entry({uploadId: $ctrl.upload._id})"
+            data-testid="upload-edit-link-{{::$ctrl.upload._id}}"
         >
             <i class="fa fa-pencil"></i>
             <span translate="project.input_status.expected"></span>
         </a>
 
-        <a ng-switch-when="failed" class="btn btn-danger btn-xxs" ng-click="$ctrl.onDelete()">
+        <a ng-switch-when="failed" class="btn btn-danger btn-xxs" ng-click="$ctrl.onDelete()" data-testid="upload-delete-button">
             <i class="fa fa-trash"></i>
             <span translate="shared.delete"></span>
         </a>

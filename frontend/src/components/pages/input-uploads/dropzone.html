@@ -1,12 +1,14 @@
 <input
     type="file"
     id="file-input"
+    data-testid="uploads-file-input"
     accept="{{::$ctrl.inputTypes}}"
     multiple
     ng-on-change="$ctrl.onInputChange($event)"
 />
 
 <div
+    data-testid="uploads-dropzone"
     ng-on-dragover="$ctrl.onDragOver($event)"
     ng-on-dragleave="$ctrl.onDragLeave($event)"
     ng-on-drop="$ctrl.onDrop($event)"

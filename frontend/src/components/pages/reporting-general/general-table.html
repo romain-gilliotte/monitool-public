@@ -32,7 +32,7 @@
         <tr
             ng-repeat-end
             ng-if="row.type == 'data'"
-            data-testid="reporting-row"
+            data-testid="{{row.testid || 'reporting-row'}}"
             class="indent{{row.indent}}"
             tr-data
             project="$ctrl.project"
@@ -59,6 +59,7 @@
             <th translate="project.target"></th>
             <th
                 ng-repeat="col in $ctrl.columns track by col.id"
+                data-testid="reporting-column-header-{{col.id}}"
                 title="{{col.title|formatSlotRange}}"
             >
                 {{col.name|formatSlot}}

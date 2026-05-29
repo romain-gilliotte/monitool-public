@@ -1,12 +1,12 @@
 <div class="centered" ng-if="!$ctrl.invitations.length">
     <span translate="invitation.no_invitations_yet"></span>
-    <a ng-click="$ctrl.onEditClicked()" translate="invitation.add_invitation"></a>
+    <a ng-click="$ctrl.onEditClicked()" translate="invitation.add_invitation" data-testid="invitation-empty-add"></a>
 </div>
 
-<columns-panel ng-repeat="invitation in $ctrl.invitations">
+<columns-panel ng-repeat="invitation in $ctrl.invitations" data-testid="invitation-row-{{invitation.email}}">
     <pane-title>{{invitation.email}}</pane-title>
     <pane-body>
-        <div>
+        <div data-testid="invitation-accepted-{{invitation.email}}">
             <strong translate="invitation.accepted"></strong>
             <span ng-if="invitation.accepted" translate="shared.yes"></span>
             <span ng-if="!invitation.accepted" translate="shared.no"></span>
@@ -37,13 +37,13 @@
             </a>
 
             <div class="btn-group" uib-dropdown>
-                <a class="btn btn-default btn-xxs" uib-dropdown-toggle>
+                <a class="btn btn-default btn-xxs" uib-dropdown-toggle data-testid="invitation-revoke-toggle-{{invitation.email}}">
                     <span class="caret"></span>
                 </a>
 
                 <ul class="dropdown-menu" uib-dropdown-menu>
                     <li>
-                        <a ng-click="$ctrl.onDeleteClicked(invitation)">
+                        <a ng-click="$ctrl.onDeleteClicked(invitation)" data-testid="invitation-revoke-{{invitation.email}}">
                             <i class="fa fa-trash text-danger"></i>
                             <span class="text-danger" translate="shared.delete"></span>
                         </a>
@@ -55,7 +55,7 @@
 </columns-panel>
 
 <div ng-if="$ctrl.invitations.length">
-    <a class="btn btn-default" ng-click="$ctrl.onEditClicked()">
+    <a class="btn btn-default" ng-click="$ctrl.onEditClicked()" data-testid="invitation-add-button">
         <i class="fa fa-plus"></i>
         <span translate="invitation.add_invitation"></span>
     </a>

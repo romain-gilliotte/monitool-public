@@ -1,6 +1,7 @@
 <td class="row-graph">
     <i
         class="fa fa-line-chart"
+        data-testid="reporting-plot-toggle"
         ng-click="$ctrl.onPlotClicked()"
         ng-class="{active: $ctrl.plotted}"
     ></i>
@@ -15,19 +16,21 @@
         <button
             ng-switch-when="true"
             class="btn btn-default btn-xs"
+            data-testid="reporting-disaggregate-collapse"
             ng-click="$ctrl.onDisagregateClicked({})"
         >
             <i class="fa fa-minus"></i>
         </button>
 
         <div ng-switch-when="false" class="btn-group" uib-dropdown dropdown-append-to-body>
-            <button class="btn btn-default btn-xs" uib-dropdown-toggle>
+            <button class="btn btn-default btn-xs" data-testid="reporting-disaggregate-toggle" uib-dropdown-toggle>
                 <i class="fa fa-plus"></i>
             </button>
 
             <ul class="dropdown-menu" uib-dropdown-menu>
                 <li ng-repeat="agg in $ctrl.aggregations track by $index">
                     <a
+                        data-testid="reporting-disaggregate-option-{{agg.id}}"
                         ng-click="$ctrl.onDisagregateClicked({dimensionId: agg.id, attribute: agg.attribute})"
                     >
                         {{agg.label|translate}}

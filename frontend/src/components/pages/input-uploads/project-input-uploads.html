@@ -1,10 +1,10 @@
 <dropzone project="::$ctrl.project"></dropzone>
 
-<legend translate="input_uploads.waiting_dataentry">En attente de saisie</legend>
+<legend data-testid="uploads-page" translate="input_uploads.waiting_dataentry">En attente de saisie</legend>
 
-<p ng-if="$ctrl.uploads.length == 0" translate="input_uploads.waiting_dataentry_none"></p>
+<p data-testid="uploads-empty" ng-if="$ctrl.uploads.length == 0" translate="input_uploads.waiting_dataentry_none"></p>
 
-<div class="card-container">
+<div class="card-container" data-testid="uploads-pending-list">
     <upload
         ng-repeat="upload in $ctrl.uploads track by upload._id"
         upload="upload"
