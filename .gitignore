@@ -42,3 +42,9 @@ dist
 *.log
 .env
 */replica.key
+
+# E2E (Playwright) artifacts
+.playwright-mcp
+e2e/test-results
+e2e/playwright-report
+e2e/blob-report

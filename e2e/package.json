@@ -1,0 +1,24 @@
+{
+  "name": "monitool-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "End-to-end test harness for monitool (Playwright).",
+  "scripts": {
+    "infra:up": "node scripts/infra.mjs up",
+    "infra:down": "node scripts/infra.mjs down",
+    "reset": "node scripts/reset.mjs",
+    "seed": "node scripts/seed.mjs",
+    "pretest": "node scripts/infra.mjs up",
+    "test": "playwright test",
+    "test:headed": "node scripts/infra.mjs up && playwright test --headed",
+    "test:ui": "node scripts/infra.mjs up && playwright test --ui",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "dotenv": "^16.4.5",
+    "ioredis": "^5.4.1",
+    "mongodb": "^6.12.0"
+  }
+}
