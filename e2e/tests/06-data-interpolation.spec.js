@@ -17,14 +17,11 @@
 // assert the "≈" interpolation marker appears.
 import { test, expect } from '../fixtures.js';
 import { resetBaselineInputs, seedBaselineInput } from '../helpers/db.mjs';
+import { waitReport } from '../helpers/responses.mjs';
 import { BASELINE_PROJECT_ID } from '../scripts/constants.mjs';
 import { SITE_A } from '../scripts/seed-baseline.mjs';
 
 const PID = BASELINE_PROJECT_ID.toString();
-
-// A report job has finished server-side when the GET .../report/{b64} responds.
-const reportResponse = page =>
-    page.waitForResponse(r => /\/project\/[^/]+\/report\//.test(r.url()) && r.ok());
 
 test.beforeEach(async () => {
     await resetBaselineInputs();
@@ -51,7 +48,7 @@ test('viewing a monthly value at a finer periodicity interpolates it (≈) in th
     const rowsSelect = page.getByTestId('olap-rows-select');
     await rowsSelect.locator('input.ui-select-search').click();
     await Promise.all([
-        reportResponse(page),
+        waitReport(page),
         rowsSelect.locator('.ui-select-choices-row', { hasText: 'Days' }).first().click(),
     ]);
 

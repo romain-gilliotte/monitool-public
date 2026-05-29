@@ -21,6 +21,8 @@
 // fill('.handsontableInput') + Enter, exactly like spec 01.
 import { test, expect } from '../fixtures.js';
 import { resetPartitionedInputs, purgeReportingCache } from '../helpers/db.mjs';
+import { waitInputSaved } from '../helpers/responses.mjs';
+import { gridCells, reportingRow } from '../helpers/ui.mjs';
 import { BASELINE_PROJECT_ID } from '../scripts/constants.mjs';
 import { DATASOURCE_PARTITIONED_ID, SITE_A, BASELINE } from '../scripts/seed-baseline.mjs';
 
@@ -44,7 +46,7 @@ test('disaggregated data entry surfaces summed across partitions in reporting', 
     // Exactly one grid on this page (single-variable data source).
     const grid = page.getByTestId('hot-container');
     await expect(grid).toHaveCount(1);
-    const cells = grid.locator('.ht_master .htCore tbody td');
+    const cells = gridCells(page);
     await expect(cells).toHaveCount(9); // 3x3
 
     // Sanity-check the layout (header cells) so a future Handsontable layout
@@ -69,12 +71,7 @@ test('disaggregated data entry surfaces summed across partitions in reporting', 
     }
 
     // Save and wait for the input to be persisted (POST .../input).
-    await Promise.all([
-        page.waitForResponse(
-            r => r.request().method() === 'POST' && /\/project\/[^/]+\/input(\?|$)/.test(r.url()) && r.ok()
-        ),
-        page.getByTestId('save-button').click(),
-    ]);
+    await Promise.all([waitInputSaved(page), page.getByTestId('save-button').click()]);
 
     // Reporting cache is keyed per project and cleared on input writes, but we
     // purge defensively before asserting the recomputed report.
@@ -82,9 +79,7 @@ test('disaggregated data entry surfaces summed across partitions in reporting', 
 
     // Go to general reporting and verify the partition SUM appears.
     await page.getByTestId('nav-usage-reporting-general').click();
-    const row = page
-        .getByTestId('reporting-table')
-        .locator('tr', { hasText: BASELINE.partitionedIndicatorName });
+    const row = reportingRow(page, BASELINE.partitionedIndicatorName);
     await expect(row.getByTestId(`reporting-cell-${PERIOD}`)).toHaveText('10');
     await expect(row.getByTestId('reporting-cell-total')).toHaveText('10');
 });

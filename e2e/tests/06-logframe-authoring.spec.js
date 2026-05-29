@@ -15,6 +15,7 @@
 // a click that immediately follows. We therefore build the whole tree FIRST
 // (consecutive add clicks, no intervening fills) and fill the descriptions after.
 import { test, expect } from '../fixtures.js';
+import { waitProjectSaved } from '../helpers/responses.mjs';
 import { BASELINE_PROJECT_ID } from '../scripts/constants.mjs';
 import { BASELINE } from '../scripts/seed-baseline.mjs';
 
@@ -85,15 +86,7 @@ test('author a logframe with a goal, a purpose/output/activity tree and a copy-f
     await expect(card.getByTestId('indicator-computation-status')).toBeVisible();
 
     // --- Save and wait for the project to be persisted (PUT .../project/{id}). ---
-    await Promise.all([
-        page.waitForResponse(
-            r =>
-                r.request().method() === 'PUT' &&
-                new RegExp(`/project/${PID}(\\?|$)`).test(r.url()) &&
-                r.ok()
-        ),
-        page.getByTestId('save-button').click(),
-    ]);
+    await Promise.all([waitProjectSaved(page, PID), page.getByTestId('save-button').click()]);
 
     // --- Full app reload, reopen the authored logframe, assert everything persisted. ---
     await page.goto(`/app.html#!/projects/${PID}/logical-frame`);

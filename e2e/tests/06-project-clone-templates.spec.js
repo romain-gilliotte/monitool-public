@@ -14,6 +14,7 @@
 import { test, expect } from '../fixtures.js';
 import { MongoClient, ObjectId } from 'mongodb';
 import { resetBaselineInputs, seedBaselineInput, purgeReportingCacheFor } from '../helpers/db.mjs';
+import { reportingRow } from '../helpers/ui.mjs';
 import { MONGO_URI, MONGO_DB, BASELINE_PROJECT_ID } from '../scripts/constants.mjs';
 import { SITE_A, BASELINE } from '../scripts/seed-baseline.mjs';
 
@@ -101,18 +102,14 @@ test('clone a project as a template (structure only, and structure + data)', asy
     await purgeReportingCacheFor(allId);
     await page.goto(`/app.html#!/projects/${allId}/general`);
     await expect(page.getByTestId('app-error')).toHaveCount(0);
-    const allRow = page
-        .getByTestId('reporting-table')
-        .locator('tr', { hasText: BASELINE.indicatorName });
+    const allRow = reportingRow(page, BASELINE.indicatorName);
     await expect(allRow.getByTestId(`reporting-cell-${PERIOD}`)).toHaveText('42');
 
     // --- The structure-only clone does NOT carry the value -------------------
     await purgeReportingCacheFor(structureId);
     await page.goto(`/app.html#!/projects/${structureId}/general`);
     await expect(page.getByTestId('app-error')).toHaveCount(0);
-    const structureRow = page
-        .getByTestId('reporting-table')
-        .locator('tr', { hasText: BASELINE.indicatorName });
+    const structureRow = reportingRow(page, BASELINE.indicatorName);
     await expect(structureRow.getByTestId(`reporting-cell-${PERIOD}`)).not.toHaveText('42');
 
     // --- Both clones persist across a full app reload ------------------------

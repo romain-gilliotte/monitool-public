@@ -13,23 +13,13 @@
 // them at runtime from the row's data-site-id / data-group-id attribute and then
 // targets the id-keyed testids.
 import { test, expect } from '../fixtures.js';
+import { waitProjectSaved, waitProjectCreated } from '../helpers/responses.mjs';
 
 const PROJECT_NAME = 'E2E Sites Authoring Project';
 const COUNTRY = 'Testland';
 const SITE_NAME = 'Bossangoa Health Center';
 const SITE_RENAMED = 'Bossangoa Hospital';
 const GROUP_NAME = 'Northern Region';
-
-// Wait on the project PUT (existing project save). axios prefixes /api, so the
-// path contains /project/<id>; match PUT specifically and require an ok status.
-function waitForProjectPut(page) {
-    return page.waitForResponse(
-        r =>
-            r.request().method() === 'PUT' &&
-            /\/project\/[^/]+(\?|$)/.test(r.url()) &&
-            r.ok()
-    );
-}
 
 test('add, rename, group and delete sites on a fresh project', async ({ page }) => {
     // Native window.confirm dialogs: delete-site confirmation and the
@@ -43,15 +33,7 @@ test('add, rename, group and delete sites on a fresh project', async ({ page }) 
     await page.getByTestId('nav-config-basics').click();
     await page.getByTestId('basics-country').fill(COUNTRY);
     await page.getByTestId('basics-name').fill(PROJECT_NAME);
-    await Promise.all([
-        page.waitForResponse(
-            r =>
-                r.request().method() === 'POST' &&
-                /\/project(\?|$)/.test(r.url()) &&
-                r.ok()
-        ),
-        page.getByTestId('save-button').click(),
-    ]);
+    await Promise.all([waitProjectCreated(page), page.getByTestId('save-button').click()]);
     await expect(page).not.toHaveURL(/projects\/new\//);
 
     // Capture the new project id from the URL for a deterministic reload target.
@@ -67,7 +49,7 @@ test('add, rename, group and delete sites on a fresh project', async ({ page }) 
     const siteId = await siteRow.getAttribute('data-site-id');
 
     await page.getByTestId(`site-name-input-${siteId}`).fill(SITE_NAME);
-    await Promise.all([waitForProjectPut(page), page.getByTestId('save-button').click()]);
+    await Promise.all([waitProjectSaved(page), page.getByTestId('save-button').click()]);
 
     // Reload the whole app; the site name must have persisted.
     await page.goto(`/app.html#!/projects/${pid}/sites`);
@@ -75,7 +57,7 @@ test('add, rename, group and delete sites on a fresh project', async ({ page }) 
 
     // --- Rename the site. ---
     await page.getByTestId(`site-name-input-${siteId}`).fill(SITE_RENAMED);
-    await Promise.all([waitForProjectPut(page), page.getByTestId('save-button').click()]);
+    await Promise.all([waitProjectSaved(page), page.getByTestId('save-button').click()]);
 
     await page.goto(`/app.html#!/projects/${pid}/sites`);
     await expect(page.getByTestId(`site-name-input-${siteId}`)).toHaveValue(SITE_RENAMED);
@@ -99,7 +81,7 @@ test('add, rename, group and delete sites on a fresh project', async ({ page }) 
         .first()
         .click();
 
-    await Promise.all([waitForProjectPut(page), page.getByTestId('save-button').click()]);
+    await Promise.all([waitProjectSaved(page), page.getByTestId('save-button').click()]);
 
     await page.goto(`/app.html#!/projects/${pid}/sites`);
     await expect(page.getByTestId(`group-name-input-${groupId}`)).toHaveValue(GROUP_NAME);
@@ -110,7 +92,7 @@ test('add, rename, group and delete sites on a fresh project', async ({ page }) 
     await page.getByTestId(`site-delete-button-${siteId}`).click();
     await expect(page.getByTestId(`site-row-${siteId}`)).toHaveCount(0);
 
-    await Promise.all([waitForProjectPut(page), page.getByTestId('save-button').click()]);
+    await Promise.all([waitProjectSaved(page), page.getByTestId('save-button').click()]);
 
     // Reload: the site must be gone (no row keyed by its id).
     await page.goto(`/app.html#!/projects/${pid}/sites`);

@@ -6,18 +6,10 @@
 // UI dropdown -> PUT /project (active flag) -> refetch GET /project -> list re-render.
 import { test, expect } from '../fixtures.js';
 import { resetBaselineActive } from '../helpers/db.mjs';
+import { waitProjectSaved } from '../helpers/responses.mjs';
 import { BASELINE_PROJECT_ID } from '../scripts/constants.mjs';
 
 const PID = BASELINE_PROJECT_ID.toString();
-
-// Wait on the authoritative write (PUT /project/<PID>) that toggles active.
-const projectSaved = page =>
-    page.waitForResponse(
-        r =>
-            r.request().method() === 'PUT' &&
-            new RegExp(`/project/${PID}(\\?|$)`).test(r.url()) &&
-            r.ok()
-    );
 
 test.beforeEach(async () => {
     // The spec mutates project.active through the real API; force the baseline
@@ -35,7 +27,7 @@ test('archive a project then restore it', async ({ page }) => {
 
     // Archive: open the per-card actions dropdown, then click "Archive".
     await page.getByTestId(`project-actions-toggle-${PID}`).click();
-    await Promise.all([projectSaved(page), page.getByTestId(`project-archive-${PID}`).click()]);
+    await Promise.all([waitProjectSaved(page, PID), page.getByTestId(`project-archive-${PID}`).click()]);
 
     // Archived projects are hidden by default => the card leaves the active view.
     await expect(page.getByTestId(`project-open-${PID}`)).toHaveCount(0);
@@ -46,7 +38,7 @@ test('archive a project then restore it', async ({ page }) => {
     await expect(page.getByTestId(`project-restore-${PID}`)).toBeVisible();
 
     // Restore: the project becomes active again and returns to the active list.
-    await Promise.all([projectSaved(page), page.getByTestId(`project-restore-${PID}`).click()]);
+    await Promise.all([waitProjectSaved(page, PID), page.getByTestId(`project-restore-${PID}`).click()]);
 
     await expect(page.getByTestId(`project-open-${PID}`)).toBeVisible();
     await expect(page.getByTestId(`project-actions-toggle-${PID}`)).toBeVisible();

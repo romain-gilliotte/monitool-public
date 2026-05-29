@@ -7,6 +7,7 @@
 // indicators "always start their life as non computable".
 import { test, expect } from '../fixtures.js';
 import { resetBaselineExtraIndicators } from '../helpers/db.mjs';
+import { waitProjectSaved } from '../helpers/responses.mjs';
 import { BASELINE_PROJECT_ID } from '../scripts/constants.mjs';
 
 const PID = BASELINE_PROJECT_ID.toString();
@@ -45,15 +46,7 @@ test('add a cross-cutting (extra) indicator and persist it', async ({ page }) =>
     await expect(page.getByTestId('extra-indicator-empty')).toHaveCount(0);
 
     // Save the project config and wait for the persisting PUT to resolve.
-    await Promise.all([
-        page.waitForResponse(
-            r =>
-                r.request().method() === 'PUT' &&
-                /\/project\/[^/]+(\?|$)/.test(r.url()) &&
-                r.ok()
-        ),
-        page.getByTestId('save-button').click(),
-    ]);
+    await Promise.all([waitProjectSaved(page), page.getByTestId('save-button').click()]);
 
     // Reload the whole app and confirm the extra indicator survived (persisted).
     await page.goto(`/app.html#!/projects/${PID}/extra`);

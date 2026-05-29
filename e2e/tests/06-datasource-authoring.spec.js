@@ -17,6 +17,7 @@
 // for the Handsontable grid.
 import { test, expect } from '../fixtures.js';
 import { getProjectById } from '../helpers/db.mjs';
+import { waitProjectSaved, waitProjectCreated } from '../helpers/responses.mjs';
 
 const PROJECT_NAME = 'E2E Data Source Project';
 const COUNTRY = 'Testland';
@@ -25,10 +26,6 @@ const VARIABLE_NAME = 'Number of people reached';
 const PARTITION_NAME = 'Gender';
 const ELEMENT_FEMALE = 'Female';
 const ELEMENT_MALE = 'Male';
-
-// PUT /project/:id (the project is persisted after we save its basics).
-const projectPut = r =>
-    r.request().method() === 'PUT' && /\/project\/[^/]+(\?|$)/.test(r.url()) && r.ok();
 
 test('author a data source with a variable, aggregation modes and a partition', async ({
     page,
@@ -42,12 +39,7 @@ test('author a data source with a variable, aggregation modes and a partition', 
     await page.getByTestId('basics-country').fill(COUNTRY);
     await page.getByTestId('basics-name').fill(PROJECT_NAME);
 
-    await Promise.all([
-        page.waitForResponse(
-            r => r.request().method() === 'POST' && /\/project(\?|$)/.test(r.url()) && r.ok()
-        ),
-        page.getByTestId('save-button').click(),
-    ]);
+    await Promise.all([waitProjectCreated(page), page.getByTestId('save-button').click()]);
     await expect(page).not.toHaveURL(/projects\/new\//);
 
     // Capture the new project id for the API persistence read-back later.
@@ -99,7 +91,7 @@ test('author a data source with a variable, aggregation modes and a partition', 
 
     // --- Save the project (PUT) and wait for persistence. ---
     await Promise.all([
-        page.waitForResponse(projectPut),
+        waitProjectSaved(page),
         page.getByTestId('save-button').click(),
     ]);
 

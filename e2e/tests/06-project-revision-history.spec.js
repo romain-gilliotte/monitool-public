@@ -10,6 +10,7 @@
 // baseline project's revisions ourselves in beforeEach for determinism.
 import { test, expect } from '../fixtures.js';
 import { resetBaselineRevisions } from '../helpers/db.mjs';
+import { waitProjectSaved } from '../helpers/responses.mjs';
 import { BASELINE_PROJECT_ID, TEST_EMAIL } from '../scripts/constants.mjs';
 import { BASELINE } from '../scripts/seed-baseline.mjs';
 
@@ -31,15 +32,7 @@ test('editing a project records a revision in its history', async ({ page }) => 
 
     // Change the country and save. The PUT is what writes the revision row.
     await country.fill(NEW_COUNTRY);
-    await Promise.all([
-        page.waitForResponse(
-            r =>
-                r.request().method() === 'PUT' &&
-                /\/project\/[^/]+(\?|$)/.test(r.url()) &&
-                r.ok()
-        ),
-        page.getByTestId('save-button').click(),
-    ]);
+    await Promise.all([waitProjectSaved(page), page.getByTestId('save-button').click()]);
 
     // Go to the History tab.
     await page.getByTestId('nav-config-history').click();

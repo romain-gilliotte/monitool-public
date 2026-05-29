@@ -11,15 +11,12 @@
 // data-testid — we target it inside the hot-container by its rendered DOM).
 import { test, expect } from '../fixtures.js';
 import { resetBaselineInputs, seedBaselineInput } from '../helpers/db.mjs';
+import { waitInputSaved } from '../helpers/responses.mjs';
+import { gridCell } from '../helpers/ui.mjs';
 import { BASELINE_PROJECT_ID } from '../scripts/constants.mjs';
 import { DATASOURCE_ID, SITE_A } from '../scripts/seed-baseline.mjs';
 
 const PID = BASELINE_PROJECT_ID.toString();
-
-// The single editable cell of the baseline's 1x1 grid.
-function gridCell(page) {
-    return page.getByTestId('hot-container').locator('.ht_master .htCore tbody td').first();
-}
 
 test.beforeEach(async () => {
     await resetBaselineInputs();
@@ -42,12 +39,7 @@ test('prefill with zeros fills the grid and saves', async ({ page }) => {
     await expect(gridCell(page)).toHaveText('0');
 
     // Save and wait for persistence (POST .../input).
-    await Promise.all([
-        page.waitForResponse(
-            r => r.request().method() === 'POST' && /\/project\/[^/]+\/input(\?|$)/.test(r.url()) && r.ok()
-        ),
-        page.getByTestId('save-button').click(),
-    ]);
+    await Promise.all([waitInputSaved(page), page.getByTestId('save-button').click()]);
 
     // Reload the edit form straight from its URL: the saved 0 must reappear.
     await page.goto(`/app.html#!/projects/${PID}/input/manual/${DATASOURCE_ID}/${PERIOD}/${SITE_A}`);
@@ -74,12 +66,7 @@ test('prefill from the previous period copies its value', async ({ page }) => {
     await expect(gridCell(page)).toHaveText('17');
 
     // Save and wait for persistence.
-    await Promise.all([
-        page.waitForResponse(
-            r => r.request().method() === 'POST' && /\/project\/[^/]+\/input(\?|$)/.test(r.url()) && r.ok()
-        ),
-        page.getByTestId('save-button').click(),
-    ]);
+    await Promise.all([waitInputSaved(page), page.getByTestId('save-button').click()]);
 
     // Reload the February edit form: the copied 17 must persist.
     await page.goto(`/app.html#!/projects/${PID}/input/manual/${DATASOURCE_ID}/${PERIOD}/${SITE_A}`);

@@ -158,19 +158,6 @@ export async function getBaselineUploadId() {
 
 // --- invitations ------------------------------------------------------------
 
-// projectId is stored as ObjectId so the project<->invitation $lookup matches.
-export async function seedInvitation(projectId, email, accepted, dataEntry) {
-    return withMongo(async db => {
-        const res = await db.collection('invitation').insertOne({
-            projectId: typeof projectId === 'string' ? new ObjectId(projectId) : projectId,
-            email,
-            accepted: !!accepted,
-            ...(dataEntry ? { dataEntry } : {}),
-        });
-        return res.insertedId.toString();
-    });
-}
-
 export async function resetBaselineInvitations() {
     await withMongo(db => db.collection('invitation').deleteMany({ projectId: BASELINE_PROJECT_ID }));
 }

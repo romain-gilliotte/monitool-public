@@ -7,6 +7,7 @@
 // seeded so the row has deterministic, loaded plot data before we click.
 import { test, expect } from '../fixtures.js';
 import { resetBaselineInputs, seedBaselineInput } from '../helpers/db.mjs';
+import { reportingRow } from '../helpers/ui.mjs';
 import { BASELINE_PROJECT_ID } from '../scripts/constants.mjs';
 import { SITE_A, BASELINE } from '../scripts/seed-baseline.mjs';
 
@@ -24,9 +25,7 @@ test('toggling a reporting row into the graph view renders the chart wrapper', a
     // so the goal indicator row is rendered.
     await expect(page.getByTestId('reporting-table')).toBeVisible();
 
-    const row = page
-        .getByTestId('reporting-table')
-        .locator('tr', { hasText: BASELINE.indicatorName });
+    const row = reportingRow(page, BASELINE.indicatorName);
 
     // Wait until the row's value is computed: the same fetch that fills this cell
     // also delivers the plot data, which the toggle needs before it will activate.

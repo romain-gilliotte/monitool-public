@@ -11,6 +11,7 @@
 // time-aggregation selector (query-aggregate) and the resulting column layout.
 import { test, expect } from '../fixtures.js';
 import { resetBaselineInputs, seedBaselineInput } from '../helpers/db.mjs';
+import { reportingRow } from '../helpers/ui.mjs';
 import { BASELINE_PROJECT_ID } from '../scripts/constants.mjs';
 import { SITE_A, SITE_B, BASELINE } from '../scripts/seed-baseline.mjs';
 
@@ -32,9 +33,7 @@ test('changing the time aggregation re-buckets columns while the total stays con
     // The reporting table is up and the first logframe section auto-opens, so
     // the goal indicator row "Total consultations" is present.
     await expect(page.getByTestId('reporting-table')).toBeVisible();
-    const row = page
-        .getByTestId('reporting-table')
-        .locator('tr', { hasText: BASELINE.indicatorName });
+    const row = reportingRow(page, BASELINE.indicatorName);
 
     const groupBy = page.getByTestId('reporting-group-by');
     await expect(groupBy).toBeVisible();

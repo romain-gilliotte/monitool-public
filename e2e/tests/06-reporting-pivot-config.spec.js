@@ -15,15 +15,11 @@
 // control is a plain checkbox and is data-testid'd directly.
 import { test, expect } from '../fixtures.js';
 import { resetBaselineInputs, seedBaselineInput } from '../helpers/db.mjs';
+import { waitReport } from '../helpers/responses.mjs';
 import { BASELINE_PROJECT_ID } from '../scripts/constants.mjs';
 import { SITE_A } from '../scripts/seed-baseline.mjs';
 
 const PID = BASELINE_PROJECT_ID.toString();
-
-// The baseline report request is a GET .../report/<b64query> rendered as JSON;
-// we wait on it so assertions run against a freshly re-rendered pivot.
-const reportResponse = page =>
-    page.waitForResponse(r => /\/project\/[^/]+\/report\//.test(r.url()) && r.ok());
 
 test.beforeEach(async () => {
     await resetBaselineInputs();
@@ -48,7 +44,7 @@ test('the pivot re-renders for the chosen rows and totals layout', async ({ page
     const rowsSelect = page.getByTestId('olap-rows-select');
     await rowsSelect.locator('input.ui-select-search').click(); // open the dropdown
     await Promise.all([
-        reportResponse(page),
+        waitReport(page),
         rowsSelect.locator('.ui-select-choices-row', { hasText: 'Months' }).first().click(),
     ]);
 
@@ -63,7 +59,7 @@ test('the pivot re-renders for the chosen rows and totals layout', async ({ page
     await expect(janRow).toContainText('7');
 
     // --- Toggle show-totals: a total row is appended (6 -> 7 rows) ---
-    await Promise.all([reportResponse(page), page.getByTestId('olap-show-totals').check()]);
+    await Promise.all([waitReport(page), page.getByTestId('olap-show-totals').check()]);
 
     await expect(bodyRows).toHaveCount(7);
     await expect(page.getByTestId('app-error')).toHaveCount(0);

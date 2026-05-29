@@ -29,6 +29,8 @@ import {
     getBaselineUploadId,
     purgeReportingCache,
 } from '../helpers/db.mjs';
+import { waitInputSaved } from '../helpers/responses.mjs';
+import { gridCell, reportingRow } from '../helpers/ui.mjs';
 import { BASELINE_PROJECT_ID } from '../scripts/constants.mjs';
 import { DATASOURCE_ID, BASELINE } from '../scripts/seed-baseline.mjs';
 
@@ -105,29 +107,17 @@ test('an uploaded Excel form is transcribed into the general reporting table', a
 
     // The extracted value lands in the grid (waiting for hot-container above
     // avoids racing the grid's initial render).
-    await expect(
-        page.getByTestId('hot-container').locator('.ht_master .htCore tbody td').first()
-    ).toHaveText(VALUE);
+    await expect(gridCell(page)).toHaveText(VALUE);
 
     // 6. Save: persists the input.
-    await Promise.all([
-        page.waitForResponse(
-            r =>
-                r.request().method() === 'POST' &&
-                /\/project\/[^/]+\/input(\?|$)/.test(r.url()) &&
-                r.ok()
-        ),
-        page.getByTestId('save-button').click(),
-    ]);
+    await Promise.all([waitInputSaved(page), page.getByTestId('save-button').click()]);
 
     // 7. Purge the per-project reporting cache so the recomputation reflects the
     //    freshly transcribed input.
     await purgeReportingCache();
 
     await page.goto(`/app.html#!/projects/${PID}/general`);
-    const row = page
-        .getByTestId('reporting-table')
-        .locator('tr', { hasText: BASELINE.indicatorName });
+    const row = reportingRow(page, BASELINE.indicatorName);
     await expect(row.getByTestId(`reporting-cell-${PERIOD}`)).toHaveText(VALUE);
     await expect(row.getByTestId('reporting-cell-total')).toHaveText(VALUE);
 });
@@ -136,14 +126,16 @@ test('an uploaded Excel form is transcribed into the general reporting table', a
 // Poll Mongo (cheap, deterministic: uploads were purged in beforeEach) until the
 // single input_upload row exists, then return its id.
 async function waitForUploadId() {
+    let uploadId = null;
     await expect
         .poll(async () => {
             try {
-                return await getBaselineUploadId();
+                uploadId = await getBaselineUploadId();
             } catch {
-                return null;
+                uploadId = null;
             }
+            return uploadId;
         }, { timeout: 30_000 })
         .not.toBeNull();
-    return getBaselineUploadId();
+    return uploadId;
 }

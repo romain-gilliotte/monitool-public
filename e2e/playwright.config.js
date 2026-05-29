@@ -30,7 +30,7 @@ export default defineConfig({
     retries: isCI ? 1 : 0,
     forbidOnly: isCI,
 
-    reporter: isCI ? [['list'], ['html', { open: 'never' }]] : [['list'], ['html', { open: 'never' }]],
+    reporter: [['list'], ['html', { open: 'never' }]],
 
     use: {
         baseURL: 'http://localhost:8080',
