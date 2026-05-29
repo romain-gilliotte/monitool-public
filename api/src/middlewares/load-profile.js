@@ -51,17 +51,28 @@ async function loadProfile(ctx, next) {
     await next();
 }
 
-// E2E test mode: bypass Auth0 JWT verification with a fixed test subject.
-// Gated behind config.authDisabled (opt-in, never enabled in production).
-const E2E_TEST_PROFILE = {
-    email: 'e2e@monitool.test',
-    name: 'E2E',
+// E2E test mode: bypass Auth0 JWT verification, deriving the identity from the
+// request instead of verifying a JWT. Gated behind config.authDisabled (opt-in,
+// never enabled in production). The fake token is `e2e:<email>` (set by the
+// frontend bypass); we parse the email out so each browser context can be a
+// distinct user, falling back to the legacy default for tokens without it.
+const buildE2eProfile = email => ({
+    email,
+    name: email.split('@')[0],
     picture: null,
     email_verified: true,
-};
+});
+
+function readE2eToken(ctx) {
+    const raw = ctx.request.header.authorization || ctx.cookies.get('monitool_access_token') || '';
+    return raw.startsWith('Bearer ') ? raw.slice(7) : raw;
+}
 
 const stubVerify = (ctx, next) => {
-    ctx.state.user = { sub: 'e2e|local-tester' };
+    const token = readE2eToken(ctx);
+    const m = /^e2e:(.+)$/.exec(token);
+    const email = m ? m[1] : 'e2e@monitool.test';
+    ctx.state.user = { sub: `e2e|${email}`, email };
     return next();
 };
 
@@ -83,7 +94,7 @@ async function createUser(ctx) {
             const token =
                 ctx.request.header.authorization || ctx.cookies.get('monitool_access_token');
             const profile = config.authDisabled
-                ? E2E_TEST_PROFILE
+                ? buildE2eProfile(ctx.state.user.email)
                 : await fetchUserInfo(token);
             if (!profile.email) {
                 throw new Error(

@@ -8,9 +8,16 @@ async function authenticate() {
     // defined by webpack.config.e2e.js (never in dev/prod). `typeof` guard keeps
     // this a dead, tree-shakeable branch when the constant is undefined.
     if (typeof AUTH_DISABLED !== 'undefined' && AUTH_DISABLED) {
-        const token = 'e2e-fake-token';
+        // The identity is selectable per browser context: the Playwright fixture
+        // injects window.__E2E_USER__ via addInitScript before this runs. It is
+        // encoded into the token as `e2e:<email>` so the API derives the same
+        // identity from the request. Defaults to the legacy single-user profile.
+        const e2eUser = (typeof window !== 'undefined' && window.__E2E_USER__) || {};
+        const email = e2eUser.email || 'e2e@monitool.test';
+        const name = e2eUser.name || 'E2E';
+        const token = `e2e:${email}`;
         window.accessToken = token;
-        window.profile = { email: 'e2e@monitool.test', name: 'E2E', email_verified: true };
+        window.profile = { email, name, email_verified: true };
 
         axios.defaults.baseURL = SERVICE_URL;
         Cookies.set('monitool_access_token', token, {

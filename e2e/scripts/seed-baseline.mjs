@@ -15,6 +15,18 @@ export const DATASOURCE_ID = 'bbbbbbbb-0000-4000-8000-000000000001';
 export const VARIABLE_ID = 'cccccccc-0000-4000-8000-000000000001';
 export const LOGFRAME_ID = 'dddddddd-0000-4000-8000-000000000001';
 
+// A second, disaggregated data source (2 partitions x 2 elements) used by the
+// multi-partition data-entry spec. Lives in the same baseline project / sequence
+// so its inputs flow through BASELINE_SEQ_ID like the partition-free variable.
+export const DATASOURCE_PARTITIONED_ID = 'bbbbbbbb-0000-4000-8000-000000000002';
+export const VARIABLE_PARTITIONED_ID = 'cccccccc-0000-4000-8000-000000000002';
+export const PARTITION_SEX_ID = 'eeeeeeee-0000-4000-8000-000000000001';
+export const PARTITION_AGE_ID = 'eeeeeeee-0000-4000-8000-000000000002';
+export const SEX_M_ID = 'ffffffff-0000-4000-8000-000000000001';
+export const SEX_F_ID = 'ffffffff-0000-4000-8000-000000000002';
+export const AGE_LT5_ID = 'ffffffff-0000-4000-8000-000000000011';
+export const AGE_GTE5_ID = 'ffffffff-0000-4000-8000-000000000012';
+
 export const BASELINE = {
     name: 'E2E Baseline Project',
     country: 'E2E Land',
@@ -25,6 +37,9 @@ export const BASELINE = {
     datasourceName: 'Monthly activity report',
     variableName: 'Number of consultations',
     indicatorName: 'Total consultations',
+    partitionedDatasourceName: 'Disaggregated activity report',
+    partitionedVariableName: 'Consultations by sex and age',
+    partitionedIndicatorName: 'Total disaggregated consultations',
 };
 
 export function buildBaselineProject(owner) {
@@ -58,6 +73,61 @@ export function buildBaselineProject(owner) {
         },
     };
 
+    // Disaggregated variable: 2 partitions (Sex, Age) x 2 elements each.
+    // distribution:1 puts one partition on columns and one on rows in the grid.
+    const partitionedVariable = {
+        id: VARIABLE_PARTITIONED_ID,
+        name: BASELINE.partitionedVariableName,
+        active: true,
+        timeAgg: 'sum',
+        geoAgg: 'sum',
+        distribution: 1,
+        partitions: [
+            {
+                id: PARTITION_SEX_ID,
+                name: 'Sex',
+                active: true,
+                aggregation: 'sum',
+                groups: [],
+                elements: [
+                    { id: SEX_M_ID, name: 'Male', active: true },
+                    { id: SEX_F_ID, name: 'Female', active: true },
+                ],
+            },
+            {
+                id: PARTITION_AGE_ID,
+                name: 'Age',
+                active: true,
+                aggregation: 'sum',
+                groups: [],
+                elements: [
+                    { id: AGE_LT5_ID, name: '<5', active: true },
+                    { id: AGE_GTE5_ID, name: '>=5', active: true },
+                ],
+            },
+        ],
+    };
+
+    const partitionedDataSource = {
+        id: DATASOURCE_PARTITIONED_ID,
+        name: BASELINE.partitionedDatasourceName,
+        periodicity: 'month',
+        active: true,
+        entities: [SITE_A, SITE_B],
+        elements: [partitionedVariable],
+    };
+
+    const partitionedIndicator = {
+        display: BASELINE.partitionedIndicatorName,
+        baseline: null,
+        target: null,
+        colorize: false,
+        computation: {
+            formula: 'a',
+            parameters: { a: { elementId: VARIABLE_PARTITIONED_ID, filter: {} } },
+        },
+    };
+
     const logicalFrame = {
         id: LOGFRAME_ID,
         name: 'E2E logical framework',
@@ -65,7 +135,7 @@ export function buildBaselineProject(owner) {
         entities: [SITE_A, SITE_B],
         start: null,
         end: null,
-        indicators: [indicator],
+        indicators: [indicator, partitionedIndicator],
         purposes: [],
     };
 
@@ -82,7 +152,7 @@ export function buildBaselineProject(owner) {
             { id: SITE_B, name: BASELINE.siteBName, active: true },
         ],
         groups: [],
-        forms: [dataSource],
+        forms: [dataSource, partitionedDataSource],
         logicalFrames: [logicalFrame],
         extraIndicators: [],
     };
