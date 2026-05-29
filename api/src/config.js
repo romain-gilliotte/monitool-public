@@ -31,6 +31,10 @@ const config = {
     port: parseInt(readEnv('MONITOOL_PORT', '8000')),
     cluster: toBool(readEnv('MONITOOL_CLUSTER', 'TRUE')),
 
+    // E2E test mode: disables Auth0 token verification and userinfo lookups.
+    // Opt-in only, defaults to FALSE, must never be enabled in production.
+    authDisabled: toBool(readEnv('MONITOOL_AUTH_DISABLED', 'FALSE')),
+
     jwt: {
         jwksHost: readEnv('MONITOOL_JWKS_HOST'),
         audience: readEnv('MONITOOL_AUDIENCE'),

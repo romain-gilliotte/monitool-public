@@ -3,6 +3,27 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 async function authenticate() {
+    // E2E test mode: bypass Auth0 entirely and bootstrap the app with a fixed
+    // test profile. Gated behind the AUTH_DISABLED build constant, which is only
+    // defined by webpack.config.e2e.js (never in dev/prod). `typeof` guard keeps
+    // this a dead, tree-shakeable branch when the constant is undefined.
+    if (typeof AUTH_DISABLED !== 'undefined' && AUTH_DISABLED) {
+        const token = 'e2e-fake-token';
+        window.accessToken = token;
+        window.profile = { email: 'e2e@monitool.test', name: 'E2E', email_verified: true };
+
+        axios.defaults.baseURL = SERVICE_URL;
+        Cookies.set('monitool_access_token', token, {
+            path: SERVICE_URL,
+            sameSite: 'strict',
+            secure: IS_PRODUCTION,
+        });
+
+        const startApp = await import('./app');
+        startApp.default();
+        return;
+    }
+
     const auth0 = (window.auth0 = await createAuth0Client({
         domain: 'monitool.eu.auth0.com',
         client_id: 'z31Kt6FYp8YDG4BypH4qp1ibLd1Ns4ME',

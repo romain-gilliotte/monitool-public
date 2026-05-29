@@ -51,7 +51,22 @@ async function loadProfile(ctx, next) {
     await next();
 }
 
-export default (ctx, next) => verifyToken(ctx, () => loadProfile(ctx, next));
+// E2E test mode: bypass Auth0 JWT verification with a fixed test subject.
+// Gated behind config.authDisabled (opt-in, never enabled in production).
+const E2E_TEST_PROFILE = {
+    email: 'e2e@monitool.test',
+    name: 'E2E',
+    picture: null,
+    email_verified: true,
+};
+
+const stubVerify = (ctx, next) => {
+    ctx.state.user = { sub: 'e2e|local-tester' };
+    return next();
+};
+
+export default (ctx, next) =>
+    (config.authDisabled ? stubVerify : verifyToken)(ctx, () => loadProfile(ctx, next));
 /**
  * Create user is it was not created by a concurrent request
  */
@@ -67,7 +82,9 @@ async function createUser(ctx) {
             // User was not found from the subcriber id
             const token =
                 ctx.request.header.authorization || ctx.cookies.get('monitool_access_token');
-            const profile = await fetchUserInfo(token);
+            const profile = config.authDisabled
+                ? E2E_TEST_PROFILE
+                : await fetchUserInfo(token);
             if (!profile.email) {
                 throw new Error(
                     'When loading your profile from your identity provider, we could not find your email address. ' +
