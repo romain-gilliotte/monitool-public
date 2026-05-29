@@ -20,7 +20,11 @@ classes, so the tests keep working as the markup changes.
   ```
   These mirror the dependencies installed in `.devcontainer/Dockerfile`. The
   `compute-report` worker (used by spec 01 / general reporting) needs none of
-  them; only downloads/uploads do.
+  them; only downloads/uploads do. The **paper-form** spec additionally exercises
+  the workers' OpenCV binding (`@techstark/opencv-js`, bundled in `workers/`) to
+  parse the re-uploaded PDF — no extra host package, but it is the slowest spec.
+  The Excel-upload spec uses `exceljs` (an e2e devDependency, installed by
+  `npm install`).
 
 ## Install
 
@@ -57,12 +61,17 @@ Monitool authenticates through Auth0, which can't be exercised offline. The
 harness enables an **opt-in, gated test mode** (never active in production):
 
 - **Frontend** — `frontend/webpack.config.e2e.js` defines `AUTH_DISABLED`, and
-  `frontend/src/index.js` then bypasses Auth0 and boots Angular with a fixed
-  test profile (`e2e@monitool.test`). The branch is dead code (tree-shaken) in
-  the normal dev/prod builds where `AUTH_DISABLED` is undefined.
+  `frontend/src/index.js` then bypasses Auth0 and boots Angular with a test
+  profile. The branch is dead code (tree-shaken) in the normal dev/prod builds
+  where `AUTH_DISABLED` is undefined.
 - **API** — `MONITOOL_AUTH_DISABLED=TRUE` (set in `.env.e2e`) makes
   `api/src/middlewares/load-profile.js` skip JWT verification and the Auth0
-  `/userinfo` lookup, using the same fixed test user.
+  `/userinfo` lookup, deriving the identity from the request instead.
+- **Multi-account** — the identity is encoded in the fake token as
+  `e2e:<email>` (defaulting to `e2e@monitool.test`). The Playwright fixture
+  injects `window.__E2E_USER__` per browser context, so specs can run as a
+  different user via `test.use({ userEmail })` or the `asUser(email)` fixture —
+  used by the invitation spec to drive a real two-user flow.
 
 `.env.e2e` contains only public config (the real Auth0 values are unused here)
 and localhost connection strings — no secrets — so it is committed.
@@ -91,6 +100,29 @@ Each spec maps to a distinct user-doc use-case (no overlap):
 | `03-project-configuration` | initial project configuration | create a project, set basics, persist (round-trip) |
 | `04-reporting-pivot` | pivot tables | a seeded value shows in the OLAP pivot |
 | `05-demo-project-smoke` | the Gondwana project + navigation | demo project loads across its main screens without hitting the error state |
+| `06-config-sites` | sites | add / rename / group / delete sites on a fresh project |
+| `06-datasource-authoring` | data source | create a data source with a variable, aggregation modes and a partition |
+| `06-logframe-authoring` | logical framework | build a goal/purpose/output/activity tree + a copy-formula indicator |
+| `06-extra-indicator-config` | indicators | add a cross-cutting extra indicator |
+| `06-invitations-multiaccount` | invite other users | owner invites + revokes; a 2nd identity accepts and gains access |
+| `06-multipartition-entry-to-reporting` | disaggregated data entry | drive an NxM Handsontable; the partition sum surfaces in reporting |
+| `06-input-prefill` | online data entry | prefill with zeros / copy previous period |
+| `06-excel-upload-roundtrip` | Excel data entry (upload) | fill + upload an `.xlsx`, worker import, value reaches reporting |
+| `06-paper-form-roundtrip` | paper form data entry | download the paper PDF, re-upload, OpenCV parse; invalid upload fails gracefully |
+| `06-project-revision-history` | change tracking | an edit produces a revision entry |
+| `06-reporting-drilldown` | general reporting | disaggregate an indicator by site |
+| `06-reporting-time-aggregation` | general reporting | months → quarters → years → by-site, invariant total |
+| `06-reporting-pivot-config` | pivot tables | choose rows + show-totals layout |
+| `06-reporting-graph-toggle` | reporting | toggle a row into the graph view |
+| `06-reporting-excel-export` | reporting | download the OLAP report as `.xlsx` |
+| `06-data-interpolation` | data interpolation | a monthly value viewed at a finer periodicity shows the `≈` marker |
+| `06-project-clone-templates` | project templates | clone structure / structure+data via `clone-project` |
+| `06-project-archive-restore` | project archival | archive then restore a project |
+| `06-project-list-filters` | basic navigation | list search, ongoing/finished/archived filters, favorites |
+| `06-language-switch` | basic navigation | switch the UI language (EN/FR/ES) |
+| `06-uploads-page` | data entry (uploads) | the uploads page renders with its empty state |
+| `06-error-states` | account / access model | 404 + no-access project navigations land on the error page |
+| `06-pdf-logframe-download` | logical framework | download a valid logframe PDF (regression guard for the roboto-fontface bug) |
 
 ## `data-testid` convention
 
