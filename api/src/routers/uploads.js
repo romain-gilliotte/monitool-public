@@ -21,32 +21,38 @@ router.get('/project/:projectId/upload', isInvited, async ctx => {
 });
 
 router.post('/project/:projectId/upload-sse', isInvited, async ctx => {
-    const collection = ctx.io.database.collection('input_upload');
-    if (ctx.request.accepts('text/event-stream')) {
-        const options = { batchSize: 1, fullDocument: 'updateLookup' };
-        const wpipeline = [
-            { $match: { 'fullDocument.projectId': new ObjectId(ctx.params.projectId) } },
-            {
-                $project: {
-                    'fullDocument.original.data': 0,
-                    'fullDocument.thumbnail.data': 0,
-                    'fullDocument.processed.data': 0,
-                    'updateDescription.updatedFields.thumbnail.data': 0,
-                    'updateDescription.updatedFields.processed.data': 0,
-                },
-            },
-        ];
-
-        // Close changelog on all errors (most notably, client disconnects are an error).
-        const changeLog = collection.watch(wpipeline, options);
-        const transform = mongoWatchToEventStream();
-        pipeline(changeLog.stream(), transform, error => void changeLog.close());
-
-        ctx.response.type = 'text/event-stream';
-        ctx.response.body = transform;
-    } else {
+    if (!ctx.request.accepts('text/event-stream')) {
         ctx.response.status = 406;
+        return;
     }
+
+    const collection = ctx.io.database.collection('input_upload');
+    const options = { batchSize: 1, fullDocument: 'updateLookup' };
+    const wpipeline = [
+        { $match: { 'fullDocument.projectId': new ObjectId(ctx.params.projectId) } },
+        {
+            $project: {
+                'fullDocument.original.data': 0,
+                'fullDocument.thumbnail.data': 0,
+                'fullDocument.processed.data': 0,
+                'updateDescription.updatedFields.thumbnail.data': 0,
+                'updateDescription.updatedFields.processed.data': 0,
+            },
+        },
+    ];
+
+    const changeLog = collection.watch(wpipeline, options);
+    const transform = mongoWatchToEventStream();
+
+    // Own the raw response instead of handing Koa a stream body: the client holds
+    // this SSE stream open until it leaves the page, so the eventual disconnect
+    // reaches us as a premature close on res. Piping res here (rather than letting
+    // Koa do it) keeps that expected event in this callback — where we just close
+    // the change stream — instead of bubbling it to the app-level error handler.
+    ctx.status = 200;
+    ctx.response.type = 'text/event-stream';
+    ctx.respond = false;
+    pipeline(changeLog.stream(), transform, ctx.res, () => void changeLog.close());
 });
 
 router.get('/project/:projectId/upload-history', isInvited, async ctx => {
