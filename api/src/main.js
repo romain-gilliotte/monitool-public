@@ -34,6 +34,24 @@ export async function start() {
     app.context.io = new InputOutput();
     await app.context.io.connect();
 
+    // Koa pipes streamed bodies (Mongo cursors -> JSON) to the socket *after* the
+    // middleware chain has resolved, so an error there (typically a client that
+    // navigated away mid-stream) surfaces here rather than in error-handler.js.
+    // Without a listener Koa dumps a raw stack to stderr; route it through winston
+    // with the offending route instead. Registering this before listen() also
+    // suppresses Koa's default stderr handler.
+    app.on('error', (err, ctx) => {
+        if (['ERR_STREAM_PREMATURE_CLOSE', 'ECONNRESET', 'EPIPE'].includes(err.code)) {
+            winston.log('warn', `Client aborted response (${err.code})`, {
+                method: ctx?.method,
+                route: ctx?.url,
+            });
+            return;
+        }
+
+        winston.log('error', err.message, { stack: err.stack, route: ctx?.url });
+    });
+
     app.use(cors());
     app.use(async (ctx, next) => {
         const start = process.hrtime.bigint();
