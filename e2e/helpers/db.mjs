@@ -213,6 +213,15 @@ export async function deleteProject(projectId) {
     );
 }
 
+// Read a project document straight from Mongo — a stable persistence oracle for
+// authoring specs (the same data the UI would re-render), avoiding the editor's
+// collapse/visibility state.
+export async function getProjectById(projectId) {
+    return withMongo(db =>
+        db.collection('project').findOne({ _id: new ObjectId(projectId) })
+    );
+}
+
 // --- discovery --------------------------------------------------------------
 
 export async function getDemoProjectId() {

@@ -1,6 +1,6 @@
 <div class="centered" ng-if="!$ctrl.editableProject.forms.length">
     <span translate="project.no_data_source_yet"></span>
-    <a ng-click="$ctrl.onCreateClicked()" translate="project.add_datasource"></a>
+    <a ng-click="$ctrl.onCreateClicked()" translate="project.add_datasource" data-testid="ds-create-button"></a>
 </div>
 
 <div ng-sortable="$ctrl.dataSourceSortOptions">
@@ -115,7 +115,7 @@
 </div>
 
 <div ng-if="$ctrl.editableProject.forms.length">
-    <a class="btn btn-default" ng-click="$ctrl.onCreateClicked()">
+    <a class="btn btn-default" ng-click="$ctrl.onCreateClicked()" data-testid="ds-create-button">
         <i class="fa fa-plus"></i>
         <span translate="project.add_datasource"></span>
     </a>
