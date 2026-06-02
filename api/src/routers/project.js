@@ -1,6 +1,6 @@
 import Ajv from 'ajv';
 import crypto from 'node:crypto';
-import jiff from 'jiff';
+import fastJsonPatch from 'fast-json-patch';
 import Router from '@koa/router';
 import { ObjectId } from 'mongodb';
 import JSONStream from 'JSONStream';
@@ -74,10 +74,7 @@ router.put('/project/:projectId', validateBody('project'), async ctx => {
         projectId: new ObjectId(ctx.params.projectId),
         user: ctx.state.profile.email,
         time: new Date(),
-        backwards: jiff.diff(newProject, oldProject, {
-            invertible: false,
-            makeContext: () => undefined,
-        }),
+        backwards: fastJsonPatch.compare(newProject, oldProject),
     });
 
     // Clear reporting cache
